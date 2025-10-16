@@ -143,7 +143,7 @@ void World::GenerateFromConfig(const std::string& configPath) {
 bool World::LoadFromFile(const std::string& path) {
     std::ifstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        std::cout << "Failed to load world from: " << path << std::endl;
+        std::cout << "Failed to load world from: " << path << '\n';
         return false;
     }
 
@@ -157,14 +157,14 @@ bool World::LoadFromFile(const std::string& path) {
     }
 
     file.close();
-    std::cout << "World loaded from: " << path << std::endl;
+    std::cout << "World loaded from: " << path << '\n';
     return true;
 }
 
 bool World::SaveToFile(const std::string& path) {
     std::ofstream file(path, std::ios::binary);
     if (!file.is_open()) {
-        std::cout << "Failed to save world to: " << path << std::endl;
+        std::cout << "Failed to save world to: " << path << '\n';
         return false;
     }
 
@@ -177,7 +177,7 @@ bool World::SaveToFile(const std::string& path) {
     }
 
     file.close();
-    std::cout << "World saved to: " << path << std::endl;
+    std::cout << "World saved to: " << path << '\n';
     return true;
 }
 

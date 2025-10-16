@@ -28,8 +28,6 @@ void Logger::Log(const std::string& message) {
         logFile << message << std::endl;
         logFile.flush();
     }
-
-    std::cout << message << std::endl;
 }
 
 void Logger::Close() {

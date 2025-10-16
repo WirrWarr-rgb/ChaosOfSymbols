@@ -5,8 +5,14 @@
 #include <sstream>
 #include <regex>
 
+/// <summary>
+/// —амописный парсер JSON
+/// </summary>
 class SimpleJsonParser {
 public:
+    /// <summary>
+    /// ”даление лишних пробелов и переносов из JSON
+    /// </summary>
     static std::string CleanJson(const std::string& json) {
         std::string result;
         bool inString = false;
@@ -27,6 +33,11 @@ public:
         return result;
     }
 
+    /// <summary>
+    /// ѕарсинг JSON-массива на отдельные объекты
+    /// </summary>
+    /// <param name="json"></param>
+    /// <returns></returns>
     static std::vector<std::string> ParseArray(const std::string& json) {
         std::vector<std::string> result;
 
@@ -85,6 +96,9 @@ public:
         return result;
     }
 
+    /// <summary>
+    /// »звелечение значени€ из JSON-объектов с помощью регул€рных выражений
+    /// </summary>
     static std::string GetStringValue(const std::string& json, const std::string& key) {
         std::regex pattern("\"" + key + "\"\\s*:\\s*\"([^\"]*)\"");
         std::smatch match;
@@ -94,6 +108,9 @@ public:
         return "";
     }
 
+    /// <summary>
+    /// »звелечение значени€ из JSON-объектов с помощью регул€рных выражений
+    /// </summary>
     static int GetIntValue(const std::string& json, const std::string& key) {
         std::regex pattern("\"" + key + "\"\\s*:\\s*(-?\\d+)");
         std::smatch match;
@@ -103,6 +120,9 @@ public:
         return 0;
     }
 
+    /// <summary>
+    /// »звелечение значени€ из JSON-объектов с помощью регул€рных выражений
+    /// </summary>
     static bool GetBoolValue(const std::string& json, const std::string& key) {
         std::regex pattern("\"" + key + "\"\\s*:\\s*(true|false)");
         std::smatch match;
@@ -132,17 +152,21 @@ void TileTypeManager::LoadDefaultTiles() {
     Logger::Log("Loaded " + std::to_string(m_tileTypes.size()) + " default tile types");
 }
 
+
 bool TileTypeManager::LoadFromFile() {
     return LoadFromFile(m_resourceFilePath);
 }
 
+/// <summary>
+/// «агрузка данных
+/// </summary>
 bool TileTypeManager::LoadFromFile(const std::string& filePath) {
     Logger::Log("=== LOADING TILE TYPES FROM: " + filePath + " ===");
 
     std::ifstream file(filePath);
     if (!file.is_open()) {
         Logger::Log("ERROR: Tile config not found: " + filePath);
-        std::cout << "Tile config not found: " << filePath << ", using defaults" << std::endl;
+        std::cout << "Tile config not found: " << filePath << ", using defaults" << '\n';
 
         Logger::Log("Attempting to create default tile config...");
         if (SaveToFile(filePath)) {
@@ -239,12 +263,15 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
     return true;
 }
 
+/// <summary>
+/// —охранение
+/// </summary>
 bool TileTypeManager::SaveToFile(const std::string& filePath) {
     std::string outputPath = filePath.empty() ? m_resourceFilePath : filePath;
     std::ofstream file(outputPath);
 
     if (!file.is_open()) {
-        std::cout << "Failed to save tile config: " << outputPath << std::endl;
+        std::cout << "Failed to save tile config: " << outputPath << '\n';
         return false;
     }
 
@@ -271,7 +298,7 @@ bool TileTypeManager::SaveToFile(const std::string& filePath) {
     file << "\n]";
     file.close();
 
-    std::cout << "Saved " << m_tileTypes.size() << " tile types to: " << outputPath << std::endl;
+    std::cout << "Saved " << m_tileTypes.size() << " tile types to: " << outputPath << '\n';
     return true;
 }
 

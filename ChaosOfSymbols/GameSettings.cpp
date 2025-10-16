@@ -10,7 +10,6 @@ GameSettings::GameSettings(const std::string& filePath)
 bool GameSettings::LoadFromFile() {
     std::ifstream file(m_settingsFilePath);
     if (!file.is_open()) {
-        std::cout << "Settings file not found, using defaults\n";
         return false;
     }
 
@@ -25,7 +24,6 @@ bool GameSettings::LoadFromFile() {
     }
 
     file.close();
-    std::cout << "Settings loaded from: " << m_settingsFilePath << std::endl;
     return true;
 }
 
@@ -40,7 +38,6 @@ bool GameSettings::SaveToFile() {
     file << "UseRandomSeed=" << (m_useRandomSeed ? "true" : "false") << std::endl;
 
     file.close();
-    std::cout << "Settings saved to: " << m_settingsFilePath << std::endl;
     return true;
 }
 

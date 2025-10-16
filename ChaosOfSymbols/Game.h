@@ -7,6 +7,24 @@
 
 class Game {
 private:
+    // Константы для настройки игры
+    static constexpr const char* LogFile = "config/debug.log";
+    static constexpr const char* WorldConfigFile = "config/world_gen.cfg";
+    static constexpr const char* WorldSaveFile = "saves/world.dat";
+
+    // Константы времени (в миллисекундах)
+    static constexpr int FrameDelayMs = 50;        // 20 FPS
+    static constexpr int MoveCooldownMs = 100;     // Задержка между движениями
+
+    // Константы игровой логики
+    static constexpr int DefaultPlayerX = 10;
+    static constexpr int DefaultPlayerY = 10;
+    static constexpr int UiUpdateInterval = 6;
+    static constexpr int MaxSearchRadius = 20;
+    static constexpr int MaxRandomAttempts = 100;
+    static constexpr int EmergencyPositionX = 1;
+    static constexpr int EmergencyPositionY = 1;
+
     bool m_isRunning;
     World* m_currentWorld;
     GameSettings* m_settings;

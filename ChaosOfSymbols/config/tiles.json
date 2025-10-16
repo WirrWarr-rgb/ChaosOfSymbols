@@ -49,7 +49,7 @@
     "name": "tree",
     "character": "T",
     "color": 2,
-    "isPassable": false,
+    "isPassable": true,
     "isDestructible": true,
     "damage": 0
   },

@@ -13,20 +13,24 @@ static bool rPressed = false;
 static bool kPressed = false;
 static bool lPressed = false;
 
+using namespace std;
+
 Game::Game()
     : m_isRunning(false), m_currentWorld(nullptr),
     m_settings(nullptr), m_renderSystem(nullptr),
-    m_tileManager(nullptr), m_playerX(10), m_playerY(10) {}
+    m_tileManager(nullptr), m_playerX(DefaultPlayerX), m_playerY(DefaultPlayerY) {}
 
 Game::~Game() {
     Shutdown();
 }
 
+/// <summary>
+/// Инициализация игры
+/// </summary>
+/// <returns>Успех/неудачу попытки инициалиоровать игру</returns>
 bool Game::Initialize() {
-    Logger::Initialize("debug.log");
+    Logger::Initialize(LogFile);
     Logger::Log("=== GAME INITIALIZATION STARTED ===");
-
-    std::cout << "Initializing ASCII Game..." << std::endl;
 
     m_settings = new GameSettings();
     m_settings->LoadFromFile();
@@ -36,25 +40,21 @@ bool Game::Initialize() {
     Logger::Log("Attempting to load tile types...");
     if (!m_tileManager->LoadFromFile()) {
         Logger::Log("ERROR: Failed to load tile types!");
-        std::cout << "ERROR: Failed to load tile types!" << std::endl;
         return false;
     }
     else {
         Logger::Log("Tile types loaded successfully");
-        std::cout << "Tile types loaded successfully" << std::endl;
 
-        Logger::Log("Number of loaded tiles: " + std::to_string(m_tileManager->GetTileCount()));
-        std::cout << "Number of loaded tiles: " << m_tileManager->GetTileCount() << std::endl;
+        int tileCount = m_tileManager->GetTileCount();
+        Logger::Log("Number of loaded tiles: " + to_string(tileCount));
 
-        for (int i = 0; i <= 7; i++) {
+        for (int i = 0; i < tileCount; i++) {
             TileType* tile = m_tileManager->GetTileType(i);
             if (tile) {
-                Logger::Log("Tile " + std::to_string(i) + ": " + tile->GetName() + " ('" + std::string(1, tile->GetCharacter()) + "')");
-                std::cout << "Tile " << i << ": " << tile->GetName() << " ('" << tile->GetCharacter() << "')" << std::endl;
+                Logger::Log("Tile " + to_string(i) + ": " + tile->GetName() + " ('" + string(1, tile->GetCharacter()) + "')");
             }
             else {
-                Logger::Log("WARNING: Tile " + std::to_string(i) + " not found!");
-                std::cout << "WARNING: Tile " << i << " not found!" << std::endl;
+                Logger::Log("WARNING: Tile " + to_string(i) + " not found!");
             }
         }
     }
@@ -65,7 +65,7 @@ bool Game::Initialize() {
 
     m_renderSystem = new RenderSystem(m_tileManager);
 
-    m_currentWorld->GenerateFromConfig("config/world_gen.cfg");
+    m_currentWorld->GenerateFromConfig(WorldConfigFile);
 
     m_renderSystem->SetScreenSize(m_currentWorld->GetWidth(), m_currentWorld->GetHeight());
 
@@ -84,7 +84,7 @@ bool Game::Initialize() {
 void Game::Shutdown() {
     Logger::Log("=== GAME SHUTDOWN STARTED ===");
 
-    std::cout << "Shutting down game..." << std::endl;
+    cout << "Shutting down game..." << endl;
 
     if (m_settings) {
         m_settings->SaveToFile();
@@ -95,21 +95,24 @@ void Game::Shutdown() {
     delete m_tileManager;
     delete m_renderSystem;
 
-    std::cout << "Game shutdown complete." << std::endl;
+    cout << "Game shutdown complete." << endl;
     Logger::Log("=== GAME SHUTDOWN COMPLETED ===");
 
     Logger::Close();
 }
 
+/// <summary>
+/// Игровой цикл
+/// </summary>
 void Game::Run() {
-    auto lastTime = std::chrono::steady_clock::now();
+    auto lastTime = chrono::steady_clock::now(); //начальной время для расчеты дельта времени
 
     while (m_isRunning) {
-        auto currentTime = std::chrono::steady_clock::now();
-        auto deltaTime = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastTime);
+        auto currentTime = chrono::steady_clock::now(); //тек. время
+        auto deltaTime = chrono::duration_cast<chrono::milliseconds>(currentTime - lastTime); //разница с предыдущим кадром
 
-        if (deltaTime.count() < 50) {
-            std::this_thread::sleep_for(std::chrono::milliseconds(50 - deltaTime.count()));
+        if (deltaTime.count() < FrameDelayMs) { //если прошло меньше N мс, то ждем оставшееся время и переходим к следующей итерации
+            this_thread::sleep_for(chrono::milliseconds(FrameDelayMs - deltaTime.count()));
             continue;
         }
 
@@ -121,12 +124,15 @@ void Game::Run() {
     }
 }
 
+/// <summary>
+/// Обработка ввода
+/// </summary>
 void Game::ProcessInput() {
-    static auto lastMoveTime = std::chrono::steady_clock::now();
-    auto currentTime = std::chrono::steady_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastMoveTime);
+    static auto lastMoveTime = chrono::steady_clock::now(); //стат. для ограничения скорости движения
+    auto currentTime = chrono::steady_clock::now();
+    auto elapsed = chrono::duration_cast<chrono::milliseconds>(currentTime - lastMoveTime); //время с последнего движения
 
-    if (elapsed.count() < 100) {
+    if (elapsed.count() < MoveCooldownMs) { //игнор, если мало времени прошло
         return;
     }
 
@@ -165,29 +171,11 @@ void Game::ProcessInput() {
     else {
         rPressed = false;
     }
-
-    if (GetAsyncKeyState('K') & 0x8000) {
-        if (!kPressed) {
-            m_currentWorld->SaveToFile("saves/world.dat");
-            kPressed = true;
-        }
-    }
-    else {
-        kPressed = false;
-    }
-
-    if (GetAsyncKeyState('L') & 0x8000) {
-        if (!lPressed) {
-            m_currentWorld->LoadFromFile("saves/world.dat");
-            EnsureValidPlayerPosition();
-            lPressed = true;
-        }
-    }
-    else {
-        lPressed = false;
-    }
 }
 
+/// <summary>
+/// Обновление состояния
+/// </summary>
 void Game::Update() {
     int currentTile = m_currentWorld->GetTileAt(m_playerX, m_playerY);
     TileType* tile = m_tileManager->GetTileType(currentTile);
@@ -197,24 +185,35 @@ void Game::Update() {
     }
 }
 
+/// <summary>
+/// Отрисовка
+/// </summary>
 void Game::Render() {
     static int lastPlayerX = m_playerX;
     static int lastPlayerY = m_playerY;
 
-    m_renderSystem->DrawWorld(*m_currentWorld);
+    m_renderSystem->StartFrame();
 
+    m_renderSystem->DrawWorld(*m_currentWorld);
     m_renderSystem->DrawPlayer(m_playerX, m_playerY, lastPlayerX, lastPlayerY, *m_currentWorld);
 
     static int uiCounter = 0;
-    if (uiCounter++ > 5) {
+    if (uiCounter++ > UiUpdateInterval) {
         m_renderSystem->DrawUI(*m_currentWorld, m_playerX, m_playerY);
         uiCounter = 0;
     }
+
+    m_renderSystem->EndFrame();
 
     lastPlayerX = m_playerX;
     lastPlayerY = m_playerY;
 }
 
+/// <summary>
+/// Движение и позиционирование игрока
+/// </summary>
+/// <param name="dx">Смещение по X (-1 : влево, 0 : на месте, 1 : вправо</param>
+/// <param name="dy">Смещение по Y (-1 : вверх, 0 : на месте, 1 : вниз</param>
 void Game::MovePlayer(int dx, int dy) {
     int newX = m_playerX + dx;
     int newY = m_playerY + dy;
@@ -232,6 +231,9 @@ void Game::MovePlayer(int dx, int dy) {
     }
 }
 
+/// <summary>
+/// Проверяет текущую позицию и исправляет ее при необходимости
+/// </summary>
 void Game::EnsureValidPlayerPosition() {
     int currentTile = m_currentWorld->GetTileAt(m_playerX, m_playerY);
     TileType* tile = m_tileManager->GetTileType(currentTile);
@@ -241,12 +243,11 @@ void Game::EnsureValidPlayerPosition() {
     }
 }
 
+/// <summary>
+/// Поиск ближайшего проходимого места
+/// </summary>
 void Game::FindNearestPassablePosition() {
-    std::cout << "Player stuck in impassable tile! Finding nearest passable position..." << std::endl;
-
-    const int maxRadius = 10;
-
-    for (int radius = 1; radius <= maxRadius; radius++) {
+    for (int radius = 1; radius <= MaxSearchRadius; radius++) {
         for (int dy = -radius; dy <= radius; dy++) {
             for (int dx = -radius; dx <= radius; dx++) {
                 if (radius > 1 && abs(dx) < radius && abs(dy) < radius) {
@@ -263,7 +264,6 @@ void Game::FindNearestPassablePosition() {
                     TileType* tile = m_tileManager->GetTileType(tileId);
 
                     if (tile && tile->IsPassable()) {
-                        std::cout << "Found passable position at: " << checkX << ", " << checkY << std::endl;
                         m_playerX = checkX;
                         m_playerY = checkY;
                         return;
@@ -276,12 +276,15 @@ void Game::FindNearestPassablePosition() {
     FindRandomPassablePosition();
 }
 
+/// <summary>
+/// Поиск рандомного проходимого места
+/// </summary>
 void Game::FindRandomPassablePosition() {
-    std::cout << "Using fallback: searching for random passable position..." << std::endl;
+    cout << "Using fallback: searching for random passable position..." << endl;
 
     srand(static_cast<unsigned int>(time(nullptr)));
 
-    for (int attempt = 0; attempt < 100; attempt++) {
+    for (int attempt = 0; attempt < MaxRandomAttempts; attempt++) {
         int randomX = rand() % m_currentWorld->GetWidth();
         int randomY = rand() % m_currentWorld->GetHeight();
 
@@ -289,14 +292,14 @@ void Game::FindRandomPassablePosition() {
         TileType* tile = m_tileManager->GetTileType(tileId);
 
         if (tile && tile->IsPassable()) {
-            std::cout << "Found random passable position at: " << randomX << ", " << randomY << std::endl;
+            cout << "Found random passable position at: " << randomX << ", " << randomY << endl;
             m_playerX = randomX;
             m_playerY = randomY;
             return;
         }
     }
 
-    std::cout << "Emergency: setting player to position 1,1" << std::endl;
-    m_playerX = 1;
-    m_playerY = 1;
+    cout << "Emergency: setting player to position 1,1" << endl;
+    m_playerX = EmergencyPositionX;
+    m_playerY = EmergencyPositionY;
 }

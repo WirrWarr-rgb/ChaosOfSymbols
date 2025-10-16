@@ -1,14 +1,23 @@
 #include "RenderSystem.h"
 #include "Logger.h"
 #include <iostream>
+#include <algorithm>
 #define NOMINMAX
 #include <windows.h>
+#include <chrono>
 
 namespace rlutil {
+    /// <summary>
+    /// Установка цвета текста
+    /// </summary>
+    /// <param name="color">Цвет</param>
     void setColor(int color) {
         SetConsoleTextAttribute(GetStdHandle(STD_OUTPUT_HANDLE), color);
     }
 
+    /// <summary>
+    /// Очистка экрана
+    /// </summary>
     void cls() {
         COORD topLeft = { 0, 0 };
         CONSOLE_SCREEN_BUFFER_INFO screen;
@@ -23,6 +32,11 @@ namespace rlutil {
         SetConsoleCursorPosition(console, topLeft);
     }
 
+    /// <summary>
+    /// Перемещение курсора в координаты X.Y.
+    /// </summary>
+    /// <param name="x">Координата X</param>
+    /// <param name="y">Координата Y</param>
     void locate(int x, int y) {
         COORD coord;
         coord.X = static_cast<SHORT>(x);
@@ -30,6 +44,9 @@ namespace rlutil {
         SetConsoleCursorPosition(GetStdHandle(STD_OUTPUT_HANDLE), coord);
     }
 
+    /// <summary>
+    /// Скрытие курсора
+    /// </summary>
     void hideCursor() {
         CONSOLE_CURSOR_INFO cursorInfo;
         cursorInfo.dwSize = 100;
@@ -50,22 +67,38 @@ namespace rlutil {
     }
 }
 
+/// <summary>
+/// Конструктор: инициализация
+/// </summary>
 RenderSystem::RenderSystem(TileTypeManager* tileManager)
     : m_tileManager(tileManager) {
     rlutil::hideCursor();
-    m_screenWidth = 80;
-    m_screenHeight = 24;
+    m_screenWidth = DefaultScreenWidth;
+    m_screenHeight = DefaultScreenHeight;
     InitializePreviousFrame();
+
+    // Инициализация статистики
+    m_stats.lastFpsUpdate = std::chrono::steady_clock::now();
+    m_stats.fpsHistory.reserve(60); // Храним историю за последние 60 кадров
 }
 
+/// <summary>
+/// Деструктор: восстановление консоли
+/// </summary>
 RenderSystem::~RenderSystem() {
-    COORD size = { 80, 25 };
+    COORD size = { DefaultScreenWidth, DefaultScreenHeight-1 };
     SetConsoleScreenBufferSize(GetStdHandle(STD_OUTPUT_HANDLE), size);
 
-    SMALL_RECT rect = { 0, 0, 79, 24 };
+    SMALL_RECT rect = { 0, 0, DefaultScreenWidth-1, DefaultScreenHeight-1 };
     SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), TRUE, &rect);
 }
 
+
+/// <summary>
+/// Управление размером экрана
+/// </summary>
+/// <param name="width">Ширина</param>
+/// <param name="height">Высота</param>
 void RenderSystem::SetScreenSize(int width, int height) {
     m_screenWidth = width;
     m_screenHeight = height;
@@ -82,16 +115,35 @@ void RenderSystem::SetScreenSize(int width, int height) {
     ClearScreen();
 }
 
+/// <summary>
+/// Система двойной буферизации: перерисовка только изменившихся символов
+/// </summary>
 void RenderSystem::InitializePreviousFrame() {
     m_previousFrame.clear();
     m_previousFrame.resize(m_screenHeight, std::vector<int>(m_screenWidth, -1));
 }
 
+/// <summary>
+/// Система двойной буферизации: проверка изменился ли тайл
+/// </summary>
+bool RenderSystem::NeedsRedraw(int x, int y, int tileId) {
+    if (x < 0 || x >= m_screenWidth || y < 0 || y >= m_screenHeight)
+        return false;
+
+    return m_previousFrame[y][x] != tileId;
+}
+
+/// <summary>
+/// Очистка консоли
+/// </summary>
 void RenderSystem::ClearScreen() {
     rlutil::cls();
     InitializePreviousFrame();
 }
 
+/// <summary>
+/// Отрисовка мира
+/// </summary>
 void RenderSystem::DrawWorld(const World& world) {
     int worldWidth = world.GetWidth();
     int worldHeight = world.GetHeight();
@@ -104,15 +156,6 @@ void RenderSystem::DrawWorld(const World& world) {
     static bool firstDraw = true;
     if (firstDraw) {
         Logger::Log("First draw - world size: " + std::to_string(worldWidth) + "x" + std::to_string(worldHeight));
-        for (int y = 0; y < std::min(3, worldHeight); y++) {
-            for (int x = 0; x < std::min(3, worldWidth); x++) {
-                int tileId = world.GetTileAt(x, y);
-                TileType* tile = m_tileManager->GetTileType(tileId);
-                Logger::Log("Tile at " + std::to_string(x) + "," + std::to_string(y) +
-                    ": ID=" + std::to_string(tileId) +
-                    ", TilePtr=" + (tile ? tile->GetName() : "NULL"));
-            }
-        }
         firstDraw = false;
     }
 
@@ -129,29 +172,26 @@ void RenderSystem::DrawWorld(const World& world) {
                     std::cout << tile->GetCharacter();
                 }
                 else {
-                    rlutil::setColor(8);
-                    std::cout << '?';
-                    if (x < 5 && y < 5) {
-                        Logger::Log("WARNING: Unknown tile ID " + std::to_string(tileId) +
-                            " at position " + std::to_string(x) + "," + std::to_string(y));
-                    }
+                    rlutil::setColor(UnknownTileColor);
+                    std::cout << UnknownTileChar;
                 }
 
                 m_previousFrame[y][x] = tileId;
+                m_stats.tilesDrawn++; // Считаем отрисованные тайлы
+            }
+            else {
+                m_stats.tilesSkipped++; // Считаем пропущенные тайлы
             }
         }
     }
     rlutil::setColor(15);
 }
 
-bool RenderSystem::NeedsRedraw(int x, int y, int tileId) {
-    if (x < 0 || x >= m_screenWidth || y < 0 || y >= m_screenHeight)
-        return false;
-
-    return m_previousFrame[y][x] != tileId;
-}
-
+/// <summary>
+/// Отрисовка игрока
+/// </summary>
 void RenderSystem::DrawPlayer(int x, int y, int previousX, int previousY, const World& world) {
+    // Восстановление тайла на предыдущей позиции игрока
     if (previousX >= 0 && previousX < m_screenWidth &&
         previousY >= 0 && previousY < m_screenHeight) {
 
@@ -166,16 +206,20 @@ void RenderSystem::DrawPlayer(int x, int y, int previousX, int previousY, const 
         }
     }
 
+    // Отрисовка игрока на новой позиции
     if (x >= 0 && x < m_screenWidth && y >= 0 && y < m_screenHeight) {
         rlutil::locate(x, y);
-        rlutil::setColor(12);
-        std::cout << '@';
-        m_previousFrame[y][x] = -2;
+        rlutil::setColor(PlayerColor);
+        std::cout << PlayerChar;
+        m_previousFrame[y][x] = PlayerTileId;
     }
 
     rlutil::setColor(15);
 }
 
+/// <summary>
+/// Отрисовка пользовательского интерфейса
+/// </summary>
 void RenderSystem::DrawUI(const World& world, int posX, int posY) {
     rlutil::locate(0, m_screenHeight);
     for (int i = 0; i < m_screenWidth; i++) {
@@ -185,5 +229,86 @@ void RenderSystem::DrawUI(const World& world, int posX, int posY) {
     rlutil::locate(0, m_screenHeight);
     std::cout << "Pos: " << posX << "," << posY;
     std::cout << " | Seed: " << world.GetCurrentSeed();
+    std::cout << " | FPS: " << static_cast<int>(m_stats.currentFps);
     std::cout << " | Controls: WASD-move, Q-quit, R-regenerate";
+}
+
+/// <summary>
+/// Начало отрисовки кадра
+/// </summary>
+void RenderSystem::StartFrame() {
+    m_stats.frameStart = std::chrono::steady_clock::now();
+    m_stats.tilesDrawn = 0;
+    m_stats.tilesSkipped = 0;
+}
+
+/// <summary>
+/// Завершение отрисовки кадра
+/// </summary>
+void RenderSystem::EndFrame() {
+    auto frameEnd = std::chrono::steady_clock::now();
+    auto frameTime = std::chrono::duration_cast<std::chrono::microseconds>(
+        frameEnd - m_stats.frameStart).count();
+
+    // Расчет FPS
+    if (frameTime > 0) {
+        m_stats.currentFps = 1000000.0 / frameTime; // FPS = 1 / время_кадра_в_секундах
+    }
+    else {
+        m_stats.currentFps = 0.0;
+    }
+
+    m_stats.framesRendered++;
+
+    // Обновление статистики FPS каждую секунду
+    UpdateFPS();
+}
+
+/// <summary>
+/// Обновление статистики FPS
+/// </summary>
+void RenderSystem::UpdateFPS() {
+    auto now = std::chrono::steady_clock::now();
+    auto timeSinceLastUpdate = std::chrono::duration_cast<std::chrono::milliseconds>(
+        now - m_stats.lastFpsUpdate).count();
+
+    if (timeSinceLastUpdate >= 1000) {
+        m_stats.fpsHistory.push_back(m_stats.currentFps);
+
+        if (m_stats.fpsHistory.size() > 60) {
+            m_stats.fpsHistory.erase(m_stats.fpsHistory.begin());
+        }
+
+        double sum = 0.0;
+        for (double fps : m_stats.fpsHistory) {
+            sum += fps;
+        }
+        m_stats.averageFps = sum / m_stats.fpsHistory.size();
+
+        m_stats.minFps = std::min(m_stats.minFps, m_stats.currentFps);
+        m_stats.maxFps = std::max(m_stats.maxFps, m_stats.currentFps);
+
+        m_stats.lastFpsUpdate = now;
+
+        static int logCounter = 0;
+        if (++logCounter >= 5) {
+            LogStats();
+            logCounter = 0;
+        }
+    }
+}
+
+/// <summary>
+/// Логирование статистики
+/// </summary>
+void RenderSystem::LogStats() const {
+    int totalTiles = m_screenWidth * m_screenHeight;
+    double efficiency = (m_stats.tilesDrawn * 100.0) / totalTiles;
+
+    Logger::Log("Render Stats - FPS: " + std::to_string(static_cast<int>(m_stats.currentFps)) +
+        " | Avg: " + std::to_string(static_cast<int>(m_stats.averageFps)) +
+        " | Min: " + std::to_string(static_cast<int>(m_stats.minFps)) +
+        " | Max: " + std::to_string(static_cast<int>(m_stats.maxFps)) +
+        " | Efficiency: " + std::to_string(static_cast<int>(efficiency)) + "%" +
+        " | Tiles: " + std::to_string(m_stats.tilesDrawn) + "/" + std::to_string(totalTiles));
 }
