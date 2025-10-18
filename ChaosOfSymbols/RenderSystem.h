@@ -20,8 +20,8 @@ private:
     static constexpr int DefaultScreenHeight = 24;
     static constexpr int PlayerColor = 12; // Красный
     static constexpr char PlayerChar = '@';
-    static constexpr int UnknownTileColor = 8; // Серый
-    static constexpr char UnknownTileChar = '?';
+    static constexpr int UnknownTileColor = 10; // Серый
+    static constexpr char UnknownTileChar = '.';
     static constexpr int PlayerTileId = -2; // Специальный ID для игрока
 
     // Статистика

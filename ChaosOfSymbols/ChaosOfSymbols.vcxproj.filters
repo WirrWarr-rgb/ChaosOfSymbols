@@ -42,6 +42,12 @@
     <ClCompile Include="Logger.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="CellularAutomatonRules.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="WorldSpawnConfig.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FastNoiseLite.h">
@@ -69,6 +75,15 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Logger.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="CellularAutomatonRules.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="SpawnRule.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="WorldSpawnConfig.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

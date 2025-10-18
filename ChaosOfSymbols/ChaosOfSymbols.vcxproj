@@ -132,6 +132,7 @@
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="CellularAutomatonRules.cpp" />
     <ClCompile Include="Game.cpp" />
     <ClCompile Include="GameSettings.cpp" />
     <ClCompile Include="Logger.cpp" />
@@ -141,17 +142,21 @@
     <ClCompile Include="TileTypeManager.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="WorldGenerationConfig.cpp" />
+    <ClCompile Include="WorldSpawnConfig.cpp" />
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="CellularAutomatonRules.h" />
     <ClInclude Include="FastNoiseLite.h" />
     <ClInclude Include="Game.h" />
     <ClInclude Include="GameSettings.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="SpawnRule.h" />
     <ClInclude Include="TileType.h" />
     <ClInclude Include="TileTypeManager.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="WorldGenerationConfig.h" />
+    <ClInclude Include="WorldSpawnConfig.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

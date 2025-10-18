@@ -10,8 +10,6 @@
 #include <ctime>
 
 static bool rPressed = false;
-static bool kPressed = false;
-static bool lPressed = false;
 
 using namespace std;
 
@@ -62,6 +60,10 @@ bool Game::Initialize() {
     Logger::Log("Testing config-based generation...");
 
     m_currentWorld = new World();
+    m_currentWorld->SetTileManager(m_tileManager);
+
+    // Включаем клеточный автомат
+    m_currentWorld->SetAutomatonEnabled(true);
 
     m_renderSystem = new RenderSystem(m_tileManager);
 
@@ -128,29 +130,41 @@ void Game::Run() {
 /// Обработка ввода
 /// </summary>
 void Game::ProcessInput() {
-    static auto lastMoveTime = chrono::steady_clock::now(); //стат. для ограничения скорости движения
+    static auto lastMoveTime = chrono::steady_clock::now();
     auto currentTime = chrono::steady_clock::now();
-    auto elapsed = chrono::duration_cast<chrono::milliseconds>(currentTime - lastMoveTime); //время с последнего движения
+    auto elapsed = chrono::duration_cast<chrono::milliseconds>(currentTime - lastMoveTime);
 
-    if (elapsed.count() < MoveCooldownMs) { //игнор, если мало времени прошло
+    if (elapsed.count() < MoveCooldownMs) {
         return;
     }
+
+    bool playerMoved = false;
 
     if (GetAsyncKeyState('W') & 0x8000 || GetAsyncKeyState(VK_UP) & 0x8000) {
         MovePlayer(0, -1);
         lastMoveTime = currentTime;
+        playerMoved = true;
     }
     if (GetAsyncKeyState('S') & 0x8000 || GetAsyncKeyState(VK_DOWN) & 0x8000) {
         MovePlayer(0, 1);
         lastMoveTime = currentTime;
+        playerMoved = true;
     }
     if (GetAsyncKeyState('A') & 0x8000 || GetAsyncKeyState(VK_LEFT) & 0x8000) {
         MovePlayer(-1, 0);
         lastMoveTime = currentTime;
+        playerMoved = true;
     }
     if (GetAsyncKeyState('D') & 0x8000 || GetAsyncKeyState(VK_RIGHT) & 0x8000) {
         MovePlayer(1, 0);
         lastMoveTime = currentTime;
+        playerMoved = true;
+    }
+
+    // Обновляем клеточный автомат только если игрок действительно двигался
+    if (playerMoved && m_currentWorld->IsAutomatonEnabled()) {
+        Logger::Log("Player moved - updating cellular automaton");
+        m_currentWorld->UpdateCellularAutomaton();
     }
 
     if (GetAsyncKeyState('Q') & 0x8000) {

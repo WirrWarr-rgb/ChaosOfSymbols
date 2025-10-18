@@ -1,6 +1,9 @@
 #pragma once
 #include "FastNoiseLite.h"
 #include "WorldGenerationConfig.h"
+#include "WorldSpawnConfig.h"
+#include "CellularAutomatonRules.h"
+#include "TileTypeManager.h"
 #include <vector>
 #include <string>
 
@@ -12,20 +15,31 @@ private:
     FastNoiseLite m_noiseGenerator;
     int m_currentSeed;
     WorldGenConfig m_genConfig;
+    WorldSpawnConfig m_spawnConfig;
+    CellularAutomatonConfig m_automatonConfig;
+    bool m_automatonEnabled;
+    TileTypeManager* m_tileManager;
 
 public:
     World();
-
-    void Generate(int seed);
     void GenerateFromConfig(const std::string& configPath = "config/world_gen.cfg");
-    bool LoadFromFile(const std::string& path);
-    bool SaveToFile(const std::string& path);
     int GetTileAt(int x, int y) const;
 
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
     int GetCurrentSeed() const { return m_currentSeed; }
-    const WorldGenConfig& GetGenConfig() const { return m_genConfig; }
 
-    void SetSize(int width, int height);
-};  
+    void SetTileManager(TileTypeManager* tileManager) { m_tileManager = tileManager; }
+
+    // Методы для клеточного автомата
+    void UpdateCellularAutomaton();
+    void SetAutomatonEnabled(bool enabled) { m_automatonEnabled = enabled; }
+    bool IsAutomatonEnabled() const { return m_automatonEnabled; }
+
+private:
+    void GenerateBaseTerrain();
+    void ApplySpawnRules();
+    char GetTileCharacter(int tileId) const;
+    int FindTileIdByCharacter(char character) const;
+    std::unordered_map<char, int> CountNeighbors(int x, int y, const std::vector<std::vector<int>>& currentMap) const;
+};

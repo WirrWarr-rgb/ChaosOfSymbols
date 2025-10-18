@@ -22,7 +22,7 @@
     "name": "stone_wall",
     "character": "#",
     "color": 8,
-    "isPassable": false,
+    "isPassable": true,
     "isDestructible": true,
     "damage": 0
   },
@@ -31,43 +31,17 @@
     "name": "water",
     "character": "~",
     "color": 9,
-    "isPassable": false,
+    "isPassable": true,
     "isDestructible": false,
     "damage": 0
   },
+
   {
     "id": 4,
-    "name": "lava",
-    "character": "~",
-    "color": 4,
-    "isPassable": true,
-    "isDestructible": false,
-    "damage": 5
-  },
-  {
-    "id": 5,
-    "name": "tree",
-    "character": "T",
-    "color": 2,
-    "isPassable": true,
-    "isDestructible": true,
-    "damage": 0
-  },
-  {
-    "id": 6,
-    "name": "sand",
-    "character": ",",
-    "color": 14,
-    "isPassable": true,
-    "isDestructible": false,
-    "damage": 0
-  },
-  {
-    "id": 7,
     "name": "mountain",
     "character": "^",
     "color": 7,
-    "isPassable": false,
+    "isPassable": true,
     "isDestructible": false,
     "damage": 0
   }

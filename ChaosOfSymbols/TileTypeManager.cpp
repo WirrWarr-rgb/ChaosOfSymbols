@@ -36,8 +36,6 @@ public:
     /// <summary>
     /// Парсинг JSON-массива на отдельные объекты
     /// </summary>
-    /// <param name="json"></param>
-    /// <returns></returns>
     static std::vector<std::string> ParseArray(const std::string& json) {
         std::vector<std::string> result;
 

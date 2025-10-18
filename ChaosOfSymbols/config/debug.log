@@ -2,7 +2,7 @@
 === GAME INITIALIZATION STARTED ===
 Attempting to load tile types...
 === LOADING TILE TYPES FROM: config/tiles.json ===
-File opened successfully, size: 1208 bytes
+File opened successfully, size: 759 bytes
 JSON content starts with: [
   {
     "id": 0,
@@ -12,179 +12,169 @@ JSON content ends with: ...    "isDestructible": false,
     "damage": 0
   }
 ]
-Cleaned JSON: [  {    "id": 0,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 1,    "name": "grass",    "character": ".",    "color": 10,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 2,    "name": "stone_wall",    "character": "#",    "color": 8,    "isPassable": false,    "isDestructible": true,    "damage": 0  },  {    "id": 3,    "name": "water",    "character": "~",    "color": 9,    "isPassable": false,    "isDestructible": false,    "damage": 0  },  {    "id": 4,    "name": "lava",    "character": "~",    "color": 4,    "isPassable": true,    "isDestructible": false,    "damage": 5  },  {    "id": 5,    "name": "tree",    "character": "T",    "color": 2,    "isPassable": true,    "isDestructible": true,    "damage": 0  },  {    "id": 6,    "name": "sand",    "character": ",",    "color": 14,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 7,    "name": "mountain",    "character": "^",    "color": 7,    "isPassable": false,    "isDestructible": false,    "damage": 0  }]
+Cleaned JSON: [  {    "id": 0,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 1,    "name": "grass",    "character": ".",    "color": 10,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 2,    "name": "stone_wall",    "character": "#",    "color": 8,    "isPassable": true,    "isDestructible": true,    "damage": 0  },  {    "id": 3,    "name": "water",    "character": "~",    "color": 9,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 4,    "name": "mountain",    "character": "^",    "color": 7,    "isPassable": true,    "isDestructible": false,    "damage": 0  }]
 Found object: {    "id": 0,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
 Found object: {    "id": 1,    "name": "grass",    "character": ".",    "color": 10,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
-Found object: {    "id": 2,    "name": "stone_wall",    "character": "#",    "color": 8,    "isPassable": false,    "isDestructible": true,    "damage": 0  }
-Found object: {    "id": 3,    "name": "water",    "character": "~",    "color": 9,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
-Found object: {    "id": 4,    "name": "lava",    "character": "~",    "color": 4,    "isPassable": true,    "isDestructible": false,    "damage": 5  }
-Found object: {    "id": 5,    "name": "tree",    "character": "T",    "color": 2,    "isPassable": true,    "isDestructible": true,    "damage": 0  }
-Found object: {    "id": 6,    "name": "sand",    "character": ",",    "color": 14,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
-Found object: {    "id": 7,    "name": "mountain",    "character": "^",    "color": 7,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
-Parsed 8 objects from JSON array
-Found 8 tile objects in JSON
+Found object: {    "id": 2,    "name": "stone_wall",    "character": "#",    "color": 8,    "isPassable": true,    "isDestructible": true,    "damage": 0  }
+Found object: {    "id": 3,    "name": "water",    "character": "~",    "color": 9,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
+Found object: {    "id": 4,    "name": "mountain",    "character": "^",    "color": 7,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
+Parsed 5 objects from JSON array
+Found 5 tile objects in JSON
 Parsed tile - id: 0, name: air, character: ' ', color: 0, passable: true
 Successfully registered tile: air
 Parsed tile - id: 1, name: grass, character: '.', color: 10, passable: true
 Successfully registered tile: grass
-Parsed tile - id: 2, name: stone_wall, character: '#', color: 8, passable: false
+Parsed tile - id: 2, name: stone_wall, character: '#', color: 8, passable: true
 Successfully registered tile: stone_wall
-Parsed tile - id: 3, name: water, character: '~', color: 9, passable: false
+Parsed tile - id: 3, name: water, character: '~', color: 9, passable: true
 Successfully registered tile: water
-Parsed tile - id: 4, name: lava, character: '~', color: 4, passable: true
-Successfully registered tile: lava
-Parsed tile - id: 5, name: tree, character: 'T', color: 2, passable: true
-Successfully registered tile: tree
-Parsed tile - id: 6, name: sand, character: ',', color: 14, passable: true
-Successfully registered tile: sand
-Parsed tile - id: 7, name: mountain, character: '^', color: 7, passable: false
+Parsed tile - id: 4, name: mountain, character: '^', color: 7, passable: true
 Successfully registered tile: mountain
-=== TILE LOADING COMPLETED: 8 tiles loaded ===
+=== TILE LOADING COMPLETED: 5 tiles loaded ===
 === LOADED TILES SUMMARY ===
 Tile 0: ' ' - air (color: 0)
 Tile 1: '.' - grass (color: 10)
 Tile 2: '#' - stone_wall (color: 8)
 Tile 3: '~' - water (color: 9)
-Tile 4: '~' - lava (color: 4)
-Tile 5: 'T' - tree (color: 2)
-Tile 6: ',' - sand (color: 14)
-Tile 7: '^' - mountain (color: 7)
+Tile 4: '^' - mountain (color: 7)
 === END LOADED TILES SUMMARY ===
 Tile types loaded successfully
-Number of loaded tiles: 8
+Number of loaded tiles: 5
 Tile 0: air (' ')
 Tile 1: grass ('.')
 Tile 2: stone_wall ('#')
 Tile 3: water ('~')
-Tile 4: lava ('~')
-Tile 5: tree ('T')
-Tile 6: sand (',')
-Tile 7: mountain ('^')
+Tile 4: mountain ('^')
 Testing config-based generation...
-World constructor: creating empty world
-=== STARTING GENERATE FROM CONFIG ===
+=== STARTING PURE RULE-BASED GENERATION ===
 Loading world config from: config/world_gen.cfg
-Found section: World
-Parsing Width = 72 in section World
-Set width to 72
-Parsing Height = 32 in section World
-Set height to 32
-Parsing Seed = 12345 in section World
-Set seed to 12345
-Parsing UseRandomSeed = true in section World
-Set useRandomSeed to true
-Parsing NoiseFrequency = 0.05 in section World
-Set noiseFrequency to 0.050000
-Found section: Biomes
-Parsing deep_water = -1.0,-0.4,3,1.0 in section Biomes
-Added biome: deep_water [-1.000000 to -0.400000] -> tile 3 prob 1.000000
-Parsing water = -0.4,-0.2,3,1.0 in section Biomes
-Added biome: water [-0.400000 to -0.200000] -> tile 3 prob 1.000000
-Parsing sand = -0.2,-0.1,6,1.0 in section Biomes
-Added biome: sand [-0.200000 to -0.100000] -> tile 6 prob 1.000000
-Parsing grass = -0.5,0.7,1,1.0 in section Biomes
-Added biome: grass [-0.500000 to 0.700000] -> tile 1 prob 1.000000
-Parsing forest = 0.1,0,5,0.4 in section Biomes
-Added biome: forest [0.100000 to 0.000000] -> tile 5 prob 0.400000
-Parsing stone = 0.3,0.6,2,1.0 in section Biomes
-Added biome: stone [0.300000 to 0.600000] -> tile 2 prob 1.000000
-Parsing mountain = 0.6,1.0,7,1.0 in section Biomes
-Added biome: mountain [0.600000 to 1.000000] -> tile 7 prob 1.000000
-Found section: SpecialFeatures
-Parsing 4 = 0.02 in section SpecialFeatures
-Special feature: tile 4 probability 0.020000
-Parsing 5 = 0.1 in section SpecialFeatures
-Special feature: tile 5 probability 0.100000
-Config loaded successfully. Biomes: 7, Special features: 2
-World size set from config: 72x32
-Using seed: 1760631703, noise frequency: 0.050000
-Barrier created around the world
-Tiles placed by biomes: 2100
-Tiles placed by features: 249
-=== GENERATE FROM CONFIG COMPLETED ===
+World size: 80x24
+Using seed: 1760759269
+=== PARSING CELLULAR AUTOMATON CONFIG ===
+Line 1: skipped (comment/empty)
+Line 2: skipped (comment/empty)
+Line 3: skipped (comment/empty)
+Line 4: skipped (comment/empty)
+Line 5: skipped (comment/empty)
+Line 6: found tile definition: '.'
+Line 7: key='survival', value='count['.'] >= 2 && count['.'] <= 7'
+Set survival rule for tile '.': count['.'] >= 2 && count['.'] <= 7
+Line 8: key='birth', value='count['.'] >= 3 || count['~'] >= 2'
+Set birth rule for tile '.': count['.'] >= 3 || count['~'] >= 2
+SUCCESS: Registered rule for tile '.'
+Line 9: key='death', value='count['.'] >= 5'
+ERROR: Rule without tile definition at line 9
+Line 10: skipped (comment/empty)
+Line 11: skipped (comment/empty)
+Line 12: skipped (comment/empty)
+Line 13: skipped (comment/empty)
+Line 14: skipped (comment/empty)
+Line 15: skipped (comment/empty)
+Line 16: skipped (comment/empty)
+Line 17: skipped (comment/empty)
+Line 18: found tile definition: '~'
+Line 19: key='survival', value='count['~'] >= 1 && count['~'] <= 7'
+Set survival rule for tile '~': count['~'] >= 1 && count['~'] <= 7
+Line 20: key='birth', value='count['~'] >= 3 || count['.'] >= 3'
+Set birth rule for tile '~': count['~'] >= 3 || count['.'] >= 3
+SUCCESS: Registered rule for tile '~'
+Line 21: key='death', value='count['~'] >= 7'
+ERROR: Rule without tile definition at line 21
+Line 22: skipped (comment/empty)
+Line 23: skipped (comment/empty)
+Line 24: found tile definition: '^'
+Line 25: key='survival', value='count['^'] >= 1'
+Set survival rule for tile '^': count['^'] >= 1
+Line 26: key='birth', value='count['^'] >= 1 || count['.'] >= 7'
+Set birth rule for tile '^': count['^'] >= 1 || count['.'] >= 7
+SUCCESS: Registered rule for tile '^'
+Line 27: key='death', value='count['~'] >= 2'
+ERROR: Rule without tile definition at line 27
+=== CELLULAR AUTOMATON CONFIG PARSING COMPLETE ===
+Total rules loaded: 3
+Rule for '^' is available
+Rule for '~' is available
+Rule for '.' is available
+Using base tile ID: 1
+Base terrain generated with tile: 1
+Loading spawn config from: config/world_spawn.cfg
+Added spawn rule: '~' -> prob: 0.100000, allowed: '.~'
+Added spawn rule: '^' -> prob: 0.400000, allowed: '.'
+Spawn config loaded: 2 spawn tiles with rules
+Applying spawn rules
+Spawn rules applied: 984 tiles changed
+=== RULE-BASED GENERATION COMPLETED ===
 === GAME INITIALIZATION COMPLETED ===
-First draw - world size: 72x32
-Regenerating world from config...
-=== STARTING GENERATE FROM CONFIG ===
-Loading world config from: config/world_gen.cfg
-Found section: World
-Parsing Width = 72 in section World
-Set width to 72
-Parsing Height = 32 in section World
-Set height to 32
-Parsing Seed = 12345 in section World
-Set seed to 12345
-Parsing UseRandomSeed = true in section World
-Set useRandomSeed to true
-Parsing NoiseFrequency = 0.05 in section World
-Set noiseFrequency to 0.050000
-Found section: Biomes
-Parsing deep_water = -1.0,-0.4,3,1.0 in section Biomes
-Added biome: deep_water [-1.000000 to -0.400000] -> tile 3 prob 1.000000
-Parsing water = -0.4,-0.2,3,1.0 in section Biomes
-Added biome: water [-0.400000 to -0.200000] -> tile 3 prob 1.000000
-Parsing sand = -0.2,-0.1,6,1.0 in section Biomes
-Added biome: sand [-0.200000 to -0.100000] -> tile 6 prob 1.000000
-Parsing grass = -0.5,0.7,1,1.0 in section Biomes
-Added biome: grass [-0.500000 to 0.700000] -> tile 1 prob 1.000000
-Parsing forest = 0.1,0,5,0.4 in section Biomes
-Added biome: forest [0.100000 to 0.000000] -> tile 5 prob 0.400000
-Parsing stone = 0.3,0.6,2,1.0 in section Biomes
-Added biome: stone [0.300000 to 0.600000] -> tile 2 prob 1.000000
-Parsing mountain = 0.6,1.0,7,1.0 in section Biomes
-Added biome: mountain [0.600000 to 1.000000] -> tile 7 prob 1.000000
-Found section: SpecialFeatures
-Parsing 4 = 0.02 in section SpecialFeatures
-Special feature: tile 4 probability 0.020000
-Parsing 5 = 0.1 in section SpecialFeatures
-Special feature: tile 5 probability 0.100000
-Config loaded successfully. Biomes: 7, Special features: 2
-World size set from config: 72x32
-Using seed: 1760631705, noise frequency: 0.050000
-Barrier created around the world
-Tiles placed by biomes: 2100
-Tiles placed by features: 226
-=== GENERATE FROM CONFIG COMPLETED ===
-Render Stats - FPS: 496 | Avg: 846 | Min: 4 | Max: 2941 | Efficiency: 0% | Tiles: 1/2304
-Regenerating world from config...
-=== STARTING GENERATE FROM CONFIG ===
-Loading world config from: config/world_gen.cfg
-Found section: World
-Parsing Width = 72 in section World
-Set width to 72
-Parsing Height = 32 in section World
-Set height to 32
-Parsing Seed = 12345 in section World
-Set seed to 12345
-Parsing UseRandomSeed = true in section World
-Set useRandomSeed to true
-Parsing NoiseFrequency = 0.05 in section World
-Set noiseFrequency to 0.050000
-Found section: Biomes
-Parsing deep_water = -1.0,-0.4,3,1.0 in section Biomes
-Added biome: deep_water [-1.000000 to -0.400000] -> tile 3 prob 1.000000
-Parsing water = -0.4,-0.2,3,1.0 in section Biomes
-Added biome: water [-0.400000 to -0.200000] -> tile 3 prob 1.000000
-Parsing sand = -0.2,-0.1,6,1.0 in section Biomes
-Added biome: sand [-0.200000 to -0.100000] -> tile 6 prob 1.000000
-Parsing grass = -0.5,0.7,1,1.0 in section Biomes
-Added biome: grass [-0.500000 to 0.700000] -> tile 1 prob 1.000000
-Parsing forest = 0.1,0,5,0.4 in section Biomes
-Added biome: forest [0.100000 to 0.000000] -> tile 5 prob 0.400000
-Parsing stone = 0.3,0.6,2,1.0 in section Biomes
-Added biome: stone [0.300000 to 0.600000] -> tile 2 prob 1.000000
-Parsing mountain = 0.6,1.0,7,1.0 in section Biomes
-Added biome: mountain [0.600000 to 1.000000] -> tile 7 prob 1.000000
-Found section: SpecialFeatures
-Parsing 4 = 0.02 in section SpecialFeatures
-Special feature: tile 4 probability 0.020000
-Parsing 5 = 0.1 in section SpecialFeatures
-Special feature: tile 5 probability 0.100000
-Config loaded successfully. Biomes: 7, Special features: 2
-World size set from config: 72x32
-Using seed: 1760631709, noise frequency: 0.050000
-Barrier created around the world
-Tiles placed by biomes: 2100
-Tiles placed by features: 277
-=== GENERATE FROM CONFIG COMPLETED ===
-Render Stats - FPS: 3846 | Avg: 1942 | Min: 4 | Max: 5464 | Efficiency: 0% | Tiles: 1/2304
+First draw - world size: 80x24
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 0 births, 132 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 132 births, 4 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 4 births, 14 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 14 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 0 births, 12 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 12 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 0 births, 12 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 12 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 0 births, 12 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 12 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 0 births, 12 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 12 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 0 births, 12 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 12 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 0 births, 12 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 12 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 0 births, 12 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 12 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===

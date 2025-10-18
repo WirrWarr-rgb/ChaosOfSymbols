@@ -1,81 +1,22 @@
 #include "World.h"
 #include "Logger.h"
-#include <iostream>
-#include <fstream>
 #include <random>
 
 World::World()
-    : m_width(0), m_height(0), m_currentSeed(0) {
-    Logger::Log("World constructor: creating empty world");
-}
-
-void World::Generate(int seed) {
-    m_currentSeed = seed;
-    m_noiseGenerator.SetSeed(seed);
-    m_noiseGenerator.SetFrequency(0.05f);
-
-    if (m_width == 0 || m_height == 0) {
-        m_width = 100;
-        m_height = 50;
-        m_map.resize(m_height, std::vector<int>(m_width, 0));
-        Logger::Log("WARNING: Using default size in Generate: " +
-            std::to_string(m_width) + "x" + std::to_string(m_height));
-    }
-
-    Logger::Log("Generating world with seed: " + std::to_string(seed) +
-        ", size: " + std::to_string(m_width) + "x" + std::to_string(m_height));
-
-    for (int y = 0; y < m_height; y++) {
-        for (int x = 0; x < m_width; x++) {
-            float noiseValue = m_noiseGenerator.GetNoise(static_cast<float>(x), static_cast<float>(y));
-
-            if (noiseValue < -0.3f) {
-                m_map[y][x] = 3; // Water
-            }
-            else if (noiseValue < -0.1f) {
-                m_map[y][x] = 6; // Sand
-            }
-            else if (noiseValue < 0.3f) {
-                m_map[y][x] = 1; // Grass
-            }
-            else if (noiseValue < 0.5f) {
-                if ((x + y) % 5 == 0) {
-                    m_map[y][x] = 5; // Tree
-                }
-                else {
-                    m_map[y][x] = 1; // Grass
-                }
-            }
-            else if (noiseValue < 0.7f) {
-                m_map[y][x] = 2; // Stone wall
-            }
-            else {
-                m_map[y][x] = 7; // Mountain
-            }
-
-            if ((x * y) % 97 == 0) {
-                m_map[y][x] = 4; // Lava
-            }
-        }
-    }
-
-    Logger::Log("World generation completed!");
+    : m_width(0), m_height(0), m_currentSeed(0), m_automatonEnabled(true), m_tileManager(nullptr) {
 }
 
 void World::GenerateFromConfig(const std::string& configPath) {
-    Logger::Log("=== STARTING GENERATE FROM CONFIG ===");
+    Logger::Log("=== STARTING PURE RULE-BASED GENERATION ===");
 
     if (!m_genConfig.LoadFromFile(configPath)) {
-        Logger::Log("ERROR: Failed to load config, using default generation");
-        Generate(12345);
+        Logger::Log("ERROR: Failed to load world generation config");
         return;
     }
 
     m_width = m_genConfig.width;
     m_height = m_genConfig.height;
     m_map.resize(m_height, std::vector<int>(m_width, 0));
-
-    Logger::Log("World size set from config: " + std::to_string(m_width) + "x" + std::to_string(m_height));
 
     if (m_genConfig.useRandomSeed) {
         m_currentSeed = static_cast<int>(time(nullptr));
@@ -87,98 +28,200 @@ void World::GenerateFromConfig(const std::string& configPath) {
     m_noiseGenerator.SetSeed(m_currentSeed);
     m_noiseGenerator.SetFrequency(m_genConfig.noiseFrequency);
 
-    Logger::Log("Using seed: " + std::to_string(m_currentSeed) +
-        ", noise frequency: " + std::to_string(m_genConfig.noiseFrequency));
+    Logger::Log("World size: " + std::to_string(m_width) + "x" + std::to_string(m_height));
+    Logger::Log("Using seed: " + std::to_string(m_currentSeed));
+
+    // Загружаем конфиг клеточного автомата
+    if (!m_automatonConfig.LoadFromFile("config/cellular_automaton.cfg")) {
+        Logger::Log("WARNING: Failed to load cellular automaton config");
+    }
+
+    // Генерируем базовый террейн
+    GenerateBaseTerrain();
+
+    // Применяем правила спавна
+    if (m_spawnConfig.LoadFromFile()) {
+        ApplySpawnRules();
+    }
+
+    Logger::Log("=== RULE-BASED GENERATION COMPLETED ===");
+}
+
+void World::GenerateBaseTerrain() {
+    if (!m_tileManager) {
+        Logger::Log("ERROR: No tile manager for base terrain generation");
+        return;
+    }
+
+    // Находим ID для базового тайла (например, травы)
+    int baseTileId = FindTileIdByCharacter('.');
+    if (baseTileId == -1) {
+        // Если травы нет, берем первый доступный тайл
+        if (!m_tileManager->GetAllTiles().empty()) {
+            baseTileId = m_tileManager->GetAllTiles().begin()->first;
+        }
+        else {
+            Logger::Log("ERROR: No tiles available for base terrain");
+            return;
+        }
+    }
+
+    Logger::Log("Using base tile ID: " + std::to_string(baseTileId));
+
+    // Заполняем карту базовым тайлом
+    for (int y = 0; y < m_height; y++) {
+        for (int x = 0; x < m_width; x++) {
+            m_map[y][x] = baseTileId;
+        }
+    }
+
+    Logger::Log("Base terrain generated with tile: " + std::to_string(baseTileId));
+}
+
+void World::ApplySpawnRules() {
+    if (!m_tileManager) return;
+
+    Logger::Log("Applying spawn rules");
 
     std::random_device rd;
     std::mt19937 gen(rd());
     std::uniform_real_distribution<> dis(0.0, 1.0);
 
-    int tilesPlacedByBiomes = 0;
-    int tilesPlacedByFeatures = 0;
+    int spawnCount = 0;
 
     for (int y = 0; y < m_height; y++) {
         for (int x = 0; x < m_width; x++) {
-            if (x == 0 || x == m_width - 1 || y == 0 || y == m_height - 1) {
-                m_map[y][x] = 2;
-                continue;
-            }
+            int currentTileId = m_map[y][x];
+            char currentChar = GetTileCharacter(currentTileId);
 
-            float noiseValue = m_noiseGenerator.GetNoise(static_cast<float>(x), static_cast<float>(y));
+            // Получаем ID текущего базового тайла для проверки разрешенных тайлов
+            int currentBaseTileId = currentTileId;
 
-            bool tilePlaced = false;
-            for (const auto& biome : m_genConfig.biomeRules) {
-                const BiomeRule& rule = biome.second;
-                if (noiseValue >= rule.minHeight && noiseValue < rule.maxHeight) {
-                    if (dis(gen) <= rule.probability) {
-                        m_map[y][x] = rule.tileId;
-                        tilePlaced = true;
-                        tilesPlacedByBiomes++;
-                        break;
+            // Проверяем все правила спавна
+            const auto& allSpawnRules = m_spawnConfig.GetAllRules();
+            for (const auto& spawnPair : allSpawnRules) {
+                char spawnTileChar = spawnPair.first;
+
+                // Находим ID тайла для спавна по его символу
+                int spawnTileId = FindTileIdByCharacter(spawnTileChar);
+                if (spawnTileId == -1) continue;
+
+                // Проверяем все правила для этого символа спавна
+                for (const auto& rule : spawnPair.second) {
+                    // Проверяем, может ли этот тайл спавниться на текущем базовом тайле
+                    if (rule.CanSpawnOn(currentChar) && dis(gen) <= rule.probability) {
+                        m_map[y][x] = spawnTileId;
+                        spawnCount++;
+                        break; // только одно правило на тайл
                     }
-                }
-            }
-
-            if (!tilePlaced) {
-                m_map[y][x] = 0;
-            }
-
-            for (const auto& feature : m_genConfig.specialFeatures) {
-                if (dis(gen) <= feature.second) {
-                    m_map[y][x] = feature.first;
-                    tilesPlacedByFeatures++;
-                    break;
                 }
             }
         }
     }
 
-    Logger::Log("Barrier created around the world");
-    Logger::Log("Tiles placed by biomes: " + std::to_string(tilesPlacedByBiomes));
-    Logger::Log("Tiles placed by features: " + std::to_string(tilesPlacedByFeatures));
-
-    Logger::Log("=== GENERATE FROM CONFIG COMPLETED ===");
+    Logger::Log("Spawn rules applied: " + std::to_string(spawnCount) + " tiles changed");
 }
 
-bool World::LoadFromFile(const std::string& path) {
-    std::ifstream file(path, std::ios::binary);
-    if (!file.is_open()) {
-        std::cout << "Failed to load world from: " << path << '\n';
-        return false;
+void World::UpdateCellularAutomaton() {
+    if (!m_automatonEnabled || !m_tileManager) {
+        Logger::Log("Cellular automaton disabled or no tile manager");
+        return;
     }
 
-    file.read(reinterpret_cast<char*>(&m_width), sizeof(m_width));
-    file.read(reinterpret_cast<char*>(&m_height), sizeof(m_height));
-    file.read(reinterpret_cast<char*>(&m_currentSeed), sizeof(m_currentSeed));
+    Logger::Log("=== STARTING CELLULAR AUTOMATON UPDATE ===");
 
-    m_map.resize(m_height, std::vector<int>(m_width, 0));
-    for (int y = 0; y < m_height; y++) {
-        file.read(reinterpret_cast<char*>(m_map[y].data()), m_width * sizeof(int));
+    if (m_automatonConfig.GetAllRules().empty()) {
+        Logger::Log("ERROR: No cellular automaton rules available!");
+        return;
     }
 
-    file.close();
-    std::cout << "World loaded from: " << path << '\n';
-    return true;
+    std::vector<std::vector<int>> newMap = m_map;
+    bool changed = false;
+    int deaths = 0;
+    int births = 0;
+    int naturalDeaths = 0;
+
+    for (int y = 1; y < m_height - 1; y++) {
+        for (int x = 1; x < m_width - 1; x++) {
+            char currentChar = GetTileCharacter(m_map[y][x]);
+            const CellRule* rule = m_automatonConfig.GetRule(currentChar);
+            auto neighborCounts = CountNeighbors(x, y, m_map);
+
+            // ПРОВЕРКА СМЕРТИ для существующих клеток
+            if (m_map[y][x] != 0 && rule && rule->deathRule) {
+                bool shouldDie = rule->deathRule(neighborCounts);
+                if (shouldDie) {
+                    newMap[y][x] = 0; // Клетка умирает
+                    changed = true;
+                    deaths++;
+                    naturalDeaths++;
+                    if (naturalDeaths <= 3) {
+                        Logger::Log("NATURAL DEATH at " + std::to_string(x) + "," + std::to_string(y) +
+                            " - '" + std::string(1, currentChar) + "'");
+                    }
+                    continue; // Переходим к следующей клетке
+                }
+            }
+
+            // Старая логика выживания и рождения
+            if (m_map[y][x] != 0) {
+                if (rule && rule->survivalRule) {
+                    bool shouldSurvive = rule->survivalRule(neighborCounts);
+                    if (!shouldSurvive) {
+                        newMap[y][x] = 0;
+                        changed = true;
+                        deaths++;
+                    }
+                }
+            }
+            else {
+                const auto& allRules = m_automatonConfig.GetAllRules();
+                for (auto it = allRules.begin(); it != allRules.end(); ++it) {
+                    char tileChar = it->first;
+                    const CellRule& birthRule = it->second;
+
+                    if (birthRule.birthRule && birthRule.birthRule(neighborCounts)) {
+                        int newTileId = FindTileIdByCharacter(tileChar);
+                        if (newTileId != -1) {
+                            newMap[y][x] = newTileId;
+                            changed = true;
+                            births++;
+                            break;
+                        }
+                    }
+                }
+            }
+        }
+    }
+
+    if (changed) {
+        m_map = newMap;
+        Logger::Log("Cellular automaton: " + std::to_string(births) + " births, " +
+            std::to_string(deaths) + " deaths (" + std::to_string(naturalDeaths) + " natural)");
+    }
+
+    Logger::Log("=== CELLULAR AUTOMATON UPDATE COMPLETE ===");
 }
 
-bool World::SaveToFile(const std::string& path) {
-    std::ofstream file(path, std::ios::binary);
-    if (!file.is_open()) {
-        std::cout << "Failed to save world to: " << path << '\n';
-        return false;
+std::unordered_map<char, int> World::CountNeighbors(int x, int y, const std::vector<std::vector<int>>& currentMap) const {
+    std::unordered_map<char, int> counts;
+
+    // Проверяем 8 соседей (окрестность Мура)
+    for (int dy = -1; dy <= 1; dy++) {
+        for (int dx = -1; dx <= 1; dx++) {
+            if (dx == 0 && dy == 0) continue;
+
+            int nx = x + dx;
+            int ny = y + dy;
+
+            if (nx >= 0 && nx < m_width && ny >= 0 && ny < m_height) {
+                char neighborChar = GetTileCharacter(currentMap[ny][nx]);
+                counts[neighborChar]++;
+            }
+        }
     }
 
-    file.write(reinterpret_cast<const char*>(&m_width), sizeof(m_width));
-    file.write(reinterpret_cast<const char*>(&m_height), sizeof(m_height));
-    file.write(reinterpret_cast<const char*>(&m_currentSeed), sizeof(m_currentSeed));
-
-    for (int y = 0; y < m_height; y++) {
-        file.write(reinterpret_cast<const char*>(m_map[y].data()), m_width * sizeof(int));
-    }
-
-    file.close();
-    std::cout << "World saved to: " << path << '\n';
-    return true;
+    return counts;
 }
 
 int World::GetTileAt(int x, int y) const {
@@ -188,8 +231,21 @@ int World::GetTileAt(int x, int y) const {
     return 0;
 }
 
-void World::SetSize(int width, int height) {
-    m_width = width;
-    m_height = height;
-    m_map.resize(m_height, std::vector<int>(m_width, 0));
+char World::GetTileCharacter(int tileId) const {
+    if (!m_tileManager) return '.';
+    TileType* tile = m_tileManager->GetTileType(tileId);
+    return tile ? tile->GetCharacter() : '.';
+}
+
+int World::FindTileIdByCharacter(char character) const {
+    if (!m_tileManager) return -1;
+
+    const auto& allTiles = m_tileManager->GetAllTiles();
+    for (const auto& pair : allTiles) {
+        const TileType& tile = pair.second;
+        if (tile.GetCharacter() == character) {
+            return tile.GetId();
+        }
+    }
+    return -1;
 }

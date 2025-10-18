@@ -34,6 +34,10 @@ private:
     int m_playerX;
     int m_playerY;
 
+    bool m_automatonEnabled;
+    int m_actionsSinceLastUpdate;
+    static constexpr int ActionsPerUpdate = 1; // Обновлять автомат после каждого действия
+
 public:
     Game();
     ~Game();
@@ -50,4 +54,6 @@ private:
     void EnsureValidPlayerPosition();
     void FindNearestPassablePosition();
     void FindRandomPassablePosition();
+
+    void UpdateCellularAutomaton();
 };
