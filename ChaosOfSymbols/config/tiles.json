@@ -1,47 +1,29 @@
 [
   {
     "id": 0,
-    "name": "air",
-    "character": " ",
-    "color": 0,
+    "name": "grass",
+    "character": ".",
+    "color": 2,
     "isPassable": true,
     "isDestructible": false,
     "damage": 0
   },
   {
     "id": 1,
-    "name": "grass",
-    "character": ".",
-    "color": 10,
-    "isPassable": true,
-    "isDestructible": false,
-    "damage": 0
-  },
-  {
-    "id": 2,
-    "name": "stone_wall",
-    "character": "#",
-    "color": 8,
-    "isPassable": true,
-    "isDestructible": true,
-    "damage": 0
-  },
-  {
-    "id": 3,
     "name": "water",
-    "character": "~",
-    "color": 9,
-    "isPassable": true,
+    "character": "+",
+    "color": 3,
+    "isPassable": false,
     "isDestructible": false,
     "damage": 0
   },
 
   {
-    "id": 4,
+    "id": 2,
     "name": "mountain",
-    "character": "^",
-    "color": 7,
-    "isPassable": true,
+    "character": "#",
+    "color": 6,
+    "isPassable": false,
     "isDestructible": false,
     "damage": 0
   }

@@ -16,7 +16,9 @@ using namespace std;
 Game::Game()
     : m_isRunning(false), m_currentWorld(nullptr),
     m_settings(nullptr), m_renderSystem(nullptr),
-    m_tileManager(nullptr), m_playerX(DefaultPlayerX), m_playerY(DefaultPlayerY) {}
+    m_tileManager(nullptr), m_playerX(DefaultPlayerX), m_playerY(DefaultPlayerY),
+    m_playerSteps(0) {
+}
 
 Game::~Game() {
     Shutdown();
@@ -42,6 +44,13 @@ bool Game::Initialize() {
     }
     else {
         Logger::Log("Tile types loaded successfully");
+
+        TileType* mountainTile = m_tileManager->GetTileType(4);
+        if (mountainTile) {
+            char mountainChar = mountainTile->GetCharacter();
+            Logger::Log("MOUNTAIN TILE TEST - Character: '" + std::string(1, mountainChar) + "'");
+            Logger::Log("MOUNTAIN TILE TEST - Character code: " + std::to_string(static_cast<unsigned char>(mountainChar)));
+        }
 
         int tileCount = m_tileManager->GetTileCount();
         Logger::Log("Number of loaded tiles: " + to_string(tileCount));
@@ -69,8 +78,10 @@ bool Game::Initialize() {
 
     m_currentWorld->GenerateFromConfig(WorldConfigFile);
 
-    m_renderSystem->SetScreenSize(m_currentWorld->GetWidth(), m_currentWorld->GetHeight());
+    // ”станавливаем размер экрана по игровому пространству (без границы)
+    m_renderSystem->SetScreenSize(m_currentWorld->GetTotalWidth(), m_currentWorld->GetTotalHeight());
 
+    // ѕозици€ игрока в игровом пространстве (без учета границы)
     m_playerX = (m_currentWorld->GetWidth() / 2 > 1) ? m_currentWorld->GetWidth() / 2 : 1;
     m_playerY = (m_currentWorld->GetHeight() / 2 > 1) ? m_currentWorld->GetHeight() / 2 : 1;
     EnsureValidPlayerPosition();
@@ -176,7 +187,8 @@ void Game::ProcessInput() {
             Logger::Log("Regenerating world from config...");
             m_currentWorld->GenerateFromConfig("config/world_gen.cfg");
 
-            m_renderSystem->SetScreenSize(m_currentWorld->GetWidth(), m_currentWorld->GetHeight());
+            // ќбновл€ем размер экрана по полному размеру (с границей)
+            m_renderSystem->SetScreenSize(m_currentWorld->GetTotalWidth(), m_currentWorld->GetTotalHeight());
 
             EnsureValidPlayerPosition();
             rPressed = true;
@@ -213,7 +225,7 @@ void Game::Render() {
 
     static int uiCounter = 0;
     if (uiCounter++ > UiUpdateInterval) {
-        m_renderSystem->DrawUI(*m_currentWorld, m_playerX, m_playerY);
+        m_renderSystem->DrawUI(*m_currentWorld, m_playerX, m_playerY, m_playerSteps);
         uiCounter = 0;
     }
 
@@ -232,8 +244,9 @@ void Game::MovePlayer(int dx, int dy) {
     int newX = m_playerX + dx;
     int newY = m_playerY + dy;
 
-    if (newX > 0 && newX < m_currentWorld->GetWidth() - 1 &&
-        newY > 0 && newY < m_currentWorld->GetHeight() - 1) {
+    // ѕровер€ем границы игрового пространства (без учета границы)
+    if (newX >= 0 && newX < m_currentWorld->GetWidth() &&
+        newY >= 0 && newY < m_currentWorld->GetHeight()) {
 
         int targetTile = m_currentWorld->GetTileAt(newX, newY);
         TileType* tile = m_tileManager->GetTileType(targetTile);
@@ -241,6 +254,7 @@ void Game::MovePlayer(int dx, int dy) {
         if (tile && tile->IsPassable()) {
             m_playerX = newX;
             m_playerY = newY;
+            m_playerSteps++;
         }
     }
 }
@@ -271,6 +285,7 @@ void Game::FindNearestPassablePosition() {
                 int checkX = m_playerX + dx;
                 int checkY = m_playerY + dy;
 
+                // ѕровер€ем границы игрового пространства
                 if (checkX >= 0 && checkX < m_currentWorld->GetWidth() &&
                     checkY >= 0 && checkY < m_currentWorld->GetHeight()) {
 
@@ -299,6 +314,7 @@ void Game::FindRandomPassablePosition() {
     srand(static_cast<unsigned int>(time(nullptr)));
 
     for (int attempt = 0; attempt < MaxRandomAttempts; attempt++) {
+        // »щем в игровом пространстве (без границы)
         int randomX = rand() % m_currentWorld->GetWidth();
         int randomY = rand() % m_currentWorld->GetHeight();
 

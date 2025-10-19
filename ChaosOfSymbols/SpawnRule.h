@@ -1,13 +1,9 @@
 #pragma once
 #include <unordered_set>
+#include <vector>
 
 struct SpawnRule {
     int tileId;
-    float probability;
-    std::unordered_set<char> allowedBaseTiles;
-
-    bool CanSpawnOn(char baseTile) const {
-        return allowedBaseTiles.empty() ||
-            allowedBaseTiles.find(baseTile) != allowedBaseTiles.end();
-    }
+    std::vector<float> zoneProbabilities; // [низины, равнины, горы]
+    char character;
 };

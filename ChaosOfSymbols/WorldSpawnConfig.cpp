@@ -20,20 +20,21 @@ bool WorldSpawnConfig::LoadFromFile() {
 
     std::string line;
     while (std::getline(file, line)) {
-        if (line.empty() || line[0] == '#') continue;
+        // Удаляем комментарии (всё что после //)
+        size_t commentPos = line.find("//");
+        if (commentPos != std::string::npos) {
+            line = line.substr(0, commentPos);
+        }
+
+        // Пропускаем пустые строки
+        line.erase(0, line.find_first_not_of(" \t"));
+        if (line.empty()) continue;
 
         std::stringstream ss(line);
-        std::string spawnTileStr, probabilityStr, allowedTilesStr;
-
-        // Новый формат: spawnTile=probability:allowedBaseTiles
-        // Примеры: 
-        // T=0.3:.       - дерево спавнится на траве с вероятностью 30%
-        // ~=0.1:.~      - вода спавнится на траве или воде с вероятностью 10%
-        // ,=0.02:*      - песок спавнится где угодно с вероятностью 2%
+        std::string spawnTileStr, probabilitiesStr;
 
         if (std::getline(ss, spawnTileStr, '=') &&
-            std::getline(ss, probabilityStr, ':') &&
-            std::getline(ss, allowedTilesStr)) {
+            std::getline(ss, probabilitiesStr)) {
 
             if (spawnTileStr.length() != 1) {
                 Logger::Log("WARNING: Invalid spawn tile in config: " + spawnTileStr);
@@ -41,23 +42,36 @@ bool WorldSpawnConfig::LoadFromFile() {
             }
 
             char spawnTile = spawnTileStr[0];
-            float probability = std::stof(probabilityStr);
 
-            SpawnRule rule;
-            rule.tileId = -1; // Будет установлен позже по символу
-            rule.probability = probability;
+            // Парсим вероятности для трех зон
+            std::vector<float> zoneProbs;
+            std::stringstream probStream(probabilitiesStr);
+            std::string probToken;
 
-            // Обрабатываем разрешенные базовые тайлы
-            for (char allowedTile : allowedTilesStr) {
-                if (allowedTile != ',') {
-                    rule.allowedBaseTiles.insert(allowedTile);
+            while (std::getline(probStream, probToken, ':')) {
+                try {
+                    zoneProbs.push_back(std::stof(probToken));
+                }
+                catch (const std::exception& e) {
+                    Logger::Log("WARNING: Invalid probability format: " + probToken);
+                    zoneProbs.push_back(0.1f); // fallback
                 }
             }
 
-            m_spawnRules[spawnTile].push_back(rule);
+            // Если указано меньше 3 вероятностей, дополняем
+            while (zoneProbs.size() < 3) {
+                zoneProbs.push_back(0.1f);
+            }
+
+            SpawnRule rule;
+            rule.tileId = -1;
+            rule.zoneProbabilities = zoneProbs;
+            rule.character = spawnTile;
+
+            m_spawnRules[spawnTile] = rule;
             Logger::Log("Added spawn rule: '" + std::string(1, spawnTile) +
-                "' -> prob: " + std::to_string(probability) +
-                ", allowed: '" + allowedTilesStr + "'");
+                "' -> zones: " + std::to_string(zoneProbs[0]) + ":" +
+                std::to_string(zoneProbs[1]) + ":" + std::to_string(zoneProbs[2]));
         }
     }
 
@@ -66,8 +80,10 @@ bool WorldSpawnConfig::LoadFromFile() {
     return true;
 }
 
-const std::vector<SpawnRule>& WorldSpawnConfig::GetSpawnRules(char spawnTile) const {
-    static const std::vector<SpawnRule> empty;
+const SpawnRule* WorldSpawnConfig::GetSpawnRule(char spawnTile) const {
     auto it = m_spawnRules.find(spawnTile);
-    return (it != m_spawnRules.end()) ? it->second : empty;
+    if (it != m_spawnRules.end()) {
+        return &it->second;
+    }
+    return nullptr;
 }

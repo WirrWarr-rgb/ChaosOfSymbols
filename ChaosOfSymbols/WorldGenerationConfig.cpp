@@ -1,4 +1,4 @@
-#include "WorldGenerationConfig.h"
+﻿#include "WorldGenerationConfig.h"
 #include "Logger.h"
 #include <fstream>
 
@@ -17,7 +17,15 @@ bool WorldGenConfig::LoadFromFile(const std::string& filePath) {
 
     std::string line;
     while (std::getline(file, line)) {
-        if (line.empty() || line[0] == '#') continue;
+        // Удаляем комментарии (всё что после //)
+        size_t commentPos = line.find("//");
+        if (commentPos != std::string::npos) {
+            line = line.substr(0, commentPos);
+        }
+
+        // Пропускаем пустые строки
+        line.erase(0, line.find_first_not_of(" \t"));
+        if (line.empty()) continue;
 
         size_t delimiterPos = line.find('=');
         if (delimiterPos == std::string::npos) continue;

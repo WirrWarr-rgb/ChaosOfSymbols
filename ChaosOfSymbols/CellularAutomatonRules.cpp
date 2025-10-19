@@ -97,14 +97,24 @@ bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
     while (std::getline(file, line)) {
         lineNumber++;
 
-        // Пропускаем пустые строки и комментарии
-        if (line.empty() || line[0] == '#') {
+        // УДАЛЕНО: старый код с комментариями #
+        // if (line.empty() || line[0] == '#') {
+
+        // ДОБАВЛЕНО: поддержка комментариев //
+        // Удаляем комментарии (всё что после //)
+        size_t commentPos = line.find("//");
+        if (commentPos != std::string::npos) {
+            line = line.substr(0, commentPos);
+        }
+
+        // Пропускаем пустые строки после удаления комментариев
+        line.erase(0, line.find_first_not_of(" \t"));
+        if (line.empty()) {
             Logger::Log("Line " + std::to_string(lineNumber) + ": skipped (comment/empty)");
             continue;
         }
 
-        // Убираем пробелы в начале и конце строки
-        line.erase(0, line.find_first_not_of(" \t"));
+        // Убираем пробелы в конце строки
         line.erase(line.find_last_not_of(" \t") + 1);
 
         // Проверяем, является ли строка определением тайла (один символ в начале строки)

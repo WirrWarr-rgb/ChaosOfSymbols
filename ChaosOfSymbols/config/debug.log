@@ -2,179 +2,182 @@
 === GAME INITIALIZATION STARTED ===
 Attempting to load tile types...
 === LOADING TILE TYPES FROM: config/tiles.json ===
-File opened successfully, size: 759 bytes
+File opened successfully, size: 458 bytes
 JSON content starts with: [
   {
     "id": 0,
-    "name": "air",
-    "charact...
+    "name": "grass",
+    "chara...
 JSON content ends with: ...    "isDestructible": false,
     "damage": 0
   }
 ]
-Cleaned JSON: [  {    "id": 0,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 1,    "name": "grass",    "character": ".",    "color": 10,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 2,    "name": "stone_wall",    "character": "#",    "color": 8,    "isPassable": true,    "isDestructible": true,    "damage": 0  },  {    "id": 3,    "name": "water",    "character": "~",    "color": 9,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 4,    "name": "mountain",    "character": "^",    "color": 7,    "isPassable": true,    "isDestructible": false,    "damage": 0  }]
-Found object: {    "id": 0,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
-Found object: {    "id": 1,    "name": "grass",    "character": ".",    "color": 10,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
-Found object: {    "id": 2,    "name": "stone_wall",    "character": "#",    "color": 8,    "isPassable": true,    "isDestructible": true,    "damage": 0  }
-Found object: {    "id": 3,    "name": "water",    "character": "~",    "color": 9,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
-Found object: {    "id": 4,    "name": "mountain",    "character": "^",    "color": 7,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
-Parsed 5 objects from JSON array
-Found 5 tile objects in JSON
-Parsed tile - id: 0, name: air, character: ' ', color: 0, passable: true
-Successfully registered tile: air
-Parsed tile - id: 1, name: grass, character: '.', color: 10, passable: true
+Cleaned JSON: [  {    "id": 0,    "name": "grass",    "character": ".",    "color": 2,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 1,    "name": "water",    "character": "+",    "color": 3,    "isPassable": false,    "isDestructible": false,    "damage": 0  },  {    "id": 2,    "name": "mountain",    "character": "#",    "color": 6,    "isPassable": false,    "isDestructible": false,    "damage": 0  }]
+Found object: {    "id": 0,    "name": "grass",    "character": ".",    "color": 2,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
+Found object: {    "id": 1,    "name": "water",    "character": "+",    "color": 3,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
+Found object: {    "id": 2,    "name": "mountain",    "character": "#",    "color": 6,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
+Parsed 3 objects from JSON array
+Found 3 tile objects in JSON
+Parsed tile - id: 0, name: grass, character: '.', color: 2, passable: true
 Successfully registered tile: grass
-Parsed tile - id: 2, name: stone_wall, character: '#', color: 8, passable: true
-Successfully registered tile: stone_wall
-Parsed tile - id: 3, name: water, character: '~', color: 9, passable: true
+Parsed tile - id: 1, name: water, character: '+', color: 3, passable: false
 Successfully registered tile: water
-Parsed tile - id: 4, name: mountain, character: '^', color: 7, passable: true
+Parsed tile - id: 2, name: mountain, character: '#', color: 6, passable: false
 Successfully registered tile: mountain
-=== TILE LOADING COMPLETED: 5 tiles loaded ===
+=== TILE LOADING COMPLETED: 3 tiles loaded ===
 === LOADED TILES SUMMARY ===
-Tile 0: ' ' - air (color: 0)
-Tile 1: '.' - grass (color: 10)
-Tile 2: '#' - stone_wall (color: 8)
-Tile 3: '~' - water (color: 9)
-Tile 4: '^' - mountain (color: 7)
+Tile 0: '.' - grass (color: 2)
+Tile 1: '+' - water (color: 3)
+Tile 2: '#' - mountain (color: 6)
 === END LOADED TILES SUMMARY ===
 Tile types loaded successfully
-Number of loaded tiles: 5
-Tile 0: air (' ')
-Tile 1: grass ('.')
-Tile 2: stone_wall ('#')
-Tile 3: water ('~')
-Tile 4: mountain ('^')
+Number of loaded tiles: 3
+Tile 0: grass ('.')
+Tile 1: water ('+')
+Tile 2: mountain ('#')
 Testing config-based generation...
 === STARTING PURE RULE-BASED GENERATION ===
 Loading world config from: config/world_gen.cfg
-World size: 80x24
-Using seed: 1760759269
+Loading spawn config from: config/world_spawn.cfg
+Added spawn rule: '.' -> zones: 0.300000:0.400000:0.100000
+Added spawn rule: '+' -> zones: 0.400000:0.200000:0.050000
+Added spawn rule: '#' -> zones: 0.300000:0.400000:0.850000
+Spawn config loaded: 3 spawn tiles with rules
+Content size: 80x24
+Total size with border: 82x26
+Using seed: 1760864680
 === PARSING CELLULAR AUTOMATON CONFIG ===
 Line 1: skipped (comment/empty)
-Line 2: skipped (comment/empty)
-Line 3: skipped (comment/empty)
-Line 4: skipped (comment/empty)
-Line 5: skipped (comment/empty)
-Line 6: found tile definition: '.'
-Line 7: key='survival', value='count['.'] >= 2 && count['.'] <= 7'
-Set survival rule for tile '.': count['.'] >= 2 && count['.'] <= 7
-Line 8: key='birth', value='count['.'] >= 3 || count['~'] >= 2'
-Set birth rule for tile '.': count['.'] >= 3 || count['~'] >= 2
-SUCCESS: Registered rule for tile '.'
-Line 9: key='death', value='count['.'] >= 5'
+Line 2: found tile definition: '+'
+Line 3: key='survival', value='(count['+'] >= 1 && count['+'] <= 4) ||'
+Set survival rule for tile '+': (count['+'] >= 1 && count['+'] <= 4) ||
+Line 4: key='(count['+']', value='= 5 && count['.'] >= 3) ||'
+WARNING: Unknown key: (count['+']
+Line 5: key='(count['+']', value='= 0 && count['.'] >= 5 && count['#'] == 0)'
+WARNING: Unknown key: (count['+']
+Line 6: key='birth', value='(count['+'] >= 2 && count['+'] <= 3 && count['.'] >= 2) ||'
+Set birth rule for tile '+': (count['+'] >= 2 && count['+'] <= 3 && count['.'] >= 2) ||
+SUCCESS: Registered rule for tile '+'
+Line 7: key='(count['.'] >', value='4 && count['#'] == 0 && count['+'] == 1)'
+ERROR: Rule without tile definition at line 7
+Line 8: key='death', value='(count['+'] >= 6) ||'
+ERROR: Rule without tile definition at line 8
+Line 9: key='(count['#'] >', value='3) ||'
 ERROR: Rule without tile definition at line 9
-Line 10: skipped (comment/empty)
+Line 10: key='(count['+'] <', value='1 && count['.'] <= 2)'
+ERROR: Rule without tile definition at line 10
 Line 11: skipped (comment/empty)
 Line 12: skipped (comment/empty)
-Line 13: skipped (comment/empty)
-Line 14: skipped (comment/empty)
-Line 15: skipped (comment/empty)
-Line 16: skipped (comment/empty)
-Line 17: skipped (comment/empty)
-Line 18: found tile definition: '~'
-Line 19: key='survival', value='count['~'] >= 1 && count['~'] <= 7'
-Set survival rule for tile '~': count['~'] >= 1 && count['~'] <= 7
-Line 20: key='birth', value='count['~'] >= 3 || count['.'] >= 3'
-Set birth rule for tile '~': count['~'] >= 3 || count['.'] >= 3
-SUCCESS: Registered rule for tile '~'
-Line 21: key='death', value='count['~'] >= 7'
+Line 13: found tile definition: '.'
+Line 14: key='survival', value='(count['.'] >= 3 && count['.'] <= 7) ||'
+Set survival rule for tile '.': (count['.'] >= 3 && count['.'] <= 7) ||
+Line 15: key='(count['.']', value='= 2 && count['+'] <= 2) ||'
+WARNING: Unknown key: (count['.']
+Line 16: key='(count['.']', value='= 8 && count['+'] >= 1)'
+WARNING: Unknown key: (count['.']
+Line 17: key='birth', value='(count['.'] >= 2 && count['.'] <= 6 && count['+'] <= 3) ||'
+Set birth rule for tile '.': (count['.'] >= 2 && count['.'] <= 6 && count['+'] <= 3) ||
+SUCCESS: Registered rule for tile '.'
+Line 18: key='(count['+']', value='= 0 && count['#'] <= 2 && count['.'] >= 1)'
+ERROR: Rule without tile definition at line 18
+Line 19: key='death', value='(count['.'] <= 1 && count['+'] >= 3) ||'
+ERROR: Rule without tile definition at line 19
+Line 20: key='(count['+'] >', value='6) ||'
+ERROR: Rule without tile definition at line 20
+Line 21: key='(count['#'] >', value='4)'
 ERROR: Rule without tile definition at line 21
 Line 22: skipped (comment/empty)
 Line 23: skipped (comment/empty)
-Line 24: found tile definition: '^'
-Line 25: key='survival', value='count['^'] >= 1'
-Set survival rule for tile '^': count['^'] >= 1
-Line 26: key='birth', value='count['^'] >= 1 || count['.'] >= 7'
-Set birth rule for tile '^': count['^'] >= 1 || count['.'] >= 7
-SUCCESS: Registered rule for tile '^'
-Line 27: key='death', value='count['~'] >= 2'
-ERROR: Rule without tile definition at line 27
+Line 24: found tile definition: '#'
+Line 25: key='survival', value='(count['#'] >= 2 && count['#'] <= 5) ||'
+Set survival rule for tile '#': (count['#'] >= 2 && count['#'] <= 5) ||
+Line 26: key='(count['#']', value='= 1 && count['.'] >= 4) ||'
+WARNING: Unknown key: (count['#']
+Line 27: key='(count['#']', value='= 6 && count['+'] == 0)'
+WARNING: Unknown key: (count['#']
+Line 28: key='birth', value='(count['#'] >= 3 && count['+'] == 0) ||'
+Set birth rule for tile '#': (count['#'] >= 3 && count['+'] == 0) ||
+SUCCESS: Registered rule for tile '#'
+Line 29: key='(count['#'] >', value='2 && count['.'] <= 2 && count['+'] == 0)'
+ERROR: Rule without tile definition at line 29
+Line 30: key='death', value='(count['#'] <= 1 && count['+'] >= 2) ||'
+ERROR: Rule without tile definition at line 30
+Line 31: key='(count['#'] >', value='6) ||'
+ERROR: Rule without tile definition at line 31
+Line 32: key='(count['+'] >', value='3)'
+ERROR: Rule without tile definition at line 32
 === CELLULAR AUTOMATON CONFIG PARSING COMPLETE ===
 Total rules loaded: 3
-Rule for '^' is available
-Rule for '~' is available
+Rule for '#' is available
+Rule for '+' is available
 Rule for '.' is available
-Using base tile ID: 1
-Base terrain generated with tile: 1
-Loading spawn config from: config/world_spawn.cfg
-Added spawn rule: '~' -> prob: 0.100000, allowed: '.~'
-Added spawn rule: '^' -> prob: 0.400000, allowed: '.'
-Spawn config loaded: 2 spawn tiles with rules
-Applying spawn rules
-Spawn rules applied: 984 tiles changed
+Generating terrain based on height zones...
+Detected tiles - Water: '+', Grass: '.', Mountain: '#'
+Zone-based terrain generated: 1920 tiles placed
+  '.' (grass): 1486
+  '+' (water): 149
+  '#' (mountain): 285
+Creating border with tile ID: 2
+Border created successfully
+Smoothing terrain with natural transitions...
+Natural smoothing applied: 548 changes made
 === RULE-BASED GENERATION COMPLETED ===
 === GAME INITIALIZATION COMPLETED ===
-First draw - world size: 80x24
+First draw - total size with border: 82x26
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 0 births, 132 deaths (0 natural)
+Cellular automaton: 438 births, 731 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 132 births, 4 deaths (0 natural)
+Cellular automaton: 690 births, 391 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 4 births, 14 deaths (0 natural)
+Cellular automaton: 664 births, 683 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 14 births, 0 deaths (0 natural)
+Cellular automaton: 656 births, 633 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 0 births, 12 deaths (0 natural)
+Cellular automaton: 595 births, 660 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 12 births, 0 deaths (0 natural)
+Cellular automaton: 554 births, 588 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Render Stats - FPS: 7 | Avg: 186 | Min: 7 | Max: 581 | Efficiency: 53% | Tiles: 1140/2132
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 554 births, 552 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 0 births, 12 deaths (0 natural)
+Cellular automaton: 548 births, 542 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 12 births, 0 deaths (0 natural)
+Cellular automaton: 534 births, 537 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 0 births, 12 deaths (0 natural)
+Cellular automaton: 508 births, 504 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 12 births, 0 deaths (0 natural)
+Cellular automaton: 403 births, 524 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 0 births, 12 deaths (0 natural)
+Cellular automaton: 447 births, 355 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 12 births, 0 deaths (0 natural)
+Cellular automaton: 382 births, 474 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 0 births, 12 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Player moved - updating cellular automaton
-=== STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 12 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Player moved - updating cellular automaton
-=== STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 0 births, 12 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Player moved - updating cellular automaton
-=== STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 12 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Player moved - updating cellular automaton
-=== STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 0 births, 12 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Player moved - updating cellular automaton
-=== STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 12 births, 0 deaths (0 natural)
+Cellular automaton: 450 births, 330 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===

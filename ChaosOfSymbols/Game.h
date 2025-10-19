@@ -34,6 +34,8 @@ private:
     int m_playerX;
     int m_playerY;
 
+    int m_playerSteps;
+
     bool m_automatonEnabled;
     int m_actionsSinceLastUpdate;
     static constexpr int ActionsPerUpdate = 1; // Обновлять автомат после каждого действия
@@ -48,6 +50,8 @@ public:
     void Update();
     void Render();
     void Shutdown();
+
+    int GetPlayerSteps() const { return m_playerSteps; }
 
 private:
     void MovePlayer(int dx, int dy);

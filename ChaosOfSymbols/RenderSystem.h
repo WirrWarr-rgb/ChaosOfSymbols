@@ -51,7 +51,7 @@ public:
 
     void ClearScreen();
     void DrawWorld(const World& world);
-    void DrawUI(const World& world, int posX, int posY);
+    void DrawUI(const World& world, int posX, int posY, int playerSteps);
     void DrawPlayer(int x, int y, int previousX, int previousY, const World& world);
 
     void SetScreenSize(int width, int height);

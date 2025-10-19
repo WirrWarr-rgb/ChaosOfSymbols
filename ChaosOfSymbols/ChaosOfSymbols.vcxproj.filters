@@ -87,4 +87,14 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <None Include="config\cellular_automaton.cfg" />
+    <None Include="config\settings.cfg" />
+    <None Include="config\tiles.json" />
+    <None Include="config\world_gen.cfg" />
+    <None Include="config\world_spawn.cfg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Text Include="config\debug.log" />
+  </ItemGroup>
 </Project>
