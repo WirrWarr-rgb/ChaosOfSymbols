@@ -17,7 +17,7 @@ void World::GenerateFromConfig(const std::string& configPath) {
         return;
     }
 
-    // ЗАГРУЗКА КОНФИГА СПАВНА - ДОБАВЬТЕ ЭТО
+    // Загружаем конфиг спавна
     if (!m_spawnConfig.LoadFromFile()) {
         Logger::Log("ERROR: Failed to load spawn config");
         return;
@@ -58,6 +58,16 @@ void World::GenerateFromConfig(const std::string& configPath) {
 
     SmoothTerrain();
 
+    // СПАВНИМ НАЧАЛЬНУЮ ЕДУ - ДОБАВЬТЕ ЭТО
+    if (m_foodManager) {
+        // Спавним еду в количестве ~10% от площади карты
+        int initialFoodCount = (m_contentWidth * m_contentHeight) / 10;
+        initialFoodCount = std::min(initialFoodCount, 30); // Но не более 30
+        SpawnRandomFood(initialFoodCount);
+    }
+    else {
+        Logger::Log("WARNING: No food manager available for initial food spawn");
+    }
 
     Logger::Log("=== RULE-BASED GENERATION COMPLETED ===");
 }
@@ -368,8 +378,8 @@ std::unordered_map<char, int> World::CountNeighbors(int x, int y, const std::vec
     std::unordered_map<char, int> counts;
 
     // Проверяем 24 соседа (окрестность 5x5 без центра)
-    for (int dy = -2; dy <= 2; dy++) {
-        for (int dx = -2; dx <= 2; dx++) {
+    for (int dy = -3; dy <= 3; dy++) {
+        for (int dx = -3; dx <= 3; dx++) {
             if (dx == 0 && dy == 0) continue; // Пропускаем саму клетку
 
             int nx = x + dx;
@@ -472,4 +482,137 @@ char World::FindTileByTerrainType(const std::string& terrainType, const std::uno
 
     // Fallback: возвращаем первый символ из правил
     return spawnRules.empty() ? '?' : spawnRules.begin()->first;
+}
+
+void World::SpawnRandomFood(int count) {
+    if (!m_foodManager || !m_tileManager) {
+        Logger::Log("WARNING: Cannot spawn food - no food manager or tile manager");
+        return;
+    }
+
+    Logger::Log("Attempting to spawn " + std::to_string(count) + " food items");
+
+    int spawned = 0;
+    int attempts = 0;
+    const int maxAttempts = count * 20; // Увеличим количество попыток
+
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> disX(0, m_contentWidth - 1);
+    std::uniform_int_distribution<> disY(0, m_contentHeight - 1);
+
+    while (spawned < count && attempts < maxAttempts) {
+        int x = disX(gen);
+        int y = disY(gen);
+
+        if (CanSpawnFoodAt(x, y)) {
+            const Food* food = m_foodManager->GetRandomFood();
+            if (food) {
+                int key = y * m_contentWidth + x;
+                m_foodSpawns[key] = { x, y, food->GetId() };
+                spawned++;
+
+                if (spawned <= 5) { // Логируем только первые 5 для отладки
+                    Logger::Log("Spawned " + food->GetName() + " at " +
+                        std::to_string(x) + "," + std::to_string(y));
+                }
+            }
+        }
+        attempts++;
+    }
+
+    Logger::Log("Food spawning completed: " + std::to_string(spawned) + "/" +
+        std::to_string(count) + " items spawned (" +
+        std::to_string(attempts) + " attempts)");
+}
+
+const Food* World::GetFoodAt(int x, int y) const {
+    if (!m_foodManager || x < 0 || x >= m_contentWidth || y < 0 || y >= m_contentHeight) {
+        return nullptr;
+    }
+
+    int key = y * m_contentWidth + x;
+    auto it = m_foodSpawns.find(key);
+    if (it != m_foodSpawns.end()) {
+        return m_foodManager->GetFood(it->second.foodId);
+    }
+    return nullptr;
+}
+
+bool World::RemoveFoodAt(int x, int y) {
+    if (x < 0 || x >= m_contentWidth || y < 0 || y >= m_contentHeight) {
+        return false;
+    }
+
+    int key = y * m_contentWidth + x;
+    auto it = m_foodSpawns.find(key);
+    if (it != m_foodSpawns.end()) {
+        const Food* food = m_foodManager->GetFood(it->second.foodId);
+        if (food) {
+            Logger::Log("Food collected: " + food->GetName() + " at " +
+                std::to_string(x) + "," + std::to_string(y));
+        }
+        m_foodSpawns.erase(it);
+        return true;
+    }
+    return false;
+}
+
+void World::RespawnFoodPeriodically() {
+    // Респавним 1-3 единицы еды, если на карте мало еды
+    int currentFoodCount = m_foodSpawns.size();
+    int maxFoodOnMap = 40; // Максимальное количество еды на карте
+
+    if (currentFoodCount < 40) {
+        int foodToSpawn = std::min(10, maxFoodOnMap - currentFoodCount);
+        SpawnRandomFood(foodToSpawn);
+        Logger::Log("Periodic food respawn: added " + std::to_string(foodToSpawn) + " items");
+    }
+}
+
+bool World::CanSpawnFoodAt(int x, int y) const {
+    // Проверяем, что позиция в пределах игрового пространства
+    if (x < 0 || x >= m_contentWidth || y < 0 || y >= m_contentHeight) {
+        return false;
+    }
+
+    // Проверяем, что здесь уже нет еды
+    int key = y * m_contentWidth + x;
+    if (m_foodSpawns.find(key) != m_foodSpawns.end()) {
+        return false;
+    }
+
+    return true;
+}
+
+int World::GetRandomPassablePosition(int& outX, int& outY) {
+    std::random_device rd;
+    std::mt19937 gen(rd());
+    std::uniform_int_distribution<> disX(0, m_contentWidth - 1);
+    std::uniform_int_distribution<> disY(0, m_contentHeight - 1);
+
+    for (int attempt = 0; attempt < 100; attempt++) {
+        int x = disX(gen);
+        int y = disY(gen);
+
+        int tileId = GetTileAt(x, y);
+        TileType* tile = m_tileManager->GetTileType(tileId);
+
+        if (tile && tile->IsPassable()) {
+            outX = x;
+            outY = y;
+            return tileId;
+        }
+    }
+
+    // Fallback
+    outX = 1;
+    outY = 1;
+    return GetTileAt(1, 1);
+}
+
+void World::ClearAllFood() {
+    int foodCount = m_foodSpawns.size();
+    m_foodSpawns.clear();
+    Logger::Log("Cleared all food from world: " + std::to_string(foodCount) + " items removed");
 }

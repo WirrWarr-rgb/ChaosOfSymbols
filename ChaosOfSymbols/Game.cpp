@@ -1,4 +1,4 @@
-#include "Game.h"
+п»ї#include "Game.h"
 #include "Logger.h"
 #include <windows.h>
 #include <iostream>
@@ -8,6 +8,7 @@
 #include <vector>
 #include <algorithm>
 #include <ctime>
+#include <iomanip>
 
 static bool rPressed = false;
 
@@ -16,8 +17,15 @@ using namespace std;
 Game::Game()
     : m_isRunning(false), m_currentWorld(nullptr),
     m_settings(nullptr), m_renderSystem(nullptr),
-    m_tileManager(nullptr), m_playerX(DefaultPlayerX), m_playerY(DefaultPlayerY),
-    m_playerSteps(0) {
+    m_tileManager(nullptr), m_foodManager(nullptr),
+    m_playerX(DefaultPlayerX), m_playerY(DefaultPlayerY),
+    m_playerSteps(0),
+    m_playerHP(MAX_HP),
+    m_playerHunger(MAX_HUNGER),
+    m_playerXP(0),           // Р”РѕР±Р°РІСЊС‚Рµ СЌС‚Рѕ
+    m_playerLevel(1),        // Р”РѕР±Р°РІСЊС‚Рµ СЌС‚Рѕ  
+    m_xpToNextLevel(100)     // Р”РѕР±Р°РІСЊС‚Рµ СЌС‚Рѕ
+{
 }
 
 Game::~Game() {
@@ -25,12 +33,15 @@ Game::~Game() {
 }
 
 /// <summary>
-/// Инициализация игры
+/// РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ РёРіСЂС‹
 /// </summary>
-/// <returns>Успех/неудачу попытки инициалиоровать игру</returns>
+/// <returns>РЈСЃРїРµС…/РЅРµСѓРґР°С‡Сѓ РїРѕРїС‹С‚РєРё РёРЅРёС†РёР°Р»РёРѕСЂРѕРІР°С‚СЊ РёРіСЂСѓ</returns>
 bool Game::Initialize() {
     Logger::Initialize(LogFile);
     Logger::Log("=== GAME INITIALIZATION STARTED ===");
+    Logger::Log("DEBUG Initialize - XP: " + std::to_string(m_playerXP) +
+        ", Level: " + std::to_string(m_playerLevel) +
+        ", XP to next: " + std::to_string(m_xpToNextLevel));
 
     m_settings = new GameSettings();
     m_settings->LoadFromFile();
@@ -66,22 +77,35 @@ bool Game::Initialize() {
         }
     }
 
+    m_foodManager = new FoodManager();
+    Logger::Log("Attempting to load food types...");
+    if (!m_foodManager->LoadFromFile()) {
+        Logger::Log("WARNING: Failed to load food types!");
+        // РќРµ РїСЂРµСЂС‹РІР°РµРј РёРіСЂСѓ, РµСЃР»Рё РЅРµ СѓРґР°Р»РѕСЃСЊ Р·Р°РіСЂСѓР·РёС‚СЊ РµРґСѓ
+    }
+    else {
+        Logger::Log("Food types loaded successfully");
+    }
+
+
     Logger::Log("Testing config-based generation...");
 
     m_currentWorld = new World();
     m_currentWorld->SetTileManager(m_tileManager);
 
-    // Включаем клеточный автомат
+    m_currentWorld->SetFoodManager(m_foodManager);
+
+    // Р’РєР»СЋС‡Р°РµРј РєР»РµС‚РѕС‡РЅС‹Р№ Р°РІС‚РѕРјР°С‚
     m_currentWorld->SetAutomatonEnabled(true);
 
     m_renderSystem = new RenderSystem(m_tileManager);
 
     m_currentWorld->GenerateFromConfig(WorldConfigFile);
 
-    // Устанавливаем размер экрана по игровому пространству (без границы)
+    // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј СЂР°Р·РјРµСЂ СЌРєСЂР°РЅР° РїРѕ РёРіСЂРѕРІРѕРјСѓ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІСѓ (Р±РµР· РіСЂР°РЅРёС†С‹)
     m_renderSystem->SetScreenSize(m_currentWorld->GetTotalWidth(), m_currentWorld->GetTotalHeight());
 
-    // Позиция игрока в игровом пространстве (без учета границы)
+    // РџРѕР·РёС†РёСЏ РёРіСЂРѕРєР° РІ РёРіСЂРѕРІРѕРј РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ (Р±РµР· СѓС‡РµС‚Р° РіСЂР°РЅРёС†С‹)
     m_playerX = (m_currentWorld->GetWidth() / 2 > 1) ? m_currentWorld->GetWidth() / 2 : 1;
     m_playerY = (m_currentWorld->GetHeight() / 2 > 1) ? m_currentWorld->GetHeight() / 2 : 1;
     EnsureValidPlayerPosition();
@@ -115,16 +139,16 @@ void Game::Shutdown() {
 }
 
 /// <summary>
-/// Игровой цикл
+/// РРіСЂРѕРІРѕР№ С†РёРєР»
 /// </summary>
 void Game::Run() {
-    auto lastTime = chrono::steady_clock::now(); //начальной время для расчеты дельта времени
+    auto lastTime = chrono::steady_clock::now(); //РЅР°С‡Р°Р»СЊРЅРѕР№ РІСЂРµРјСЏ РґР»СЏ СЂР°СЃС‡РµС‚С‹ РґРµР»СЊС‚Р° РІСЂРµРјРµРЅРё
 
     while (m_isRunning) {
-        auto currentTime = chrono::steady_clock::now(); //тек. время
-        auto deltaTime = chrono::duration_cast<chrono::milliseconds>(currentTime - lastTime); //разница с предыдущим кадром
+        auto currentTime = chrono::steady_clock::now(); //С‚РµРє. РІСЂРµРјСЏ
+        auto deltaTime = chrono::duration_cast<chrono::milliseconds>(currentTime - lastTime); //СЂР°Р·РЅРёС†Р° СЃ РїСЂРµРґС‹РґСѓС‰РёРј РєР°РґСЂРѕРј
 
-        if (deltaTime.count() < FrameDelayMs) { //если прошло меньше N мс, то ждем оставшееся время и переходим к следующей итерации
+        if (deltaTime.count() < FrameDelayMs) { //РµСЃР»Рё РїСЂРѕС€Р»Рѕ РјРµРЅСЊС€Рµ N РјСЃ, С‚Рѕ Р¶РґРµРј РѕСЃС‚Р°РІС€РµРµСЃСЏ РІСЂРµРјСЏ Рё РїРµСЂРµС…РѕРґРёРј Рє СЃР»РµРґСѓСЋС‰РµР№ РёС‚РµСЂР°С†РёРё
             this_thread::sleep_for(chrono::milliseconds(FrameDelayMs - deltaTime.count()));
             continue;
         }
@@ -138,9 +162,16 @@ void Game::Run() {
 }
 
 /// <summary>
-/// Обработка ввода
+/// РћР±СЂР°Р±РѕС‚РєР° РІРІРѕРґР°
 /// </summary>
 void Game::ProcessInput() {
+    if (!m_isRunning) return;
+
+    if (m_playerHP <= 0) {
+        ShowDeathScreen();
+        return; // Р’Р°Р¶РЅРѕ: РІС‹С…РѕРґРёРј СЃСЂР°Р·Сѓ РїРѕСЃР»Рµ РїРѕРєР°Р·Р° СЌРєСЂР°РЅР° СЃРјРµСЂС‚Рё
+    }
+
     static auto lastMoveTime = chrono::steady_clock::now();
     auto currentTime = chrono::steady_clock::now();
     auto elapsed = chrono::duration_cast<chrono::milliseconds>(currentTime - lastMoveTime);
@@ -172,10 +203,16 @@ void Game::ProcessInput() {
         playerMoved = true;
     }
 
-    // Обновляем клеточный автомат только если игрок действительно двигался
+    // РћР±РЅРѕРІР»СЏРµРј РєР»РµС‚РѕС‡РЅС‹Р№ Р°РІС‚РѕРјР°С‚ С‚РѕР»СЊРєРѕ РµСЃР»Рё РёРіСЂРѕРє РґРµР№СЃС‚РІРёС‚РµР»СЊРЅРѕ РґРІРёРіР°Р»СЃСЏ
     if (playerMoved && m_currentWorld->IsAutomatonEnabled()) {
-        Logger::Log("Player moved - updating cellular automaton");
-        m_currentWorld->UpdateCellularAutomaton();
+        static int automatonCounter = 0;
+        if (++automatonCounter >= 3) {
+            Logger::Log("Player moved - updating cellular automaton");
+            m_currentWorld->UpdateCellularAutomaton();
+            automatonCounter = 0;
+        }
+        m_playerSteps++;
+        ConsumeEnergy();
     }
 
     if (GetAsyncKeyState('Q') & 0x8000) {
@@ -185,9 +222,18 @@ void Game::ProcessInput() {
     if (GetAsyncKeyState('R') & 0x8000) {
         if (!rPressed) {
             Logger::Log("Regenerating world from config...");
+
+            // РћР§РРЎРўРљРђ Р•Р”Р« РџР•Р Р•Р” Р Р•Р“Р•РќР•Р РђР¦РР•Р™ - Р”РћР‘РђР’Р¬РўР• Р­РўРћ
+            m_currentWorld->ClearAllFood();
+
             m_currentWorld->GenerateFromConfig("config/world_gen.cfg");
 
-            // Обновляем размер экрана по полному размеру (с границей)
+            // РЎР‘Р РћРЎ РџРћРљРђР—РђРўР•Р›Р•Р™
+            m_playerSteps = 0;
+            m_playerHP = MAX_HP;
+            m_playerHunger = MAX_HUNGER;
+
+            // РћР±РЅРѕРІР»СЏРµРј СЂР°Р·РјРµСЂ СЌРєСЂР°РЅР° РїРѕ РїРѕР»РЅРѕРјСѓ СЂР°Р·РјРµСЂСѓ (СЃ РіСЂР°РЅРёС†РµР№)
             m_renderSystem->SetScreenSize(m_currentWorld->GetTotalWidth(), m_currentWorld->GetTotalHeight());
 
             EnsureValidPlayerPosition();
@@ -199,10 +245,49 @@ void Game::ProcessInput() {
     }
 }
 
+void Game::ConsumeEnergy() {
+    // РЈРјРµРЅСЊС€Р°РµРј РіРѕР»РѕРґ РЅР° 1
+    if (m_playerHunger > 0) {
+        m_playerHunger--;
+        Logger::Log("Hunger decreased: " + std::to_string(m_playerHunger) + "/" + std::to_string(MAX_HUNGER));
+    }
+
+    // Р•СЃР»Рё РіРѕР»РѕРґ 0, РѕС‚РЅРёРјР°РµРј HP
+    if (m_playerHunger <= 0) {
+        m_playerHP -= 2;
+        Logger::Log("Starving! HP decreased: " + std::to_string(m_playerHP) + "/" + std::to_string(MAX_HP));
+
+        // РџСЂРѕРІРµСЂСЏРµРј СЃРјРµСЂС‚СЊ
+        if (m_playerHP <= 0) {
+            m_playerHP = 0;
+            Logger::Log("Player died from starvation!");
+
+            // РћРЎРўРђРќРђР’Р›РР’РђР•Рњ РР“Р РЈ Р РџРћРљРђР—Р«Р’РђР•Рњ Р­РљР РђРќ РЎРњР•Р РўР
+            m_isRunning = false;
+            ShowDeathScreen();
+        }
+    }
+}
+
 /// <summary>
-/// Обновление состояния
+/// РћР±РЅРѕРІР»РµРЅРёРµ СЃРѕСЃС‚РѕСЏРЅРёСЏ
 /// </summary>
 void Game::Update() {
+    if (!m_isRunning) return;
+
+    if (m_playerHP <= 0) {
+        ShowDeathScreen();
+        return;
+    }
+
+    CollectFood();
+
+    static int foodRespawnTimer = 0;
+    if (++foodRespawnTimer > 300) { // РљР°Р¶РґС‹Рµ 300 РѕР±РЅРѕРІР»РµРЅРёР№
+        m_currentWorld->RespawnFoodPeriodically();
+        foodRespawnTimer = 0;
+    }
+
     int currentTile = m_currentWorld->GetTileAt(m_playerX, m_playerY);
     TileType* tile = m_tileManager->GetTileType(currentTile);
 
@@ -211,8 +296,40 @@ void Game::Update() {
     }
 }
 
+void Game::CollectFood() {
+    const Food* food = m_currentWorld->GetFoodAt(m_playerX, m_playerY);
+    if (food) {
+        // Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј РїРѕРєР°Р·Р°С‚РµР»Рё
+        int oldHP = m_playerHP;
+        int oldHunger = m_playerHunger;
+
+        m_playerHunger = min(MAX_HUNGER, m_playerHunger + food->GetHungerRestore());
+        m_playerHP = min(MAX_HP, m_playerHP + food->GetHpRestore());
+
+        // РџРћР›РЈР§РђР•Рњ РћРџР«Рў Р—Рђ Р•Р”РЈ
+        int xpGained = food->GetExperience();
+        GainXP(xpGained);
+
+        // РЈР±РёСЂР°РµРј РµРґСѓ СЃ РєР°СЂС‚С‹
+        m_currentWorld->RemoveFoodAt(m_playerX, m_playerY);
+
+        // Р›РѕРіРёСЂСѓРµРј
+        Logger::Log("Collected " + food->GetName() +
+            " - Hunger: +" + std::to_string(food->GetHungerRestore()) +
+            ", HP: +" + std::to_string(food->GetHpRestore()) +
+            ", XP: +" + std::to_string(xpGained) + // Р”РѕР±Р°РІСЊС‚Рµ XP
+            " | Now: HP=" + std::to_string(m_playerHP) +
+            "/" + std::to_string(MAX_HP) +
+            ", Hunger=" + std::to_string(m_playerHunger) +
+            "/" + std::to_string(MAX_HUNGER) +
+            ", XP=" + std::to_string(m_playerXP) + // Р”РѕР±Р°РІСЊС‚Рµ XP
+            "/" + std::to_string(m_xpToNextLevel) +
+            ", Level=" + std::to_string(m_playerLevel)); // Р”РѕР±Р°РІСЊС‚Рµ СѓСЂРѕРІРµРЅСЊ
+    }
+}
+
 /// <summary>
-/// Отрисовка
+/// РћС‚СЂРёСЃРѕРІРєР°
 /// </summary>
 void Game::Render() {
     static int lastPlayerX = m_playerX;
@@ -225,7 +342,9 @@ void Game::Render() {
 
     static int uiCounter = 0;
     if (uiCounter++ > UiUpdateInterval) {
-        m_renderSystem->DrawUI(*m_currentWorld, m_playerX, m_playerY, m_playerSteps);
+        m_renderSystem->DrawUI(*m_currentWorld, m_playerX, m_playerY, m_playerSteps,
+            m_playerHP, MAX_HP, m_playerHunger, MAX_HUNGER,
+            m_playerXP, m_playerLevel, m_xpToNextLevel); // Р”РѕР±Р°РІСЊС‚Рµ РѕРїС‹С‚ Рё СѓСЂРѕРІРµРЅСЊ
         uiCounter = 0;
     }
 
@@ -236,31 +355,40 @@ void Game::Render() {
 }
 
 /// <summary>
-/// Движение и позиционирование игрока
+/// Р”РІРёР¶РµРЅРёРµ Рё РїРѕР·РёС†РёРѕРЅРёСЂРѕРІР°РЅРёРµ РёРіСЂРѕРєР°
 /// </summary>
-/// <param name="dx">Смещение по X (-1 : влево, 0 : на месте, 1 : вправо</param>
-/// <param name="dy">Смещение по Y (-1 : вверх, 0 : на месте, 1 : вниз</param>
-void Game::MovePlayer(int dx, int dy) {
+/// <param name="dx">РЎРјРµС‰РµРЅРёРµ РїРѕ X (-1 : РІР»РµРІРѕ, 0 : РЅР° РјРµСЃС‚Рµ, 1 : РІРїСЂР°РІРѕ</param>
+/// <param name="dy">РЎРјРµС‰РµРЅРёРµ РїРѕ Y (-1 : РІРІРµСЂС…, 0 : РЅР° РјРµСЃС‚Рµ, 1 : РІРЅРёР·</param>
+bool Game::MovePlayer(int dx, int dy) { // в†ђ РР—РњР•РќРРўР• РќРђ bool
     int newX = m_playerX + dx;
     int newY = m_playerY + dy;
 
-    // Проверяем границы игрового пространства (без учета границы)
+    // РџСЂРѕРІРµСЂСЏРµРј РіСЂР°РЅРёС†С‹ РёРіСЂРѕРІРѕРіРѕ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІР° (Р±РµР· СѓС‡РµС‚Р° РіСЂР°РЅРёС†С‹)
     if (newX >= 0 && newX < m_currentWorld->GetWidth() &&
         newY >= 0 && newY < m_currentWorld->GetHeight()) {
 
         int targetTile = m_currentWorld->GetTileAt(newX, newY);
         TileType* tile = m_tileManager->GetTileType(targetTile);
 
+        const Food* food = m_currentWorld->GetFoodAt(newX, newY);
+        if (food) {
+            // Р•СЃР»Рё РЅР° РєР»РµС‚РєРµ РµСЃС‚СЊ РµРґР° - СЂР°Р·СЂРµС€Р°РµРј С…РѕРґ РЅРµР·Р°РІРёСЃРёРјРѕ РѕС‚ РїСЂРѕС…РѕРґРёРјРѕСЃС‚Рё С‚Р°Р№Р»Р°
+            m_playerX = newX;
+            m_playerY = newY;
+            return true;
+        }
+
         if (tile && tile->IsPassable()) {
             m_playerX = newX;
             m_playerY = newY;
-            m_playerSteps++;
+            return true;
         }
     }
+    return false;
 }
 
 /// <summary>
-/// Проверяет текущую позицию и исправляет ее при необходимости
+/// РџСЂРѕРІРµСЂСЏРµС‚ С‚РµРєСѓС‰СѓСЋ РїРѕР·РёС†РёСЋ Рё РёСЃРїСЂР°РІР»СЏРµС‚ РµРµ РїСЂРё РЅРµРѕР±С…РѕРґРёРјРѕСЃС‚Рё
 /// </summary>
 void Game::EnsureValidPlayerPosition() {
     int currentTile = m_currentWorld->GetTileAt(m_playerX, m_playerY);
@@ -272,7 +400,7 @@ void Game::EnsureValidPlayerPosition() {
 }
 
 /// <summary>
-/// Поиск ближайшего проходимого места
+/// РџРѕРёСЃРє Р±Р»РёР¶Р°Р№С€РµРіРѕ РїСЂРѕС…РѕРґРёРјРѕРіРѕ РјРµСЃС‚Р°
 /// </summary>
 void Game::FindNearestPassablePosition() {
     for (int radius = 1; radius <= MaxSearchRadius; radius++) {
@@ -285,7 +413,7 @@ void Game::FindNearestPassablePosition() {
                 int checkX = m_playerX + dx;
                 int checkY = m_playerY + dy;
 
-                // Проверяем границы игрового пространства
+                // РџСЂРѕРІРµСЂСЏРµРј РіСЂР°РЅРёС†С‹ РёРіСЂРѕРІРѕРіРѕ РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІР°
                 if (checkX >= 0 && checkX < m_currentWorld->GetWidth() &&
                     checkY >= 0 && checkY < m_currentWorld->GetHeight()) {
 
@@ -306,7 +434,7 @@ void Game::FindNearestPassablePosition() {
 }
 
 /// <summary>
-/// Поиск рандомного проходимого места
+/// РџРѕРёСЃРє СЂР°РЅРґРѕРјРЅРѕРіРѕ РїСЂРѕС…РѕРґРёРјРѕРіРѕ РјРµСЃС‚Р°
 /// </summary>
 void Game::FindRandomPassablePosition() {
     cout << "Using fallback: searching for random passable position..." << endl;
@@ -314,7 +442,7 @@ void Game::FindRandomPassablePosition() {
     srand(static_cast<unsigned int>(time(nullptr)));
 
     for (int attempt = 0; attempt < MaxRandomAttempts; attempt++) {
-        // Ищем в игровом пространстве (без границы)
+        // РС‰РµРј РІ РёРіСЂРѕРІРѕРј РїСЂРѕСЃС‚СЂР°РЅСЃС‚РІРµ (Р±РµР· РіСЂР°РЅРёС†С‹)
         int randomX = rand() % m_currentWorld->GetWidth();
         int randomY = rand() % m_currentWorld->GetHeight();
 
@@ -332,4 +460,83 @@ void Game::FindRandomPassablePosition() {
     cout << "Emergency: setting player to position 1,1" << endl;
     m_playerX = EmergencyPositionX;
     m_playerY = EmergencyPositionY;
+}
+
+void Game::ShowDeathScreen() {
+    m_currentWorld->ClearAllFood();
+
+    system("cls");
+
+    // Р–РґРµРј РґР»СЏ СЃС‚Р°Р±РёР»РёР·Р°С†РёРё
+    std::this_thread::sleep_for(std::chrono::milliseconds(100));
+
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+
+    int screenWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
+    int screenHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
+
+    // РЈСЃС‚Р°РЅР°РІР»РёРІР°РµРј РєСЂР°СЃРЅС‹Р№ С†РІРµС‚
+    SetConsoleTextAttribute(hConsole, 12);
+
+    // РћС‡РёС‰Р°РµРј СЌРєСЂР°РЅ РїСЂРѕР±РµР»Р°РјРё
+    for (int y = 0; y < screenHeight; y++) {
+        COORD pos = { 0, static_cast<SHORT>(y) };
+        SetConsoleCursorPosition(hConsole, pos);
+        cout << std::string(screenWidth, ' ');
+    }
+
+    // РџСЂРѕСЃС‚РѕР№ СЌРєСЂР°РЅ СЃРјРµСЂС‚Рё Р‘Р•Р— РїСЃРµРІРґРѕРіСЂР°С„РёРєРё
+    int startY = screenHeight / 2 - 3;
+
+    COORD titlePos = { static_cast<SHORT>(screenWidth / 2 - 5), static_cast<SHORT>(startY) };
+    SetConsoleCursorPosition(hConsole, titlePos);
+    cout << "YOU DIED!";
+
+    COORD stepsPos = { static_cast<SHORT>(screenWidth / 2 - 5), static_cast<SHORT>(startY + 2) };
+    SetConsoleCursorPosition(hConsole, stepsPos);
+    cout << "Steps: " << m_playerSteps;
+
+    COORD levelPos = { static_cast<SHORT>(screenWidth / 2 - 5), static_cast<SHORT>(startY + 3) };
+    SetConsoleCursorPosition(hConsole, levelPos);
+    cout << "Level: " << m_playerLevel;
+
+    COORD xpPos = { static_cast<SHORT>(screenWidth / 2 - 5), static_cast<SHORT>(startY + 4) };
+    SetConsoleCursorPosition(hConsole, xpPos);
+    cout << "Total XP: " << m_playerXP;
+
+    COORD exitPos = { static_cast<SHORT>(screenWidth / 2 - 5), static_cast<SHORT>(startY + 4) };
+    SetConsoleCursorPosition(hConsole, exitPos);
+    m_isRunning = false;
+
+    _getch();
+
+    // Р’РѕСЃСЃС‚Р°РЅР°РІР»РёРІР°РµРј С†РІРµС‚
+    SetConsoleTextAttribute(hConsole, 7);
+}
+
+void Game::GainXP(int amount) {
+    m_playerXP += amount;
+    Logger::Log("Gained " + std::to_string(amount) + " XP! Total: " +
+        std::to_string(m_playerXP) + "/" + std::to_string(m_xpToNextLevel));
+
+    CheckLevelUp();
+}
+
+void Game::CheckLevelUp() {
+    while (m_playerXP >= m_xpToNextLevel) {
+        m_playerXP -= m_xpToNextLevel;
+        m_playerLevel++;
+
+        // РЈРІРµР»РёС‡РёРІР°РµРј С‚СЂРµР±РѕРІР°РЅРёСЏ Рє РѕРїС‹С‚Сѓ РґР»СЏ СЃР»РµРґСѓСЋС‰РµРіРѕ СѓСЂРѕРІРЅСЏ
+        m_xpToNextLevel = static_cast<int>(m_xpToNextLevel * 1.5f);
+
+        // Р‘РѕРЅСѓСЃС‹ Р·Р° СѓСЂРѕРІРµРЅСЊ
+        m_playerHP = MAX_HP; // РџРѕР»РЅРѕРµ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ HP
+        m_playerHunger = MAX_HUNGER; // РџРѕР»РЅРѕРµ РІРѕСЃСЃС‚Р°РЅРѕРІР»РµРЅРёРµ РіРѕР»РѕРґР°
+
+        Logger::Log("LEVEL UP! Reached level " + std::to_string(m_playerLevel) +
+            "! Next level at " + std::to_string(m_xpToNextLevel) + " XP");
+    }
 }

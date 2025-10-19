@@ -48,6 +48,12 @@
     <ClCompile Include="WorldSpawnConfig.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="Food.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="FoodManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FastNoiseLite.h">
@@ -84,6 +90,12 @@
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="WorldSpawnConfig.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="Food.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="FoodManager.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
   </ItemGroup>

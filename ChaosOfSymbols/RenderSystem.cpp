@@ -108,7 +108,7 @@ void RenderSystem::SetScreenSize(int width, int height) {
     COORD bufferSize = { static_cast<SHORT>(width), static_cast<SHORT>(height + 1) };
     SetConsoleScreenBufferSize(hConsole, bufferSize);
 
-    SMALL_RECT windowSize = { 0, 0, static_cast<SHORT>(width - 1), static_cast<SHORT>(height) };
+    SMALL_RECT windowSize = { 0, 0, static_cast<SHORT>(width - 1), static_cast<SHORT>(height + 1) };
     SetConsoleWindowInfo(hConsole, TRUE, &windowSize);
 
     InitializePreviousFrame();
@@ -145,36 +145,50 @@ void RenderSystem::ClearScreen() {
 /// Отрисовка мира С ГРАНИЦЕЙ
 /// </summary>
 void RenderSystem::DrawWorld(const World& world) {
-    // Используем полный размер мира (включая границу) для отрисовки
     int totalWidth = world.GetTotalWidth();
     int totalHeight = world.GetTotalHeight();
-    
-    // Устанавливаем размер экрана по полному размеру (с границей)
+
     if (totalWidth != m_screenWidth || totalHeight != m_screenHeight) {
         SetScreenSize(totalWidth, totalHeight);
         ClearScreen();
     }
 
-    static bool firstDraw = true;
-    if (firstDraw) {
-        Logger::Log("First draw - total size with border: " + std::to_string(totalWidth) + "x" + std::to_string(totalHeight));
-        firstDraw = false;
-    }
-
-    // Отрисовываем ВСЮ карту (включая границу)
+    // ОДИН ПРОХОД: сначала рисуем все статические объекты, потом динамические
     for (int y = 0; y < totalHeight; y++) {
         for (int x = 0; x < totalWidth; x++) {
-            int tileId = world.GetTileAtFullMap(x, y);
-
-            if (NeedsRedraw(x, y, tileId)) {
-                rlutil::locate(x, y);
-
-                // ОСОБАЯ ОБРАБОТКА ГРАНИЦЫ - если это край карты
-                if (x == 0 || x == totalWidth - 1 || y == 0 || y == totalHeight - 1) {
-                    rlutil::setColor(15); // БЕЛЫЙ цвет
-                    std::cout << '#';     // Хардкоженный символ границы
+            // Обработка границы
+            if (x == 0 || x == totalWidth - 1 || y == 0 || y == totalHeight - 1) {
+                if (NeedsRedraw(x, y, BORDER_TILE_ID)) {
+                    rlutil::locate(x, y);
+                    rlutil::setColor(15);
+                    std::cout << '#';
+                    m_previousFrame[y][x] = BORDER_TILE_ID;
+                    m_stats.tilesDrawn++;
                 }
-                else {
+                continue;
+            }
+
+            // Координаты в игровом пространстве
+            int gameX = x - 1;
+            int gameY = y - 1;
+
+            // ПРОВЕРЯЕМ ЕДУ ПЕРВОЙ (динамический объект)
+            const Food* food = world.GetFoodAt(gameX, gameY);
+            if (food) {
+                int foodId = FOOD_TILE_ID_BASE + food->GetId();
+                if (NeedsRedraw(x, y, foodId)) {
+                    rlutil::locate(x, y);
+                    rlutil::setColor(food->GetColor());
+                    std::cout << food->GetSymbol();
+                    m_previousFrame[y][x] = foodId;
+                    m_stats.tilesDrawn++;
+                }
+            }
+            else {
+                // ЕСЛИ ЕДЫ НЕТ - ОТРИСОВЫВАЕМ ТАЙЛ ЗЕМЛИ (статический объект)
+                int tileId = world.GetTileAtFullMap(x, y);
+                if (NeedsRedraw(x, y, tileId)) {
+                    rlutil::locate(x, y);
                     TileType* tile = m_tileManager->GetTileType(tileId);
                     if (tile) {
                         rlutil::setColor(tile->GetColor());
@@ -184,14 +198,12 @@ void RenderSystem::DrawWorld(const World& world) {
                         rlutil::setColor(UnknownTileColor);
                         std::cout << UnknownTileChar;
                     }
+                    m_previousFrame[y][x] = tileId;
+                    m_stats.tilesDrawn++;
                 }
-
-                m_previousFrame[y][x] = tileId;
-                m_stats.tilesDrawn++;
             }
         }
     }
-    rlutil::setColor(15);
 }
 
 /// <summary>
@@ -199,35 +211,50 @@ void RenderSystem::DrawWorld(const World& world) {
 /// </summary>
 void RenderSystem::DrawPlayer(int x, int y, int previousX, int previousY, const World& world) {
     // Координаты игрока в игровом пространстве, преобразуем в координаты полной карты
-    // Игрок находится внутри игрового пространства, не в границе
-    // Игровое пространство начинается с (1,1) в полной карте
     int screenX = x + 1;
     int screenY = y + 1;
     int prevScreenX = previousX + 1;
     int prevScreenY = previousY + 1;
 
-    // Восстановление тайла на предыдущей позиции игрока
+    // ВОССТАНОВЛЕНИЕ ПРЕДЫДУЩЕЙ ПОЗИЦИИ ИГРОКА
     if (prevScreenX >= 0 && prevScreenX < m_screenWidth &&
-        prevScreenY >= 0 && prevScreenY < m_screenHeight) {
+        prevScreenY >= 0 && prevScreenY < m_screenHeight &&
+        (prevScreenX != screenX || prevScreenY != screenY)) {
 
-        rlutil::locate(prevScreenX, prevScreenY);
-        // Используем полную карту для получения правильного тайла
-        int tileId = world.GetTileAtFullMap(prevScreenX, prevScreenY);
-        TileType* tile = m_tileManager->GetTileType(tileId);
+        // ВСЕГДА перерисовываем предыдущую позицию
+        int gamePrevX = prevScreenX - 1;
+        int gamePrevY = prevScreenY - 1;
 
-        if (tile) {
-            rlutil::setColor(tile->GetColor());
-            std::cout << tile->GetCharacter();
+        const Food* prevFood = world.GetFoodAt(gamePrevX, gamePrevY);
+        if (prevFood) {
+            // Если на предыдущей позиции была еда - восстанавливаем ее
+            int foodId = FOOD_TILE_ID_BASE + prevFood->GetId();
+            rlutil::locate(prevScreenX, prevScreenY);
+            rlutil::setColor(prevFood->GetColor());
+            std::cout << prevFood->GetSymbol();
+            m_previousFrame[prevScreenY][prevScreenX] = foodId;
+        }
+        else {
+            // Если еды не было - восстанавливаем тайл земли
+            int tileId = world.GetTileAtFullMap(prevScreenX, prevScreenY);
+            rlutil::locate(prevScreenX, prevScreenY);
+            TileType* tile = m_tileManager->GetTileType(tileId);
+            if (tile) {
+                rlutil::setColor(tile->GetColor());
+                std::cout << tile->GetCharacter();
+            }
             m_previousFrame[prevScreenY][prevScreenX] = tileId;
         }
+        m_stats.tilesDrawn++;
     }
 
-    // Отрисовка игрока на новой позиции
+    // ОТРИСОВКА ИГРОКА НА НОВОЙ ПОЗИЦИИ
     if (screenX >= 0 && screenX < m_screenWidth && screenY >= 0 && screenY < m_screenHeight) {
         rlutil::locate(screenX, screenY);
         rlutil::setColor(PlayerColor);
         std::cout << PlayerChar;
-        m_previousFrame[screenY][screenX] = PlayerTileId;
+        m_previousFrame[screenY][screenX] = PLAYER_TILE_ID;
+        m_stats.tilesDrawn++;
     }
 
     rlutil::setColor(15);
@@ -236,18 +263,28 @@ void RenderSystem::DrawPlayer(int x, int y, int previousX, int previousY, const 
 /// <summary>
 /// Отрисовка пользовательского интерфейса
 /// </summary>
-void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerSteps) {
+void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerSteps,
+    int playerHP, int playerMaxHP, int playerHunger, int playerMaxHunger,
+    int playerXP, int playerLevel, int xpToNextLevel) { // Добавьте эти параметры
+
     rlutil::locate(0, m_screenHeight);
     for (int i = 0; i < m_screenWidth; i++) {
         std::cout << ' ';
     }
 
     rlutil::locate(0, m_screenHeight);
+
+    // ОТОБРАЖАЕМ ОПЫТ И УРОВЕНЬ
     std::cout << "Steps: " << playerSteps;
-    std::cout << " | Pos: " << posX << "," << posY;
+    std::cout << " | Lvl: " << playerLevel;
+    std::cout << " | XP: " << playerXP << "/" << xpToNextLevel;
+    std::cout << " | Health: " << playerHP << "/" << playerMaxHP;
+    std::cout << " | Hunger: " << playerHunger << "/" << playerMaxHunger;
+    std::cout << "\n";
+    std::cout << "Pos: " << posX << "," << posY;
     std::cout << " | Seed: " << world.GetCurrentSeed();
     std::cout << " | FPS: " << static_cast<int>(m_stats.currentFps);
-    std::cout << " | Controls: WASD-move, Q-quit, R-regenerate";
+    std::cout << " | Controls: WASD-move, Q-quit";
 }
 
 /// <summary>

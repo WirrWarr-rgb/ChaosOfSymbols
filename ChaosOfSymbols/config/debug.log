@@ -1,5 +1,6 @@
 === DEBUG LOG STARTED ===
 === GAME INITIALIZATION STARTED ===
+DEBUG Initialize - XP: 0, Level: 1, XP to next: 100
 Attempting to load tile types...
 === LOADING TILE TYPES FROM: config/tiles.json ===
 File opened successfully, size: 458 bytes
@@ -35,6 +36,16 @@ Number of loaded tiles: 3
 Tile 0: grass ('.')
 Tile 1: water ('+')
 Tile 2: mountain ('#')
+Attempting to load food types...
+Loaded food: Apple (ID: 1, XP: 8)
+Loaded food: Bread (ID: 2, XP: 12)
+Loaded food: Meat (ID: 3, XP: 25)
+Loaded food: Berry (ID: 4, XP: 5)
+Loaded food: Fish (ID: 5, XP: 15)
+Loaded food: Cake (ID: 6, XP: 30)
+Loaded food: Mushroom (ID: 7, XP: 2)
+Food manager loaded 7 food types
+Food types loaded successfully
 Testing config-based generation...
 === STARTING PURE RULE-BASED GENERATION ===
 Loading world config from: config/world_gen.cfg
@@ -45,7 +56,7 @@ Added spawn rule: '#' -> zones: 0.300000:0.400000:0.850000
 Spawn config loaded: 3 spawn tiles with rules
 Content size: 80x24
 Total size with border: 82x26
-Using seed: 1760864680
+Using seed: 1760891559
 === PARSING CELLULAR AUTOMATON CONFIG ===
 Line 1: skipped (comment/empty)
 Line 2: found tile definition: '+'
@@ -114,70 +125,1085 @@ Rule for '.' is available
 Generating terrain based on height zones...
 Detected tiles - Water: '+', Grass: '.', Mountain: '#'
 Zone-based terrain generated: 1920 tiles placed
-  '.' (grass): 1486
-  '+' (water): 149
-  '#' (mountain): 285
+  '.' (grass): 1537
+  '+' (water): 334
+  '#' (mountain): 49
 Creating border with tile ID: 2
 Border created successfully
 Smoothing terrain with natural transitions...
-Natural smoothing applied: 548 changes made
+Natural smoothing applied: 1055 changes made
+Attempting to spawn 30 food items
+Spawned Berry at 66,0
+Spawned Berry at 30,13
+Spawned Mushroom at 33,10
+Spawned Bread at 73,1
+Spawned Fish at 66,6
+Food spawning completed: 30/30 items spawned (30 attempts)
 === RULE-BASED GENERATION COMPLETED ===
 === GAME INITIALIZATION COMPLETED ===
-First draw - total size with border: 82x26
+Hunger decreased: 19/20
+Hunger decreased: 18/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 438 births, 731 deaths (0 natural)
+Cellular automaton: 136 births, 803 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Hunger decreased: 15/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 690 births, 391 deaths (0 natural)
+Cellular automaton: 353 births, 103 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Hunger decreased: 12/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 664 births, 683 deaths (0 natural)
+Cellular automaton: 151 births, 378 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+Hunger decreased: 10/20
+Hunger decreased: 9/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 656 births, 633 deaths (0 natural)
+Cellular automaton: 432 births, 99 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 8/20
+Render Stats - FPS: 242 | Avg: 259 | Min: 16 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Hunger decreased: 7/20
+Hunger decreased: 6/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 595 births, 660 deaths (0 natural)
+Cellular automaton: 153 births, 478 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 5/20
+Hunger decreased: 4/20
+Hunger decreased: 3/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 554 births, 588 deaths (0 natural)
+Cellular automaton: 319 births, 116 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
-Render Stats - FPS: 7 | Avg: 186 | Min: 7 | Max: 581 | Efficiency: 53% | Tiles: 1140/2132
+Hunger decreased: 2/20
+Hunger decreased: 1/20
+Gained 5 XP! Total: 5/100
+Food collected: Berry at 30,13
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=30/30, Hunger=11/20, XP=5/100, Level=1
+Hunger decreased: 10/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 554 births, 552 deaths (0 natural)
+Cellular automaton: 157 births, 348 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 9/20
+Hunger decreased: 8/20
+Hunger decreased: 7/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 548 births, 542 deaths (0 natural)
+Cellular automaton: 349 births, 136 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 6/20
+Hunger decreased: 5/20
+Gained 8 XP! Total: 13/100
+Food collected: Apple at 26,15
+Collected Apple - Hunger: +15, HP: +0, XP: +8 | Now: HP=30/30, Hunger=20/20, XP=13/100, Level=1
+Render Stats - FPS: 261 | Avg: 237 | Min: 16 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Hunger decreased: 19/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 534 births, 537 deaths (0 natural)
+Cellular automaton: 280 births, 365 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Hunger decreased: 16/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 508 births, 504 deaths (0 natural)
+Cellular automaton: 290 births, 271 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Hunger decreased: 13/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 403 births, 524 deaths (0 natural)
+Cellular automaton: 233 births, 298 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 12/20
+Gained 25 XP! Total: 38/100
+Food collected: Meat at 19,16
+Collected Meat - Hunger: +40, HP: +5, XP: +25 | Now: HP=30/30, Hunger=20/20, XP=38/100, Level=1
+Hunger decreased: 19/20
+Hunger decreased: 18/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 447 births, 355 deaths (0 natural)
+Cellular automaton: 317 births, 226 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Hunger decreased: 15/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 382 births, 474 deaths (0 natural)
+Cellular automaton: 183 births, 329 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Render Stats - FPS: 170 | Avg: 227 | Min: 16 | Max: 722 | Efficiency: 0% | Tiles: 3/2132
+Hunger decreased: 12/20
 Player moved - updating cellular automaton
 === STARTING CELLULAR AUTOMATON UPDATE ===
-Cellular automaton: 450 births, 330 deaths (0 natural)
+Cellular automaton: 269 births, 178 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+Hunger decreased: 10/20
+Hunger decreased: 9/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 208 births, 283 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 8/20
+Hunger decreased: 7/20
+Hunger decreased: 6/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 325 births, 173 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 5/20
+Hunger decreased: 4/20
+Gained 12 XP! Total: 50/100
+Food collected: Bread at 2,15
+Collected Bread - Hunger: +25, HP: +0, XP: +12 | Now: HP=30/30, Hunger=20/20, XP=50/100, Level=1
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 155 births, 352 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Render Stats - FPS: 206 | Avg: 218 | Min: 16 | Max: 722 | Efficiency: 0% | Tiles: 3/2132
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 323 births, 144 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Attempting to spawn 10 food items
+Spawned Mushroom at 3,18
+Spawned Berry at 16,8
+Spawned Fish at 79,11
+Spawned Mushroom at 46,12
+Spawned Berry at 0,19
+Food spawning completed: 10/10 items spawned (10 attempts)
+Periodic food respawn: added 10 items
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 189 births, 323 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 12/20
+Hunger decreased: 11/20
+Gained 2 XP! Total: 52/100
+Food collected: Mushroom at 4,11
+Collected Mushroom - Hunger: +5, HP: +-5, XP: +2 | Now: HP=25/30, Hunger=16/20, XP=52/100, Level=1
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 374 births, 179 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Hunger decreased: 12/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 143 births, 399 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+Gained 2 XP! Total: 54/100
+Food collected: Mushroom at 2,10
+Collected Mushroom - Hunger: +5, HP: +-5, XP: +2 | Now: HP=20/30, Hunger=16/20, XP=54/100, Level=1
+Hunger decreased: 15/20
+Render Stats - FPS: 229 | Avg: 209 | Min: 16 | Max: 722 | Efficiency: 0% | Tiles: 3/2132
+Hunger decreased: 14/20
+Gained 15 XP! Total: 69/100
+Food collected: Fish at 2,8
+Collected Fish - Hunger: +30, HP: +3, XP: +15 | Now: HP=23/30, Hunger=20/20, XP=69/100, Level=1
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 356 births, 105 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 113 births, 389 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Gained 2 XP! Total: 71/100
+Food collected: Mushroom at 4,6
+Collected Mushroom - Hunger: +5, HP: +-5, XP: +2 | Now: HP=18/30, Hunger=20/20, XP=71/100, Level=1
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 315 births, 91 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 167 births, 335 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Gained 8 XP! Total: 79/100
+Food collected: Apple at 9,7
+Collected Apple - Hunger: +15, HP: +0, XP: +8 | Now: HP=18/30, Hunger=20/20, XP=79/100, Level=1
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 291 births, 154 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Render Stats - FPS: 16 | Avg: 177 | Min: 13 | Max: 722 | Efficiency: 20% | Tiles: 440/2132
+Hunger decreased: 16/20
+Gained 2 XP! Total: 81/100
+Food collected: Mushroom at 11,5
+Collected Mushroom - Hunger: +5, HP: +-5, XP: +2 | Now: HP=13/30, Hunger=20/20, XP=81/100, Level=1
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 248 births, 292 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 332 births, 243 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 105 births, 358 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 12/20
+Hunger decreased: 11/20
+Gained 5 XP! Total: 86/100
+Food collected: Berry at 13,10
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=15/30, Hunger=20/20, XP=86/100, Level=1
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 435 births, 72 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Render Stats - FPS: 265 | Avg: 161 | Min: 13 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 154 births, 451 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 305 births, 157 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 12/20
+Gained 5 XP! Total: 91/100
+Food collected: Berry at 16,8
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=17/30, Hunger=20/20, XP=91/100, Level=1
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 197 births, 306 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 375 births, 176 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Render Stats - FPS: 12 | Avg: 154 | Min: 12 | Max: 722 | Efficiency: 25% | Tiles: 545/2132
+Hunger decreased: 13/20
+Attempting to spawn 10 food items
+Spawned Berry at 40,6
+Spawned Berry at 53,17
+Spawned Meat at 44,2
+Spawned Berry at 8,4
+Spawned Cake at 4,6
+Food spawning completed: 10/10 items spawned (10 attempts)
+Periodic food respawn: added 10 items
+Hunger decreased: 12/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 207 births, 403 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+Hunger decreased: 10/20
+Hunger decreased: 9/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 327 births, 183 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 8/20
+Gained 30 XP! Total: 121/100
+LEVEL UP! Reached level 2! Next level at 150 XP
+Food collected: Cake at 12,16
+Collected Cake - Hunger: +50, HP: +10, XP: +30 | Now: HP=30/30, Hunger=20/20, XP=21/150, Level=2
+Hunger decreased: 19/20
+Render Stats - FPS: 252 | Avg: 169 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 190 births, 339 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 342 births, 181 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Hunger decreased: 12/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 178 births, 351 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+Gained 25 XP! Total: 46/150
+Food collected: Meat at 7,16
+Collected Meat - Hunger: +40, HP: +5, XP: +25 | Now: HP=30/30, Hunger=20/20, XP=46/150, Level=2
+Render Stats - FPS: 15 | Avg: 168 | Min: 12 | Max: 722 | Efficiency: 24% | Tiles: 519/2132
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 270 births, 168 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 251 births, 279 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Gained 2 XP! Total: 48/150
+Food collected: Mushroom at 3,18
+Collected Mushroom - Hunger: +5, HP: +-5, XP: +2 | Now: HP=25/30, Hunger=19/20, XP=48/150, Level=2
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 336 births, 237 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Gained 5 XP! Total: 53/150
+Food collected: Berry at 0,19
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=27/30, Hunger=20/20, XP=53/150, Level=2
+Render Stats - FPS: 265 | Avg: 178 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 162 births, 358 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 334 births, 153 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 214 births, 332 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+Hunger decreased: 12/20
+Hunger decreased: 11/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 282 births, 209 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 10/20
+Hunger decreased: 9/20
+Hunger decreased: 8/20
+Gained 2 XP! Total: 55/150
+Food collected: Mushroom at 5,13
+Collected Mushroom - Hunger: +5, HP: +-5, XP: +2 | Now: HP=22/30, Hunger=13/20, XP=55/150, Level=2
+Attempting to spawn 7 food items
+Spawned Berry at 69,4
+Spawned Apple at 66,15
+Spawned Fish at 11,8
+Spawned Apple at 13,7
+Spawned Apple at 61,4
+Food spawning completed: 7/7 items spawned (8 attempts)
+Periodic food respawn: added 7 items
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 202 births, 288 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 12/20
+Render Stats - FPS: 15 | Avg: 182 | Min: 12 | Max: 722 | Efficiency: 22% | Tiles: 484/2132
+Hunger decreased: 11/20
+Hunger decreased: 10/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 350 births, 184 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 9/20
+Hunger decreased: 8/20
+Gained 12 XP! Total: 67/150
+Food collected: Bread at 4,9
+Collected Bread - Hunger: +25, HP: +0, XP: +12 | Now: HP=22/30, Hunger=20/20, XP=67/150, Level=2
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 157 births, 369 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Gained 30 XP! Total: 97/150
+Food collected: Cake at 4,6
+Collected Cake - Hunger: +50, HP: +10, XP: +30 | Now: HP=30/30, Hunger=20/20, XP=97/150, Level=2
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 393 births, 128 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Render Stats - FPS: 245 | Avg: 171 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 89 births, 430 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Gained 5 XP! Total: 102/150
+Food collected: Berry at 8,4
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=30/30, Hunger=20/20, XP=102/150, Level=2
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 364 births, 72 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Gained 15 XP! Total: 117/150
+Food collected: Fish at 8,7
+Collected Fish - Hunger: +30, HP: +3, XP: +15 | Now: HP=30/30, Hunger=20/20, XP=117/150, Level=2
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 106 births, 385 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Render Stats - FPS: 320 | Avg: 168 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 411 births, 68 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Gained 8 XP! Total: 125/150
+Food collected: Apple at 13,7
+Collected Apple - Hunger: +15, HP: +0, XP: +8 | Now: HP=30/30, Hunger=20/20, XP=125/150, Level=2
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 128 births, 447 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Gained 15 XP! Total: 140/150
+Food collected: Fish at 11,8
+Collected Fish - Hunger: +30, HP: +3, XP: +15 | Now: HP=30/30, Hunger=20/20, XP=140/150, Level=2
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 328 births, 99 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 173 births, 345 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Gained 8 XP! Total: 148/150
+Food collected: Apple at 12,11
+Collected Apple - Hunger: +15, HP: +0, XP: +8 | Now: HP=30/30, Hunger=20/20, XP=148/150, Level=2
+Render Stats - FPS: 17 | Avg: 162 | Min: 12 | Max: 722 | Efficiency: 24% | Tiles: 516/2132
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 306 births, 160 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 238 births, 312 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Hunger decreased: 12/20
+Attempting to spawn 7 food items
+Spawned Berry at 61,1
+Spawned Fish at 67,1
+Spawned Berry at 53,2
+Spawned Fish at 16,5
+Spawned Bread at 43,0
+Food spawning completed: 7/7 items spawned (7 attempts)
+Periodic food respawn: added 7 items
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 309 births, 238 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+Hunger decreased: 10/20
+Render Stats - FPS: 284 | Avg: 163 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Hunger decreased: 9/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 231 births, 319 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 8/20
+Hunger decreased: 7/20
+Hunger decreased: 6/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 295 births, 224 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 5/20
+Hunger decreased: 4/20
+Hunger decreased: 3/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 188 births, 291 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 2/20
+Render Stats - FPS: 13 | Avg: 167 | Min: 12 | Max: 722 | Efficiency: 22% | Tiles: 476/2132
+Hunger decreased: 1/20
+Hunger decreased: 0/20
+Starving! HP decreased: 28/30
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 349 births, 177 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Starving! HP decreased: 26/30
+Starving! HP decreased: 24/30
+Starving! HP decreased: 22/30
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 258 births, 359 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Starving! HP decreased: 20/30
+Starving! HP decreased: 18/30
+Starving! HP decreased: 16/30
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 217 births, 267 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Starving! HP decreased: 14/30
+Gained 2 XP! Total: 150/150
+LEVEL UP! Reached level 3! Next level at 225 XP
+Food collected: Mushroom at 33,10
+Collected Mushroom - Hunger: +5, HP: +-5, XP: +2 | Now: HP=30/30, Hunger=20/20, XP=0/225, Level=3
+Render Stats - FPS: 17 | Avg: 175 | Min: 12 | Max: 722 | Efficiency: 22% | Tiles: 474/2132
+Render Stats - FPS: 280 | Avg: 192 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 273 births, 203 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Attempting to spawn 1 food items
+Spawned Berry at 46,18
+Food spawning completed: 1/1 items spawned (1 attempts)
+Periodic food respawn: added 1 items
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 257 births, 275 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Gained 15 XP! Total: 15/225
+Food collected: Fish at 38,6
+Collected Fish - Hunger: +30, HP: +3, XP: +15 | Now: HP=30/30, Hunger=20/20, XP=15/225, Level=3
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 301 births, 249 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Gained 5 XP! Total: 20/225
+Food collected: Berry at 40,6
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=30/30, Hunger=20/20, XP=20/225, Level=3
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 251 births, 304 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Render Stats - FPS: 15 | Avg: 189 | Min: 12 | Max: 722 | Efficiency: 25% | Tiles: 542/2132
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 394 births, 243 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Hunger decreased: 12/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 220 births, 405 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+Gained 15 XP! Total: 35/225
+Food collected: Fish at 37,1
+Collected Fish - Hunger: +30, HP: +3, XP: +15 | Now: HP=30/30, Hunger=20/20, XP=35/225, Level=3
+Hunger decreased: 19/20
+Gained 5 XP! Total: 40/225
+Food collected: Berry at 37,2
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=30/30, Hunger=20/20, XP=40/225, Level=3
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 216 births, 216 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 277 births, 202 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 258 births, 279 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 12/20
+Gained 12 XP! Total: 52/225
+Food collected: Bread at 43,0
+Collected Bread - Hunger: +25, HP: +0, XP: +12 | Now: HP=30/30, Hunger=20/20, XP=52/225, Level=3
+Hunger decreased: 19/20
+Gained 5 XP! Total: 57/225
+Food collected: Berry at 44,0
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=30/30, Hunger=20/20, XP=57/225, Level=3
+Render Stats - FPS: 272 | Avg: 180 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 285 births, 265 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Gained 25 XP! Total: 82/225
+Food collected: Meat at 44,2
+Collected Meat - Hunger: +40, HP: +5, XP: +25 | Now: HP=30/30, Hunger=20/20, XP=82/225, Level=3
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 302 births, 295 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 206 births, 279 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Gained 2 XP! Total: 84/225
+Food collected: Mushroom at 48,4
+Collected Mushroom - Hunger: +5, HP: +-5, XP: +2 | Now: HP=25/30, Hunger=19/20, XP=84/225, Level=3
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 268 births, 201 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 232 births, 286 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+Render Stats - FPS: 13 | Avg: 176 | Min: 12 | Max: 722 | Efficiency: 24% | Tiles: 512/2132
+Hunger decreased: 12/20
+Gained 5 XP! Total: 89/225
+Food collected: Berry at 53,2
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=27/30, Hunger=20/20, XP=89/225, Level=3
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 220 births, 230 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 270 births, 210 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 269 births, 280 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 12/20
+Hunger decreased: 11/20
+Render Stats - FPS: 289 | Avg: 174 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Hunger decreased: 10/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 196 births, 281 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 9/20
+Gained 5 XP! Total: 94/225
+Food collected: Berry at 57,3
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=29/30, Hunger=19/20, XP=94/225, Level=3
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 317 births, 168 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Attempting to spawn 10 food items
+Spawned Apple at 39,9
+Spawned Berry at 37,12
+Spawned Mushroom at 67,12
+Spawned Bread at 25,8
+Spawned Mushroom at 64,22
+Food spawning completed: 10/10 items spawned (10 attempts)
+Periodic food respawn: added 10 items
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 210 births, 334 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+Gained 5 XP! Total: 99/225
+Food collected: Berry at 61,1
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=30/30, Hunger=20/20, XP=99/225, Level=3
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Render Stats - FPS: 241 | Avg: 165 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 240 births, 214 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Gained 8 XP! Total: 107/225
+Food collected: Apple at 61,4
+Collected Apple - Hunger: +15, HP: +0, XP: +8 | Now: HP=30/30, Hunger=20/20, XP=107/225, Level=3
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 260 births, 233 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 269 births, 253 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 269 births, 265 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+Hunger decreased: 12/20
+Hunger decreased: 11/20
+Gained 8 XP! Total: 115/225
+Food collected: Apple at 56,0
+Collected Apple - Hunger: +15, HP: +0, XP: +8 | Now: HP=30/30, Hunger=20/20, XP=115/225, Level=3
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 235 births, 274 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Render Stats - FPS: 325 | Avg: 175 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 294 births, 225 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 222 births, 310 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+Hunger decreased: 12/20
+Hunger decreased: 11/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 349 births, 210 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 10/20
+Hunger decreased: 9/20
+Hunger decreased: 8/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 158 births, 370 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 7/20
+Hunger decreased: 6/20
+Hunger decreased: 5/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 274 births, 136 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 4/20
+Hunger decreased: 3/20
+Render Stats - FPS: 305 | Avg: 175 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Hunger decreased: 2/20
+Gained 5 XP! Total: 120/225
+Food collected: Berry at 66,0
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=30/30, Hunger=12/20, XP=120/225, Level=3
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 286 births, 284 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+Hunger decreased: 10/20
+Gained 15 XP! Total: 135/225
+Food collected: Fish at 67,1
+Collected Fish - Hunger: +30, HP: +3, XP: +15 | Now: HP=30/30, Hunger=20/20, XP=135/225, Level=3
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 194 births, 287 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 285 births, 193 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Gained 5 XP! Total: 140/225
+Food collected: Berry at 69,4
+Collected Berry - Hunger: +10, HP: +2, XP: +5 | Now: HP=30/30, Hunger=20/20, XP=140/225, Level=3
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 236 births, 271 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Render Stats - FPS: 254 | Avg: 182 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 3/2132
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 336 births, 249 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Gained 15 XP! Total: 155/225
+Food collected: Fish at 66,6
+Collected Fish - Hunger: +30, HP: +3, XP: +15 | Now: HP=30/30, Hunger=20/20, XP=155/225, Level=3
+Hunger decreased: 19/20
+Attempting to spawn 7 food items
+Spawned Fish at 50,18
+Spawned Bread at 2,4
+Spawned Fish at 52,2
+Spawned Bread at 32,9
+Spawned Mushroom at 12,10
+Food spawning completed: 7/7 items spawned (7 attempts)
+Periodic food respawn: added 7 items
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 267 births, 336 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 222 births, 269 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Render Stats - FPS: 269 | Avg: 184 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Hunger decreased: 13/20
+Gained 8 XP! Total: 163/225
+Food collected: Apple at 72,5
+Collected Apple - Hunger: +15, HP: +0, XP: +8 | Now: HP=30/30, Hunger=20/20, XP=163/225, Level=3
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 254 births, 227 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 311 births, 247 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 260 births, 308 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+Gained 12 XP! Total: 175/225
+Food collected: Bread at 73,1
+Collected Bread - Hunger: +25, HP: +0, XP: +12 | Now: HP=30/30, Hunger=20/20, XP=175/225, Level=3
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 259 births, 259 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Render Stats - FPS: 253 | Avg: 181 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 3/2132
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 258 births, 261 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Hunger decreased: 12/20
+Gained 2 XP! Total: 177/225
+Food collected: Mushroom at 77,2
+Collected Mushroom - Hunger: +5, HP: +-5, XP: +2 | Now: HP=25/30, Hunger=17/20, XP=177/225, Level=3
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 238 births, 257 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Hunger decreased: 14/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 292 births, 236 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+Hunger decreased: 12/20
+Hunger decreased: 11/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 266 births, 299 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 10/20
+Hunger decreased: 9/20
+Hunger decreased: 8/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 254 births, 270 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 7/20
+Hunger decreased: 6/20
+Hunger decreased: 5/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 193 births, 259 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 4/20
+Render Stats - FPS: 15 | Avg: 182 | Min: 12 | Max: 722 | Efficiency: 20% | Tiles: 445/2132
+Hunger decreased: 3/20
+Hunger decreased: 2/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 298 births, 179 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 1/20
+Hunger decreased: 0/20
+Starving! HP decreased: 23/30
+Starving! HP decreased: 21/30
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 227 births, 299 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Starving! HP decreased: 19/30
+Starving! HP decreased: 17/30
+Starving! HP decreased: 15/30
+Gained 2 XP! Total: 179/225
+Food collected: Mushroom at 67,12
+Collected Mushroom - Hunger: +5, HP: +-5, XP: +2 | Now: HP=10/30, Hunger=5/20, XP=179/225, Level=3
+Render Stats - FPS: 304 | Avg: 179 | Min: 12 | Max: 722 | Efficiency: 0% | Tiles: 2/2132
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 283 births, 225 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 4/20
+Hunger decreased: 3/20
+Hunger decreased: 2/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 186 births, 280 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 1/20
+Hunger decreased: 0/20
+Starving! HP decreased: 8/30
+Attempting to spawn 4 food items
+Spawned Berry at 8,23
+Spawned Bread at 28,13
+Spawned Mushroom at 24,20
+Spawned Berry at 42,15
+Food spawning completed: 4/4 items spawned (4 attempts)
+Periodic food respawn: added 4 items
+Starving! HP decreased: 6/30
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 294 births, 164 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Starving! HP decreased: 4/30
+Starving! HP decreased: 2/30
+Starving! HP decreased: 0/30
+Player died from starvation!
+Cleared all food from world: 40 items removed
+=== GAME SHUTDOWN STARTED ===
+=== GAME SHUTDOWN COMPLETED ===
+=== DEBUG LOG ENDED ===

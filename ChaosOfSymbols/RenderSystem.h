@@ -22,7 +22,12 @@ private:
     static constexpr char PlayerChar = '@';
     static constexpr int UnknownTileColor = 10; // Серый
     static constexpr char UnknownTileChar = '.';
-    static constexpr int PlayerTileId = -2; // Специальный ID для игрока
+    static constexpr int PlayerTileId = -9999; // Уникальный ID для игрока
+    static constexpr int FoodIdOffset = 1000;
+
+    const int BORDER_TILE_ID = -2;
+    const int PLAYER_TILE_ID = -1;
+    const int FOOD_TILE_ID_BASE = 1000;
 
     // Статистика
     struct RenderStats {
@@ -51,7 +56,8 @@ public:
 
     void ClearScreen();
     void DrawWorld(const World& world);
-    void DrawUI(const World& world, int posX, int posY, int playerSteps);
+    void DrawUI(const World& world, int posX, int posY, int playerSteps, int playerHP, int playerMaxHP, int playerHunger, int playerMaxHunger,
+        int playerXP, int playerLevel, int xpToNextLevel);
     void DrawPlayer(int x, int y, int previousX, int previousY, const World& world);
 
     void SetScreenSize(int width, int height);

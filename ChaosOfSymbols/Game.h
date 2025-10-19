@@ -4,6 +4,7 @@
 #include "TileTypeManager.h"
 #include "RenderSystem.h"
 #include <windows.h>
+#include "FoodManager.h"
 
 class Game {
 private:
@@ -30,6 +31,7 @@ private:
     GameSettings* m_settings;
     RenderSystem* m_renderSystem;
     TileTypeManager* m_tileManager;
+    FoodManager* m_foodManager;
 
     int m_playerX;
     int m_playerY;
@@ -39,6 +41,15 @@ private:
     bool m_automatonEnabled;
     int m_actionsSinceLastUpdate;
     static constexpr int ActionsPerUpdate = 1; // Обновлять автомат после каждого действия
+
+    const int MAX_HP = 30;
+    const int MAX_HUNGER = 20;
+    int m_playerHP;     
+    int m_playerHunger; 
+
+    int m_playerXP;          // Текущий опыт
+    int m_playerLevel;       // Текущий уровень
+    int m_xpToNextLevel;     // Опыт до следующего уровня
 
 public:
     Game();
@@ -52,12 +63,23 @@ public:
     void Shutdown();
 
     int GetPlayerSteps() const { return m_playerSteps; }
+    int GetPlayerHP() const { return m_playerHP; }       
+    int GetPlayerHunger() const { return m_playerHunger; } 
+    int GetMaxHP() const { return MAX_HP; }                
+    int GetMaxHunger() const { return MAX_HUNGER; }      
 
 private:
-    void MovePlayer(int dx, int dy);
+    bool MovePlayer(int dx, int dy);
     void EnsureValidPlayerPosition();
     void FindNearestPassablePosition();
     void FindRandomPassablePosition();
 
     void UpdateCellularAutomaton();
+
+    void ConsumeEnergy();
+    void ShowDeathScreen();
+    void CollectFood();
+
+    void GainXP(int amount); // Метод для получения опыта
+    void CheckLevelUp();     // Проверка повышения уровня
 };

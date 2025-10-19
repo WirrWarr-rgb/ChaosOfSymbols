@@ -1,0 +1,168 @@
+=== DEBUG LOG STARTED ===
+=== GAME INITIALIZATION STARTED ===
+DEBUG Initialize - HP: 30/30, Hunger: 20/20
+Attempting to load tile types...
+=== LOADING TILE TYPES FROM: config/tiles.json ===
+File opened successfully, size: 458 bytes
+JSON content starts with: [
+  {
+    "id": 0,
+    "name": "grass",
+    "chara...
+JSON content ends with: ...    "isDestructible": false,
+    "damage": 0
+  }
+]
+Cleaned JSON: [  {    "id": 0,    "name": "grass",    "character": ".",    "color": 2,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 1,    "name": "water",    "character": "+",    "color": 3,    "isPassable": false,    "isDestructible": false,    "damage": 0  },  {    "id": 2,    "name": "mountain",    "character": "#",    "color": 6,    "isPassable": false,    "isDestructible": false,    "damage": 0  }]
+Found object: {    "id": 0,    "name": "grass",    "character": ".",    "color": 2,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
+Found object: {    "id": 1,    "name": "water",    "character": "+",    "color": 3,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
+Found object: {    "id": 2,    "name": "mountain",    "character": "#",    "color": 6,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
+Parsed 3 objects from JSON array
+Found 3 tile objects in JSON
+Parsed tile - id: 0, name: grass, character: '.', color: 2, passable: true
+Successfully registered tile: grass
+Parsed tile - id: 1, name: water, character: '+', color: 3, passable: false
+Successfully registered tile: water
+Parsed tile - id: 2, name: mountain, character: '#', color: 6, passable: false
+Successfully registered tile: mountain
+=== TILE LOADING COMPLETED: 3 tiles loaded ===
+=== LOADED TILES SUMMARY ===
+Tile 0: '.' - grass (color: 2)
+Tile 1: '+' - water (color: 3)
+Tile 2: '#' - mountain (color: 6)
+=== END LOADED TILES SUMMARY ===
+Tile types loaded successfully
+Number of loaded tiles: 3
+Tile 0: grass ('.')
+Tile 1: water ('+')
+Tile 2: mountain ('#')
+Attempting to load food types...
+Loaded food: Apple (ID: 1, Symbol: 'a')
+Loaded food: Bread (ID: 2, Symbol: 'b')
+Loaded food: Meat (ID: 3, Symbol: 'm')
+Loaded food: Berry (ID: 4, Symbol: 'r')
+Loaded food: Fish (ID: 5, Symbol: 'f')
+Loaded food: Cake (ID: 6, Symbol: 'c')
+Loaded food: Mushroom (ID: 7, Symbol: 'u')
+Food manager loaded 7 food types
+Food types loaded successfully
+Testing config-based generation...
+=== STARTING PURE RULE-BASED GENERATION ===
+Loading world config from: config/world_gen.cfg
+Loading spawn config from: config/world_spawn.cfg
+Added spawn rule: '.' -> zones: 0.300000:0.400000:0.100000
+Added spawn rule: '+' -> zones: 0.400000:0.200000:0.050000
+Added spawn rule: '#' -> zones: 0.300000:0.400000:0.850000
+Spawn config loaded: 3 spawn tiles with rules
+Content size: 80x24
+Total size with border: 82x26
+Using seed: 1760888656
+=== PARSING CELLULAR AUTOMATON CONFIG ===
+Line 1: skipped (comment/empty)
+Line 2: found tile definition: '+'
+Line 3: key='survival', value='(count['+'] >= 1 && count['+'] <= 4) ||'
+Set survival rule for tile '+': (count['+'] >= 1 && count['+'] <= 4) ||
+Line 4: key='(count['+']', value='= 5 && count['.'] >= 3) ||'
+WARNING: Unknown key: (count['+']
+Line 5: key='(count['+']', value='= 0 && count['.'] >= 5 && count['#'] == 0)'
+WARNING: Unknown key: (count['+']
+Line 6: key='birth', value='(count['+'] >= 2 && count['+'] <= 3 && count['.'] >= 2) ||'
+Set birth rule for tile '+': (count['+'] >= 2 && count['+'] <= 3 && count['.'] >= 2) ||
+SUCCESS: Registered rule for tile '+'
+Line 7: key='(count['.'] >', value='4 && count['#'] == 0 && count['+'] == 1)'
+ERROR: Rule without tile definition at line 7
+Line 8: key='death', value='(count['+'] >= 6) ||'
+ERROR: Rule without tile definition at line 8
+Line 9: key='(count['#'] >', value='3) ||'
+ERROR: Rule without tile definition at line 9
+Line 10: key='(count['+'] <', value='1 && count['.'] <= 2)'
+ERROR: Rule without tile definition at line 10
+Line 11: skipped (comment/empty)
+Line 12: skipped (comment/empty)
+Line 13: found tile definition: '.'
+Line 14: key='survival', value='(count['.'] >= 3 && count['.'] <= 7) ||'
+Set survival rule for tile '.': (count['.'] >= 3 && count['.'] <= 7) ||
+Line 15: key='(count['.']', value='= 2 && count['+'] <= 2) ||'
+WARNING: Unknown key: (count['.']
+Line 16: key='(count['.']', value='= 8 && count['+'] >= 1)'
+WARNING: Unknown key: (count['.']
+Line 17: key='birth', value='(count['.'] >= 2 && count['.'] <= 6 && count['+'] <= 3) ||'
+Set birth rule for tile '.': (count['.'] >= 2 && count['.'] <= 6 && count['+'] <= 3) ||
+SUCCESS: Registered rule for tile '.'
+Line 18: key='(count['+']', value='= 0 && count['#'] <= 2 && count['.'] >= 1)'
+ERROR: Rule without tile definition at line 18
+Line 19: key='death', value='(count['.'] <= 1 && count['+'] >= 3) ||'
+ERROR: Rule without tile definition at line 19
+Line 20: key='(count['+'] >', value='6) ||'
+ERROR: Rule without tile definition at line 20
+Line 21: key='(count['#'] >', value='4)'
+ERROR: Rule without tile definition at line 21
+Line 22: skipped (comment/empty)
+Line 23: skipped (comment/empty)
+Line 24: found tile definition: '#'
+Line 25: key='survival', value='(count['#'] >= 2 && count['#'] <= 5) ||'
+Set survival rule for tile '#': (count['#'] >= 2 && count['#'] <= 5) ||
+Line 26: key='(count['#']', value='= 1 && count['.'] >= 4) ||'
+WARNING: Unknown key: (count['#']
+Line 27: key='(count['#']', value='= 6 && count['+'] == 0)'
+WARNING: Unknown key: (count['#']
+Line 28: key='birth', value='(count['#'] >= 3 && count['+'] == 0) ||'
+Set birth rule for tile '#': (count['#'] >= 3 && count['+'] == 0) ||
+SUCCESS: Registered rule for tile '#'
+Line 29: key='(count['#'] >', value='2 && count['.'] <= 2 && count['+'] == 0)'
+ERROR: Rule without tile definition at line 29
+Line 30: key='death', value='(count['#'] <= 1 && count['+'] >= 2) ||'
+ERROR: Rule without tile definition at line 30
+Line 31: key='(count['#'] >', value='6) ||'
+ERROR: Rule without tile definition at line 31
+Line 32: key='(count['+'] >', value='3)'
+ERROR: Rule without tile definition at line 32
+=== CELLULAR AUTOMATON CONFIG PARSING COMPLETE ===
+Total rules loaded: 3
+Rule for '#' is available
+Rule for '+' is available
+Rule for '.' is available
+Generating terrain based on height zones...
+Detected tiles - Water: '+', Grass: '.', Mountain: '#'
+Zone-based terrain generated: 1920 tiles placed
+  '.' (grass): 1376
+  '+' (water): 86
+  '#' (mountain): 458
+Creating border with tile ID: 2
+Border created successfully
+Smoothing terrain with natural transitions...
+Natural smoothing applied: 955 changes made
+Attempting to spawn 30 food items
+Spawned Bread at 9,3
+Spawned Bread at 14,21
+Spawned Bread at 31,19
+Spawned Apple at 33,20
+Spawned Bread at 22,10
+Food spawning completed: 30/30 items spawned (31 attempts)
+=== RULE-BASED GENERATION COMPLETED ===
+=== GAME INITIALIZATION COMPLETED ===
+First draw - total size with border: 82x26
+Attempting to spawn 10 food items
+Spawned Apple at 62,3
+Spawned Fish at 67,20
+Spawned Berry at 46,2
+Spawned Berry at 9,7
+Spawned Apple at 1,12
+Food spawning completed: 10/10 items spawned (10 attempts)
+Periodic food respawn: added 10 items
+Hunger decreased: 19/20
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 275 births, 1335 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Hunger decreased: 16/20
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== STARTING CELLULAR AUTOMATON UPDATE ===
+Cellular automaton: 643 births, 251 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Hunger decreased: 13/20
+Render Stats - FPS: 97 | Avg: 78 | Min: 43 | Max: 107 | Efficiency: 3% | Tiles: 81/2132
