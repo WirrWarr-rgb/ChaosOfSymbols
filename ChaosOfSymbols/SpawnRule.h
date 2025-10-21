@@ -4,6 +4,8 @@
 
 struct SpawnRule {
     int tileId;
-    std::vector<float> zoneProbabilities; // [низины, равнины, горы]
     char character;
+    std::vector<float> zoneProbabilities; // [РЅРёР·РёРЅС‹, СЂР°РІРЅРёРЅС‹, РіРѕСЂС‹]
+
+    SpawnRule() : tileId(-1), character('?') {}
 };

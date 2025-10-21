@@ -6,7 +6,6 @@ public:
     Food();
     Food(int id, const std::string& name, char symbol, int color, int hungerRestore, int hpRestore, int spawnWeight, int experience = 0);
 
-    // Геттеры
     int GetId() const { return m_id; }
     const std::string& GetName() const { return m_name; }
     char GetSymbol() const { return m_symbol; }
@@ -14,7 +13,7 @@ public:
     int GetHungerRestore() const { return m_hungerRestore; }
     int GetHpRestore() const { return m_hpRestore; }
     int GetSpawnWeight() const { return m_spawnWeight; }
-    int GetExperience() const { return m_experience; } // Добавьте этот метод
+    int GetExperience() const { return m_experience; }
 
 private:
     int m_id;
@@ -23,6 +22,6 @@ private:
     int m_color;
     int m_hungerRestore;
     int m_hpRestore;
-    int m_spawnWeight; // Вес для случайного спавна (чем больше, тем чаще появляется)
+    int m_spawnWeight;
     int m_experience;
 };

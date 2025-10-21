@@ -6,12 +6,12 @@
 #include <regex>
 
 /// <summary>
-/// Самописный парсер JSON
+/// РЎР°РјРѕРїРёСЃРЅС‹Р№ РїР°СЂСЃРµСЂ JSON
 /// </summary>
 class SimpleJsonParser {
 public:
     /// <summary>
-    /// Удаление лишних пробелов и переносов из JSON
+    /// РЈРґР°Р»РµРЅРёРµ Р»РёС€РЅРёС… РїСЂРѕР±РµР»РѕРІ Рё РїРµСЂРµРЅРѕСЃРѕРІ РёР· JSON
     /// </summary>
     static std::string CleanJson(const std::string& json) {
         std::string result;
@@ -34,13 +34,13 @@ public:
     }
 
     /// <summary>
-    /// Парсинг JSON-массива на отдельные объекты
+    /// РџР°СЂСЃРёРЅРі JSON-РјР°СЃСЃРёРІР° РЅР° РѕС‚РґРµР»СЊРЅС‹Рµ РѕР±СЉРµРєС‚С‹
     /// </summary>
     static std::vector<std::string> ParseArray(const std::string& json) {
         std::vector<std::string> result;
 
         std::string cleanJson = CleanJson(json);
-        Logger::Log("Cleaned JSON: " + cleanJson);
+        Logger::Log("Cleaned JSON: " + cleanJson + "\n");
 
         if (cleanJson.empty() || cleanJson[0] != '[' || cleanJson[cleanJson.size() - 1] != ']') {
             Logger::Log("ERROR: JSON is not a valid array");
@@ -90,12 +90,12 @@ public:
             }
         }
 
-        Logger::Log("Parsed " + std::to_string(result.size()) + " objects from JSON array");
+        Logger::Log("\nParsed " + std::to_string(result.size()) + " objects from JSON array");
         return result;
     }
 
     /// <summary>
-    /// Извелечение значения из JSON-объектов с помощью регулярных выражений
+    /// РР·РІРµР»РµС‡РµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РёР· JSON-РѕР±СЉРµРєС‚РѕРІ СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРіСѓР»СЏСЂРЅС‹С… РІС‹СЂР°Р¶РµРЅРёР№
     /// </summary>
     static std::string GetStringValue(const std::string& json, const std::string& key) {
         std::regex pattern("\"" + key + "\"\\s*:\\s*\"([^\"]*)\"");
@@ -107,7 +107,7 @@ public:
     }
 
     /// <summary>
-    /// Извелечение значения из JSON-объектов с помощью регулярных выражений
+    /// РР·РІРµР»РµС‡РµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РёР· JSON-РѕР±СЉРµРєС‚РѕРІ СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРіСѓР»СЏСЂРЅС‹С… РІС‹СЂР°Р¶РµРЅРёР№
     /// </summary>
     static int GetIntValue(const std::string& json, const std::string& key) {
         std::regex pattern("\"" + key + "\"\\s*:\\s*(-?\\d+)");
@@ -119,7 +119,7 @@ public:
     }
 
     /// <summary>
-    /// Извелечение значения из JSON-объектов с помощью регулярных выражений
+    /// РР·РІРµР»РµС‡РµРЅРёРµ Р·РЅР°С‡РµРЅРёСЏ РёР· JSON-РѕР±СЉРµРєС‚РѕРІ СЃ РїРѕРјРѕС‰СЊСЋ СЂРµРіСѓР»СЏСЂРЅС‹С… РІС‹СЂР°Р¶РµРЅРёР№
     /// </summary>
     static bool GetBoolValue(const std::string& json, const std::string& key) {
         std::regex pattern("\"" + key + "\"\\s*:\\s*(true|false)");
@@ -156,7 +156,7 @@ bool TileTypeManager::LoadFromFile() {
 }
 
 /// <summary>
-/// Загрузка данных
+/// Р—Р°РіСЂСѓР·РєР° РґР°РЅРЅС‹С…
 /// </summary>
 bool TileTypeManager::LoadFromFile(const std::string& filePath) {
     Logger::Log("=== LOADING TILE TYPES FROM: " + filePath + " ===");
@@ -164,7 +164,6 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
     std::ifstream file(filePath);
     if (!file.is_open()) {
         Logger::Log("ERROR: Tile config not found: " + filePath);
-        std::cout << "Tile config not found: " << filePath << ", using defaults" << '\n';
 
         Logger::Log("Attempting to create default tile config...");
         if (SaveToFile(filePath)) {
@@ -202,9 +201,6 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
         jsonContent = jsonContent.substr(start, end - start + 1);
     }
 
-    Logger::Log("JSON content starts with: " + jsonContent.substr(0, 50) + "...");
-    Logger::Log("JSON content ends with: ..." + (jsonContent.size() > 50 ? jsonContent.substr(jsonContent.size() - 50) : jsonContent));
-
     if (jsonContent[0] != '[' || jsonContent[jsonContent.size() - 1] != ']') {
         Logger::Log("ERROR: JSON content is not an array. Expected [...], but got: " + jsonContent);
         LoadDefaultTiles();
@@ -212,7 +208,7 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
     }
 
     auto tileObjects = SimpleJsonParser::ParseArray(jsonContent);
-    Logger::Log("Found " + std::to_string(tileObjects.size()) + " tile objects in JSON");
+    Logger::Log("Found " + std::to_string(tileObjects.size()) + " tile objects in JSON\n");
 
     if (tileObjects.empty()) {
         Logger::Log("WARNING: No tile objects found in JSON, using defaults");
@@ -247,22 +243,22 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
         }
     }
 
-    Logger::Log("=== TILE LOADING COMPLETED: " + std::to_string(m_tileTypes.size()) + " tiles loaded ===");
+    Logger::Log("\n=== TILE LOADING COMPLETED: " + std::to_string(m_tileTypes.size()) + " tiles loaded ===\n");
 
-    Logger::Log("=== LOADED TILES SUMMARY ===");
+    Logger::Log("=== LOADED TILES SUMMARY ===\n");
     for (const auto& pair : m_tileTypes) {
         const TileType& tile = pair.second;
         Logger::Log("Tile " + std::to_string(tile.GetId()) + ": '" +
             std::string(1, tile.GetCharacter()) + "' - " + tile.GetName() +
             " (color: " + std::to_string(tile.GetColor()) + ")");
     }
-    Logger::Log("=== END LOADED TILES SUMMARY ===");
+    Logger::Log("\n=== END LOADED TILES SUMMARY ===\n");
 
     return true;
 }
 
 /// <summary>
-/// Сохранение
+/// РЎРѕС…СЂР°РЅРµРЅРёРµ
 /// </summary>
 bool TileTypeManager::SaveToFile(const std::string& filePath) {
     std::string outputPath = filePath.empty() ? m_resourceFilePath : filePath;

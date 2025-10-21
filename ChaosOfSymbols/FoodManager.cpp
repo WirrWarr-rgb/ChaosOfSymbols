@@ -21,16 +21,16 @@ bool FoodManager::LoadFromFile(const std::string& filename) {
         return false;
     }
 
+    Logger::Log("=== LOADED FOOD SUMMARY ===\n");
     std::string line;
     while (std::getline(file, line)) {
         if (line.empty() || line[0] == '#') continue;
 
         std::istringstream iss(line);
-        int id, color, hunger, hp, weight, experience = 0; // Добавьте experience
+        int id, color, hunger, hp, weight, experience = 0;
         std::string name;
         char symbol;
 
-        // Читаем 7 значений вместо 6
         if (iss >> id >> name >> symbol >> color >> hunger >> hp >> weight >> experience) {
             Food* food = new Food(id, name, symbol, color, hunger, hp, weight, experience);
             m_foods.push_back(food);
@@ -38,13 +38,10 @@ bool FoodManager::LoadFromFile(const std::string& filename) {
             Logger::Log("Loaded food: " + name + " (ID: " + std::to_string(id) +
                 ", XP: " + std::to_string(experience) + ")");
         }
-        // Для обратной совместимости - если experience не указан
         else {
-            // Сбрасываем поток и читаем без experience
             iss.clear();
             iss.str(line);
             if (iss >> id >> name >> symbol >> color >> hunger >> hp >> weight) {
-                // Автоматически рассчитываем опыт на основе восстановления голода
                 experience = hunger / 2 + hp * 2;
                 Food* food = new Food(id, name, symbol, color, hunger, hp, weight, experience);
                 m_foods.push_back(food);
@@ -56,7 +53,8 @@ bool FoodManager::LoadFromFile(const std::string& filename) {
     }
 
     CalculateSpawnWeights();
-    Logger::Log("Food manager loaded " + std::to_string(m_foods.size()) + " food types");
+    Logger::Log("\nFood manager loaded " + std::to_string(m_foods.size()) + " food types");
+    Logger::Log("\n=== END LOADED FOOD SUMMARY ===\n");
     return true;
 }
 

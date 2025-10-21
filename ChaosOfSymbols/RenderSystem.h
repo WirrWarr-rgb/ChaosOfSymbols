@@ -15,21 +15,21 @@ namespace rlutil {
 
 class RenderSystem {
 private:
-    // Константы
+    // РљРѕРЅСЃС‚Р°РЅС‚С‹
     static constexpr int DefaultScreenWidth = 80;
     static constexpr int DefaultScreenHeight = 24;
-    static constexpr int PlayerColor = 12; // Красный
+    static constexpr int PlayerColor = 12; // РљСЂР°СЃРЅС‹Р№
     static constexpr char PlayerChar = '@';
-    static constexpr int UnknownTileColor = 10; // Серый
+    static constexpr int UnknownTileColor = 10; // РЎРµСЂС‹Р№
     static constexpr char UnknownTileChar = '.';
-    static constexpr int PlayerTileId = -9999; // Уникальный ID для игрока
+    static constexpr int PlayerTileId = -9999; // РЈРЅРёРєР°Р»СЊРЅС‹Р№ ID РґР»СЏ РёРіСЂРѕРєР°
     static constexpr int FoodIdOffset = 1000;
 
     const int BORDER_TILE_ID = -2;
     const int PLAYER_TILE_ID = -1;
     const int FOOD_TILE_ID_BASE = 1000;
 
-    // Статистика
+    // РЎС‚Р°С‚РёСЃС‚РёРєР°
     struct RenderStats {
         int framesRendered = 0;
         int tilesDrawn = 0;
@@ -64,12 +64,14 @@ public:
     int GetScreenWidth() const { return m_screenWidth; }
     int GetScreenHeight() const { return m_screenHeight; }
 
-    // Методы для статистики
+    // РњРµС‚РѕРґС‹ РґР»СЏ СЃС‚Р°С‚РёСЃС‚РёРєРё
     void StartFrame();
     void EndFrame();
     double GetCurrentFPS() const { return m_stats.currentFps; }
     double GetAverageFPS() const { return m_stats.averageFps; }
     void LogStats() const;
+
+    void ClearEntireScreen();
 
 private:
     void InitializePreviousFrame();

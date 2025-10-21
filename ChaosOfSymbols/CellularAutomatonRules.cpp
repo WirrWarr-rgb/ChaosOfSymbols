@@ -9,7 +9,7 @@ bool RuleParser::evaluate(const std::unordered_map<char, int>& neighborCounts) c
     if (m_ruleString.empty() || m_ruleString == "true") return true;
     if (m_ruleString == "false") return false;
 
-    // Простой парсер для условий типа "count['#'] >= 2 && count['~'] == 1"
+    // РџСЂРѕСЃС‚РѕР№ РїР°СЂСЃРµСЂ РґР»СЏ СѓСЃР»РѕРІРёР№ С‚РёРїР° "count['#'] >= 2 && count['~'] == 1"
     size_t andPos = m_ruleString.find("&&");
     size_t orPos = m_ruleString.find("||");
 
@@ -33,20 +33,20 @@ bool RuleParser::parseCondition(const std::string& condition, const std::unorder
     trimmed.erase(0, trimmed.find_first_not_of(" \t"));
     trimmed.erase(trimmed.find_last_not_of(" \t") + 1);
 
-    // Парсим условие типа "count['#'] >= 2"
+    // РџР°СЂСЃРёРј СѓСЃР»РѕРІРёРµ С‚РёРїР° "count['#'] >= 2"
     size_t bracketStart = trimmed.find("count['");
     if (bracketStart == std::string::npos) return false;
 
     size_t bracketEnd = trimmed.find("']", bracketStart);
     if (bracketEnd == std::string::npos) return false;
 
-    char tileChar = trimmed[bracketStart + 7]; // после "count['"
+    char tileChar = trimmed[bracketStart + 7]; // РїРѕСЃР»Рµ "count['"
     std::string rest = trimmed.substr(bracketEnd + 2);
 
-    // Убираем пробелы
+    // РЈР±РёСЂР°РµРј РїСЂРѕР±РµР»С‹
     rest.erase(std::remove(rest.begin(), rest.end(), ' '), rest.end());
 
-    // Парсим оператор и значение
+    // РџР°СЂСЃРёРј РѕРїРµСЂР°С‚РѕСЂ Рё Р·РЅР°С‡РµРЅРёРµ
     std::string op;
     std::string valueStr;
 
@@ -86,62 +86,46 @@ bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
     }
 
     m_rules.clear();
+
     std::string line;
     char currentTile = '\0';
     CellRule currentRule;
     int lineNumber = 0;
     bool hasTileDefinition = false;
 
-    Logger::Log("=== PARSING CELLULAR AUTOMATON CONFIG ===");
-
     while (std::getline(file, line)) {
         lineNumber++;
 
-        // УДАЛЕНО: старый код с комментариями #
-        // if (line.empty() || line[0] == '#') {
-
-        // ДОБАВЛЕНО: поддержка комментариев //
-        // Удаляем комментарии (всё что после //)
         size_t commentPos = line.find("//");
         if (commentPos != std::string::npos) {
             line = line.substr(0, commentPos);
         }
 
-        // Пропускаем пустые строки после удаления комментариев
         line.erase(0, line.find_first_not_of(" \t"));
         if (line.empty()) {
-            Logger::Log("Line " + std::to_string(lineNumber) + ": skipped (comment/empty)");
             continue;
         }
 
-        // Убираем пробелы в конце строки
         line.erase(line.find_last_not_of(" \t") + 1);
 
-        // Проверяем, является ли строка определением тайла (один символ в начале строки)
         if (line.length() == 1) {
-            // Это определение нового тайла
             currentTile = line[0];
             hasTileDefinition = true;
-            Logger::Log("Line " + std::to_string(lineNumber) + ": found tile definition: '" + std::string(1, currentTile) + "'");
             continue;
         }
 
         size_t eqPos = line.find('=');
         if (eqPos == std::string::npos) {
-            Logger::Log("Line " + std::to_string(lineNumber) + ": no '=' found");
             continue;
         }
 
         std::string key = line.substr(0, eqPos);
         std::string value = line.substr(eqPos + 1);
 
-        // Убираем пробелы
         key.erase(0, key.find_first_not_of(" \t"));
         key.erase(key.find_last_not_of(" \t") + 1);
         value.erase(0, value.find_first_not_of(" \t"));
         value.erase(value.find_last_not_of(" \t") + 1);
-
-        Logger::Log("Line " + std::to_string(lineNumber) + ": key='" + key + "', value='" + value + "'");
 
         if (!hasTileDefinition) {
             Logger::Log("ERROR: Rule without tile definition at line " + std::to_string(lineNumber));
@@ -149,40 +133,32 @@ bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
         }
 
         if (key == "survival") {
-            currentRule.survivalRule = RuleParser::parse(value);
-            Logger::Log("Set survival rule for tile '" + std::string(1, currentTile) + "': " + value);
+            currentRule.survivalRule = RuleParser::create(value);
         }
         else if (key == "birth") {
-            currentRule.birthRule = RuleParser::parse(value);
-            Logger::Log("Set birth rule for tile '" + std::string(1, currentTile) + "': " + value);
+            currentRule.birthRule = RuleParser::create(value);
 
-            // Сохраняем правило когда дошли до конца определения
             if (currentTile != '\0') {
                 m_rules[currentTile] = currentRule;
-                Logger::Log("SUCCESS: Registered rule for tile '" + std::string(1, currentTile) + "'");
                 currentTile = '\0';
                 currentRule = CellRule();
                 hasTileDefinition = false;
             }
         }
         else if (key == "death") {
-            currentRule.deathRule = RuleParser::parse(value);
-            Logger::Log("Set death rule for tile '" + std::string(1, currentTile) + "': " + value);
+            currentRule.deathRule = RuleParser::create(value);
         }
         else {
             Logger::Log("WARNING: Unknown key: " + key);
         }
     }
 
-    file.close();
-    Logger::Log("=== CELLULAR AUTOMATON CONFIG PARSING COMPLETE ===");
-    Logger::Log("Total rules loaded: " + std::to_string(m_rules.size()));
-
-    // Логируем все загруженные правила (без structured bindings)
-    for (std::unordered_map<char, CellRule>::const_iterator it = m_rules.begin(); it != m_rules.end(); ++it) {
-        char tileChar = it->first;
-        Logger::Log("Rule for '" + std::string(1, tileChar) + "' is available");
+    if (currentTile != '\0') {
+        m_rules[currentTile] = currentRule;
     }
+
+    file.close();
+    LogRulesSummary();
 
     return !m_rules.empty();
 }
@@ -193,4 +169,44 @@ const CellRule* CellularAutomatonConfig::GetRule(char tileChar) const {
         return &it->second;
     }
     return nullptr;
+}
+
+void CellularAutomatonConfig::LogRulesSummary() const {
+    Logger::Log("\n=== LOADED CELLULAR AUTOMATON RULES SUMMARY ===\n");
+
+    for (const auto& pair : m_rules) {
+        char tileChar = pair.first;
+        const CellRule& rule = pair.second;
+
+        std::string ruleInfo = "Tile '" + std::string(1, tileChar) + "': ";
+        bool hasRules = false;
+
+        if (rule.survivalRule) {
+            ruleInfo += "\nSurvival=" + rule.survivalRule->getRuleString();
+            hasRules = true;
+        }
+        else {
+            ruleInfo += "\nSurvival=ERROR";
+        }
+        if (rule.birthRule) {
+            if (hasRules) ruleInfo += ", ";
+            ruleInfo += "\nBirth=" + rule.birthRule->getRuleString();
+            hasRules = true;
+        }
+        else {
+            ruleInfo += "\nBirth=ERROR";
+        }
+        if (rule.deathRule) {
+            if (hasRules) ruleInfo += ", ";
+            ruleInfo += "\nDeath=" + rule.deathRule->getRuleString();
+            hasRules = true;
+        }
+        else {
+            ruleInfo += "\nDeath=ERROR";
+        }
+
+        Logger::Log(ruleInfo);
+    }
+
+    Logger::Log("\n=== END CELLULAR AUTOMATON RULES SUMMARY ===\n");
 }

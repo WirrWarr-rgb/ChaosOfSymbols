@@ -1,23 +1,20 @@
 #pragma once
 #include "World.h"
-#include "GameSettings.h"
-#include "TileTypeManager.h"
 #include "RenderSystem.h"
+#include "ConfigManager.h"  // Р”РѕР±Р°РІСЊС‚Рµ СЌС‚РѕС‚ include
 #include <windows.h>
-#include "FoodManager.h"
+#include <memory>  // Р”Р»СЏ unique_ptr
 
 class Game {
 private:
-    // Константы для настройки игры
+    // РљРѕРЅСЃС‚Р°РЅС‚С‹ РґР»СЏ РЅР°СЃС‚СЂРѕР№РєРё РёРіСЂС‹
     static constexpr const char* LogFile = "config/debug.log";
-    static constexpr const char* WorldConfigFile = "config/world_gen.cfg";
-    static constexpr const char* WorldSaveFile = "saves/world.dat";
 
-    // Константы времени (в миллисекундах)
-    static constexpr int FrameDelayMs = 50;        // 20 FPS
-    static constexpr int MoveCooldownMs = 100;     // Задержка между движениями
+    // РљРѕРЅСЃС‚Р°РЅС‚С‹ РІСЂРµРјРµРЅРё (РІ РјРёР»Р»РёСЃРµРєСѓРЅРґР°С…)
+    static constexpr int FrameDelayMs = 33;        // 20 FPS
+    static constexpr int MoveCooldownMs = 66;     // Р—Р°РґРµСЂР¶РєР° РјРµР¶РґСѓ РґРІРёР¶РµРЅРёСЏРјРё
 
-    // Константы игровой логики
+    // РљРѕРЅСЃС‚Р°РЅС‚С‹ РёРіСЂРѕРІРѕР№ Р»РѕРіРёРєРё
     static constexpr int DefaultPlayerX = 10;
     static constexpr int DefaultPlayerY = 10;
     static constexpr int UiUpdateInterval = 6;
@@ -28,28 +25,30 @@ private:
 
     bool m_isRunning;
     World* m_currentWorld;
-    GameSettings* m_settings;
     RenderSystem* m_renderSystem;
-    TileTypeManager* m_tileManager;
-    FoodManager* m_foodManager;
+    std::unique_ptr<ConfigManager> m_configManager;  // Р—Р°РјРµРЅСЏРµРј РѕС‚РґРµР»СЊРЅС‹Рµ РјРµРЅРµРґР¶РµСЂС‹
+
+    // РЈР”РђР›Р•РќРћ: TileTypeManager* m_tileManager;
+    // РЈР”РђР›Р•РќРћ: FoodManager* m_foodManager;
 
     int m_playerX;
     int m_playerY;
-
     int m_playerSteps;
 
     bool m_automatonEnabled;
     int m_actionsSinceLastUpdate;
-    static constexpr int ActionsPerUpdate = 1; // Обновлять автомат после каждого действия
+    static constexpr int ActionsPerUpdate = 1;
 
     const int MAX_HP = 30;
     const int MAX_HUNGER = 20;
-    int m_playerHP;     
-    int m_playerHunger; 
+    int m_playerHP;
+    int m_playerHunger;
+    std::unordered_map<int, int> m_foodEaten;
+    int m_totalXP;
 
-    int m_playerXP;          // Текущий опыт
-    int m_playerLevel;       // Текущий уровень
-    int m_xpToNextLevel;     // Опыт до следующего уровня
+    int m_playerXP;
+    int m_playerLevel;
+    int m_xpToNextLevel;
 
 public:
     Game();
@@ -63,10 +62,10 @@ public:
     void Shutdown();
 
     int GetPlayerSteps() const { return m_playerSteps; }
-    int GetPlayerHP() const { return m_playerHP; }       
-    int GetPlayerHunger() const { return m_playerHunger; } 
-    int GetMaxHP() const { return MAX_HP; }                
-    int GetMaxHunger() const { return MAX_HUNGER; }      
+    int GetPlayerHP() const { return m_playerHP; }
+    int GetPlayerHunger() const { return m_playerHunger; }
+    int GetMaxHP() const { return MAX_HP; }
+    int GetMaxHunger() const { return MAX_HUNGER; }
 
 private:
     bool MovePlayer(int dx, int dy);
@@ -74,12 +73,15 @@ private:
     void FindNearestPassablePosition();
     void FindRandomPassablePosition();
 
-    void UpdateCellularAutomaton();
-
     void ConsumeEnergy();
     void ShowDeathScreen();
     void CollectFood();
 
-    void GainXP(int amount); // Метод для получения опыта
-    void CheckLevelUp();     // Проверка повышения уровня
+    void GainXP(int amount);
+    void CheckLevelUp();
+
+    // РњРµС‚РѕРґС‹ РґР»СЏ РѕР±СЂР°Р±РѕС‚РєРё РёР·РјРµРЅРµРЅРёР№ РєРѕРЅС„РёРіРѕРІ
+    void OnTilesChanged();
+    void OnFoodChanged();
+    void OnAutomatonRulesChanged();
 };

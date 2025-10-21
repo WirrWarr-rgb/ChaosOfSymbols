@@ -1,10 +1,9 @@
 #pragma once
 #include "FastNoiseLite.h"
-#include "WorldGenerationConfig.h"
-#include "WorldSpawnConfig.h"
+#include "WorldConfig.h"
 #include "CellularAutomatonRules.h"
 #include "TileTypeManager.h"
-#include "FoodManager.h" // ƒŒ¡¿¬‹“≈ ›“Œ
+#include "FoodManager.h"
 #include <vector>
 #include <string>
 #include <unordered_map>
@@ -22,29 +21,29 @@ private:
     int m_contentWidth;
     int m_contentHeight;
     FastNoiseLite m_noiseGenerator;
-    int m_currentSeed;
-    WorldGenConfig m_genConfig;
-    WorldSpawnConfig m_spawnConfig;
-    CellularAutomatonConfig m_automatonConfig;
+    WorldConfig m_config;
     bool m_automatonEnabled;
     TileTypeManager* m_tileManager;
-    FoodManager* m_foodManager; // ƒŒ¡¿¬‹“≈ ›“Œ
-    std::unordered_map<int, FoodSpawn> m_foodSpawns; // ƒŒ¡¿¬‹“≈ ›“Œ - key: y * m_contentWidth + x
+    FoodManager* m_foodManager;
+    std::unordered_map<int, FoodSpawn> m_foodSpawns; // key: y * m_contentWidth + x
+
+    // –ò–°–ü–†–ê–í–õ–ï–ù–ò–ï: –∏—Å–ø–æ–ª—å–∑—É–µ–º —É–∫–∞–∑–∞—Ç–µ–ª—å –Ω–∞ –≤–Ω–µ—à–Ω–∏–π –∫–æ–Ω—Ñ–∏–≥
+    CellularAutomatonConfig* m_automatonConfig;
 
 public:
     World();
-    void GenerateFromConfig(const std::string& configPath = "config/world_gen.cfg");
+    void GenerateFromConfig();
     int GetTileAt(int x, int y) const;
 
-    // ¬ÓÁ‚‡˘‡ÂÏ ‡ÁÏÂ˚ ¡≈« „‡ÌËˆ˚ (Ë„Ó‚ÓÂ ÔÓÒÚ‡ÌÒÚ‚Ó)
+    // –í–æ–∑–≤—Ä–∞—â–∞–µ–º —Ä–∞–∑–º–µ—Ä—ã –ë–ï–ó –≥—Ä–∞–Ω–∏—Ü—ã (–∏–≥—Ä–æ–≤–æ–µ –ø—Ä–æ—Å—Ç—Ä–∞–Ω—Å—Ç–≤–æ)
     int GetWidth() const { return m_contentWidth; }
     int GetHeight() const { return m_contentHeight; }
 
-    // ÃÂÚÓ‰˚ ‰Îˇ ÔÓÎÛ˜ÂÌËˇ ÔÓÎÌ˚ı ‡ÁÏÂÓ‚
+    // –ú–µ—Ç–æ–¥—ã –¥–ª—è –ø–æ–ª—É—á–µ–Ω–∏—è –ø–æ–ª–Ω—ã—Ö —Ä–∞–∑–º–µ—Ä–æ–≤
     int GetTotalWidth() const { return m_width; }
     int GetTotalHeight() const { return m_height; }
 
-    // ÃÂÚÓ‰ ‰Îˇ ÔÓÎÛ˜ÂÌËˇ Ú‡ÈÎ‡ ËÁ ÔÓÎÌÓÈ Í‡Ú˚ (Ò „‡ÌËˆÂÈ)
+    // –ú–µ—Ç–æ–¥ –¥–ª—è –ø–æ–ª—É—á–µ–Ω–∏—è —Ç–∞–π–ª–∞ –∏–∑ –ø–æ–ª–Ω–æ–π –∫–∞—Ä—Ç—ã (—Å –≥—Ä–∞–Ω–∏—Ü–µ–π)
     int GetTileAtFullMap(int x, int y) const {
         if (x >= 0 && x < m_width && y >= 0 && y < m_height) {
             return m_map[y][x];
@@ -52,41 +51,54 @@ public:
         return 0;
     }
 
-    int GetCurrentSeed() const { return m_currentSeed; }
+    int GetCurrentSeed() const { return m_config.GetEffectiveSeed(); }
 
     void SetTileManager(TileTypeManager* tileManager) { m_tileManager = tileManager; }
-    void SetFoodManager(FoodManager* foodManager) { m_foodManager = foodManager; } // ƒŒ¡¿¬‹“≈ ›“Œ
+    void SetFoodManager(FoodManager* foodManager) { m_foodManager = foodManager; }
 
-    // ÃÂÚÓ‰˚ ‰Îˇ ÍÎÂÚÓ˜ÌÓ„Ó ‡‚ÚÓÏ‡Ú‡
+    // –ú–µ—Ç–æ–¥—ã –¥–ª—è –∫–ª–µ—Ç–æ—á–Ω–æ–≥–æ –∞–≤—Ç–æ–º–∞—Ç–∞
     void UpdateCellularAutomaton();
     void SetAutomatonEnabled(bool enabled) { m_automatonEnabled = enabled; }
     bool IsAutomatonEnabled() const { return m_automatonEnabled; }
 
-    // Ã≈“Œƒ€ ƒÀﬂ ≈ƒ€ - ƒŒ¡¿¬‹“≈ ›“» Ã≈“Œƒ€
+    // –ú–µ—Ç–æ–¥—ã –¥–ª—è –µ–¥—ã
     void SpawnRandomFood(int count = 10);
     const Food* GetFoodAt(int x, int y) const;
     bool RemoveFoodAt(int x, int y);
-    void RespawnFoodPeriodically(); // ƒÎˇ ÔÂËÓ‰Ë˜ÂÒÍÓ„Ó ÂÒÔ‡‚Ì‡
-
+    void RespawnFoodPeriodically();
     void ClearAllFood();
-    void ClearScreen();
+
+    // –ò–°–ü–†–ê–í–õ–ï–ù–ò–ï: –ø—Ä–∞–≤–∏–ª—å–Ω—ã–µ –º–µ—Ç–æ–¥—ã –¥–ª—è —Ä–∞–±–æ—Ç—ã —Å –∫–æ–Ω—Ñ–∏–≥–æ–º –∞–≤—Ç–æ–º–∞—Ç–∞
+    void SetAutomatonConfig(CellularAutomatonConfig* config) {
+        m_automatonConfig = config;
+    }
+
+    CellularAutomatonConfig* GetAutomatonConfig() const {
+        return m_automatonConfig;
+    }
+
+    void NotifyTilesChanged() {}
+
+    void UpdateTileAppearance(); // –û–±–Ω–æ–≤–ª—è–µ—Ç –≤–Ω–µ—à–Ω–∏–π –≤–∏–¥ —Ç–∞–π–ª–æ–≤
+    void RemoveDeletedTiles(const std::unordered_set<int>& removedTileIds);
 
 private:
     void GenerateBaseTerrain();
-    void ApplySpawnRules();
     void CreateBorder();
     void SmoothTerrain();
     char GetTileCharacter(int tileId) const;
     int FindTileIdByCharacter(char character) const;
     std::unordered_map<char, int> CountNeighbors(int x, int y, const std::vector<std::vector<int>>& currentMap) const;
     char SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>& spawnRules, int x, int y);
-    float GetProbabilityForZone(const SpawnRule& rule, int zone);
     char FindWaterTile(const std::unordered_map<char, SpawnRule>& spawnRules) const;
     char FindGrassTile(const std::unordered_map<char, SpawnRule>& spawnRules) const;
     char FindMountainTile(const std::unordered_map<char, SpawnRule>& spawnRules) const;
     char FindTileByTerrainType(const std::string& terrainType, const std::unordered_map<char, SpawnRule>& spawnRules) const;
 
-    // ¬—œŒÃŒ√¿“≈À‹Õ€≈ Ã≈“Œƒ€ ƒÀﬂ ≈ƒ€
+    // –í—Å–ø–æ–º–æ–≥–∞—Ç–µ–ª—å–Ω—ã–µ –º–µ—Ç–æ–¥—ã –¥–ª—è –µ–¥—ã
     bool CanSpawnFoodAt(int x, int y) const;
     int GetRandomPassablePosition(int& outX, int& outY);
+    void CheckNeighbor(int x, int y, int dx, int dy,
+        const std::vector<std::vector<int>>& currentMap,
+        std::unordered_map<char, int>& counts) const;
 };

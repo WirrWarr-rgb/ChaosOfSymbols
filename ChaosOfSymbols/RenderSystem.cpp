@@ -366,3 +366,20 @@ void RenderSystem::LogStats() const {
         " | Efficiency: " + std::to_string(static_cast<int>(efficiency)) + "%" +
         " | Tiles: " + std::to_string(m_stats.tilesDrawn) + "/" + std::to_string(totalTiles));
 }
+
+void RenderSystem::ClearEntireScreen() {
+    rlutil::cls();
+
+    // Дополнительная ручная очистка
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+
+    COORD topLeft = { 0, 0 };
+    DWORD consoleSize = csbi.dwSize.X * csbi.dwSize.Y;
+    DWORD written;
+
+    FillConsoleOutputCharacterA(hConsole, ' ', consoleSize, topLeft, &written);
+    FillConsoleOutputAttribute(hConsole, 7, consoleSize, topLeft, &written);
+    SetConsoleCursorPosition(hConsole, topLeft);
+}

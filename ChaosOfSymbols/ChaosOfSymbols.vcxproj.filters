@@ -24,9 +24,6 @@
     <ClCompile Include="TileTypeManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="GameSettings.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="World.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
@@ -36,7 +33,7 @@
     <ClCompile Include="Game.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="WorldGenerationConfig.cpp">
+    <ClCompile Include="WorldConfig.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="Logger.cpp">
@@ -45,13 +42,16 @@
     <ClCompile Include="CellularAutomatonRules.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
-    <ClCompile Include="WorldSpawnConfig.cpp">
-      <Filter>Исходные файлы</Filter>
-    </ClCompile>
     <ClCompile Include="Food.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
     <ClCompile Include="FoodManager.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="FileWatcher.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
+    <ClCompile Include="ConfigManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
   </ItemGroup>
@@ -65,9 +65,6 @@
     <ClInclude Include="TileTypeManager.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="GameSettings.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="World.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
@@ -77,7 +74,7 @@
     <ClInclude Include="Game.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="WorldGenerationConfig.h">
+    <ClInclude Include="WorldConfig.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="Logger.h">
@@ -89,22 +86,28 @@
     <ClInclude Include="SpawnRule.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
-    <ClInclude Include="WorldSpawnConfig.h">
-      <Filter>Исходные файлы</Filter>
-    </ClInclude>
     <ClInclude Include="Food.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
     <ClInclude Include="FoodManager.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="ConfigParser.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="FileWatcher.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
+    <ClInclude Include="ConfigManager.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config\cellular_automaton.cfg" />
-    <None Include="config\settings.cfg" />
-    <None Include="config\tiles.json" />
     <None Include="config\world_gen.cfg" />
     <None Include="config\world_spawn.cfg" />
+    <None Include="config\food.cfg" />
+    <None Include="config\tiles.json" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="config\debug.log" />

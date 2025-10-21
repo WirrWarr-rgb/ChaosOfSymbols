@@ -16,7 +16,7 @@ void Logger::Initialize(const std::string& filename) {
     }
 
     isInitialized = true;
-    Log("=== DEBUG LOG STARTED ===");
+    Log("=== DEBUG LOG STARTED ===\n");
 }
 
 void Logger::Log(const std::string& message) {
