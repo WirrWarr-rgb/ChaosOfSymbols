@@ -1,8 +1,8 @@
-#include "World.h"
-#include "Logger.h"
 #include <random>
 #include <algorithm>
-#include <ctime> 
+#include <ctime>
+#include "World.h"
+#include "Logger.h"
 
 World::World()
     : m_width(0), m_height(0), m_contentWidth(0), m_contentHeight(0),
@@ -11,16 +11,17 @@ World::World()
 {
 }
 
+/// <summary>
+/// Генерация мира согласно конфигу
+/// </summary>
 void World::GenerateFromConfig() {
     Logger::Log("\n=== STARTING PURE RULE-BASED GENERATION ===\n");
 
-    // Загружаем конфигурацию (оба конфига загружаются внутри WorldGenConfig)
     if (!m_config.LoadConfig()) {
         Logger::Log("ERROR: Failed to load world generation config");
         return;
     }
 
-    // Рассчитываем размеры: контент + граница с двух сторон
     m_contentWidth = m_config.GetWidth();
     m_contentHeight = m_config.GetHeight();
     m_width = m_contentWidth + 2;
@@ -28,7 +29,6 @@ void World::GenerateFromConfig() {
 
     m_map.resize(m_height, std::vector<int>(m_width, 0));
 
-    // Настраиваем генератор шума
     int currentSeed = m_config.GetEffectiveSeed();
     m_noiseGenerator.SetSeed(currentSeed);
     m_noiseGenerator.SetFrequency(m_config.GetNoiseFrequency());
@@ -37,7 +37,6 @@ void World::GenerateFromConfig() {
     Logger::Log("Total size with border: " + std::to_string(m_width) + "x" + std::to_string(m_height));
     Logger::Log("Using seed: " + std::to_string(currentSeed));
 
-    // Загружаем конфиг клеточного автомата
     if (m_automatonConfig) {
         Logger::Log("Cellular automaton config is available (external)");
     }
@@ -45,19 +44,15 @@ void World::GenerateFromConfig() {
         Logger::Log("WARNING: No cellular automaton config available");
     }
 
-    // Генерируем базовый террейн
     GenerateBaseTerrain();
 
-    // Создаем границу из символов #
     CreateBorder();
 
     SmoothTerrain();
 
-    // Спавним начальную еду
     if (m_foodManager) {
-        // Спавним еду в количестве ~10% от площади карты
         int initialFoodCount = (m_contentWidth * m_contentHeight) / 10;
-        initialFoodCount = std::min(initialFoodCount, 30); // Но не более 30
+        initialFoodCount = std::min(initialFoodCount, 30);
         SpawnRandomFood(initialFoodCount);
     }
     else {
@@ -67,6 +62,9 @@ void World::GenerateFromConfig() {
     Logger::Log("=== RULE-BASED GENERATION COMPLETED ===");
 }
 
+/// <summary>
+/// Генерация баззового пространства с шумом Перлина и правил спавна
+/// </summary>
 void World::GenerateBaseTerrain() {
     if (!m_tileManager) {
         Logger::Log("ERROR: No tile manager for base terrain generation");
@@ -80,7 +78,6 @@ void World::GenerateBaseTerrain() {
         return;
     }
 
-    // Определяем символы динамически из конфига
     char waterChar = FindWaterTile(spawnRules);
     char grassChar = FindGrassTile(spawnRules);
     char mountainChar = FindMountainTile(spawnRules);
@@ -90,27 +87,23 @@ void World::GenerateBaseTerrain() {
 
     for (int y = 1; y < m_height - 1; y++) {
         for (int x = 1; x < m_width - 1; x++) {
-            // Более высокая частота шума для меньшего мира
             float baseNoise = (m_noiseGenerator.GetNoise((float)x * 0.03f, (float)y * 0.03f) + 1.0f) * 0.5f;
             float ridgeNoise = 1.0f - std::abs(m_noiseGenerator.GetNoise((float)x * 0.06f + 1000, (float)y * 0.06f + 1000));
             float detailNoise = (m_noiseGenerator.GetNoise((float)x * 0.15f + 2000, (float)y * 0.15f + 2000) + 1.0f) * 0.5f;
 
-            // Комбинируем шумы
             float heightNoise = baseNoise * 0.4f + ridgeNoise * 0.4f + detailNoise * 0.2f;
 
-            // Меньше воды, больше разнообразия
             heightNoise = std::pow(heightNoise, 1.1f); // Меньше эрозии
 
-            // Узкие зоны для большего разнообразия
             int zone;
-            if (heightNoise < 0.25f) {  // Только 25% для воды (было 30%)
-                zone = 0; // Низкая зона (вода)
+            if (heightNoise < 0.25f) {  // 25%
+                zone = 0; // Низкая зона
             }
-            else if (heightNoise < 0.7f) { // 45% для травы
-                zone = 1; // Средняя зона (трава)
+            else if (heightNoise < 0.7f) { // 45% 
+                zone = 1; // Средняя зона
             }
-            else { // 30% для гор
-                zone = 2; // Высокая зона (горы)
+            else { // 30%
+                zone = 2; // Высокая зона
             }
 
             // Выбираем тайл на основе зоны
@@ -125,7 +118,6 @@ void World::GenerateBaseTerrain() {
         }
     }
 
-    // Логируем статистику с именами тайлов
     Logger::Log("Zone-based terrain generated: " + std::to_string(tilesPlaced) + " tiles placed");
     for (const auto& stat : tileStatistics) {
         std::string tileName = "unknown";
@@ -137,6 +129,9 @@ void World::GenerateBaseTerrain() {
     }
 }
 
+/// <summary>
+/// Сглаживание пространства для естественных переходов между зонами
+/// </summary>
 void World::SmoothTerrain() {
     if (!m_tileManager) return;
 
@@ -161,7 +156,6 @@ void World::SmoothTerrain() {
             int mountainCount = neighbors.count(mountainChar) ? neighbors.at(mountainChar) : 0;
             int grassCount = neighbors.count(grassChar) ? neighbors.at(grassChar) : 0;
 
-            // Естественные переходы между биомами
             if (current == mountainChar) {
                 if (waterCount >= 4) {
                     newMap[y][x] = FindTileIdByCharacter(waterChar); // Горы у воды -> вода
@@ -201,8 +195,13 @@ void World::SmoothTerrain() {
     }
 }
 
+/// <summary>
+/// Выбирает тайл для зоны на основе вероятностей из спавн-правил
+/// </summary>
+/// <param name="zone">0=низины(вода), 1=равнины(трава), 2=горы</param>
+/// <param name="spawnRules">правила спавна для разных типов terrain</param>
+/// <returns>символ выбранного тайла</returns>
 char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>& spawnRules, int x, int y) {
-    // Используем координаты для детерминированного, но плавного выбора
     float noise = (m_noiseGenerator.GetNoise((float)x * 0.1f, (float)y * 0.1f) + 1.0f) * 0.5f;
 
     // Создаем взвешенный выбор на основе вероятностей
@@ -222,9 +221,8 @@ char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>
         }
     }
 
-    // Вероятностный выбор вместо выбора самого вероятного
     if (totalWeight > 0.0f) {
-        float randomValue = noise * totalWeight; // Используем шум как случайное значение
+        float randomValue = noise * totalWeight;
         float currentWeight = 0.0f;
 
         for (const auto& weightedTile : weightedTiles) {
@@ -235,7 +233,6 @@ char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>
         }
     }
 
-    // Fallback: возвращаем самый вероятный тайл
     if (!weightedTiles.empty()) {
         std::sort(weightedTiles.begin(), weightedTiles.end(),
             [](const auto& a, const auto& b) { return a.second > b.second; });
@@ -246,13 +243,15 @@ char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>
     return '.';
 }
 
+/// <summary>
+/// Создание непроходимой границы по краям карты
+/// </summary>
 void World::CreateBorder() {
     if (!m_tileManager) {
         Logger::Log("ERROR: No tile manager for border creation");
         return;
     }
 
-    // Находим ID для тайла границы (#)
     int borderTileId = FindTileIdByCharacter('#');
     if (borderTileId == -1) {
         Logger::Log("WARNING: Border tile '#' not found, skipping border creation");
@@ -261,24 +260,87 @@ void World::CreateBorder() {
 
     Logger::Log("Creating border with tile ID: " + std::to_string(borderTileId));
 
-    // Создаем границу по периметру карты
     for (int x = 0; x < m_width; x++) {
-        // Верхняя граница (y = 0)
         m_map[0][x] = borderTileId;
-        // Нижняя граница (y = m_height - 1)
         m_map[m_height - 1][x] = borderTileId;
     }
 
     for (int y = 0; y < m_height; y++) {
-        // Левая граница (x = 0)
         m_map[y][0] = borderTileId;
-        // Правая граница (x = m_width - 1)
         m_map[y][m_width - 1] = borderTileId;
     }
 
     Logger::Log("Border created successfully");
 }
 
+/// <summary>
+/// Находит символ тайла воды
+/// </summary>
+char World::FindWaterTile(const std::unordered_map<char, SpawnRule>& spawnRules) const {
+    return FindTileByTerrainType("water", spawnRules);
+}
+
+/// <summary>
+/// Находит символ тайла травы
+/// </summary>
+char World::FindGrassTile(const std::unordered_map<char, SpawnRule>& spawnRules) const {
+    return FindTileByTerrainType("grass", spawnRules);
+}
+
+/// <summary>
+/// Находит символ тайла гор
+/// </summary>
+char World::FindMountainTile(const std::unordered_map<char, SpawnRule>& spawnRules) const {
+    return FindTileByTerrainType("mountain", spawnRules);
+}
+
+/// <summary>
+/// Универсальный метод поиска тайла по типу terrain (water/grass/mountain)
+/// </summary>
+char World::FindTileByTerrainType(const std::string& terrainType, const std::unordered_map<char, SpawnRule>& spawnRules) const {
+    if (!m_tileManager) return '?';
+
+    Logger::Log("Looking for terrain type: " + terrainType);
+
+    const auto& allTiles = m_tileManager->GetAllTiles();
+    for (const auto& pair : allTiles) {
+        const TileType& tile = pair.second;
+        std::string name = tile.GetName();
+        std::transform(name.begin(), name.end(), name.begin(), ::tolower);
+
+        if (name.find(terrainType) != std::string::npos) {
+            return tile.GetCharacter();
+        }
+    }
+
+    for (const auto& spawnPair : spawnRules) {
+        char character = spawnPair.first;
+        const SpawnRule& rule = spawnPair.second;
+
+        if (rule.zoneProbabilities.size() >= 3) {
+            float lowProb = rule.zoneProbabilities[0];
+            float midProb = rule.zoneProbabilities[1];
+            float highProb = rule.zoneProbabilities[2];
+
+            if (terrainType == "water" && lowProb > midProb && lowProb > highProb) {
+                return character;
+            }
+            else if (terrainType == "grass" && midProb > lowProb && midProb > highProb) {
+                return character;
+            }
+            else if (terrainType == "mountain" && highProb > lowProb && highProb > midProb) {
+                return character;
+            }
+        }
+    }
+
+    // Fallback: возвращаем первый символ из правил
+    return spawnRules.empty() ? '?' : spawnRules.begin()->first;
+}
+
+/// <summary>
+/// Применение правил клеточного автомата для изменения мира
+/// </summary>
 void World::UpdateCellularAutomaton() {
     if (!m_automatonEnabled || !m_tileManager || !m_automatonConfig) {
         Logger::Log("Cellular automaton disabled or no config");
@@ -306,9 +368,8 @@ void World::UpdateCellularAutomaton() {
             const CellRule* rule = m_automatonConfig->GetRule(currentChar);
             auto neighborCounts = CountNeighbors(x, y, m_map);
 
-            // ИСПРАВЬ ЗДЕСЬ: rule->deathRule(neighborCounts) -> rule->deathRule->evaluate(neighborCounts)
             if (m_map[y][x] != 0 && rule && rule->deathRule) {
-                bool shouldDie = rule->deathRule->evaluate(neighborCounts);  // ← ИСПРАВЬ
+                bool shouldDie = rule->deathRule->evaluate(neighborCounts);
                 if (shouldDie) {
                     newMap[y][x] = 0;
                     changed = true;
@@ -322,7 +383,6 @@ void World::UpdateCellularAutomaton() {
                 }
             }
 
-            // ИСПРАВЬ ЗДЕСЬ ВСЕ ВЫЗОВЫ:
             if (m_map[y][x] != 0) {
                 if (rule && rule->survivalRule) {
                     bool shouldSurvive = rule->survivalRule->evaluate(neighborCounts);
@@ -362,6 +422,9 @@ void World::UpdateCellularAutomaton() {
     Logger::Log("=== CELLULAR AUTOMATON UPDATE COMPLETE ===");
 }
 
+/// <summary>
+/// Подсчет соседей каждого типа вокруг клетки
+/// </summary>
 std::unordered_map<char, int> World::CountNeighbors(int x, int y, const std::vector<std::vector<int>>& currentMap) const {
     std::unordered_map<char, int> counts;
 
@@ -386,14 +449,15 @@ std::unordered_map<char, int> World::CountNeighbors(int x, int y, const std::vec
     return counts;
 }
 
-// Вспомогательный метод для проверки одного соседа
+/// <summary>
+/// Вспомогательный метод для проверки одного соседа
+/// </summary>
 void World::CheckNeighbor(int x, int y, int dx, int dy,
     const std::vector<std::vector<int>>& currentMap,
     std::unordered_map<char, int>& counts) const {
     int nx = x + dx;
     int ny = y + dy;
 
-    // Игнорируем граничные клетки
     if (nx <= 0 || nx >= m_width - 1 || ny <= 0 || ny >= m_height - 1) {
         return;
     }
@@ -404,9 +468,14 @@ void World::CheckNeighbor(int x, int y, int dx, int dy,
     }
 }
 
+/// <summary>
+/// Возвращение ID тайла в игровых координатах (без учета границы)
+/// </summary>
+/// <param name="x"></param>
+/// <param name="y"></param>
+/// <returns></returns>
 int World::GetTileAt(int x, int y) const {
     // Координаты передаются для игровой области (0,0 - левый верхний угол игрового пространства)
-    // Преобразуем в координаты полной карты (с границей)
     int mapX = x + 1;
     int mapY = y + 1;
 
@@ -416,12 +485,18 @@ int World::GetTileAt(int x, int y) const {
     return 0;
 }
 
+/// <summary>
+/// Преобразование ID тайла в символ для отображения
+/// </summary>
 char World::GetTileCharacter(int tileId) const {
     if (!m_tileManager) return '.';
     TileType* tile = m_tileManager->GetTileType(tileId);
     return tile ? tile->GetCharacter() : '.';
 }
 
+/// <summary>
+/// Находит ID тайла по его символу
+/// </summary>
 int World::FindTileIdByCharacter(char character) const {
     if (!m_tileManager) return -1;
 
@@ -435,61 +510,58 @@ int World::FindTileIdByCharacter(char character) const {
     return -1;
 }
 
-char World::FindWaterTile(const std::unordered_map<char, SpawnRule>& spawnRules) const {
-    return FindTileByTerrainType("water", spawnRules);
-}
+/// <summary>
+/// Обновление внешнего вида всех тайлов после изменений конфигураций
+/// </summary>
+void World::UpdateTileAppearance() {
+    if (!m_tileManager) return;
 
-char World::FindGrassTile(const std::unordered_map<char, SpawnRule>& spawnRules) const {
-    return FindTileByTerrainType("grass", spawnRules);
-}
+    Logger::Log("Updating tile appearances...");
+    int changes = 0;
 
-char World::FindMountainTile(const std::unordered_map<char, SpawnRule>& spawnRules) const {
-    return FindTileByTerrainType("mountain", spawnRules);
-}
+    for (int y = 1; y < m_height - 1; y++) {
+        for (int x = 1; x < m_width - 1; x++) {
+            int tileId = m_map[y][x];
+            TileType* tile = m_tileManager->GetTileType(tileId);
 
-char World::FindTileByTerrainType(const std::string& terrainType, const std::unordered_map<char, SpawnRule>& spawnRules) const {
-    if (!m_tileManager) return '?';
-
-    Logger::Log("Looking for terrain type: " + terrainType);
-
-    // Сначала пытаемся найти по имени в TileType
-    const auto& allTiles = m_tileManager->GetAllTiles();
-    for (const auto& pair : allTiles) {
-        const TileType& tile = pair.second;
-        std::string name = tile.GetName();
-        std::transform(name.begin(), name.end(), name.begin(), ::tolower);
-
-        if (name.find(terrainType) != std::string::npos) {
-            return tile.GetCharacter();
-        }
-    }
-
-    // Если по имени не нашли, анализируем вероятности из спавн-правил
-    for (const auto& spawnPair : spawnRules) {
-        char character = spawnPair.first;
-        const SpawnRule& rule = spawnPair.second;
-
-        if (rule.zoneProbabilities.size() >= 3) {
-            float lowProb = rule.zoneProbabilities[0];  // низины
-            float midProb = rule.zoneProbabilities[1];  // равнины
-            float highProb = rule.zoneProbabilities[2]; // горы
-
-            if (terrainType == "water" && lowProb > midProb && lowProb > highProb) {
-                return character;
-            }
-            else if (terrainType == "grass" && midProb > lowProb && midProb > highProb) {
-                return character;
-            }
-            else if (terrainType == "mountain" && highProb > lowProb && highProb > midProb) {
-                return character;
+            if (!tile) {
+                m_map[y][x] = GetTileCharacter(0);
+                changes++;
             }
         }
     }
 
-    // Fallback: возвращаем первый символ из правил
-    return spawnRules.empty() ? '?' : spawnRules.begin()->first;
+    if (changes > 0) {
+        Logger::Log("Updated " + std::to_string(changes) + " tile appearances");
+    }
 }
 
+/// <summary>
+/// Замена удаленных тайлов на тайлы по умолчанию
+/// </summary>
+void World::RemoveDeletedTiles(const std::unordered_set<int>& removedTileIds) {
+    if (removedTileIds.empty()) return;
+
+    Logger::Log("Removing deleted tiles from world...");
+    int replacements = 0;
+
+    for (int y = 1; y < m_height - 1; y++) {
+        for (int x = 1; x < m_width - 1; x++) {
+            if (removedTileIds.find(m_map[y][x]) != removedTileIds.end()) {
+                m_map[y][x] = GetTileCharacter(0);
+                replacements++;
+            }
+        }
+    }
+
+    if (replacements > 0) {
+        Logger::Log("Replaced " + std::to_string(replacements) + " deleted tiles with grass");
+    }
+}
+
+/// <summary>
+/// Генерация случайной еды в проходимых местах карты
+/// </summary>
 void World::SpawnRandomFood(int count) {
     if (!m_foodManager || !m_tileManager) {
         Logger::Log("WARNING: Cannot spawn food - no food manager or tile manager");
@@ -500,7 +572,7 @@ void World::SpawnRandomFood(int count) {
 
     int spawned = 0;
     int attempts = 0;
-    const int maxAttempts = count * 20; // Увеличим количество попыток
+    const int maxAttempts = count * 20;
 
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -518,7 +590,7 @@ void World::SpawnRandomFood(int count) {
                 m_foodSpawns[key] = { x, y, food->GetId() };
                 spawned++;
 
-                if (spawned <= 5) { // Логируем только первые 5 для отладки
+                if (spawned <= 5) {
                     Logger::Log("Spawned " + food->GetName() + " at " +
                         std::to_string(x) + "," + std::to_string(y));
                 }
@@ -532,6 +604,9 @@ void World::SpawnRandomFood(int count) {
         std::to_string(attempts) + " attempts)");
 }
 
+/// <summary>
+/// Возвращает еду в указанных координатах или nullptr если еды нет
+/// </summary>
 const Food* World::GetFoodAt(int x, int y) const {
     if (!m_foodManager || x < 0 || x >= m_contentWidth || y < 0 || y >= m_contentHeight) {
         return nullptr;
@@ -545,6 +620,9 @@ const Food* World::GetFoodAt(int x, int y) const {
     return nullptr;
 }
 
+/// <summary>
+/// Удаляет еду с указанной позиции, когда игрок ее собирает
+/// </summary>
 bool World::RemoveFoodAt(int x, int y) {
     if (x < 0 || x >= m_contentWidth || y < 0 || y >= m_contentHeight) {
         return false;
@@ -564,10 +642,12 @@ bool World::RemoveFoodAt(int x, int y) {
     return false;
 }
 
+/// <summary>
+/// Респавн еды
+/// </summary>
 void World::RespawnFoodPeriodically() {
-    // Респавним 1-3 единицы еды, если на карте мало еды
     int currentFoodCount = m_foodSpawns.size();
-    int maxFoodOnMap = 40; // Максимальное количество еды на карте
+    int maxFoodOnMap = 40;
 
     if (currentFoodCount < 40) {
         int foodToSpawn = std::min(10, maxFoodOnMap - currentFoodCount);
@@ -576,13 +656,14 @@ void World::RespawnFoodPeriodically() {
     }
 }
 
+/// <summary>
+/// Проверка: можно ли спавнить еду в указанной позиции
+/// </summary>
 bool World::CanSpawnFoodAt(int x, int y) const {
-    // Проверяем, что позиция в пределах игрового пространства
     if (x < 0 || x >= m_contentWidth || y < 0 || y >= m_contentHeight) {
         return false;
     }
 
-    // Проверяем, что здесь уже нет еды
     int key = y * m_contentWidth + x;
     if (m_foodSpawns.find(key) != m_foodSpawns.end()) {
         return false;
@@ -591,6 +672,9 @@ bool World::CanSpawnFoodAt(int x, int y) const {
     return true;
 }
 
+/// <summary>
+/// Находит случайную проходимую позицию на карте
+/// </summary>
 int World::GetRandomPassablePosition(int& outX, int& outY) {
     std::random_device rd;
     std::mt19937 gen(rd());
@@ -617,54 +701,11 @@ int World::GetRandomPassablePosition(int& outX, int& outY) {
     return GetTileAt(1, 1);
 }
 
+/// <summary>
+/// Полная очистка еды
+/// </summary>
 void World::ClearAllFood() {
     int foodCount = m_foodSpawns.size();
     m_foodSpawns.clear();
     Logger::Log("Cleared all food from world: " + std::to_string(foodCount) + " items removed");
-}
-
-void World::UpdateTileAppearance() {
-    if (!m_tileManager) return;
-
-    Logger::Log("Updating tile appearances...");
-    int changes = 0;
-
-    // Проходим по всей карте и обновляем отображение
-    for (int y = 1; y < m_height - 1; y++) {
-        for (int x = 1; x < m_width - 1; x++) {
-            int tileId = m_map[y][x];
-            TileType* tile = m_tileManager->GetTileType(tileId);
-
-            // Если тайл был удален, заменяем его на дефолтный (трава)
-            if (!tile) {
-                m_map[y][x] = FindTileIdByCharacter('.');
-                changes++;
-            }
-        }
-    }
-
-    if (changes > 0) {
-        Logger::Log("Updated " + std::to_string(changes) + " tile appearances");
-    }
-}
-
-void World::RemoveDeletedTiles(const std::unordered_set<int>& removedTileIds) {
-    if (removedTileIds.empty()) return;
-
-    Logger::Log("Removing deleted tiles from world...");
-    int replacements = 0;
-
-    for (int y = 1; y < m_height - 1; y++) {
-        for (int x = 1; x < m_width - 1; x++) {
-            if (removedTileIds.find(m_map[y][x]) != removedTileIds.end()) {
-                // Заменяем удаленный тайл на траву
-                m_map[y][x] = FindTileIdByCharacter('.');
-                replacements++;
-            }
-        }
-    }
-
-    if (replacements > 0) {
-        Logger::Log("Replaced " + std::to_string(replacements) + " deleted tiles with grass");
-    }
 }

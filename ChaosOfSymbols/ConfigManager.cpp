@@ -11,6 +11,9 @@ ConfigManager::~ConfigManager() {
     }
 }
 
+/// <summary>
+/// Инициализирует все подсистемы конфигураций и запускает наблюдение за файлами
+/// </summary>
 bool ConfigManager::Initialize() {
     Logger::Log("Initializing ConfigManager\n");
 
@@ -57,12 +60,18 @@ bool ConfigManager::Initialize() {
     return true;
 }
 
+/// <summary>
+/// Обновляет состояние всех наблюдателей файлов (вызывается каждый кадр)
+/// </summary>
 void ConfigManager::Update() {
     if (m_fileWatcher) {
         m_fileWatcher->Update();
     }
 }
 
+/// <summary>
+///  Перезагрузка конфигурации тайлов при изменении файла
+/// </summary>
 void ConfigManager::ReloadTiles() {
     Logger::Log("Reloading tile configurations...");
 
@@ -106,6 +115,9 @@ void ConfigManager::ReloadTiles() {
     }
 }
 
+/// <summary>
+/// Перезагрузка конфигурации еды при изменении файла
+/// </summary>
 void ConfigManager::ReloadFood() {
     Logger::Log("Reloading food configurations...");
 
@@ -120,6 +132,9 @@ void ConfigManager::ReloadFood() {
     }
 }
 
+/// <summary>
+/// Перезагрузка конфигурации правил клеточного автомата при изменении файла
+/// </summary>
 void ConfigManager::ReloadAutomatonRules() {
     Logger::Log("Reloading cellular automaton rules...");
 

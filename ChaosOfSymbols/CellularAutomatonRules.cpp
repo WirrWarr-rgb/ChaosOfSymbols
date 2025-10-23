@@ -1,10 +1,13 @@
-#include "CellularAutomatonRules.h"
-#include "Logger.h"
 #include <fstream>
 #include <sstream>
 #include <algorithm>
 #include <cctype>
+#include "CellularAutomatonRules.h"
+#include "Logger.h"
 
+/// <summary>
+/// Выполняет оценку правила клеточного автомата на основе counts соседей
+/// </summary>
 bool RuleParser::evaluate(const std::unordered_map<char, int>& neighborCounts) const {
     if (m_ruleString.empty() || m_ruleString == "true") return true;
     if (m_ruleString == "false") return false;
@@ -28,12 +31,14 @@ bool RuleParser::evaluate(const std::unordered_map<char, int>& neighborCounts) c
     }
 }
 
+/// <summary>
+/// Парсит отдельное условие вида "count['#'] >= 2" и проверяет его выполнение
+/// </summary>
 bool RuleParser::parseCondition(const std::string& condition, const std::unordered_map<char, int>& counts) const {
     std::string trimmed = condition;
     trimmed.erase(0, trimmed.find_first_not_of(" \t"));
     trimmed.erase(trimmed.find_last_not_of(" \t") + 1);
 
-    // Парсим условие типа "count['#'] >= 2"
     size_t bracketStart = trimmed.find("count['");
     if (bracketStart == std::string::npos) return false;
 
@@ -78,6 +83,11 @@ bool RuleParser::parseCondition(const std::string& condition, const std::unorder
     return false;
 }
 
+/// <summary>
+/// Загружает правила клеточного автомата из конфигурационного файла
+/// </summary>
+/// <param name="filename"></param>
+/// <returns></returns>
 bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -108,9 +118,18 @@ bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
 
         line.erase(line.find_last_not_of(" \t") + 1);
 
+        // Если строка состоит из одного символа - это новый тайл
         if (line.length() == 1) {
+            // Сохраняем предыдущее правило, если оно было
+            if (currentTile != '\0' && hasTileDefinition) {
+                m_rules[currentTile] = currentRule;
+                Logger::Log("DEBUG: Saved rule for tile '" + std::string(1, currentTile) + "'");
+            }
+
             currentTile = line[0];
+            currentRule = CellRule();
             hasTileDefinition = true;
+            Logger::Log("DEBUG: Started new tile '" + std::string(1, currentTile) + "'");
             continue;
         }
 
@@ -137,13 +156,6 @@ bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
         }
         else if (key == "birth") {
             currentRule.birthRule = RuleParser::create(value);
-
-            if (currentTile != '\0') {
-                m_rules[currentTile] = currentRule;
-                currentTile = '\0';
-                currentRule = CellRule();
-                hasTileDefinition = false;
-            }
         }
         else if (key == "death") {
             currentRule.deathRule = RuleParser::create(value);
@@ -153,16 +165,27 @@ bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
         }
     }
 
-    if (currentTile != '\0') {
+    // Сохраняем последнее правило после окончания файла
+    if (currentTile != '\0' && hasTileDefinition) {
         m_rules[currentTile] = currentRule;
+        Logger::Log("DEBUG: Saved final rule for tile '" + std::string(1, currentTile) + "'");
     }
 
     file.close();
     LogRulesSummary();
 
+    // Дополнительная отладочная информация
+    Logger::Log("DEBUG: Total rules loaded: " + std::to_string(m_rules.size()));
+    for (const auto& pair : m_rules) {
+        Logger::Log("DEBUG: Rule for '" + std::string(1, pair.first) + "' is in map");
+    }
+
     return !m_rules.empty();
 }
 
+/// <summary>
+/// Получает правила для конкретного типа тайла
+/// </summary>
 const CellRule* CellularAutomatonConfig::GetRule(char tileChar) const {
     std::unordered_map<char, CellRule>::const_iterator it = m_rules.find(tileChar);
     if (it != m_rules.end()) {
@@ -171,6 +194,9 @@ const CellRule* CellularAutomatonConfig::GetRule(char tileChar) const {
     return nullptr;
 }
 
+/// <summary>
+/// Логирует сводку всех загруженных правил для отладки
+/// </summary>
 void CellularAutomatonConfig::LogRulesSummary() const {
     Logger::Log("\n=== LOADED CELLULAR AUTOMATON RULES SUMMARY ===\n");
 

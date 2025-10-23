@@ -1,24 +1,25 @@
 #pragma once
-#include "TileType.h"
 #include <unordered_map>
 #include <string>
+#include "TileType.h"
 
 class TileTypeManager {
-private:
-    std::unordered_map<int, TileType> m_tileTypes;
-    std::string m_resourceFilePath;
-
-    void LoadDefaultTiles();
-
 public:
     TileTypeManager(const std::string& filePath = "config/tiles.json");
 
     bool LoadFromFile();
     bool LoadFromFile(const std::string& filePath);
     bool SaveToFile(const std::string& filePath = "");
-    TileType* GetTileType(int id);
     void RegisterTileType(const TileType& tileType);
+
+    // Геттеры
+    const std::unordered_map<int, TileType>& GetAllTiles() const { return m_tileTypes; }
+    TileType* GetTileType(int id);
     size_t GetTileCount() const { return m_tileTypes.size(); }
 
-    const std::unordered_map<int, TileType>& GetAllTiles() const { return m_tileTypes; }
+private:
+    void LoadDefaultTiles();
+
+    std::unordered_map<int, TileType> m_tileTypes;
+    std::string m_resourceFilePath;
 };

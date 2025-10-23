@@ -1,7 +1,7 @@
-﻿#include "WorldConfig.h"
-#include "Logger.h"
-#include <sstream>
+﻿#include <sstream>
 #include <algorithm>
+#include "WorldConfig.h"
+#include "Logger.h"
 
 WorldConfig::WorldConfig()
     : m_width(80), m_height(40), m_seed(1337),
@@ -18,30 +18,30 @@ WorldConfig::WorldConfig(const std::string& worldConfigPath, const std::string& 
     m_spawnConfigPath(spawnConfigPath) {
 }
 
+/// <summary>
+/// Загрузка полной конфигурации мира из файлов: основной конфиг + правила спавна
+/// </summary>
+/// <returns></returns>
 bool WorldConfig::LoadConfig() {
     Logger::Log("Loading world generation configuration...");
 
-    // Сохраняем флаг использования случайного сида
-    bool shouldUseRandomSeed = m_useRandomSeed;
+    bool originalUseRandomSeed = m_useRandomSeed;
+    int originalSeed = m_seed;
 
-    if (shouldUseRandomSeed) {
-        m_seed = static_cast<int>(time(nullptr));
-        Logger::Log("Using random seed: " + std::to_string(m_seed));
-    }
-
-    // Загружаем основной конфиг
     if (!LoadFromFile(m_worldConfigPath)) {
         Logger::Log("ERROR: Failed to load world config: " + m_worldConfigPath);
         return false;
     }
 
-    // ВОССТАНАВЛИВАЕМ случайный сид после загрузки конфига, если нужно
-    if (shouldUseRandomSeed) {
-        // НЕ перезаписываем сид из конфига
-        Logger::Log("Keeping random seed: " + std::to_string(m_seed) + " (ignoring config seed)");
+
+    if (m_useRandomSeed) {
+        m_seed = static_cast<int>(time(nullptr));
+        Logger::Log("Using random seed: " + std::to_string(m_seed));
+    }
+    else {
+        Logger::Log("Using configured seed: " + std::to_string(m_seed));
     }
 
-    // Загружаем конфиг спавна
     if (!ParseSpawnConfig()) {
         Logger::Log("ERROR: Failed to load spawn config: " + m_spawnConfigPath);
         return false;
@@ -50,11 +50,14 @@ bool WorldConfig::LoadConfig() {
     Logger::Log("World config loaded successfully: " +
         std::to_string(m_width) + "x" + std::to_string(m_height) +
         ", seed: " + std::to_string(m_seed) +
-        ", random: " + std::string(shouldUseRandomSeed ? "true" : "false"));
+        ", random: " + std::string(m_useRandomSeed ? "true" : "false"));
 
     return true;
 }
 
+/// <summary>
+/// Обработка пары ключ-значение из основного конфига
+/// </summary>
 bool WorldConfig::ParseKeyValue(const std::string& key, const std::string& value) {
     if (key == "Width" || key == "WorldWidth") {
         m_width = std::stoi(value);
@@ -63,9 +66,7 @@ bool WorldConfig::ParseKeyValue(const std::string& key, const std::string& value
         m_height = std::stoi(value);
     }
     else if (key == "Seed" || key == "WorldSeed") {
-        if (!m_useRandomSeed) {
-            m_seed = std::stoi(value);
-        }
+        m_seed = std::stoi(value);
     }
     else if (key == "UseRandomSeed") {
         m_useRandomSeed = (value == "true");
@@ -84,6 +85,9 @@ bool WorldConfig::ParseKeyValue(const std::string& key, const std::string& value
     return true;
 }
 
+/// <summary>
+/// Загрука и парсинг конфигурации спавна тайлов для разных зон высот
+/// </summary>
 bool WorldConfig::ParseSpawnConfig() {
     std::ifstream file(m_spawnConfigPath);
     if (!file.is_open()) {
@@ -94,20 +98,17 @@ bool WorldConfig::ParseSpawnConfig() {
 
     std::string line;
     while (std::getline(file, line)) {
-        // Удаляем комментарии
         size_t commentPos = line.find("//");
         if (commentPos != std::string::npos) {
             line = line.substr(0, commentPos);
         }
 
-        // Удаляем пробелы
         line.erase(0, line.find_first_not_of(" \t"));
         if (line.empty()) continue;
 
         std::stringstream ss(line);
         std::string spawnTileStr, probabilitiesStr;
 
-        // Парсим формат: символ=вероятности
         if (std::getline(ss, spawnTileStr, '=') &&
             std::getline(ss, probabilitiesStr)) {
 
@@ -118,7 +119,6 @@ bool WorldConfig::ParseSpawnConfig() {
 
             char spawnTile = spawnTileStr[0];
 
-            // Парсим вероятности для трех зон (низины:равнины:горы)
             std::vector<float> zoneProbs;
             std::stringstream probStream(probabilitiesStr);
             std::string probToken;
@@ -129,17 +129,16 @@ bool WorldConfig::ParseSpawnConfig() {
                 }
                 catch (const std::exception& e) {
                     Logger::Log("WARNING: Invalid probability format: " + probToken);
-                    zoneProbs.push_back(0.1f); // fallback
+                    zoneProbs.push_back(0.1f);
                 }
             }
 
-            // Дополняем до 3 вероятностей если нужно
             while (zoneProbs.size() < 3) {
                 zoneProbs.push_back(0.1f);
             }
 
             SpawnRule rule;
-            rule.tileId = -1; // Заполнится позже через TileManager
+            rule.tileId = -1; 
             rule.character = spawnTile;
             rule.zoneProbabilities = zoneProbs;
 
@@ -151,10 +150,19 @@ bool WorldConfig::ParseSpawnConfig() {
     return true;
 }
 
+/// <summary>
+/// Возвращение сида для генерации (случайный или заданный)
+/// </summary>
+/// <returns></returns>
 int WorldConfig::GetEffectiveSeed() const {
     return m_seed;
 }
 
+/// <summary>
+/// Возвращение правил спавна для указанного символа
+/// </summary>
+/// <param name="spawnTile"></param>
+/// <returns></returns>
 const SpawnRule* WorldConfig::GetSpawnRule(char spawnTile) const {
     auto it = m_spawnRules.find(spawnTile);
     if (it != m_spawnRules.end()) {

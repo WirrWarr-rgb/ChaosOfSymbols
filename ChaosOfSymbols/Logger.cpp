@@ -1,5 +1,5 @@
-#include "Logger.h"
 #include <iostream>
+#include "Logger.h"
 
 std::ofstream Logger::logFile;
 bool Logger::isInitialized = false;
@@ -19,6 +19,10 @@ void Logger::Initialize(const std::string& filename) {
     Log("=== DEBUG LOG STARTED ===\n");
 }
 
+/// <summary>
+/// Вывод сообщения в дебаг.лог
+/// </summary>
+/// <param name="message"></param>
 void Logger::Log(const std::string& message) {
     if (!isInitialized) {
         Initialize();

@@ -1,7 +1,7 @@
-#include "FoodManager.h"
-#include "Logger.h"
 #include <fstream>
 #include <sstream>
+#include "FoodManager.h"
+#include "Logger.h"
 
 FoodManager::FoodManager() : m_totalSpawnWeight(0) {
 }
@@ -14,6 +14,11 @@ FoodManager::~FoodManager() {
     m_foodMap.clear();
 }
 
+/// <summary>
+/// Загрузка конфигурации еды из файла и создание объектов Food
+/// </summary>
+/// <param name="filename"></param>
+/// <returns></returns>
 bool FoodManager::LoadFromFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -58,11 +63,18 @@ bool FoodManager::LoadFromFile(const std::string& filename) {
     return true;
 }
 
+/// <summary>
+/// Получение объекта еды по его id
+/// </summary>
 const Food* FoodManager::GetFood(int id) const {
     auto it = m_foodMap.find(id);
     return (it != m_foodMap.end()) ? it->second : nullptr;
 }
 
+/// <summary>
+/// Возвращает случайный объект еды с учетом весов спавна
+/// </summary>
+/// <returns></returns>
 const Food* FoodManager::GetRandomFood() const {
     if (m_foods.empty() || m_totalSpawnWeight == 0)
         return nullptr;
@@ -81,9 +93,12 @@ const Food* FoodManager::GetRandomFood() const {
         }
     }
 
-    return m_foods.back(); // fallback
+    return m_foods.back();
 }
 
+/// <summary>
+/// Вычисление общего веса спавна для всех типов еды (для вероятностного выбора)
+/// </summary>
 void FoodManager::CalculateSpawnWeights() {
     m_totalSpawnWeight = 0;
     for (const auto& food : m_foods) {

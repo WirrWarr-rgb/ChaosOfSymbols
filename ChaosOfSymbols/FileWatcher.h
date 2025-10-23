@@ -1,10 +1,9 @@
-// FileWatcher.h
 #pragma once
 #include <string>
 #include <chrono>
 #include <functional>
 #include <unordered_map>
-#include <filesystem>  // Теперь используем стандартный filesystem
+#include <filesystem>
 
 class FileWatcher {
 public:

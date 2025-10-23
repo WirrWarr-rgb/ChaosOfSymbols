@@ -1,6 +1,4 @@
-﻿#include "Game.h"
-#include "Logger.h"
-#include <windows.h>
+﻿#include <windows.h>
 #include <iostream>
 #include <conio.h>
 #include <chrono>
@@ -9,24 +7,24 @@
 #include <algorithm> 
 #include <ctime>
 #include <iomanip>
+#include "Game.h"
+#include "Logger.h"
 
 static bool rPressed = false;
 
 using namespace std;
 
+/// <summary>
+/// Конструктор класса - инициализация всех переменных начальными значениями
+/// </summary>
 Game::Game()
     : m_isRunning(false), m_currentWorld(nullptr),
     m_renderSystem(nullptr),
     m_playerX(DefaultPlayerX), m_playerY(DefaultPlayerY), m_playerSteps(0),
     m_playerHP(MAX_HP), m_playerHunger(MAX_HUNGER),
     m_playerXP(0), m_playerLevel(1), m_xpToNextLevel(100),
-    m_totalXP(0), // Инициализируем общий опыт
-    m_foodEaten()
+    m_totalXP(0)
 {
-    // Инициализируем счетчики для всех известных типов еды нулями
-    for (int i = 1; i <= 4; i++) {
-        m_foodEaten[i] = 0;
-    }
 }
 
 Game::~Game() {
@@ -41,29 +39,24 @@ bool Game::Initialize() {
     Logger::Initialize(LogFile);
     Logger::Log("=== GAME INITIALIZATION STARTED ===\n");
 
-    // Инициализируем менеджер конфигураций
     m_configManager = std::make_unique<ConfigManager>();
     if (!m_configManager->Initialize()) {
         Logger::Log("ERROR: Failed to initialize config manager!");
         return false;
     }
 
-    // Настраиваем обработчики изменений
     m_configManager->OnTilesChanged = [this]() { this->OnTilesChanged(); };
     m_configManager->OnFoodChanged = [this]() { this->OnFoodChanged(); };
     m_configManager->OnAutomatonRulesChanged = [this]() { this->OnAutomatonRulesChanged(); };
 
-    // Получаем менеджеры из ConfigManager
     TileTypeManager* tileManager = m_configManager->GetTileManager();
     FoodManager* foodManager = m_configManager->GetFoodManager();
 
-    // Остальная инициализация остается похожей, но используем менеджеры из ConfigManager
     m_currentWorld = new World();
     m_currentWorld->SetTileManager(tileManager);
     m_currentWorld->SetFoodManager(foodManager);
     m_currentWorld->SetAutomatonEnabled(true);
 
-    // Устанавливаем конфиг автомата
     m_currentWorld->SetAutomatonConfig(m_configManager->GetAutomatonConfig());
 
     m_renderSystem = new RenderSystem(tileManager);
@@ -84,22 +77,25 @@ bool Game::Initialize() {
     return true;
 }
 
+/// <summary>
+/// Остановка игры
+/// </summary>
 void Game::Shutdown() {
     Logger::Log("=== GAME SHUTDOWN STARTED ===");
 
-    cout << "Shutting down game..." << endl;
+    cout << "Shutting down game...\n";
 
     delete m_currentWorld;
     delete m_renderSystem;
 
-    cout << "Game shutdown complete." << endl;
+    cout << "Game shutdown complete.\n";
     Logger::Log("=== GAME SHUTDOWN COMPLETED ===");
 
     Logger::Close();
 }
 
 /// <summary>
-/// Игровой цикл
+/// Игровой цикл с фикс. временем обновления
 /// </summary>
 void Game::Run() {
     auto lastTime = chrono::steady_clock::now(); //начальной время для расчеты дельта времени
@@ -163,7 +159,6 @@ void Game::ProcessInput() {
         playerMoved = true;
     }
 
-    // Обновляем клеточный автомат только если игрок действительно двигался
     if (playerMoved && m_currentWorld->IsAutomatonEnabled()) {
         static int automatonCounter = 0;
         if (++automatonCounter >= 1) {
@@ -189,12 +184,9 @@ void Game::ProcessInput() {
             m_playerSteps = 0;
             m_playerHP = MAX_HP;
             m_playerHunger = MAX_HUNGER;
-            m_totalXP = 0; // Сбрасываем общий опыт
+            m_totalXP = 0;
 
-            // Сбрасываем счетчики еды
-            for (auto& pair : m_foodEaten) {
-                pair.second = 0;
-            }
+            m_foodEaten.clear();
 
             m_renderSystem->SetScreenSize(m_currentWorld->GetTotalWidth(), m_currentWorld->GetTotalHeight());
 
@@ -207,6 +199,9 @@ void Game::ProcessInput() {
     }
 }
 
+/// <summary>
+/// Система голода и здоровья
+/// </summary>
 void Game::ConsumeEnergy() {
     // Уменьшаем голод на 1
     if (m_playerHunger > 0) {
@@ -236,7 +231,6 @@ void Game::ConsumeEnergy() {
 void Game::Update() {
     if (!m_isRunning) return;
 
-    // Обновляем мониторинг файлов конфигурации
     if (m_configManager) {
         m_configManager->Update();
     }
@@ -254,21 +248,27 @@ void Game::Update() {
         foodRespawnTimer = 0;
     }
 
-    // Получаем tileManager из configManager
     TileTypeManager* tileManager = m_configManager->GetTileManager();
     int currentTile = m_currentWorld->GetTileAt(m_playerX, m_playerY);
-    TileType* tile = tileManager->GetTileType(currentTile);  // Используем tileManager из configManager
+    TileType* tile = tileManager->GetTileType(currentTile);
 
     if (tile && !tile->IsPassable()) {
         FindNearestPassablePosition();
     }
 }
 
+/// <summary>
+/// Сбор еды и опыта
+/// </summary>
 void Game::CollectFood() {
     const Food* food = m_currentWorld->GetFoodAt(m_playerX, m_playerY);
     if (food) {
-        // Восстанавливаем показатели
-        m_foodEaten[food->GetId()]++;
+        int foodId = food->GetId();
+        if (m_foodEaten.find(foodId) == m_foodEaten.end()) {
+            m_foodEaten[foodId] = 0;
+        }
+
+        m_foodEaten[foodId]++;
 
         int oldHP = m_playerHP;
         int oldHunger = m_playerHunger;
@@ -338,11 +338,10 @@ bool Game::MovePlayer(int dx, int dy) {
         newY >= 0 && newY < m_currentWorld->GetHeight()) {
 
         int targetTile = m_currentWorld->GetTileAt(newX, newY);
-        TileType* tile = tileManager->GetTileType(targetTile);  // Используем tileManager из configManager
+        TileType* tile = tileManager->GetTileType(targetTile);
 
         const Food* food = m_currentWorld->GetFoodAt(newX, newY);
         if (food) {
-            // Если на клетке есть еда - разрешаем ход независимо от проходимости тайла
             m_playerX = newX;
             m_playerY = newY;
             return true;
@@ -361,11 +360,10 @@ bool Game::MovePlayer(int dx, int dy) {
 /// Проверяет текущую позицию и исправляет ее при необходимости
 /// </summary>
 void Game::EnsureValidPlayerPosition() {
-    // Получаем tileManager из configManager
     TileTypeManager* tileManager = m_configManager->GetTileManager();
 
     int currentTile = m_currentWorld->GetTileAt(m_playerX, m_playerY);
-    TileType* tile = tileManager->GetTileType(currentTile);  // Используем tileManager из configManager
+    TileType* tile = tileManager->GetTileType(currentTile);
 
     if (!tile || !tile->IsPassable()) {
         FindNearestPassablePosition();
@@ -376,7 +374,6 @@ void Game::EnsureValidPlayerPosition() {
 /// Поиск ближайшего проходимого места
 /// </summary>
 void Game::FindNearestPassablePosition() {
-    // Получаем tileManager из configManager
     TileTypeManager* tileManager = m_configManager->GetTileManager();
 
     for (int radius = 1; radius <= MaxSearchRadius; radius++) {
@@ -389,12 +386,11 @@ void Game::FindNearestPassablePosition() {
                 int checkX = m_playerX + dx;
                 int checkY = m_playerY + dy;
 
-                // Проверяем границы игрового пространства
                 if (checkX >= 0 && checkX < m_currentWorld->GetWidth() &&
                     checkY >= 0 && checkY < m_currentWorld->GetHeight()) {
 
                     int tileId = m_currentWorld->GetTileAt(checkX, checkY);
-                    TileType* tile = tileManager->GetTileType(tileId);  // Используем tileManager из configManager
+                    TileType* tile = tileManager->GetTileType(tileId);
 
                     if (tile && tile->IsPassable()) {
                         m_playerX = checkX;
@@ -413,7 +409,6 @@ void Game::FindNearestPassablePosition() {
 /// Поиск рандомного проходимого места
 /// </summary>
 void Game::FindRandomPassablePosition() {
-    // Получаем tileManager из configManager
     TileTypeManager* tileManager = m_configManager->GetTileManager();
 
     cout << "Using fallback: searching for random passable position..." << endl;
@@ -421,12 +416,11 @@ void Game::FindRandomPassablePosition() {
     srand(static_cast<unsigned int>(time(nullptr)));
 
     for (int attempt = 0; attempt < MaxRandomAttempts; attempt++) {
-        // Ищем в игровом пространстве (без границы)
         int randomX = rand() % m_currentWorld->GetWidth();
         int randomY = rand() % m_currentWorld->GetHeight();
 
         int tileId = m_currentWorld->GetTileAt(randomX, randomY);
-        TileType* tile = tileManager->GetTileType(tileId);  // Используем tileManager из configManager
+        TileType* tile = tileManager->GetTileType(tileId);
 
         if (tile && tile->IsPassable()) {
             m_playerX = randomX;
@@ -439,20 +433,19 @@ void Game::FindRandomPassablePosition() {
     m_playerY = EmergencyPositionY;
 }
 
+/// <summary>
+/// Экран смерти
+/// </summary>
 void Game::ShowDeathScreen() {
-    // Останавливаем игру СРАЗУ
     m_isRunning = false;
 
-    // Даем время завершиться текущему циклу рендеринга
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
-    // МНОГОКРАТНАЯ и АГРЕССИВНАЯ очистка
     for (int i = 0; i < 5; i++) {
         system("cls");
         std::this_thread::sleep_for(std::chrono::milliseconds(20));
     }
 
-    // Полная ручная очистка консоли
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(hConsole, &csbi);
@@ -461,57 +454,52 @@ void Game::ShowDeathScreen() {
     DWORD consoleSize = csbi.dwSize.X * csbi.dwSize.Y;
     DWORD written;
 
-    // Очищаем ВСЕ символы
     FillConsoleOutputCharacterA(hConsole, ' ', consoleSize, topLeft, &written);
-    // Очищаем ВСЕ атрибуты цвета
     FillConsoleOutputAttribute(hConsole, 7, consoleSize, topLeft, &written);
-    // Курсор в начало
     SetConsoleCursorPosition(hConsole, topLeft);
 
-    // Очищаем еду
     m_currentWorld->ClearAllFood();
 
-    // Устанавливаем красный цвет
     SetConsoleTextAttribute(hConsole, 7);
     cout << "==========================================\n";
 
     SetConsoleTextAttribute(hConsole, 12);
-    cout << "             YOU DIED! Unlucky :)\n";
+    cout << "\n           YOU DIED! Unlucky :)\n";
 
     SetConsoleTextAttribute(hConsole, 7);
-    cout << "==========================================\n";
-    cout << "Steps: " << m_playerSteps << "\n";
+    cout << "\n==========================================\n";
+    cout << "\nSteps: " << m_playerSteps << "\n";
     cout << "Total XP: " << m_totalXP << "\n";
     cout << "Current Level: " << m_playerLevel << "\n";
     cout << "Current XP: " << m_playerXP << "\n";
-    cout << "==========================================\n";
-    cout << "Food consumed:\n";
+    cout << "\n==========================================\n";
+    cout << "\nFood consumed:\n";
 
-    // Получаем менеджер еды для получения информации о типах еды
     FoodManager* foodManager = m_configManager->GetFoodManager();
 
-    // Для каждого типа еды в конфиге выводим статистику
-    for (int foodId = 1; foodId <= 4; foodId++) { // предполагая, что ID от 1 до 4
-        const Food* foodType = foodManager->GetFood(foodId);
-        if (foodType) {
-            int count = m_foodEaten[foodId];
+    const auto& allFood = foodManager->GetAllFood();
 
-            // Устанавливаем цвет еды
-            SetConsoleTextAttribute(hConsole, foodType->GetColor());
+    for (const auto& foodType : allFood) {
+        int foodId = foodType->GetId();
 
-            cout << foodType->GetName() << ": " << count;
-
-            // Возвращаем белый цвет для остального текста
-            SetConsoleTextAttribute(hConsole, 7);
-            cout << "\n";
+        int count = 0;
+        auto it = m_foodEaten.find(foodId);
+        if (it != m_foodEaten.end()) {
+            count = it->second;
         }
+
+        SetConsoleTextAttribute(hConsole, foodType->GetColor());
+
+        cout << foodType->GetName() << ": " << count;
+
+        SetConsoleTextAttribute(hConsole, 7);
+        cout << "\n";
     }
 
-    // Возвращаем красный цвет для завершающей линии
     SetConsoleTextAttribute(hConsole, 7);
-    cout << "==========================================\n";
+    cout << "\n==========================================\n";
     SetConsoleTextAttribute(hConsole, 7);
-    cout << "Press ESC to exit..." << "\n";
+    cout << "\nPress ESC to exit..." << "\n";
 
     while (true) {
         if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
@@ -520,16 +508,18 @@ void Game::ShowDeathScreen() {
         std::this_thread::sleep_for(std::chrono::milliseconds(50));
     }
 
-    // Восстанавливаем нормальный цвет
     SetConsoleTextAttribute(hConsole, 7);
 
-    // ЗАКРЫВАЕМ ПРОГРАММУ СРАЗУ после нажатия клавиши
-    exit(0);  // ← ДОБАВЬТЕ ЭТУ СТРОЧКУ
+    exit(0);
 }
 
+/// <summary>
+/// Добавление опыта игроку; проверка возможность lvl up
+/// </summary>
+/// <param name="amount"></param>
 void Game::GainXP(int amount) {
     m_playerXP += amount;
-    m_totalXP += amount; // Добавляем к общему опыту
+    m_totalXP += amount;
 
     Logger::Log("Gained " + std::to_string(amount) + " XP! Total: " +
         std::to_string(m_playerXP) + "/" + std::to_string(m_xpToNextLevel) +
@@ -538,6 +528,9 @@ void Game::GainXP(int amount) {
     CheckLevelUp();
 }
 
+/// <summary>
+/// Проверка и обработка повышения уровня игрока, когда накоплено достаточно опыта
+/// </summary>
 void Game::CheckLevelUp() {
     while (m_playerXP >= m_xpToNextLevel) {
         m_playerXP -= m_xpToNextLevel;
@@ -553,36 +546,34 @@ void Game::CheckLevelUp() {
     }
 }
 
-// Game.cpp - обновляем методы
+/// <summary>
+/// Обработка изменений конфигураций тайлов в реальном времени
+/// </summary>
 void Game::OnTilesChanged() {
     Logger::Log("Tile configurations changed - updating world...");
 
     if (!m_currentWorld || !m_configManager->GetTileManager()) return;
 
-    // Обновляем внешний вид всех тайлов (цвет, символы, проходимость)
     m_currentWorld->UpdateTileAppearance();
 
-    // Проверяем позицию игрока - вдруг он стоит на ставшем непроходимом тайле
     EnsureValidPlayerPosition();
 
-    // Обновляем рендер-систему с новым tile manager
     if (m_renderSystem) {
-        // RenderSystem уже использует правильный tileManager через указатель
-        // Просто принудительно перерисовываем экран
         m_renderSystem->ClearScreen();
     }
 
     Logger::Log("Tile changes applied successfully");
 }
 
+/// <summary>
+/// Обработка изменений конфигураций еды в реальном времени
+/// </summary>
 void Game::OnFoodChanged() {
     Logger::Log("Food configurations changed - updating food...");
 
     if (m_currentWorld) {
-        // Полностью очищаем и респавним еду с новыми настройками
         m_currentWorld->ClearAllFood();
 
-        // Респавним начальное количество еды
         int initialFoodCount = (m_currentWorld->GetWidth() * m_currentWorld->GetHeight()) / 10;
         initialFoodCount = std::min<int>(initialFoodCount, 30);
         m_currentWorld->SpawnRandomFood(initialFoodCount);
@@ -591,17 +582,17 @@ void Game::OnFoodChanged() {
     }
 }
 
+/// <summary>
+/// Обработка изменений конфигураций клеточного автомата в реальном времени
+/// </summary>
 void Game::OnAutomatonRulesChanged() {
     Logger::Log("Automaton rules changed - updating rules...");
 
     if (m_currentWorld && m_configManager->GetAutomatonConfig()) {
-        // Устанавливаем новые правила
         m_currentWorld->SetAutomatonConfig(m_configManager->GetAutomatonConfig());
 
-        // Немедленно применяем новые правила к существующему миру
         m_currentWorld->UpdateCellularAutomaton();
 
-        // Проверяем позицию игрока после изменений
         EnsureValidPlayerPosition();
 
         Logger::Log("New automaton rules applied successfully");

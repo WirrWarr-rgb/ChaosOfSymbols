@@ -1,9 +1,7 @@
-// FileWatcher.cpp
+#include <thread>
 #include "FileWatcher.h"
 #include "Logger.h"
-#include <thread>
 
-// Для C++17 используем стандартный namespace
 namespace fs = std::filesystem;
 
 FileWatcher::FileWatcher() : m_running(true) {}
@@ -12,6 +10,9 @@ FileWatcher::~FileWatcher() {
     Stop();
 }
 
+/// <summary>
+/// Добавление файла для наблюдения и callback при изменениях
+/// </summary>
 void FileWatcher::WatchFile(const std::string& filePath, std::function<void()> callback) {
     fs::path path(filePath);
 
@@ -31,6 +32,9 @@ void FileWatcher::WatchFile(const std::string& filePath, std::function<void()> c
     m_watchedFiles[filePath] = fileInfo;
 }
 
+/// <summary>
+/// Проверяет все наблюдаемые файлы на изменения и вызыввает callback'и
+/// </summary>
 void FileWatcher::Update() {
     for (auto& pair : m_watchedFiles) {
         const std::string& filePath = pair.first;
@@ -63,8 +67,11 @@ void FileWatcher::Update() {
             }
         }
     }
-}
+}   
 
+/// <summary>
+/// Останавливает систему наблюдения за файлами
+/// </summary>
 void FileWatcher::Stop() {
     m_running = false;
 }

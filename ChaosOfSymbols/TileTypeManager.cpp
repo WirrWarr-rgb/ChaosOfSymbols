@@ -1,9 +1,9 @@
-#include "TileTypeManager.h"
-#include "Logger.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <regex>
+#include "TileTypeManager.h"
+#include "Logger.h"
 
 /// <summary>
 /// Самописный парсер JSON
@@ -296,6 +296,11 @@ bool TileTypeManager::SaveToFile(const std::string& filePath) {
     return true;
 }
 
+/// <summary>
+/// Возвращает тип тайла по ID
+/// </summary>
+/// <param name="id"></param>
+/// <returns></returns>
 TileType* TileTypeManager::GetTileType(int id) {
     auto it = m_tileTypes.find(id);
     if (it != m_tileTypes.end()) {
@@ -304,6 +309,9 @@ TileType* TileTypeManager::GetTileType(int id) {
     return nullptr;
 }
 
+/// <summary>
+/// Регистрация типов тайла
+/// </summary>
 void TileTypeManager::RegisterTileType(const TileType& tileType) {
     m_tileTypes[tileType.GetId()] = tileType;
 }

@@ -1,10 +1,10 @@
-﻿#include "RenderSystem.h"
-#include "Logger.h"
-#include <iostream>
+﻿#include <iostream>
 #include <algorithm>
 #define NOMINMAX
 #include <windows.h>
 #include <chrono>
+#include "RenderSystem.h"
+#include "Logger.h"
 
 namespace rlutil {
     /// <summary>
@@ -265,7 +265,7 @@ void RenderSystem::DrawPlayer(int x, int y, int previousX, int previousY, const 
 /// </summary>
 void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerSteps,
     int playerHP, int playerMaxHP, int playerHunger, int playerMaxHunger,
-    int playerXP, int playerLevel, int xpToNextLevel) { // Добавьте эти параметры
+    int playerXP, int playerLevel, int xpToNextLevel) {
 
     rlutil::locate(0, m_screenHeight);
     for (int i = 0; i < m_screenWidth; i++) {
@@ -274,7 +274,6 @@ void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerStep
 
     rlutil::locate(0, m_screenHeight);
 
-    // ОТОБРАЖАЕМ ОПЫТ И УРОВЕНЬ
     std::cout << "Steps: " << playerSteps;
     std::cout << " | Lvl: " << playerLevel;
     std::cout << " | XP: " << playerXP << "/" << xpToNextLevel;
@@ -367,10 +366,12 @@ void RenderSystem::LogStats() const {
         " | Tiles: " + std::to_string(m_stats.tilesDrawn) + "/" + std::to_string(totalTiles));
 }
 
+/// <summary>
+/// Очистка экрана
+/// </summary>
 void RenderSystem::ClearEntireScreen() {
     rlutil::cls();
 
-    // Дополнительная ручная очистка
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(hConsole, &csbi);

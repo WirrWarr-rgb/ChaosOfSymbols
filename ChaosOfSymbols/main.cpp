@@ -1,11 +1,11 @@
-﻿#include "Game.h"
-#include <iostream>
+﻿#include <iostream>
 #include <windows.h>
+#include "Game.h"
 
 using namespace std;
 
 /// <summary>
-/// Устанавливает кодировку, заголовок и информацию о курсоре
+/// Установка кодировки, заголовока и информации о курсоре
 /// </summary>
 void SetupConsole() {
     SetConsoleOutputCP(65001);
@@ -18,6 +18,9 @@ void SetupConsole() {
     SetConsoleCursorInfo(hConsole, &cursorInfo);
 }
 
+/// <summary>
+/// ОСНОВА
+/// </summary>
 int main() {
     SetupConsole();
 
