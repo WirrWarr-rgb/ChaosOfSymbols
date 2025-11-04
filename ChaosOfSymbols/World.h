@@ -2,6 +2,7 @@
 #include <vector>
 #include <string>
 #include <unordered_map>
+#include <fstream>
 #include "FastNoiseLite.h"
 #include "WorldConfig.h"
 #include "CellularAutomatonRules.h"
@@ -27,6 +28,9 @@ public:
     void RespawnFoodPeriodically();
     void ClearAllFood();
     void NotifyTilesChanged() {}
+
+    // Новый метод для загрузки карты из файла
+    bool LoadMapFromFile(const std::string& filePath);
 
     // Геттеры
     int GetTileAt(int x, int y) const;
@@ -58,6 +62,7 @@ public:
 
 private:
     // Приватные методы
+    void GenerateRandomWorld(); // ДОБАВИТЬ ЭТУ СТРОКУ
     void GenerateBaseTerrain();
     void CreateBorder();
     void SmoothTerrain();

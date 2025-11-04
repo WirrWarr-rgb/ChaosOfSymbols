@@ -1,9 +1,11 @@
 #pragma once
 #include <windows.h>
 #include <memory>
+#include <unordered_map>
 #include "World.h"
 #include "RenderSystem.h"
 #include "ConfigManager.h"
+#include "PlayerConfig.h"
 
 class Game {
 public:
@@ -23,8 +25,12 @@ public:
     int GetPlayerSteps() const { return m_playerSteps; }
     int GetPlayerHP() const { return m_playerHP; }
     int GetPlayerHunger() const { return m_playerHunger; }
-    int GetMaxHP() const { return MAX_HP; }
-    int GetMaxHunger() const { return MAX_HUNGER; }
+    int GetMaxHP() const {
+        return m_playerConfig ? m_playerConfig->GetMaxHP() : 100;
+    }
+    int GetMaxHunger() const {
+        return m_playerConfig ? m_playerConfig->GetMaxHunger() : 100;
+    }
 
 private:
     // Приватные методы
@@ -47,15 +53,12 @@ private:
     // Константы
     static constexpr const char* LogFile = "config/debug.log";
     static constexpr int FrameDelayMs = 33;        // 20 FPS
-    static constexpr int MoveCooldownMs = 66;     // Задержка между движениями
-    static constexpr int DefaultPlayerX = 10;
-    static constexpr int DefaultPlayerY = 10;
     static constexpr int UiUpdateInterval = 6;
     static constexpr int MaxSearchRadius = 20;
     static constexpr int MaxRandomAttempts = 100;
     static constexpr int EmergencyPositionX = 1;
     static constexpr int EmergencyPositionY = 1;
-   
+
     // Приватные поля
     bool m_isRunning;
     World* m_currentWorld;
@@ -67,8 +70,6 @@ private:
     bool m_automatonEnabled;
     int m_actionsSinceLastUpdate;
     static constexpr int ActionsPerUpdate = 1;
-    const int MAX_HP = 30;
-    const int MAX_HUNGER = 20;
     int m_playerHP;
     int m_playerHunger;
     std::unordered_map<int, int> m_foodEaten;
@@ -76,4 +77,5 @@ private:
     int m_playerXP;
     int m_playerLevel;
     int m_xpToNextLevel;
+    PlayerConfig* m_playerConfig;
 };

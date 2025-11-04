@@ -17,6 +17,11 @@ ConfigManager::~ConfigManager() {
 bool ConfigManager::Initialize() {
     Logger::Log("Initializing ConfigManager\n");
 
+    m_playerConfig = std::make_unique<PlayerConfig>();
+    if (!m_playerConfig->LoadConfig()) {
+        Logger::Log("WARNING: Using default player configuration");
+    }
+
     m_tileManager = std::make_unique<TileTypeManager>();
     m_foodManager = std::make_unique<FoodManager>();
     m_automatonConfig = std::make_unique<CellularAutomatonConfig>();

@@ -267,6 +267,9 @@ void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerStep
     int playerHP, int playerMaxHP, int playerHunger, int playerMaxHunger,
     int playerXP, int playerLevel, int xpToNextLevel) {
 
+    // Нужно получить доступ к PlayerConfig через Game или другим способом
+    // Пока оставим как есть, значения уже передаются из Game
+
     rlutil::locate(0, m_screenHeight);
     for (int i = 0; i < m_screenWidth; i++) {
         std::cout << ' ';

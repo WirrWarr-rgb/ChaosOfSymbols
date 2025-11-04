@@ -1,19 +1,20 @@
 ﻿#include <sstream>
 #include <algorithm>
+#include <ctime>
 #include "WorldConfig.h"
 #include "Logger.h"
 
 WorldConfig::WorldConfig()
     : m_width(80), m_height(40), m_seed(1337),
-    m_useRandomSeed(true), m_noiseFrequency(0.7f),
-    m_neighborRadius(3),
+    m_noiseFrequency(0.7f), m_neighborRadius(3),
+    m_generationMode(WorldGenerationMode::RANDOM),
     m_worldConfigPath("config/world_gen.cfg"),
     m_spawnConfigPath("config/world_spawn.cfg") {
 }
 
 WorldConfig::WorldConfig(const std::string& worldConfigPath, const std::string& spawnConfigPath)
     : m_width(80), m_height(40), m_seed(1337),
-    m_useRandomSeed(true), m_noiseFrequency(0.7f),
+    m_noiseFrequency(0.7f), m_generationMode(WorldGenerationMode::RANDOM),
     m_worldConfigPath(worldConfigPath),
     m_spawnConfigPath(spawnConfigPath) {
 }
@@ -25,20 +26,23 @@ WorldConfig::WorldConfig(const std::string& worldConfigPath, const std::string& 
 bool WorldConfig::LoadConfig() {
     Logger::Log("Loading world generation configuration...");
 
-    bool originalUseRandomSeed = m_useRandomSeed;
-    int originalSeed = m_seed;
-
     if (!LoadFromFile(m_worldConfigPath)) {
         Logger::Log("ERROR: Failed to load world config: " + m_worldConfigPath);
         return false;
     }
 
+    // Для режима загрузки карты из файла не нужны дополнительные настройки
+    if (m_generationMode == WorldGenerationMode::FROM_MAP_FILE) {
+        Logger::Log("Using map from file: " + m_mapFilePath);
+        return true;
+    }
 
-    if (m_useRandomSeed) {
+    // Для режима RANDOM генерируем случайный сид
+    if (m_generationMode == WorldGenerationMode::RANDOM) {
         m_seed = static_cast<int>(time(nullptr));
         Logger::Log("Using random seed: " + std::to_string(m_seed));
     }
-    else {
+    else if (m_generationMode == WorldGenerationMode::SEEDED) {
         Logger::Log("Using configured seed: " + std::to_string(m_seed));
     }
 
@@ -50,7 +54,7 @@ bool WorldConfig::LoadConfig() {
     Logger::Log("World config loaded successfully: " +
         std::to_string(m_width) + "x" + std::to_string(m_height) +
         ", seed: " + std::to_string(m_seed) +
-        ", random: " + std::string(m_useRandomSeed ? "true" : "false"));
+        ", mode: " + std::to_string(static_cast<int>(m_generationMode)));
 
     return true;
 }
@@ -68,14 +72,33 @@ bool WorldConfig::ParseKeyValue(const std::string& key, const std::string& value
     else if (key == "Seed" || key == "WorldSeed") {
         m_seed = std::stoi(value);
     }
-    else if (key == "UseRandomSeed") {
-        m_useRandomSeed = (value == "true");
-    }
     else if (key == "NoiseFrequency") {
         m_noiseFrequency = std::stof(value);
     }
     else if (key == "NeighborRadius") {
         m_neighborRadius = std::stoi(value);
+    }
+    else if (key == "GenerationMode") {
+        int mode = std::stoi(value);
+        if (mode >= 0 && mode <= 2) {
+            m_generationMode = static_cast<WorldGenerationMode>(mode);
+        }
+        else {
+            Logger::Log("WARNING: Invalid GenerationMode value: " + value + ", using RANDOM");
+            m_generationMode = WorldGenerationMode::RANDOM;
+        }
+    }
+    else if (key == "MapFilePath") {
+        m_mapFilePath = value;
+    }
+    else if (key == "UseRandomSeed") {
+        // Старый параметр для обратной совместимости - игнорируем
+        Logger::Log("WARNING: UseRandomSeed is deprecated, use GenerationMode instead");
+        bool useRandom = (value == "true");
+        if (useRandom) {
+            m_generationMode = WorldGenerationMode::RANDOM;
+        }
+        // Если UseRandomSeed=false, оставляем текущий режим (скорее всего SEEDED)
     }
     else {
         Logger::Log("WARNING: Unknown config key: " + key);
@@ -85,6 +108,7 @@ bool WorldConfig::ParseKeyValue(const std::string& key, const std::string& value
     return true;
 }
 
+// Остальной код ParseSpawnConfig() и другие методы остаются без изменений
 /// <summary>
 /// Загрука и парсинг конфигурации спавна тайлов для разных зон высот
 /// </summary>
@@ -138,7 +162,7 @@ bool WorldConfig::ParseSpawnConfig() {
             }
 
             SpawnRule rule;
-            rule.tileId = -1; 
+            rule.tileId = -1;
             rule.character = spawnTile;
             rule.zoneProbabilities = zoneProbs;
 
@@ -151,7 +175,7 @@ bool WorldConfig::ParseSpawnConfig() {
 }
 
 /// <summary>
-/// Возвращение сида для генерации (случайный или заданный)
+/// Возвращение сида для генерации
 /// </summary>
 /// <returns></returns>
 int WorldConfig::GetEffectiveSeed() const {

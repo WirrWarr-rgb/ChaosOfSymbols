@@ -6,6 +6,7 @@
 #include "TileTypeManager.h"
 #include "FoodManager.h"
 #include "CellularAutomatonRules.h"
+#include "PlayerConfig.h"
 
 class ConfigManager {
 public:
@@ -21,6 +22,7 @@ public:
     TileTypeManager* GetTileManager() { return m_tileManager.get(); }
     FoodManager* GetFoodManager() { return m_foodManager.get(); }
     CellularAutomatonConfig* GetAutomatonConfig() { return m_automatonConfig.get(); }
+    PlayerConfig* GetPlayerConfig() const { return m_playerConfig.get(); }
 
     // Сигналы для уведомления об изменениях
     std::function<void()> OnTilesChanged;
@@ -40,6 +42,8 @@ private:
     std::unique_ptr<CellularAutomatonConfig> m_automatonConfig;
     std::unordered_set<int> m_previousTileIds;
     std::unordered_set<int> m_previousFoodIds;
+
+    std::unique_ptr<PlayerConfig> m_playerConfig;
 
     bool m_initialized;
 };

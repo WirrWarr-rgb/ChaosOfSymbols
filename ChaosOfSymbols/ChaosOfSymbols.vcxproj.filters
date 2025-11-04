@@ -54,6 +54,9 @@
     <ClCompile Include="ConfigManager.cpp">
       <Filter>Исходные файлы</Filter>
     </ClCompile>
+    <ClCompile Include="PlayerConfig.cpp">
+      <Filter>Исходные файлы</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="FastNoiseLite.h">
@@ -101,6 +104,9 @@
     <ClInclude Include="ConfigManager.h">
       <Filter>Исходные файлы</Filter>
     </ClInclude>
+    <ClInclude Include="PlayerConfig.h">
+      <Filter>Исходные файлы</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <None Include="config\cellular_automaton.cfg" />
@@ -108,8 +114,10 @@
     <None Include="config\world_spawn.cfg" />
     <None Include="config\food.cfg" />
     <None Include="config\tiles.json" />
+    <None Include="config\player.cfg" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="config\debug.log" />
+    <Text Include="config\maps\1.txt" />
   </ItemGroup>
 </Project>

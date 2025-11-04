@@ -7,7 +7,7 @@
 World::World()
     : m_width(0), m_height(0), m_contentWidth(0), m_contentHeight(0),
     m_automatonEnabled(true), m_tileManager(nullptr), m_foodManager(nullptr),
-    m_automatonConfig(nullptr) 
+    m_automatonConfig(nullptr)
 {
 }
 
@@ -15,12 +15,40 @@ World::World()
 /// Генерация мира согласно конфигу
 /// </summary>
 void World::GenerateFromConfig() {
-    Logger::Log("\n=== STARTING PURE RULE-BASED GENERATION ===\n");
+    Logger::Log("\n=== STARTING WORLD GENERATION ===\n");
 
     if (!m_config.LoadConfig()) {
         Logger::Log("ERROR: Failed to load world generation config");
         return;
     }
+
+    // Обработка разных режимов генерации
+    switch (m_config.GetGenerationMode()) {
+    case WorldGenerationMode::FROM_MAP_FILE:
+        if (!LoadMapFromFile(m_config.GetMapFilePath())) {
+            Logger::Log("ERROR: Failed to load map from file: " + m_config.GetMapFilePath());
+            // Fallback к случайной генерации
+            Logger::Log("Falling back to random generation");
+            GenerateRandomWorld();
+        }
+        else {
+            Logger::Log("=== MAP LOADED FROM FILE ===");
+            return;
+        }
+        break;
+
+    case WorldGenerationMode::SEEDED:
+    case WorldGenerationMode::RANDOM:
+        GenerateRandomWorld();
+        break;
+    }
+}
+
+/// <summary>
+/// Генерация случайного мира (общая логика для RANDOM и SEEDED)
+/// </summary>
+void World::GenerateRandomWorld() {
+    Logger::Log("Generating random world...");
 
     m_contentWidth = m_config.GetWidth();
     m_contentHeight = m_config.GetHeight();
@@ -33,8 +61,23 @@ void World::GenerateFromConfig() {
     m_noiseGenerator.SetSeed(currentSeed);
     m_noiseGenerator.SetFrequency(m_config.GetNoiseFrequency());
 
+    // Логируем информацию о режиме генерации
+    std::string modeStr;
+    switch (m_config.GetGenerationMode()) {
+    case WorldGenerationMode::RANDOM:
+        modeStr = "RANDOM";
+        break;
+    case WorldGenerationMode::SEEDED:
+        modeStr = "SEEDED";
+        break;
+    default:
+        modeStr = "UNKNOWN";
+        break;
+    }
+
     Logger::Log("Content size: " + std::to_string(m_contentWidth) + "x" + std::to_string(m_contentHeight));
     Logger::Log("Total size with border: " + std::to_string(m_width) + "x" + std::to_string(m_height));
+    Logger::Log("Generation mode: " + modeStr);
     Logger::Log("Using seed: " + std::to_string(currentSeed));
 
     if (m_automatonConfig) {
@@ -45,9 +88,7 @@ void World::GenerateFromConfig() {
     }
 
     GenerateBaseTerrain();
-
     CreateBorder();
-
     SmoothTerrain();
 
     if (m_foodManager) {
@@ -59,7 +100,84 @@ void World::GenerateFromConfig() {
         Logger::Log("WARNING: No food manager available for initial food spawn");
     }
 
-    Logger::Log("=== RULE-BASED GENERATION COMPLETED ===");
+    Logger::Log("=== WORLD GENERATION COMPLETED ===");
+}
+
+/// <summary>
+/// Загрузка карты из файла
+/// </summary>
+bool World::LoadMapFromFile(const std::string& filePath) {
+    Logger::Log("Loading map from file: " + filePath);
+
+    std::ifstream file(filePath);
+    if (!file.is_open()) {
+        Logger::Log("ERROR: Cannot open map file: " + filePath);
+        return false;
+    }
+
+    std::vector<std::string> lines;
+    std::string line;
+    int maxWidth = 0;
+
+    // Читаем все строки файла
+    while (std::getline(file, line)) {
+        if (line.empty() || (line.length() >= 2 && line[0] == '/' && line[1] == '/')) {
+            continue;
+        }
+
+        lines.push_back(line);
+        if (line.length() > maxWidth) {
+            maxWidth = line.length();
+        }
+    }
+    file.close();
+
+    if (lines.empty()) {
+        Logger::Log("ERROR: Map file is empty or contains no valid data");
+        return false;
+    }
+
+    // Устанавливаем размеры мира на основе загруженной карты
+    m_contentHeight = lines.size();
+    m_contentWidth = maxWidth;
+    m_width = m_contentWidth + 2;
+    m_height = m_contentHeight + 2;
+
+    Logger::Log("Loaded map size: " + std::to_string(m_contentWidth) + "x" + std::to_string(m_contentHeight));
+
+    // Инициализируем карту
+    m_map.resize(m_height, std::vector<int>(m_width, 0));
+
+    // Заполняем карту данными из файла
+    for (int y = 0; y < m_contentHeight; y++) {
+        const std::string& currentLine = lines[y];
+        for (int x = 0; x < m_contentWidth; x++) {
+            char mapChar = (x < currentLine.length()) ? currentLine[x] : ' ';
+            int tileId = FindTileIdByCharacter(mapChar);
+
+            if (tileId == -1) {
+                Logger::Log("WARNING: Unknown character '" + std::string(1, mapChar) +
+                    "' at position " + std::to_string(x) + "," + std::to_string(y) +
+                    ", using default tile");
+                tileId = FindTileIdByCharacter('.'); // Используем траву по умолчанию
+            }
+
+            m_map[y + 1][x + 1] = tileId;
+        }
+    }
+
+    // Создаем границу
+    CreateBorder();
+
+    // Спавним еду
+    if (m_foodManager) {
+        int initialFoodCount = (m_contentWidth * m_contentHeight) / 15; // Меньше еды на готовых картах
+        initialFoodCount = std::min(initialFoodCount, 20);
+        SpawnRandomFood(initialFoodCount);
+    }
+
+    Logger::Log("Map loaded successfully from: " + filePath);
+    return true;
 }
 
 /// <summary>

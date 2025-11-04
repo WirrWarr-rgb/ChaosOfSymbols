@@ -20,8 +20,9 @@ using namespace std;
 Game::Game()
     : m_isRunning(false), m_currentWorld(nullptr),
     m_renderSystem(nullptr),
-    m_playerX(DefaultPlayerX), m_playerY(DefaultPlayerY), m_playerSteps(0),
-    m_playerHP(MAX_HP), m_playerHunger(MAX_HUNGER),
+    m_playerConfig(nullptr),
+    m_playerX(0), m_playerY(0), m_playerSteps(0),
+    m_playerHP(0), m_playerHunger(0),
     m_playerXP(0), m_playerLevel(1), m_xpToNextLevel(100),
     m_totalXP(0)
 {
@@ -45,6 +46,15 @@ bool Game::Initialize() {
         return false;
     }
 
+    m_playerConfig = m_configManager->GetPlayerConfig();
+
+    m_playerX = m_playerConfig->GetDefaultPlayerX();
+    m_playerY = m_playerConfig->GetDefaultPlayerY();
+    m_playerHP = m_playerConfig->GetMaxHP();
+    m_playerHunger = m_playerConfig->GetMaxHunger();
+    m_xpToNextLevel = m_playerConfig->GetBaseXP();
+
+
     m_configManager->OnTilesChanged = [this]() { this->OnTilesChanged(); };
     m_configManager->OnFoodChanged = [this]() { this->OnFoodChanged(); };
     m_configManager->OnAutomatonRulesChanged = [this]() { this->OnAutomatonRulesChanged(); };
@@ -65,8 +75,10 @@ bool Game::Initialize() {
 
     m_renderSystem->SetScreenSize(m_currentWorld->GetTotalWidth(), m_currentWorld->GetTotalHeight());
 
-    m_playerX = (m_currentWorld->GetWidth() / 2 > 1) ? m_currentWorld->GetWidth() / 2 : 1;
-    m_playerY = (m_currentWorld->GetHeight() / 2 > 1) ? m_currentWorld->GetHeight() / 2 : 1;
+    if (m_playerX >= m_currentWorld->GetWidth() || m_playerY >= m_currentWorld->GetHeight()) {
+        m_playerX = (m_currentWorld->GetWidth() / 2 > 1) ? m_currentWorld->GetWidth() / 2 : 1;
+        m_playerY = (m_currentWorld->GetHeight() / 2 > 1) ? m_currentWorld->GetHeight() / 2 : 1;
+    }
     EnsureValidPlayerPosition();
 
     m_isRunning = true;
@@ -132,7 +144,7 @@ void Game::ProcessInput() {
     auto currentTime = chrono::steady_clock::now();
     auto elapsed = chrono::duration_cast<chrono::milliseconds>(currentTime - lastMoveTime);
 
-    if (elapsed.count() < MoveCooldownMs) {
+    if (elapsed.count() < m_playerConfig->GetMoveCooldownMs()) {
         return;
     }
 
@@ -182,8 +194,8 @@ void Game::ProcessInput() {
             m_currentWorld->GenerateFromConfig();
 
             m_playerSteps = 0;
-            m_playerHP = MAX_HP;
-            m_playerHunger = MAX_HUNGER;
+            m_playerHP = m_playerConfig->GetMaxHP();
+            m_playerHunger = m_playerConfig->GetMaxHunger();
             m_totalXP = 0;
 
             m_foodEaten.clear();
@@ -206,19 +218,20 @@ void Game::ConsumeEnergy() {
     // Уменьшаем голод на 1
     if (m_playerHunger > 0) {
         m_playerHunger--;
-        Logger::Log("Hunger decreased: " + std::to_string(m_playerHunger) + "/" + std::to_string(MAX_HUNGER));
+        Logger::Log("Hunger decreased: " + std::to_string(m_playerHunger) + "/" +
+            std::to_string(m_playerConfig->GetMaxHunger()));
     }
 
-    // Если голод 0, отнимаем HP
-    if (m_playerHunger <= 0) {
+    // Если голод 0, отнимаем HP (если HP система включена)
+    if (m_playerHunger <= 0 && m_playerConfig->IsHPEnabled()) {
         m_playerHP -= 2;
-        Logger::Log("Starving! HP decreased: " + std::to_string(m_playerHP) + "/" + std::to_string(MAX_HP));
+        Logger::Log("Starving! HP decreased: " + std::to_string(m_playerHP) + "/" +
+            std::to_string(m_playerConfig->GetMaxHP()));
 
         // Проверяем смерть
         if (m_playerHP <= 0) {
             m_playerHP = 0;
             Logger::Log("Player died from starvation!");
-
             m_isRunning = false;
             ShowDeathScreen();
         }
@@ -273,8 +286,8 @@ void Game::CollectFood() {
         int oldHP = m_playerHP;
         int oldHunger = m_playerHunger;
 
-        m_playerHunger = min(MAX_HUNGER, m_playerHunger + food->GetHungerRestore());
-        m_playerHP = min(MAX_HP, m_playerHP + food->GetHpRestore());
+        m_playerHunger = min(m_playerConfig->GetMaxHunger(), m_playerHunger + food->GetHungerRestore());
+        m_playerHP = min(m_playerConfig->GetMaxHP(), m_playerHP + food->GetHpRestore());
 
         int xpGained = food->GetExperience();
         GainXP(xpGained);
@@ -286,9 +299,9 @@ void Game::CollectFood() {
             ", HP: +" + std::to_string(food->GetHpRestore()) +
             ", XP: +" + std::to_string(xpGained) +
             " | Now: HP=" + std::to_string(m_playerHP) +
-            "/" + std::to_string(MAX_HP) +
+            "/" + std::to_string(m_playerConfig->GetMaxHP()) +
             ", Hunger=" + std::to_string(m_playerHunger) +
-            "/" + std::to_string(MAX_HUNGER) +
+            "/" + std::to_string(m_playerConfig->GetMaxHunger()) +
             ", XP=" + std::to_string(m_playerXP) +
             "/" + std::to_string(m_xpToNextLevel) +
             ", Level=" + std::to_string(m_playerLevel));
@@ -310,7 +323,8 @@ void Game::Render() {
     static int uiCounter = 0;
     if (uiCounter++ > UiUpdateInterval) {
         m_renderSystem->DrawUI(*m_currentWorld, m_playerX, m_playerY, m_playerSteps,
-            m_playerHP, MAX_HP, m_playerHunger, MAX_HUNGER,
+            m_playerHP, m_playerConfig->GetMaxHP(),
+            m_playerHunger, m_playerConfig->GetMaxHunger(),
             m_playerXP, m_playerLevel, m_xpToNextLevel);
         uiCounter = 0;
     }
@@ -536,10 +550,15 @@ void Game::CheckLevelUp() {
         m_playerXP -= m_xpToNextLevel;
         m_playerLevel++;
 
-        m_xpToNextLevel = static_cast<int>(m_xpToNextLevel * 1.5f);
+        m_xpToNextLevel = static_cast<int>(m_xpToNextLevel * m_playerConfig->GetXPMultiplier());
 
-        m_playerHP = MAX_HP;
-        m_playerHunger = MAX_HUNGER;
+        // Восстанавливаем HP и голод только если системы включены
+        if (m_playerConfig->IsHPEnabled()) {
+            m_playerHP = m_playerConfig->GetMaxHP();
+        }
+        if (m_playerConfig->IsHungerEnabled()) {
+            m_playerHunger = m_playerConfig->GetMaxHunger();
+        }
 
         Logger::Log("LEVEL UP! Reached level " + std::to_string(m_playerLevel) +
             "! Next level at " + std::to_string(m_xpToNextLevel) + " XP");
