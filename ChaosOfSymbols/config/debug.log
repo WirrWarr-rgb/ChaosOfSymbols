@@ -2,11 +2,13 @@
 
 === GAME INITIALIZATION STARTED ===
 
+Starting game from menu selection...
+Starting game from main menu...
 Initializing ConfigManager
 
 Loading player configuration from: config/player.cfg
 Player configuration loaded: 9 parameters
-Player config - HP: 20 (enabled), Hunger: 20 (enabled)
+Player config - HP: 20 (enabled), Hunger: 20 (disabled)
 === LOADING TILE TYPES FROM: config/tiles.json ===
 File opened successfully, size: 459 bytes
 Cleaned JSON: [  {    "id": 0,    "name": "grass",    "character": ".",    "color": 8,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 1,    "name": "water",    "character": "+",    "color": 2,    "isPassable": false,    "isDestructible": false,    "damage": 0  },  {    "id": 2,    "name": "mountain",    "character": "#",    "color": 13,    "isPassable": false,    "isDestructible": false,    "damage": 0  }]
@@ -83,121 +85,68 @@ ConfigManager initialized successfully
 === STARTING WORLD GENERATION ===
 
 Loading world generation configuration...
-Using map from file: config/maps/1.txt
-Loading map from file: config/maps/1.txt
-Loaded map size: 60x33
+Using map from file: config/maps/1ÿ.txt
+Loading map from file: config/maps/1ÿ.txt
+ERROR: Cannot open map file: config/maps/1ÿ.txt
+ERROR: Failed to load map from file: config/maps/1ÿ.txt
+Falling back to random generation
+Generating random world...
+Content size: 100x40
+Total size with border: 102x42
+Generation mode: UNKNOWN
+Using seed: 1761141339
+Cellular automaton config is available (external)
+WARNING: No spawn rules found
 Creating border with tile ID: 2
 Border created successfully
-Attempting to spawn 20 food items
-Spawned Abyss at 43,27
-Spawned Abyss at 21,19
-Spawned Star at 17,29
-Spawned Hope at 7,9
-Spawned Star at 51,25
-Food spawning completed: 20/20 items spawned (20 attempts)
-Map loaded successfully from: config/maps/1.txt
-=== MAP LOADED FROM FILE ===
-=== GAME INITIALIZATION COMPLETED ===
+Smoothing terrain with natural transitions...
+Attempting to spawn 30 food items
+Spawned Abyss at 32,27
+Spawned Hope at 52,14
+Spawned Star at 51,29
+Spawned Faith at 50,25
+Spawned Hope at 37,9
+Food spawning completed: 30/30 items spawned (30 attempts)
+=== WORLD GENERATION COMPLETED ===
+Started game with preloaded map (placeholder)
+=== GAME STARTED FROM MAIN MENU ===
 Player moved - updating cellular automaton
-Cellular automaton: 1556 births, 122 deaths (0 natural)
+Cellular automaton: 4000 births, 0 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Hunger decreased: 19/20
 Player moved - updating cellular automaton
-Cellular automaton: 1185 births, 475 deaths (0 natural)
+Cellular automaton: 4000 births, 0 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Hunger decreased: 18/20
 Player moved - updating cellular automaton
-Cellular automaton: 1657 births, 64 deaths (0 natural)
+Cellular automaton: 4000 births, 0 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Hunger decreased: 17/20
 Player moved - updating cellular automaton
-Cellular automaton: 1302 births, 415 deaths (0 natural)
+Cellular automaton: 4000 births, 0 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Hunger decreased: 16/20
 Player moved - updating cellular automaton
-Cellular automaton: 1414 births, 352 deaths (0 natural)
+Cellular automaton: 4000 births, 0 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Hunger decreased: 15/20
-Player moved - updating cellular automaton
-Cellular automaton: 1152 births, 513 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 14/20
-Render Stats - FPS: 4 | Avg: 151 | Min: 4 | Max: 450 | Efficiency: 35% | Tiles: 771/2170
-Player moved - updating cellular automaton
-Cellular automaton: 1480 births, 208 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 13/20
-Player moved - updating cellular automaton
-Cellular automaton: 1420 births, 277 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 12/20
 Gained 15 XP! Total: 15/100, Lifetime: 15
-Food collected: Faith at 51,21
+Food collected: Faith at 50,25
 Collected Faith - Hunger: +25, HP: +5, XP: +15 | Now: HP=20/20, Hunger=20/20, XP=15/100, Level=1
 Player moved - updating cellular automaton
-Cellular automaton: 1558 births, 154 deaths (0 natural)
+Cellular automaton: 4000 births, 0 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Hunger decreased: 19/20
+Render Stats - FPS: 297 | Avg: 249 | Min: 202 | Max: 308 | Efficiency: 0% | Tiles: 3/4284
 Player moved - updating cellular automaton
-Cellular automaton: 1425 births, 261 deaths (0 natural)
+Cellular automaton: 4000 births, 0 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Hunger decreased: 18/20
 Player moved - updating cellular automaton
-Cellular automaton: 1588 births, 170 deaths (0 natural)
+Cellular automaton: 4000 births, 0 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Hunger decreased: 17/20
 Player moved - updating cellular automaton
-Cellular automaton: 1554 births, 238 deaths (0 natural)
+Cellular automaton: 4000 births, 0 deaths (0 natural)
 === CELLULAR AUTOMATON UPDATE COMPLETE ===
 Hunger decreased: 16/20
-Gained 30 XP! Total: 45/100, Lifetime: 45
-Food collected: Star at 51,25
-Collected Star - Hunger: +20, HP: +30, XP: +30 | Now: HP=20/20, Hunger=20/20, XP=45/100, Level=1
-Player moved - updating cellular automaton
-Cellular automaton: 1470 births, 260 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 19/20
-Player moved - updating cellular automaton
-Cellular automaton: 1468 births, 237 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 18/20
-Player moved - updating cellular automaton
-Cellular automaton: 1569 births, 143 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 17/20
-Player moved - updating cellular automaton
-Cellular automaton: 1401 births, 309 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 16/20
-Player moved - updating cellular automaton
-Cellular automaton: 1609 births, 143 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 15/20
-Player moved - updating cellular automaton
-Cellular automaton: 1427 births, 273 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 14/20
-Player moved - updating cellular automaton
-Cellular automaton: 1540 births, 177 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 13/20
-Player moved - updating cellular automaton
-Cellular automaton: 1509 births, 223 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 12/20
-Player moved - updating cellular automaton
-Cellular automaton: 1684 births, 146 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 11/20
-Render Stats - FPS: 16 | Avg: 80 | Min: 4 | Max: 450 | Efficiency: 11% | Tiles: 244/2170
-Player moved - updating cellular automaton
-Cellular automaton: 1715 births, 99 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 10/20
-Gained 5 XP! Total: 50/100, Lifetime: 50
-Food collected: Abyss at 43,27
-Collected Abyss - Hunger: +5, HP: +-10, XP: +5 | Now: HP=10/20, Hunger=15/20, XP=50/100, Level=1
-Player moved - updating cellular automaton
-Cellular automaton: 1739 births, 99 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 14/20

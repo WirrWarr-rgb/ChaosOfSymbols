@@ -18,18 +18,25 @@ using namespace std;
 /// Конструктор класса - инициализация всех переменных начальными значениями
 /// </summary>
 Game::Game()
-    : m_isRunning(false), m_currentWorld(nullptr),
+    : m_isRunning(true), m_currentWorld(nullptr),
     m_renderSystem(nullptr),
     m_playerConfig(nullptr),
     m_playerX(0), m_playerY(0), m_playerSteps(0),
     m_playerHP(0), m_playerHunger(0),
     m_playerXP(0), m_playerLevel(1), m_xpToNextLevel(100),
-    m_totalXP(0)
+    m_totalXP(0),
+    m_inMainMenu(true)
 {
+    m_mainMenu = std::make_unique<MainMenu>();
 }
 
 Game::~Game() {
     Shutdown();
+}
+
+void Game::InitializeMainMenu() {
+    m_mainMenu->Initialize();
+    m_inMainMenu = true;
 }
 
 /// <summary>
@@ -40,20 +47,90 @@ bool Game::Initialize() {
     Logger::Initialize(LogFile);
     Logger::Log("=== GAME INITIALIZATION STARTED ===\n");
 
+    InitializeMainMenu(); // Запускаем главное меню вместо прямой инициализации игры
+
+    return true;
+}
+
+/// <summary>
+/// Остановка игры
+/// </summary>
+void Game::Shutdown() {
+    Logger::Log("=== GAME SHUTDOWN STARTED ===");
+
+    cout << "\nShutting down game...\n";
+
+    delete m_currentWorld;
+    delete m_renderSystem;
+
+    cout << "\nGame shutdown complete.\n";
+    Logger::Log("=== GAME SHUTDOWN COMPLETED ===");
+
+    Logger::Close();
+}
+
+/// <summary>
+/// Игровой цикл с фикс. временем обновления
+/// </summary>
+void Game::Run() {
+    auto lastTime = chrono::steady_clock::now();
+
+    while (m_isRunning) {
+        auto currentTime = chrono::steady_clock::now();
+        auto deltaTime = chrono::duration_cast<chrono::milliseconds>(currentTime - lastTime);
+
+        if (deltaTime.count() < FrameDelayMs) {
+            this_thread::sleep_for(chrono::milliseconds(FrameDelayMs - deltaTime.count()));
+            continue;
+        }
+
+        lastTime = currentTime;
+
+        if (m_inMainMenu) {
+            RunMainMenu();
+        }
+        else {
+            ProcessInput();
+            Update();
+            Render();
+        }
+    }
+}
+
+void Game::RunMainMenu() {
+    // Убираем все задержки - пусть меню само управляет временем
+    m_mainMenu->ProcessInput();
+    m_mainMenu->Update();
+    m_mainMenu->Render();
+
+    if (m_mainMenu->ShouldStartGame()) {
+        Logger::Log("Starting game from menu selection...");
+        StartGameFromMenu();
+    }
+    else if (m_mainMenu->ShouldExitGame()) {
+        Logger::Log("Exit requested from main menu");
+        m_isRunning = false;
+    }
+
+    // Стандартная задержка для 60 FPS
+    std::this_thread::sleep_for(std::chrono::milliseconds(16));
+}
+
+void Game::StartGameFromMenu() {
+    Logger::Log("Starting game from main menu...");
+
     m_configManager = std::make_unique<ConfigManager>();
     if (!m_configManager->Initialize()) {
         Logger::Log("ERROR: Failed to initialize config manager!");
-        return false;
+        return;
     }
 
     m_playerConfig = m_configManager->GetPlayerConfig();
-
     m_playerX = m_playerConfig->GetDefaultPlayerX();
     m_playerY = m_playerConfig->GetDefaultPlayerY();
     m_playerHP = m_playerConfig->GetMaxHP();
     m_playerHunger = m_playerConfig->GetMaxHunger();
     m_xpToNextLevel = m_playerConfig->GetBaseXP();
-
 
     m_configManager->OnTilesChanged = [this]() { this->OnTilesChanged(); };
     m_configManager->OnFoodChanged = [this]() { this->OnFoodChanged(); };
@@ -66,12 +143,19 @@ bool Game::Initialize() {
     m_currentWorld->SetTileManager(tileManager);
     m_currentWorld->SetFoodManager(foodManager);
     m_currentWorld->SetAutomatonEnabled(true);
-
     m_currentWorld->SetAutomatonConfig(m_configManager->GetAutomatonConfig());
 
     m_renderSystem = new RenderSystem(tileManager);
 
-    m_currentWorld->GenerateFromConfig();
+    auto gameMode = m_mainMenu->GetSelectedGameMode();
+    if (gameMode == MainMenuOption::PLAY_PROCEDURAL) {
+        m_currentWorld->GenerateFromConfig();
+        Logger::Log("Started game with procedural generation");
+    }
+    else {
+        m_currentWorld->GenerateFromConfig();
+        Logger::Log("Started game with preloaded map (placeholder)");
+    }
 
     m_renderSystem->SetScreenSize(m_currentWorld->GetTotalWidth(), m_currentWorld->GetTotalHeight());
 
@@ -81,52 +165,10 @@ bool Game::Initialize() {
     }
     EnsureValidPlayerPosition();
 
-    m_isRunning = true;
-    Logger::Log("=== GAME INITIALIZATION COMPLETED ===");
-
+    m_inMainMenu = false;
     m_renderSystem->ClearScreen();
 
-    return true;
-}
-
-/// <summary>
-/// Остановка игры
-/// </summary>
-void Game::Shutdown() {
-    Logger::Log("=== GAME SHUTDOWN STARTED ===");
-
-    cout << "Shutting down game...\n";
-
-    delete m_currentWorld;
-    delete m_renderSystem;
-
-    cout << "Game shutdown complete.\n";
-    Logger::Log("=== GAME SHUTDOWN COMPLETED ===");
-
-    Logger::Close();
-}
-
-/// <summary>
-/// Игровой цикл с фикс. временем обновления
-/// </summary>
-void Game::Run() {
-    auto lastTime = chrono::steady_clock::now(); //начальной время для расчеты дельта времени
-
-    while (m_isRunning) {
-        auto currentTime = chrono::steady_clock::now(); //тек. время
-        auto deltaTime = chrono::duration_cast<chrono::milliseconds>(currentTime - lastTime); //разница с предыдущим кадром
-
-        if (deltaTime.count() < FrameDelayMs) { //если прошло меньше N мс, то ждем оставшееся время и переходим к следующей итерации
-            this_thread::sleep_for(chrono::milliseconds(FrameDelayMs - deltaTime.count()));
-            continue;
-        }
-
-        lastTime = currentTime;
-
-        ProcessInput();
-        Update();
-        Render();
-    }
+    Logger::Log("=== GAME STARTED FROM MAIN MENU ===");
 }
 
 /// <summary>

@@ -6,6 +6,7 @@
 #include "RenderSystem.h"
 #include "ConfigManager.h"
 #include "PlayerConfig.h"
+#include "MainMenu.h"
 
 class Game {
 public:
@@ -50,6 +51,10 @@ private:
     void OnFoodChanged();
     void OnAutomatonRulesChanged();
 
+    void InitializeMainMenu();
+    void RunMainMenu();
+    void StartGameFromMenu();
+
     // Константы
     static constexpr const char* LogFile = "config/debug.log";
     static constexpr int FrameDelayMs = 33;        // 20 FPS
@@ -78,4 +83,6 @@ private:
     int m_playerLevel;
     int m_xpToNextLevel;
     PlayerConfig* m_playerConfig;
+    std::unique_ptr<MainMenu> m_mainMenu;
+    bool m_inMainMenu;
 };
