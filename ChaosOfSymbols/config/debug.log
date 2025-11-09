@@ -2,151 +2,48 @@
 
 === GAME INITIALIZATION STARTED ===
 
-Starting game from menu selection...
-Starting game from main menu...
-Initializing ConfigManager
-
-Loading player configuration from: config/player.cfg
-Player configuration loaded: 9 parameters
-Player config - HP: 20 (enabled), Hunger: 20 (disabled)
-=== LOADING TILE TYPES FROM: config/tiles.json ===
-File opened successfully, size: 459 bytes
-Cleaned JSON: [  {    "id": 0,    "name": "grass",    "character": ".",    "color": 8,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 1,    "name": "water",    "character": "+",    "color": 2,    "isPassable": false,    "isDestructible": false,    "damage": 0  },  {    "id": 2,    "name": "mountain",    "character": "#",    "color": 13,    "isPassable": false,    "isDestructible": false,    "damage": 0  }]
-
-Found object: {    "id": 0,    "name": "grass",    "character": ".",    "color": 8,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
-Found object: {    "id": 1,    "name": "water",    "character": "+",    "color": 2,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
-Found object: {    "id": 2,    "name": "mountain",    "character": "#",    "color": 13,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
-
-Parsed 3 objects from JSON array
-Found 3 tile objects in JSON
-
-Parsed tile - id: 0, name: grass, character: '.', color: 8, passable: true
-Successfully registered tile: grass
-Parsed tile - id: 1, name: water, character: '+', color: 2, passable: false
-Successfully registered tile: water
-Parsed tile - id: 2, name: mountain, character: '#', color: 13, passable: false
-Successfully registered tile: mountain
-
-=== TILE LOADING COMPLETED: 3 tiles loaded ===
-
-=== LOADED TILES SUMMARY ===
-
-Tile 0: '.' - grass (color: 8)
-Tile 1: '+' - water (color: 2)
-Tile 2: '#' - mountain (color: 13)
-
-=== END LOADED TILES SUMMARY ===
-
-=== LOADED FOOD SUMMARY ===
-
-Loaded food: Hope (ID: 1, XP: 10)
-Loaded food: Faith (ID: 2, XP: 15)
-Loaded food: Star (ID: 3, XP: 30)
-Loaded food: Abyss (ID: 4, XP: 5)
-
-Food manager loaded 4 food types
-
-=== END LOADED FOOD SUMMARY ===
-
-DEBUG: Started new tile '.'
-DEBUG: Saved rule for tile '.'
-DEBUG: Started new tile '+'
-DEBUG: Saved rule for tile '+'
-DEBUG: Started new tile '#'
-DEBUG: Saved final rule for tile '#'
-
-=== LOADED CELLULAR AUTOMATON RULES SUMMARY ===
-
-Tile '.': 
-Survival=(count['.'] >= 2 && count['.'] <= 5) || (count['.'] == 1 && count['+'] >= 6), 
-Birth=(count['.'] >= 2 && count['#'] <= 1)
-Death=ERROR
-Tile '#': 
-Survival=(count['#'] >= 2 && count['#'] <= 5) || (count['#'] == 1 && count['.'] >= 4), 
-Birth=(count['#'] >= 3 && count['+'] == 0) || (count['.'] <= 3 && count['#'] >= 2)
-Death=ERROR
-Tile '+': 
-Survival=(count['+'] >= 2 && count['+'] <= 7) || (count['.'] >= 2 && count['+'] >= 2) || (count['.'] >= 4), 
-Birth=(count['+'] >= 2 && count['+'] <= 5) || (count['.'] == 0 && count['#'] <= 2) || (count['.'] >= 2)
-Death=ERROR
-
-=== END CELLULAR AUTOMATON RULES SUMMARY ===
-
-DEBUG: Total rules loaded: 3
-DEBUG: Rule for '.' is in map
-DEBUG: Rule for '#' is in map
-DEBUG: Rule for '+' is in map
-Started watching file: config/tiles.json
-Started watching file: config/food.cfg
-Started watching file: config/cellular_automaton.cfg
-
-ConfigManager initialized successfully
-
-=== STARTING WORLD GENERATION ===
-
-Loading world generation configuration...
-Using map from file: config/maps/1ÿ.txt
-Loading map from file: config/maps/1ÿ.txt
-ERROR: Cannot open map file: config/maps/1ÿ.txt
-ERROR: Failed to load map from file: config/maps/1ÿ.txt
-Falling back to random generation
-Generating random world...
-Content size: 100x40
-Total size with border: 102x42
-Generation mode: UNKNOWN
-Using seed: 1761141339
-Cellular automaton config is available (external)
-WARNING: No spawn rules found
-Creating border with tile ID: 2
-Border created successfully
-Smoothing terrain with natural transitions...
-Attempting to spawn 30 food items
-Spawned Abyss at 32,27
-Spawned Hope at 52,14
-Spawned Star at 51,29
-Spawned Faith at 50,25
-Spawned Hope at 37,9
-Food spawning completed: 30/30 items spawned (30 attempts)
-=== WORLD GENERATION COMPLETED ===
-Started game with preloaded map (placeholder)
-=== GAME STARTED FROM MAIN MENU ===
-Player moved - updating cellular automaton
-Cellular automaton: 4000 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 19/20
-Player moved - updating cellular automaton
-Cellular automaton: 4000 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 18/20
-Player moved - updating cellular automaton
-Cellular automaton: 4000 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 17/20
-Player moved - updating cellular automaton
-Cellular automaton: 4000 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 16/20
-Player moved - updating cellular automaton
-Cellular automaton: 4000 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 15/20
-Gained 15 XP! Total: 15/100, Lifetime: 15
-Food collected: Faith at 50,25
-Collected Faith - Hunger: +25, HP: +5, XP: +15 | Now: HP=20/20, Hunger=20/20, XP=15/100, Level=1
-Player moved - updating cellular automaton
-Cellular automaton: 4000 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 19/20
-Render Stats - FPS: 297 | Avg: 249 | Min: 202 | Max: 308 | Efficiency: 0% | Tiles: 3/4284
-Player moved - updating cellular automaton
-Cellular automaton: 4000 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 18/20
-Player moved - updating cellular automaton
-Cellular automaton: 4000 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 17/20
-Player moved - updating cellular automaton
-Cellular automaton: 4000 births, 0 deaths (0 natural)
-=== CELLULAR AUTOMATON UPDATE COMPLETE ===
-Hunger decreased: 16/20
+=== MainMenu::InitializeSaveSelection ===
+Mode: 0
+Current MainMenu state: 0
+=== SaveSelectionMenu CONSTRUCTOR ===
+Mode: 0
+Initial state: 0
+Selected slot: 1
+Constructor completed. Saves count: 5
+=== END CONSTRUCTOR ===
+SaveSelectionMenu Initialize() - State reset to MAIN_LIST
+Current state after init: 0
+New SaveSelectionMenu created and initialized
+MainMenu state changed to SAVE_SELECTION
+SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu SelectNext - Slot: 1 -> 2
+SaveSelectionMenu MenuUp pressed
+SaveSelectionMenu SelectPrevious - Slot: 2 -> 1
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 1, ShowActions: 0
+Showing actions for slot 1
+SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 1, ShowActions: 1
+SaveSelectionMenu Action selected: Back for slot 1
+SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu SelectNext - Slot: 1 -> 2
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 2, ShowActions: 0
+Showing actions for slot 2
+SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu MenuUp pressed
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 2, ShowActions: 1
+SaveSelectionMenu Action selected: Create for slot 2
+WorldEditor created for slot 2
+Opening World Editor for slot -1
+World Editor closed, returning to save selection
+SaveSelectionMenu MenuUp pressed
+SaveSelectionMenu SelectPrevious - Slot: 2 -> 1
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 1, ShowActions: 0
+Showing actions for slot 1
+SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu MenuUp pressed

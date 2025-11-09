@@ -1,0 +1,30 @@
+[
+  {
+    "id": 0,
+    "name": "grass",
+    "character": ".",
+    "color": 8,
+    "isPassable": true,
+    "isDestructible": false,
+    "damage": 0
+  },
+  {
+    "id": 1,
+    "name": "water",
+    "character": "+",
+    "color": 2,
+    "isPassable": false,
+    "isDestructible": false,
+    "damage": 0
+  },
+
+  {
+    "id": 2,
+    "name": "mountain",
+    "character": "#",
+    "color": 13,
+    "isPassable": false,
+    "isDestructible": false,
+    "damage": 0
+  }
+]

@@ -17,7 +17,7 @@ public:
     WorldConfig(const std::string& worldConfigPath, const std::string& spawnConfigPath);
 
     // Публичные методы
-    bool LoadConfig();
+    bool LoadConfig(bool forceReload = false);
 
     // Геттеры
     int GetWidth() const { return m_width; }
@@ -41,6 +41,8 @@ public:
     void SetNeighborRadius(int radius) { m_neighborRadius = radius; }
     void SetGenerationMode(WorldGenerationMode mode) { m_generationMode = mode; }
     void SetMapFilePath(const std::string& path) { m_mapFilePath = path; }
+    void MarkAsLoadedFromSave() { m_parametersLoadedFromSave = true; }
+    void ClearSaveMark() { m_parametersLoadedFromSave = false; }
 
 protected:
     bool ParseKeyValue(const std::string& key, const std::string& value) override;
@@ -59,4 +61,6 @@ private:
 
     std::string m_worldConfigPath;
     std::string m_spawnConfigPath;
+
+    bool m_parametersLoadedFromSave = false;
 };

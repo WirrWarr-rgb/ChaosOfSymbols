@@ -7,6 +7,8 @@
 #include "ConfigManager.h"
 #include "PlayerConfig.h"
 #include "MainMenu.h"
+#include "SaveSystem.h" 
+#include "PauseMenu.h" 
 
 class Game {
 public:
@@ -54,6 +56,11 @@ private:
     void InitializeMainMenu();
     void RunMainMenu();
     void StartGameFromMenu();
+    void InitializeSaveSelection(GameMode mode);
+    void RunSaveSelection();
+    void StartGameFromSave(GameMode mode, int slot);
+
+    void LoadWorldFromSave(const WorldEditorConfig& config);
 
     // Константы
     static constexpr const char* LogFile = "config/debug.log";
@@ -85,4 +92,13 @@ private:
     PlayerConfig* m_playerConfig;
     std::unique_ptr<MainMenu> m_mainMenu;
     bool m_inMainMenu;
+    std::unique_ptr<SaveSystem> m_saveSystem;
+    std::unique_ptr<SaveSelectionMenu> m_saveSelectionMenu;
+    bool m_inSaveSelection;
+
+    std::unique_ptr<PauseMenu> m_pauseMenu;
+    bool m_isPaused;
+
+    void HandlePauseInput();
+    void RunPauseMenu();
 };

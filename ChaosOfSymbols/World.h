@@ -60,6 +60,10 @@ public:
     }
     bool RemoveFoodAt(int x, int y);
 
+    WorldConfig* GetWorldConfig() { return &m_config; }
+
+    const WorldConfig* GetWorldConfig() const { return &m_config; }
+
 private:
     // Приватные методы
     void GenerateRandomWorld(); // ДОБАВИТЬ ЭТУ СТРОКУ

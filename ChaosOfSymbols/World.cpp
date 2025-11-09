@@ -1,6 +1,7 @@
 #include <random>
 #include <algorithm>
 #include <ctime>
+#include <filesystem>
 #include "World.h"
 #include "Logger.h"
 
@@ -17,31 +18,52 @@ World::World()
 void World::GenerateFromConfig() {
     Logger::Log("\n=== STARTING WORLD GENERATION ===\n");
 
+    // Логируем текущие настройки конфига
+    Logger::Log("WorldConfig settings:");
+    Logger::Log("  Width: " + std::to_string(m_config.GetWidth()));
+    Logger::Log("  Height: " + std::to_string(m_config.GetHeight()));
+    Logger::Log("  Seed: " + std::to_string(m_config.GetEffectiveSeed()));
+    Logger::Log("  NoiseFrequency: " + std::to_string(m_config.GetNoiseFrequency()));
+    Logger::Log("  GenerationMode: " + std::to_string(static_cast<int>(m_config.GetGenerationMode())));
+
     if (!m_config.LoadConfig()) {
         Logger::Log("ERROR: Failed to load world generation config");
-        return;
+        // Пробуем сгенерировать с дефолтными настройками
+        Logger::Log("Attempting generation with current settings...");
     }
 
     // Обработка разных режимов генерации
     switch (m_config.GetGenerationMode()) {
     case WorldGenerationMode::FROM_MAP_FILE:
-        if (!LoadMapFromFile(m_config.GetMapFilePath())) {
-            Logger::Log("ERROR: Failed to load map from file: " + m_config.GetMapFilePath());
-            // Fallback к случайной генерации
-            Logger::Log("Falling back to random generation");
+        // ПРОВЕРЯЕМ: если путь к файлу карты пустой или файл не существует - используем параметры из сейва
+        if (m_config.GetMapFilePath().empty() || !std::filesystem::exists(m_config.GetMapFilePath())) {
+            Logger::Log("Map file not found or not specified: " + m_config.GetMapFilePath());
+            Logger::Log("Falling back to procedural generation with save parameters");
             GenerateRandomWorld();
         }
         else {
-            Logger::Log("=== MAP LOADED FROM FILE ===");
-            return;
+            Logger::Log("Generating from map file: " + m_config.GetMapFilePath());
+            if (!LoadMapFromFile(m_config.GetMapFilePath())) {
+                Logger::Log("ERROR: Failed to load map from file: " + m_config.GetMapFilePath());
+                // Fallback к случайной генерации с параметрами из сейва
+                Logger::Log("Falling back to random generation with save parameters");
+                GenerateRandomWorld();
+            }
+            else {
+                Logger::Log("=== MAP LOADED FROM FILE ===");
+                return;
+            }
         }
         break;
 
     case WorldGenerationMode::SEEDED:
     case WorldGenerationMode::RANDOM:
+        Logger::Log("Generating random world with save parameters...");
         GenerateRandomWorld();
         break;
     }
+
+    Logger::Log("=== WORLD GENERATION COMPLETED ===");
 }
 
 /// <summary>

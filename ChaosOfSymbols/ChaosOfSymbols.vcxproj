@@ -139,15 +139,20 @@
     <ClCompile Include="Food.cpp" />
     <ClCompile Include="FoodManager.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainMenu.cpp" />
+    <ClCompile Include="PauseMenu.cpp" />
     <ClCompile Include="PlayerConfig.cpp" />
     <ClCompile Include="RenderSystem.cpp" />
+    <ClCompile Include="SaveSelectionMenu.cpp" />
+    <ClCompile Include="SaveSystem.cpp" />
     <ClCompile Include="TileType.cpp" />
     <ClCompile Include="TileTypeManager.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="WorldConfig.cpp" />
+    <ClCompile Include="WorldEditor.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CellularAutomatonRules.h" />
@@ -158,15 +163,22 @@
     <ClInclude Include="Food.h" />
     <ClInclude Include="FoodManager.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="InputManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MainMenu.h" />
+    <ClInclude Include="PauseMenu.h" />
     <ClInclude Include="PlayerConfig.h" />
     <ClInclude Include="RenderSystem.h" />
+    <ClInclude Include="SaveSelectionMenu.h" />
+    <ClInclude Include="SaveSystem.h" />
+    <ClInclude Include="SaveTypes.h" />
     <ClInclude Include="SpawnRule.h" />
     <ClInclude Include="TileType.h" />
     <ClInclude Include="TileTypeManager.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="WorldConfig.h" />
+    <ClInclude Include="WorldEditor.h" />
+    <ClInclude Include="WorldEditorConfig.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\cellular_automaton.cfg" />

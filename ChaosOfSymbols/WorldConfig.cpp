@@ -12,18 +12,16 @@ WorldConfig::WorldConfig()
     m_spawnConfigPath("config/world_spawn.cfg") {
 }
 
-WorldConfig::WorldConfig(const std::string& worldConfigPath, const std::string& spawnConfigPath)
-    : m_width(80), m_height(40), m_seed(1337),
-    m_noiseFrequency(0.7f), m_generationMode(WorldGenerationMode::RANDOM),
-    m_worldConfigPath(worldConfigPath),
-    m_spawnConfigPath(spawnConfigPath) {
-}
-
 /// <summary>
 /// Загрузка полной конфигурации мира из файлов: основной конфиг + правила спавна
 /// </summary>
 /// <returns></returns>
-bool WorldConfig::LoadConfig() {
+bool WorldConfig::LoadConfig(bool forceReload) {
+    if (!forceReload && m_parametersLoadedFromSave) {
+        Logger::Log("Using parameters from save, skipping file config load");
+        return true;
+    }
+
     Logger::Log("Loading world generation configuration...");
 
     if (!LoadFromFile(m_worldConfigPath)) {
@@ -90,6 +88,8 @@ bool WorldConfig::ParseKeyValue(const std::string& key, const std::string& value
     }
     else if (key == "MapFilePath") {
         m_mapFilePath = value;
+    }
+    else if (key == "WorldName") {
     }
     else if (key == "UseRandomSeed") {
         // Старый параметр для обратной совместимости - игнорируем

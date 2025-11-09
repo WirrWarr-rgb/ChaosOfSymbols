@@ -2,6 +2,7 @@
 #include <windows.h>
 #include <chrono>
 #include <iostream>
+#include "Logger.h"
 
 namespace rlutil {
     void setColor(int color);
@@ -17,13 +18,19 @@ MainMenu::MainMenu()
     , m_inPlaySubmenu(false)
     , m_shouldStartGame(false)
     , m_shouldExit(false)
+    , m_shouldLoadSave(false)
     , m_selectedGameMode(MainMenuOption::PLAY_PROCEDURAL)
     , m_prevSelectedMainIndex(-1)
     , m_prevSelectedSubIndex(-1)
     , m_prevInPlaySubmenu(false)
     , m_prevState(MenuState::MAIN_MENU)
     , m_needFullRedraw(true)
+    , m_inSaveSelection(false)
+    , m_selectedSaveGameMode(GameMode::PROCEDURAL_GENERATION)
+    , m_selectedSaveSlot(1)
 {
+    m_inputManager = std::make_unique<InputManager>();
+
     m_mainMenuOptions = {
         "Play",
         "About the Game",
@@ -39,9 +46,20 @@ MainMenu::MainMenu()
 
 void MainMenu::Initialize() {
     rlutil::hideCursor();
+    if (m_inputManager) {
+        // Инициализация InputManager если нужна
+    }
 }
 
 void MainMenu::Update() {
+    if (m_inputManager) {
+        m_inputManager->Update();
+    }
+
+    if (m_currentState == MenuState::SAVE_SELECTION && m_saveSelectionMenu) {
+        m_saveSelectionMenu->Update();
+        RunSaveSelection();
+    }
 }
 
 void MainMenu::Render() {
@@ -60,6 +78,11 @@ void MainMenu::Render() {
     case MenuState::ABOUT_SCREEN:
         if (m_needFullRedraw) {
             RenderAboutScreen();
+        }
+        break;
+    case MenuState::SAVE_SELECTION:
+        if (m_saveSelectionMenu) {
+            m_saveSelectionMenu->Render();
         }
         break;
     case MenuState::IN_GAME:
@@ -260,21 +283,17 @@ void MainMenu::ConfirmSelection() {
     if (m_currentState == MenuState::ABOUT_SCREEN) {
         m_currentState = MenuState::MAIN_MENU;
         m_inPlaySubmenu = false;
-        m_needFullRedraw = true; 
+        m_needFullRedraw = true;
         return;
     }
 
     if (m_inPlaySubmenu) {
         switch (m_selectedSubIndex) {
         case 0: // with procedural generation
-            m_selectedGameMode = MainMenuOption::PLAY_PROCEDURAL;
-            m_shouldStartGame = true;
-            m_currentState = MenuState::IN_GAME;
+            InitializeSaveSelection(GameMode::PROCEDURAL_GENERATION);
             break;
         case 1: // with a preloaded map
-            m_selectedGameMode = MainMenuOption::PLAY_PRELOADED;
-            m_shouldStartGame = true;
-            m_currentState = MenuState::IN_GAME;
+            InitializeSaveSelection(GameMode::PRELOADED_MAPS);
             break;
         case 2: // back
             m_inPlaySubmenu = false;
@@ -300,6 +319,48 @@ void MainMenu::ConfirmSelection() {
     }
 }
 
+void MainMenu::InitializeSaveSelection(GameMode mode) {
+    Logger::Log("=== MainMenu::InitializeSaveSelection ===");
+    Logger::Log("Mode: " + std::to_string(static_cast<int>(mode)));
+    Logger::Log("Current MainMenu state: " + std::to_string(static_cast<int>(m_currentState)));
+    m_saveSelectionMenu = std::make_unique<SaveSelectionMenu>(mode);
+    m_saveSelectionMenu->Initialize();
+
+    m_currentState = MenuState::SAVE_SELECTION;
+    m_inSaveSelection = true;
+    m_needFullRedraw = true;
+
+    Logger::Log("New SaveSelectionMenu created and initialized");
+    Logger::Log("MainMenu state changed to SAVE_SELECTION");
+
+    // Отладочный вывод для проверки
+    std::cout << "Created new SaveSelectionMenu for mode: "
+        << static_cast<int>(mode) << std::endl;
+}
+
+
+void MainMenu::RunSaveSelection() {
+    if (m_saveSelectionMenu) {
+        if (m_saveSelectionMenu->ShouldReturnToMainMenu()) {
+            Logger::Log("MainMenu::RunSaveSelection - Returning to main menu");
+            m_currentState = MenuState::MAIN_MENU;
+            m_inSaveSelection = false;
+            m_needFullRedraw = true;
+            m_saveSelectionMenu.reset();
+            Logger::Log("SaveSelectionMenu destroyed");
+        }
+        else if (m_saveSelectionMenu->ShouldStartGame()) {
+            Logger::Log("MainMenu::RunSaveSelection - Starting game from save");
+            m_shouldLoadSave = true;
+            m_selectedSaveGameMode = m_saveSelectionMenu->GetGameMode();
+            m_selectedSaveSlot = m_saveSelectionMenu->GetSelectedSlot();
+            m_shouldStartGame = true;
+            m_saveSelectionMenu.reset();
+            Logger::Log("SaveSelectionMenu destroyed, game starting from save...");
+        }
+    }
+}
+
 void MainMenu::ClearMenuArea() {
     for (int line = 5; line <= 20; line++) {
         ClearLine(line);
@@ -314,41 +375,30 @@ void MainMenu::ClearLine(int line) {
 }
 
 void MainMenu::ProcessInput() {
-    static auto lastProcessTime = std::chrono::steady_clock::now();
-    static bool keyWasPressed = false;
+    if (!m_inputManager) return;
 
-    auto currentTime = std::chrono::steady_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::milliseconds>(currentTime - lastProcessTime);
-
-    if (elapsed.count() < 50) {
+    // Если находимся в выборе сейва, передаем управление ему
+    if (m_currentState == MenuState::SAVE_SELECTION && m_saveSelectionMenu) {
+        m_saveSelectionMenu->ProcessInput();
         return;
     }
 
-    bool wPressed = (GetAsyncKeyState('W') & 0x8000) || (GetAsyncKeyState(VK_UP) & 0x8000);
-    bool sPressed = (GetAsyncKeyState('S') & 0x8000) || (GetAsyncKeyState(VK_DOWN) & 0x8000);
-    bool enterPressed = (GetAsyncKeyState(VK_SPACE) & 0x8000) || (GetAsyncKeyState(VK_RETURN) & 0x8000);
-    bool qPressed = (GetAsyncKeyState('Q') & 0x8000);
-
-    if ((wPressed || sPressed || enterPressed || qPressed)) {
-        if (!keyWasPressed) {
-            if (wPressed) {
-                SelectPreviousOption();
-            }
-            else if (sPressed) {
-                SelectNextOption();
-            }
-            else if (enterPressed) {
-                ConfirmSelection();
-            }
-            else if (qPressed) {
-                m_shouldExit = true;
-            }
-
-            keyWasPressed = true;
-            lastProcessTime = currentTime;
-        }
+    if (m_inputManager->IsMenuUp()) {
+        SelectPreviousOption();
     }
-    else {
-        keyWasPressed = false;
+    else if (m_inputManager->IsMenuDown()) {
+        SelectNextOption();
+    }
+    else if (m_inputManager->IsMenuSelect()) {
+        ConfirmSelection();
+    }
+    else if (m_inputManager->IsMenuBack()) {
+        if (m_inPlaySubmenu) {
+            m_inPlaySubmenu = false;
+            m_selectedSubIndex = 0;
+        }
+        else {
+            m_shouldExit = true;
+        }
     }
 }
