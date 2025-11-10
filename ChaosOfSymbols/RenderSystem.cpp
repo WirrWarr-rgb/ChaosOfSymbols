@@ -375,6 +375,7 @@ void RenderSystem::LogStats() const {
 void RenderSystem::ClearEntireScreen() {
     rlutil::cls();
 
+    // Дополнительная очистка буфера консоли
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(hConsole, &csbi);
@@ -386,4 +387,7 @@ void RenderSystem::ClearEntireScreen() {
     FillConsoleOutputCharacterA(hConsole, ' ', consoleSize, topLeft, &written);
     FillConsoleOutputAttribute(hConsole, 7, consoleSize, topLeft, &written);
     SetConsoleCursorPosition(hConsole, topLeft);
+
+    // Сбрасываем буфер предыдущего кадра
+    InitializePreviousFrame();
 }

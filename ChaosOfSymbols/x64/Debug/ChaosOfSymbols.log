@@ -155,181 +155,115 @@ C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\ConfigManager.h(1,1): w
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\ConfigManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x41e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x326, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x328, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x32b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x32e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x331, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xd1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x334, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xd3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x338, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xd6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x33c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xd9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x33f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xdc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x342, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xdf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x345, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xe2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x349, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xf5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x34c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xf8, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x350, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xfb, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x353, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xfe, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x380, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x382, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x385, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x388, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x38b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x38e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x392, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x396, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x399, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x39c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x39f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3a3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3a6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3aa, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3ad, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3b1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x798, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x79a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x79f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7a3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7a7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x357, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7ac, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7af, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7ae, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b8, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7bb, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x970, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x972, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x975, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x979, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x97d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7cc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x982, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x984, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x985, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x986, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x988, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x989, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x98b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x98d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x98e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x991, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa38, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x996, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa3a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x999, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa3d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x99c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa41, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x99f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa44, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9a2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa47, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "Game.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
@@ -338,7 +272,7 @@ C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warnin
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa51, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa54, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa55, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa58, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
@@ -350,19 +284,37 @@ C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warnin
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa5e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa61, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa62, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb08, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa65, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb0a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa68, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb0d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa6c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb10, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa6f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "Game.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa72, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "Game.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa75, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "Game.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb1c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "Game.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb1e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "Game.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb21, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "Game.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb24, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x26, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
@@ -1004,6 +956,854 @@ C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): war
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa62, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "Game.cpp")
   
+  MainMenu.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4c4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4c6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4c9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4cc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4cf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4df, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4e2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4e5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x1610, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x1612, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x1615, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x1618, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x161c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28c4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28c6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28c9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28cc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28cd, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28d0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28d1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28d5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28d9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28dc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28df, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e72, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e74, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e77, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e7a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e7d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e81, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e84, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e85, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e88, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e8b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e8e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e91, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e94, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e97, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e9a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2e9e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2ea1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2ea5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x326, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x328, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x32b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x32e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x331, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x334, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x338, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x33c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x33f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x342, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x345, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x349, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x34c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x350, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x353, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x357, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7ac, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7ae, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7bb, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7cc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x984, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x986, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x989, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x98d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x991, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x996, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x999, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x99c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x99f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9a2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa51, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa55, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa58, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa5b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa5e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa62, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa65, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa68, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa6c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa6f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa72, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa75, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb1c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb1e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb21, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb24, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x26, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x28, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x29, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x2c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x31, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x35, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x39, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x41, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x44, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5b9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5bb, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5be, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5c1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5c4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5c7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5ca, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5cd, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x617, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x619, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x61c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x620, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x623, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x626, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x629, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x62d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x630, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x633, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x637, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x63a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x63d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x640, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x76a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x76c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x770, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x773, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x775, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x779, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x77c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x780, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x783, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x786, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x789, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xe7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xe9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xec, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xf0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xf3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x248, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x24a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x24f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x253, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x257, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x25c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x25f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x263, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x266, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x26a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x26d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x414, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x416, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x41a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x41d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x421, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x425, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x428, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x42c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x42f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x432, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x435, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4e2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4e4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4e9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4ed, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4f0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4f4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4f7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4fa, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4fd, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x500, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x504, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x561, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x563, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x566, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x569, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x56d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x571, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x574, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x89d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x89f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8a2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8a5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8a9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8ac, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8b0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8b4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x35d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x360, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x363, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x366, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x369, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x36d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x370, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x390, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x393, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x396, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x399, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x39c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3a0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditorConfig.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3a3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa8, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xac, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xaf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x159, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x15b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x15e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x161, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x165, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x168, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x16c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x170, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x173, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x176, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x17a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x17e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x181, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x364, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x366, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x36a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbd, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xc0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xd4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xd7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x329, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x32b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x32e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x332, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x335, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x336, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x339, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x583, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x585, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x588, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x58b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x58e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5b8, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5ba, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5be, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5bf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5c3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5f1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5f3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x5f7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x62b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x62d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x630, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x631, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x634, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x636, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x639, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x63c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x673, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x675, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x678, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x67b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x67e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x681, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x684, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x688, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x80c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x80e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x811, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x814, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x86f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x872, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x894, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x896, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x89a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8a0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8a3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8a6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8a9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8bd, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8c0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x98d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x98f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9cf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9d1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9d4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9d7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9da, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9de, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9e2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9e5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa52, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa55, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa58, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa5b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa5e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa62, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(139,45): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(146,24): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(273,81): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(276,84): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
   main.cpp
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\TileTypeManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x187, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
@@ -1161,181 +1961,115 @@ C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\ConfigManager.h(1,1): w
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\ConfigManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x41e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x326, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x328, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x32b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x32e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x331, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xd1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x334, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xd3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x338, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xd6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x33c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xd9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x33f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xdc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x342, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xdf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x345, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xe2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x349, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xf5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x34c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xf8, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x350, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xfb, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x353, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xfe, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x380, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x382, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x385, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x388, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x38b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x38e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x392, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x396, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x399, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x39c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x39f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3a3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3a6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3aa, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3ad, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x3b1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x798, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x79a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x79f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7a3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7a7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x357, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7ac, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7af, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7ae, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7b8, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7bb, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x970, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c0, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x972, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x975, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x979, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7c9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x97d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x7cc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x982, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x984, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x985, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x986, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x988, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x989, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x98b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x98d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x98e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x991, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa38, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x996, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa3a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x999, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa3d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x99c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa41, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x99f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa44, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x9a2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa47, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "main.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa4e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
@@ -1344,7 +2078,7 @@ C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warnin
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa51, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa54, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa55, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa58, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
@@ -1356,19 +2090,37 @@ C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warnin
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa5e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa61, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa62, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb08, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa65, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb0a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa68, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb0d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa6c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb10, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa6f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "main.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa72, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "main.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa75, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "main.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb1c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "main.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb1e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "main.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb21, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
+  (компиляция исходного файла "main.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb24, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveTypes.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x26, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
@@ -2010,156 +2762,6 @@ C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): war
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa62, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
   (компиляция исходного файла "main.cpp")
   
-  PauseMenu.cpp
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x493, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x497, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x49a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x49e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4a1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4a4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x4a7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x537, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x539, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x53c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x540, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x544, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x548, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x54b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x550, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x554, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x558, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x55c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x55f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x651, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x653, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x656, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x659, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x65c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x65f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x75a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x75c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x75f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x762, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x765, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x768, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x76a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x76d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x76f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x772, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x775, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x87a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x87c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x87f, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x882, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8dd, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8df, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x8e2, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x90e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x910, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x914, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x917, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa0c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa0e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa11, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa12, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa99, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa9a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa9d, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xaef, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xaf1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xaf5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xaf8, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb6e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb70, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbcf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbd1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbd4, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbd7, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbda, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbdd, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbde, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbe1, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa5, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xa8, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xac, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xaf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb3, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb6, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xb9, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbc, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0xbf, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x159, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x15b, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x15e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x161, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x165, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x168, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x16c, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x170, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x173, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x176, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x17a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x17e, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x181, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x364, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x366, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.h(1,1): warning C4828: Файл содержит знак, начинающийся со смещения 0x36a, который является недопустимым в текущей исходной кодировке (кодовая страница 65001).
-  (компиляция исходного файла "PauseMenu.cpp")
-  
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(73,20): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(109,64): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(125,68): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
   Создание кода...
   ChaosOfSymbols.vcxproj -> C:\Users\user\source\repos\ChaosOfSymbols\x64\Debug\ChaosOfSymbols.exe
   "pwsh.exe" не является внутренней или внешней

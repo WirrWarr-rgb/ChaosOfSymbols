@@ -95,9 +95,12 @@ void Game::Run() {
             RunPauseMenu();
         }
         else {
-            ProcessInput();
-            Update();
-            Render();
+            // ТОЛЬКО если мы действительно в игре, а не возвращаемся в меню
+            if (!m_inMainMenu) {
+                ProcessInput();
+                Update();
+                Render();
+            }
         }
     }
 }
@@ -114,9 +117,12 @@ void Game::RunMainMenu() {
         }
         else {
             // Запускаем обычную игру
-            Logger::Log("Starting game from menu selection...");
+            Logger::Log("Starting NEW game from menu selection...");
             StartGameFromMenu();
         }
+
+        // Сбрасываем флаги главного меню
+        m_mainMenu->ResetStartFlags();
     }
     else if (m_mainMenu->ShouldExitGame()) {
         Logger::Log("Exit requested from main menu");
@@ -504,10 +510,12 @@ void Game::CollectFood() {
 /// </summary>
 void Game::Render() {
     if (m_isPaused) {
-        m_pauseMenu->Render();  // Рендерим меню паузы поверх игры
+        // ПРИ ПАУЗЕ: полностью очищаем и рисуем только меню паузы
+        m_pauseMenu->Render();
         return;
     }
 
+    // ПРИ ВОЗОБНОВЛЕНИИ: полностью перерисовываем игровой мир
     static int lastPlayerX = m_playerX;
     static int lastPlayerY = m_playerY;
 
@@ -530,6 +538,7 @@ void Game::Render() {
     lastPlayerX = m_playerX;
     lastPlayerY = m_playerY;
 }
+
 
 /// <summary>
 /// Движение и позиционирование игрока
@@ -844,23 +853,60 @@ void Game::RunPauseMenu() {
     if (m_pauseMenu->ShouldResume()) {
         m_isPaused = false;
         m_pauseMenu->Reset();
+
+        // При возобновлении полностью перерисовываем игровой мир
+        if (m_renderSystem) {
+            m_renderSystem->ClearScreen();
+        }
         Logger::Log("Game resumed from pause menu");
     }
     else if (m_pauseMenu->ShouldReturnToMainMenu()) {
-        m_isPaused = false;
-        m_inMainMenu = true;
-        m_pauseMenu->Reset();
-
-        // Очищаем игровые ресурсы
-        delete m_currentWorld;
-        delete m_renderSystem;
-        m_currentWorld = nullptr;
-        m_renderSystem = nullptr;
-        m_configManager.reset();
-
-        // Переинициализируем главное меню
-        m_mainMenu->Initialize();
-
-        Logger::Log("Returned to main menu from pause");
+        Logger::Log("Pause menu requested return to main menu");
+        ReturnToMainMenu(); // Вызываем исправленный метод
     }
+
+    // Добавьте небольшую задержку для уменьшения нагрузки на CPU
+    std::this_thread::sleep_for(std::chrono::milliseconds(16));
+}
+
+void Game::ReturnToMainMenu() {
+    Logger::Log("Returning to main menu from pause...");
+
+    m_isPaused = false;
+    m_inMainMenu = true;
+    m_pauseMenu->Reset();
+
+    // ПОЛНОСТЬЮ очищаем игровые ресурсы
+    if (m_currentWorld) {
+        delete m_currentWorld;
+        m_currentWorld = nullptr;
+    }
+
+    if (m_renderSystem) {
+        delete m_renderSystem;
+        m_renderSystem = nullptr;
+    }
+
+    m_configManager.reset();
+
+    // Сбрасываем состояние игрока
+    m_playerX = 0;
+    m_playerY = 0;
+    m_playerSteps = 0;
+    m_playerHP = 0;
+    m_playerHunger = 0;
+    m_playerXP = 0;
+    m_playerLevel = 1;
+    m_xpToNextLevel = 100;
+    m_totalXP = 0;
+    m_foodEaten.clear();
+
+    // Сбрасываем главное меню
+    m_mainMenu->Reset();
+    m_mainMenu->ResetStartFlags(); // Дополнительно сбрасываем флаги старта
+
+    // ПОЛНАЯ очистка экрана
+    rlutil::cls();
+
+    Logger::Log("Successfully returned to main menu");
 }

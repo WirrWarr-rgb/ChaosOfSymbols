@@ -62,6 +62,8 @@ private:
 
     void LoadWorldFromSave(const WorldEditorConfig& config);
 
+    void ReturnToMainMenu();
+
     // Константы
     static constexpr const char* LogFile = "config/debug.log";
     static constexpr int FrameDelayMs = 33;        // 20 FPS

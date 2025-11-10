@@ -5,9 +5,8 @@
 #include <memory>
 #include "SaveTypes.h"
 #include "SaveSelectionMenu.h"
-#include "InputManager.h"  // Добавляем этот include
+#include "InputManager.h"
 
-// Добавляем объявление MainMenuOption перед классом MainMenu
 enum class MainMenuOption {
     PLAY_PROCEDURAL,
     PLAY_PRELOADED,
@@ -50,6 +49,11 @@ public:
         m_selectedMainIndex = 0;
         m_selectedSubIndex = 0;
         m_needFullRedraw = true;
+    }
+
+    void ResetStartFlags() {
+        m_shouldStartGame = false;
+        m_shouldLoadSave = false;
     }
 
 private:
