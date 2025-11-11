@@ -2,7 +2,7 @@
 
 [![C++](https://img.shields.io/badge/C++-17+-blue.svg)](https://isocpp.org/)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)](https://github.com/your-username/chaos-of-symbols)
+[![Status](https://img.shields.io/badge/Status-In%20Development-orange.svg)](https://github.com/WirrWarr-rgb/ChaosOfSymbols)
 
 A highly flexible and modifiable C++ console game featuring procedural world generation, dynamic world evolution, and extensive customization options.
 

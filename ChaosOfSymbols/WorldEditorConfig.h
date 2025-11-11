@@ -16,8 +16,8 @@ struct WorldEditorConfig {
     // Player tab
     int playerStartX = 40;
     int playerStartY = 20;
-    int playerMaxHP = 100;
-    int playerMaxHunger = 100;
+    int playerMaxHP = 30;
+    int playerMaxHunger = 20;
     bool enableHP = true;
     bool enableHunger = true;
 

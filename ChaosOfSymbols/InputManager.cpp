@@ -3,7 +3,6 @@
 InputManager::InputManager() {
     m_lastUpdateTime = std::chrono::steady_clock::now();
 
-    // Инициализируем состояния всех клавиш, которые будем отслеживать
     std::vector<int> keysToTrack = {
         'W', 'S', 'A', 'D',
         VK_UP, VK_DOWN, VK_LEFT, VK_RIGHT,
@@ -19,7 +18,6 @@ InputManager::InputManager() {
 void InputManager::Update() {
     auto currentTime = std::chrono::steady_clock::now();
 
-    // Обновляем состояния всех отслеживаемых клавиш
     for (auto& pair : m_keyStates) {
         int key = pair.first;
         KeyState& state = pair.second;
@@ -27,7 +25,6 @@ void InputManager::Update() {
         state.previousState = state.currentState;
         state.currentState = (GetAsyncKeyState(key) & 0x8000) != 0;
 
-        // Если клавиша только что нажата, обновляем время нажатия
         if (state.currentState && !state.previousState) {
             state.lastPressTime = currentTime;
         }
@@ -39,7 +36,6 @@ void InputManager::Update() {
 bool InputManager::IsKeyPressed(int virtualKey) {
     auto it = m_keyStates.find(virtualKey);
     if (it == m_keyStates.end()) {
-        // Если клавиша не отслеживается, добавляем ее
         m_keyStates[virtualKey] = KeyState();
         return false;
     }
@@ -80,11 +76,9 @@ bool InputManager::IsMenuUp() {
                 auto holdDuration = std::chrono::duration_cast<std::chrono::milliseconds>(
                     currentTime - state.lastPressTime);
 
-                // Первое нажатие
                 if (!state.previousState) {
                     return true;
                 }
-                // Автоповтор после задержки
                 else if (holdDuration.count() > MENU_INITIAL_DELAY_MS) {
                     auto sinceLastRepeat = std::chrono::duration_cast<std::chrono::milliseconds>(
                         currentTime - m_lastUpdateTime);
@@ -111,11 +105,9 @@ bool InputManager::IsMenuDown() {
                 auto holdDuration = std::chrono::duration_cast<std::chrono::milliseconds>(
                     currentTime - state.lastPressTime);
 
-                // Первое нажатие
                 if (!state.previousState) {
                     return true;
                 }
-                // Автоповтор после задержки
                 else if (holdDuration.count() > MENU_INITIAL_DELAY_MS) {
                     auto sinceLastRepeat = std::chrono::duration_cast<std::chrono::milliseconds>(
                         currentTime - m_lastUpdateTime);
@@ -141,7 +133,6 @@ bool InputManager::IsMenuBack() {
 void InputManager::ClearState() {
     auto currentTime = std::chrono::steady_clock::now();
 
-    // Сбрасываем все состояния клавиш
     for (auto& pair : m_keyStates) {
         KeyState& state = pair.second;
         state.currentState = false;
@@ -153,13 +144,10 @@ void InputManager::ClearState() {
 }
 
 void InputManager::ClearSystemBuffer() {
-    // Очищаем системный буфер ввода Windows
     for (int i = 0; i < 256; i++) {
-        // Двойной вызов чтобы сбросить состояние клавиш
         SHORT keyState = GetAsyncKeyState(i);
-        keyState = GetAsyncKeyState(i); // Второй вызов для сброса
+        keyState = GetAsyncKeyState(i);
     }
-
-    // Даем время системе обработать очистку
+    
     Sleep(50);
 }

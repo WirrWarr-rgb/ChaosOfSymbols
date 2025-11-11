@@ -12,11 +12,9 @@ SaveSystem::SaveSystem() {
 }
 
 void SaveSystem::InitializeSaveDirectories() {
-    // Создаем структуру папок если их нет
     fs::create_directories(GetSavesDirectory(GameMode::PROCEDURAL_GENERATION));
     fs::create_directories(GetSavesDirectory(GameMode::PRELOADED_MAPS));
 
-    // Создаем папки для слотов 1-5
     for (int i = 1; i <= 5; i++) {
         fs::create_directories(GetSaveSlotPath(GameMode::PROCEDURAL_GENERATION, i));
         fs::create_directories(GetSaveSlotPath(GameMode::PRELOADED_MAPS, i));
@@ -38,7 +36,6 @@ SaveInfo SaveSystem::GetSaveInfo(GameMode mode, int slot) const {
     info.slotNumber = slot;
     info.savePath = GetSaveSlotPath(mode, slot);
 
-    // Проверяем есть ли файл с информацией о сейве
     std::string infoFile = info.savePath + "/save_info.txt";
 
     if (fs::exists(infoFile)) {
@@ -64,10 +61,8 @@ SaveInfo SaveSystem::GetSaveInfo(GameMode mode, int slot) const {
 bool SaveSystem::CreateNewSave(GameMode mode, int slot, const std::string& name, const WorldEditorConfig& config) {
     std::string savePath = GetSaveSlotPath(mode, slot);
 
-    // Создаем папку сейва если не существует
     fs::create_directories(savePath);
 
-    // Создаем файл с информацией о сейве
     std::ofstream infoFile(savePath + "/save_info.txt");
     if (!infoFile.is_open()) {
         Logger::Log("ERROR: Cannot create save info file for slot " + std::to_string(slot));
@@ -76,11 +71,10 @@ bool SaveSystem::CreateNewSave(GameMode mode, int slot, const std::string& name,
 
     std::string currentTime = GetCurrentDateTime();
     infoFile << name << "\n";
-    infoFile << currentTime << "\n"; // creation date
-    infoFile << currentTime << "\n"; // last played date
+    infoFile << currentTime << "\n";
+    infoFile << currentTime << "\n";
     infoFile.close();
 
-    // Сохраняем конфигурации из редактора
     if (!SaveWorldConfig(mode, slot, config)) {
         Logger::Log("ERROR: Failed to save world config for slot " + std::to_string(slot));
         return false;
@@ -162,9 +156,8 @@ bool SaveSystem::SaveAutomatonConfig(GameMode mode, int slot, const WorldEditorC
     std::string configPath = savePath + "/cellular_automaton.cfg";
 
     std::stringstream content;
-    // Сохраняем правила клеточного автомата
     if (!config.survivalRules.empty()) {
-        content << ".\n";  // Тайл, к которому применяются правила
+        content << ".\n";
         content << "survival=" << config.survivalRules << "\n";
     }
     if (!config.birthRules.empty()) {
@@ -181,7 +174,6 @@ WorldEditorConfig SaveSystem::LoadWorldConfig(GameMode mode, int slot) {
     WorldEditorConfig config;
     std::string savePath = GetSaveSlotPath(mode, slot);
 
-    // Загружаем конфиг мира
     std::ifstream worldFile(savePath + "/world_gen.cfg");
     if (worldFile.is_open()) {
         std::string line;
@@ -222,7 +214,6 @@ bool SaveSystem::DeleteSave(GameMode mode, int slot) {
     std::string savePath = GetSaveSlotPath(mode, slot);
 
     try {
-        // Удаляем всю папку сейва
         if (fs::exists(savePath)) {
             uintmax_t removedCount = fs::remove_all(savePath);
             Logger::Log("Deleted save slot " + std::to_string(slot) +
@@ -250,7 +241,6 @@ bool SaveSystem::LoadSave(GameMode mode, int slot) {
 
     Logger::Log("Loading save from slot " + std::to_string(slot));
 
-    // Загружаем все конфигурации
     m_loadedConfig = LoadWorldConfig(mode, slot);
 
     if (!LoadPlayerConfig(mode, slot)) {
@@ -265,12 +255,11 @@ bool SaveSystem::LoadSave(GameMode mode, int slot) {
         Logger::Log("WARNING: Failed to load automaton config, using defaults");
     }
 
-    // Обновляем дату последнего запуска
     std::ofstream infoFile(info.savePath + "/save_info.txt");
     if (infoFile.is_open()) {
         infoFile << info.name << "\n";
         infoFile << info.creationDate << "\n";
-        infoFile << GetCurrentDateTime() << "\n"; // Обновляем last played
+        infoFile << GetCurrentDateTime() << "\n";
         infoFile.close();
     }
 
@@ -319,11 +308,9 @@ bool SaveSystem::LoadTilesConfig(GameMode mode, int slot) {
                     probs.push_back(std::stof(probToken));
                 }
                 catch (const std::exception& e) {
-                    probs.push_back(0.1f); // значение по умолчанию при ошибке
+                    probs.push_back(0.1f);
                 }
             }
-
-            // Дополняем до 3 значений если нужно
             while (probs.size() < 3) {
                 probs.push_back(0.1f);
             }
@@ -351,7 +338,6 @@ bool SaveSystem::LoadAutomatonConfig(GameMode mode, int slot) {
     while (std::getline(file, line)) {
         if (line.empty()) continue;
 
-        // Если строка состоит из одного символа - это тайл
         if (line.length() == 1) {
             currentTile = line;
             continue;
@@ -387,7 +373,6 @@ bool SaveSystem::LoadConfigFromFile(const std::string& filePath, std::function<v
             std::string key = line.substr(0, delimiterPos);
             std::string value = line.substr(delimiterPos + 1);
 
-            // Убираем пробелы
             key.erase(0, key.find_first_not_of(" \t"));
             key.erase(key.find_last_not_of(" \t") + 1);
             value.erase(0, value.find_first_not_of(" \t"));
@@ -402,8 +387,6 @@ bool SaveSystem::LoadConfigFromFile(const std::string& filePath, std::function<v
 }
 
 bool SaveSystem::SaveGame(GameMode mode, int slot, const std::string& name) {
-    // TODO: Реализовать сохранение текущего состояния игры
-    // Пока просто обновляем информацию о сейве
     std::string savePath = GetSaveSlotPath(mode, slot);
     std::ofstream infoFile(savePath + "/save_info.txt");
 
@@ -437,7 +420,6 @@ bool SaveSystem::IsSaveSlotEmpty(GameMode mode, int slot) const {
 std::string SaveSystem::GetCurrentDateTime() const {
     time_t now = time(0);
 
-    // Безопасная версия localtime
     tm localTime;
     localtime_s(&localTime, &now);
 

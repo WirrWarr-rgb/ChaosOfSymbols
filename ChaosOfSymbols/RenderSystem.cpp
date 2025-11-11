@@ -1,5 +1,6 @@
 ﻿#include <iostream>
 #include <algorithm>
+#include <sstream>
 #define NOMINMAX
 #include <windows.h>
 #include <chrono>
@@ -75,11 +76,14 @@ RenderSystem::RenderSystem(TileTypeManager* tileManager)
     rlutil::hideCursor();
     m_screenWidth = DefaultScreenWidth;
     m_screenHeight = DefaultScreenHeight;
+
+    UpdateScreenSizeFromConsole();
     InitializePreviousFrame();
 
-    // Инициализация статистики
+    m_previousUILines.resize(UI_LINES, "");
+
     m_stats.lastFpsUpdate = std::chrono::steady_clock::now();
-    m_stats.fpsHistory.reserve(60); // Храним историю за последние 60 кадров
+    m_stats.fpsHistory.reserve(60);
 }
 
 /// <summary>
@@ -93,27 +97,50 @@ RenderSystem::~RenderSystem() {
     SetConsoleWindowInfo(GetStdHandle(STD_OUTPUT_HANDLE), TRUE, &rect);
 }
 
-
 /// <summary>
 /// Управление размером экрана
 /// </summary>
 /// <param name="width">Ширина</param>
 /// <param name="height">Высота</param>
 void RenderSystem::SetScreenSize(int width, int height) {
-    m_screenWidth = width;
-    m_screenHeight = height;
+
+    const int MIN_SCREEN_WIDTH = 70;
+
+    m_screenWidth = std::max(width, MIN_SCREEN_WIDTH);
+
+    m_screenHeight = height + UI_LINES;
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    COORD bufferSize = { static_cast<SHORT>(width), static_cast<SHORT>(height + 1) };
+    // Простая установка через системную команду
+    std::string command = "mode con: cols=" +
+        std::to_string(m_screenWidth) + " lines=" +
+        std::to_string(m_screenHeight);
+    system(command.c_str());
+
+    COORD bufferSize = {
+        static_cast<SHORT>(m_screenWidth),
+        static_cast<SHORT>(m_screenHeight)
+    };
     SetConsoleScreenBufferSize(hConsole, bufferSize);
 
-    SMALL_RECT windowSize = { 0, 0, static_cast<SHORT>(width - 1), static_cast<SHORT>(height + 1) };
+    SMALL_RECT windowSize = {
+        0,
+        0,
+        static_cast<SHORT>(m_screenWidth - 1),
+        static_cast<SHORT>(m_screenHeight - 1)
+    };
     SetConsoleWindowInfo(hConsole, TRUE, &windowSize);
 
-    InitializePreviousFrame();
-    ClearScreen();
+    ClearEntireScreen();
+
+    UpdateScreenSizeFromConsole();
+
+    Logger::Log("Screen size set to: " + std::to_string(m_screenWidth) + "x" +
+        std::to_string(m_screenHeight) + " (world: " + std::to_string(width) + "x" +
+        std::to_string(height) + " + UI)");
 }
+
 
 /// <summary>
 /// Система двойной буферизации: перерисовка только изменившихся символов
@@ -121,6 +148,10 @@ void RenderSystem::SetScreenSize(int width, int height) {
 void RenderSystem::InitializePreviousFrame() {
     m_previousFrame.clear();
     m_previousFrame.resize(m_screenHeight, std::vector<int>(m_screenWidth, -1));
+
+    m_previousUILines.clear();
+    m_previousUILines.resize(UI_LINES, "");
+    m_uiNeedsRedraw = true;
 }
 
 /// <summary>
@@ -139,67 +170,76 @@ bool RenderSystem::NeedsRedraw(int x, int y, int tileId) {
 void RenderSystem::ClearScreen() {
     rlutil::cls();
     InitializePreviousFrame();
+    m_uiNeedsRedraw = true;
 }
 
 /// <summary>
 /// Отрисовка мира С ГРАНИЦЕЙ
 /// </summary>
 void RenderSystem::DrawWorld(const World& world) {
+    rlutil::hideCursor();
+    HandleConsoleResize();
+
     int totalWidth = world.GetTotalWidth();
     int totalHeight = world.GetTotalHeight();
 
-    if (totalWidth != m_screenWidth || totalHeight != m_screenHeight) {
-        SetScreenSize(totalWidth, totalHeight);
-        ClearScreen();
+    int viewportWidth = std::min(totalWidth, m_screenWidth);
+    int viewportHeight = std::min(totalHeight, m_screenHeight);
+
+    if (viewportWidth != m_screenWidth || m_forceRedraw) {
+        m_screenWidth = viewportWidth;
+        InitializePreviousFrame();
+        m_forceRedraw = false;
     }
 
-    // ОДИН ПРОХОД: сначала рисуем все статические объекты, потом динамические
-    for (int y = 0; y < totalHeight; y++) {
-        for (int x = 0; x < totalWidth; x++) {
-            // Обработка границы
+    for (int y = 0; y < viewportHeight; y++) {
+        for (int x = 0; x < viewportWidth; x++) {
             if (x == 0 || x == totalWidth - 1 || y == 0 || y == totalHeight - 1) {
-                if (NeedsRedraw(x, y, BORDER_TILE_ID)) {
-                    rlutil::locate(x, y);
-                    rlutil::setColor(15);
-                    std::cout << '#';
-                    m_previousFrame[y][x] = BORDER_TILE_ID;
-                    m_stats.tilesDrawn++;
+                if (x < viewportWidth && y < viewportHeight) {
+                    if (NeedsRedraw(x, y, BORDER_TILE_ID) || m_forceRedraw) {
+                        rlutil::locate(x, y);
+                        rlutil::setColor(15);
+                        std::cout << '#';
+                        m_previousFrame[y][x] = BORDER_TILE_ID;
+                        m_stats.tilesDrawn++;
+                    }
                 }
                 continue;
             }
 
-            // Координаты в игровом пространстве
             int gameX = x - 1;
             int gameY = y - 1;
 
-            // ПРОВЕРЯЕМ ЕДУ ПЕРВОЙ (динамический объект)
-            const Food* food = world.GetFoodAt(gameX, gameY);
-            if (food) {
-                int foodId = FOOD_TILE_ID_BASE + food->GetId();
-                if (NeedsRedraw(x, y, foodId)) {
-                    rlutil::locate(x, y);
-                    rlutil::setColor(food->GetColor());
-                    std::cout << food->GetSymbol();
-                    m_previousFrame[y][x] = foodId;
-                    m_stats.tilesDrawn++;
+            if (gameX >= 0 && gameX < world.GetWidth() &&
+                gameY >= 0 && gameY < world.GetHeight()) {
+
+                const Food* food = world.GetFoodAt(gameX, gameY);
+                if (food) {
+                    int foodId = FOOD_TILE_ID_BASE + food->GetId();
+                    if (NeedsRedraw(x, y, foodId) || m_forceRedraw) {
+                        rlutil::locate(x, y);
+                        rlutil::setColor(food->GetColor());
+                        std::cout << food->GetSymbol();
+                        m_previousFrame[y][x] = foodId;
+                        m_stats.tilesDrawn++;
+                    }
                 }
-            }
-            else {
-                // ЕСЛИ ЕДЫ НЕТ - ОТРИСОВЫВАЕМ ТАЙЛ ЗЕМЛИ (статический объект)
-                int tileId = world.GetTileAtFullMap(x, y);
-                if (NeedsRedraw(x, y, tileId)) {
-                    rlutil::locate(x, y);
-                    TileType* tile = m_tileManager->GetTileType(tileId);
-                    if (tile) {
-                        rlutil::setColor(tile->GetColor());
-                        std::cout << tile->GetCharacter();
+                else {
+                    int tileId = world.GetTileAt(gameX, gameY);
+                    if (NeedsRedraw(x, y, tileId) || m_forceRedraw) {
+                        rlutil::locate(x, y);
+                        TileType* tile = m_tileManager->GetTileType(tileId);
+                        if (tile) {
+                            rlutil::setColor(tile->GetColor());
+                            std::cout << tile->GetCharacter();
+                        }
+                        else {
+                            rlutil::setColor(UnknownTileColor);
+                            std::cout << UnknownTileChar;
+                        }
+                        m_previousFrame[y][x] = tileId;
+                        m_stats.tilesDrawn++;
                     }
-                    else {
-                        rlutil::setColor(UnknownTileColor);
-                        std::cout << UnknownTileChar;
-                    }
-                    m_previousFrame[y][x] = tileId;
-                    m_stats.tilesDrawn++;
                 }
             }
         }
@@ -210,46 +250,46 @@ void RenderSystem::DrawWorld(const World& world) {
 /// Отрисовка игрока
 /// </summary>
 void RenderSystem::DrawPlayer(int x, int y, int previousX, int previousY, const World& world) {
-    // Координаты игрока в игровом пространстве, преобразуем в координаты полной карты
     int screenX = x + 1;
     int screenY = y + 1;
     int prevScreenX = previousX + 1;
     int prevScreenY = previousY + 1;
 
-    // ВОССТАНОВЛЕНИЕ ПРЕДЫДУЩЕЙ ПОЗИЦИИ ИГРОКА
-    if (prevScreenX >= 0 && prevScreenX < m_screenWidth &&
-        prevScreenY >= 0 && prevScreenY < m_screenHeight &&
-        (prevScreenX != screenX || prevScreenY != screenY)) {
+    bool currentInViewport = (screenX >= 0 && screenX < m_screenWidth &&
+        screenY >= 0 && screenY < m_screenHeight);
+    bool prevInViewport = (prevScreenX >= 0 && prevScreenX < m_screenWidth &&
+        prevScreenY >= 0 && prevScreenY < m_screenHeight);
 
-        // ВСЕГДА перерисовываем предыдущую позицию
+    if (prevInViewport && (prevScreenX != screenX || prevScreenY != screenY)) {
         int gamePrevX = prevScreenX - 1;
         int gamePrevY = prevScreenY - 1;
 
-        const Food* prevFood = world.GetFoodAt(gamePrevX, gamePrevY);
-        if (prevFood) {
-            // Если на предыдущей позиции была еда - восстанавливаем ее
-            int foodId = FOOD_TILE_ID_BASE + prevFood->GetId();
-            rlutil::locate(prevScreenX, prevScreenY);
-            rlutil::setColor(prevFood->GetColor());
-            std::cout << prevFood->GetSymbol();
-            m_previousFrame[prevScreenY][prevScreenX] = foodId;
-        }
-        else {
-            // Если еды не было - восстанавливаем тайл земли
-            int tileId = world.GetTileAtFullMap(prevScreenX, prevScreenY);
-            rlutil::locate(prevScreenX, prevScreenY);
-            TileType* tile = m_tileManager->GetTileType(tileId);
-            if (tile) {
-                rlutil::setColor(tile->GetColor());
-                std::cout << tile->GetCharacter();
+        if (gamePrevX >= 0 && gamePrevX < world.GetWidth() &&
+            gamePrevY >= 0 && gamePrevY < world.GetHeight()) {
+
+            const Food* prevFood = world.GetFoodAt(gamePrevX, gamePrevY);
+            if (prevFood) {
+                int foodId = FOOD_TILE_ID_BASE + prevFood->GetId();
+                rlutil::locate(prevScreenX, prevScreenY);
+                rlutil::setColor(prevFood->GetColor());
+                std::cout << prevFood->GetSymbol();
+                m_previousFrame[prevScreenY][prevScreenX] = foodId;
             }
-            m_previousFrame[prevScreenY][prevScreenX] = tileId;
+            else {
+                int tileId = world.GetTileAt(gamePrevX, gamePrevY);
+                rlutil::locate(prevScreenX, prevScreenY);
+                TileType* tile = m_tileManager->GetTileType(tileId);
+                if (tile) {
+                    rlutil::setColor(tile->GetColor());
+                    std::cout << tile->GetCharacter();
+                }
+                m_previousFrame[prevScreenY][prevScreenX] = tileId;
+            }
+            m_stats.tilesDrawn++;
         }
-        m_stats.tilesDrawn++;
     }
 
-    // ОТРИСОВКА ИГРОКА НА НОВОЙ ПОЗИЦИИ
-    if (screenX >= 0 && screenX < m_screenWidth && screenY >= 0 && screenY < m_screenHeight) {
+    if (currentInViewport) {
         rlutil::locate(screenX, screenY);
         rlutil::setColor(PlayerColor);
         std::cout << PlayerChar;
@@ -267,27 +307,76 @@ void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerStep
     int playerHP, int playerMaxHP, int playerHunger, int playerMaxHunger,
     int playerXP, int playerLevel, int xpToNextLevel) {
 
-    // Нужно получить доступ к PlayerConfig через Game или другим способом
-    // Пока оставим как есть, значения уже передаются из Game
+    int worldHeight = world.GetTotalHeight();
+    int uiStartLine = worldHeight;
 
-    rlutil::locate(0, m_screenHeight);
-    for (int i = 0; i < m_screenWidth; i++) {
-        std::cout << ' ';
+    if (uiStartLine >= m_screenHeight) {
+        uiStartLine = m_screenHeight - UI_LINES;
     }
 
-    rlutil::locate(0, m_screenHeight);
+    std::vector<std::string> newUILines(UI_LINES);
 
-    std::cout << "Steps: " << playerSteps;
-    std::cout << " | Lvl: " << playerLevel;
-    std::cout << " | XP: " << playerXP << "/" << xpToNextLevel;
-    std::cout << " | Health: " << playerHP << "/" << playerMaxHP;
-    std::cout << " | Hunger: " << playerHunger << "/" << playerMaxHunger;
-    std::cout << "\n";
-    std::cout << "Pos: " << posX << "," << posY;
-    std::cout << " | Seed: " << world.GetCurrentSeed();
-    std::cout << " | FPS: " << static_cast<int>(m_stats.currentFps);
-    std::cout << " | Controls: WASD-move, Q-quit";
+    std::stringstream uiStream;
+    uiStream << "Steps: " << playerSteps;
+    uiStream << " | Lvl: " << playerLevel;
+    uiStream << " | XP: " << playerXP << "/" << xpToNextLevel;
+    uiStream << " | Health: " << playerHP << "/" << playerMaxHP;
+    uiStream << " | Hunger: " << playerHunger << "/" << playerMaxHunger;
+
+    newUILines[0] = uiStream.str();
+
+
+    std::stringstream infoStream;
+    infoStream << "Pos: " << posX << "," << posY;
+    infoStream << " | Seed: " << world.GetCurrentSeed();
+    infoStream << " | FPS: " << static_cast<int>(m_stats.currentFps);
+
+    newUILines[1] = infoStream.str();
+
+    bool uiChanged = false;
+    for (int i = 0; i < UI_LINES; i++) {
+        if (m_previousUILines[i] != newUILines[i]) {
+            uiChanged = true;
+            break;
+        }
+    }
+
+    if (uiChanged || m_uiNeedsRedraw || m_forceRedraw) {
+        ClearUIArea(uiStartLine);
+
+        for (int i = 0; i < UI_LINES; i++) {
+            if (uiStartLine + i < m_screenHeight) {
+                rlutil::locate(0, uiStartLine + i);
+                std::cout << newUILines[i];
+
+                int spacesNeeded = m_screenWidth - newUILines[i].length();
+                if (spacesNeeded > 0) {
+                    std::cout << std::string(spacesNeeded, ' ');
+                }
+            }
+        }
+
+        m_previousUILines = newUILines;
+        m_uiNeedsRedraw = false;
+
+        Logger::Log("UI redrawn - Steps: " + std::to_string(playerSteps) +
+            ", HP: " + std::to_string(playerHP) +
+            ", FPS: " + std::to_string(static_cast<int>(m_stats.currentFps)));
+    }
 }
+
+/// <summary>
+/// Полная очистка области UI
+/// </summary>
+void RenderSystem::ClearUIArea(int uiStartLine) {
+    for (int line = uiStartLine; line < m_screenHeight; line++) {
+        rlutil::locate(0, line);
+        for (int i = 0; i < m_screenWidth; i++) {
+            std::cout << ' ';
+        }
+    }
+}
+
 
 /// <summary>
 /// Начало отрисовки кадра
@@ -316,7 +405,6 @@ void RenderSystem::EndFrame() {
 
     m_stats.framesRendered++;
 
-    // Обновление статистики FPS каждую секунду
     UpdateFPS();
 }
 
@@ -373,10 +461,8 @@ void RenderSystem::LogStats() const {
 /// Очистка экрана
 /// </summary>
 void RenderSystem::ClearEntireScreen() {
-    rlutil::cls();
-
-    // Дополнительная очистка буфера консоли
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(hConsole, &csbi);
 
@@ -388,6 +474,52 @@ void RenderSystem::ClearEntireScreen() {
     FillConsoleOutputAttribute(hConsole, 7, consoleSize, topLeft, &written);
     SetConsoleCursorPosition(hConsole, topLeft);
 
-    // Сбрасываем буфер предыдущего кадра
+    rlutil::cls();
+
     InitializePreviousFrame();
+
+    m_uiNeedsRedraw = true;
+
+    rlutil::hideCursor();
+}
+
+void RenderSystem::HandleConsoleResize() {
+    if (HasConsoleSizeChanged()) {
+        Logger::Log("Console size changed - adapting...");
+        rlutil::hideCursor();
+
+        AdaptToConsoleSize();
+    }
+}
+
+bool RenderSystem::HasConsoleSizeChanged() const {
+    int currentWidth = rlutil::tcols();
+    int currentHeight = rlutil::trows();
+
+    return currentWidth != m_actualConsoleWidth || currentHeight != m_actualConsoleHeight;
+}
+
+void RenderSystem::UpdateScreenSizeFromConsole() {
+    m_actualConsoleWidth = rlutil::tcols();
+    m_actualConsoleHeight = rlutil::trows();
+}
+
+void RenderSystem::AdaptToConsoleSize() {
+    int newWidth = rlutil::tcols();
+    int newHeight = rlutil::trows();
+
+    m_actualConsoleWidth = newWidth;
+    m_actualConsoleHeight = newHeight;
+
+    if (m_screenWidth != newWidth || m_screenHeight != newHeight) {
+        m_screenWidth = newWidth;
+        m_screenHeight = newHeight;
+
+        ClearEntireScreen();
+        m_forceRedraw = true;
+        m_uiNeedsRedraw = true;
+
+        Logger::Log("Console size changed - full redraw: " +
+            std::to_string(m_screenWidth) + "x" + std::to_string(m_screenHeight));
+    }
 }

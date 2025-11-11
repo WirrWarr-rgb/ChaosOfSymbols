@@ -42,6 +42,11 @@ private:
     void InitializePreviousFrame();
     bool NeedsRedraw(int x, int y, int tileId);
     void UpdateFPS();
+    void HandleConsoleResize();
+    void AdaptToConsoleSize();
+    bool HasConsoleSizeChanged() const;
+    void UpdateScreenSizeFromConsole();
+    void ClearUIArea(int uiStartLine);
 
     // Приватные структуры
     struct RenderStats {
@@ -76,4 +81,13 @@ private:
     int m_screenWidth;
     int m_screenHeight;
     RenderStats m_stats;
+
+    int m_actualConsoleWidth = 0;
+    int m_actualConsoleHeight = 0;
+    bool m_forceRedraw = false;
+
+    static const int UI_LINES = 2;
+
+    std::vector<std::string> m_previousUILines;
+    bool m_uiNeedsRedraw = true;
 };

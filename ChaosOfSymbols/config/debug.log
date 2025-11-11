@@ -139,11 +139,11 @@ Looking for terrain type: water
 Looking for terrain type: grass
 Looking for terrain type: mountain
 Attempting to spawn 30 food items
-Spawned Hope at 46,36
-Spawned Hope at 20,3
-Spawned Star at 63,30
-Spawned Hope at 23,2
-Spawned Hope at 35,20
+Spawned Hope at 58,5
+Spawned Faith at 0,1
+Spawned Hope at 55,38
+Spawned Star at 36,19
+Spawned Faith at 76,6
 Food spawning completed: 30/30 items spawned (30 attempts)
 === WORLD GENERATION COMPLETED ===
 === WORLD GENERATION COMPLETED ===
@@ -151,6 +151,1089 @@ World loaded successfully from save
 World size: 80x40
 Player position: 40,20
 === GAME STARTED FROM SAVE ===
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 92/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 91/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 90/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 89/100
+Gained 30 XP! Total: 30/100, Lifetime: 30
+Food collected: Star at 36,19
+Collected Star - Hunger: +20, HP: +30, XP: +30 | Now: HP=100/100, Hunger=100/100, XP=30/100, Level=1
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 92/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 91/100
+Gained 10 XP! Total: 40/100, Lifetime: 40
+Food collected: Hope at 45,19
+Collected Hope - Hunger: +15, HP: +0, XP: +10 | Now: HP=100/100, Hunger=100/100, XP=40/100, Level=1
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Render Stats - FPS: 225 | Avg: 300 | Min: 91 | Max: 414 | Efficiency: 0% | Tiles: 3/3444
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 92/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 91/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 90/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 89/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 88/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 87/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 86/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 85/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 84/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 83/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 82/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 81/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 80/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 79/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 78/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 77/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 76/100
+Gained 15 XP! Total: 55/100, Lifetime: 55
+Food collected: Faith at 51,29
+Collected Faith - Hunger: +25, HP: +5, XP: +15 | Now: HP=100/100, Hunger=100/100, XP=55/100, Level=1
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Gained 15 XP! Total: 70/100, Lifetime: 70
+Food collected: Faith at 52,33
+Collected Faith - Hunger: +25, HP: +5, XP: +15 | Now: HP=100/100, Hunger=100/100, XP=70/100, Level=1
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Render Stats - FPS: 305 | Avg: 315 | Min: 91 | Max: 490 | Efficiency: 0% | Tiles: 3/3444
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 92/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 91/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 90/100
+Gained 10 XP! Total: 80/100, Lifetime: 80
+Food collected: Hope at 55,38
+Collected Hope - Hunger: +15, HP: +0, XP: +10 | Now: HP=100/100, Hunger=100/100, XP=80/100, Level=1
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 92/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 91/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 90/100
+Render Stats - FPS: 345 | Avg: 328 | Min: 91 | Max: 490 | Efficiency: 0% | Tiles: 3/3444
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 89/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 88/100
+Gained 15 XP! Total: 95/100, Lifetime: 95
+Food collected: Faith at 45,36
+Collected Faith - Hunger: +25, HP: +5, XP: +15 | Now: HP=100/100, Hunger=100/100, XP=95/100, Level=1
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 92/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 91/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 90/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 89/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 88/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 87/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 86/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 85/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 84/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 83/100
+Render Stats - FPS: 280 | Avg: 320 | Min: 91 | Max: 490 | Efficiency: 0% | Tiles: 3/3444
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 82/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 81/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 80/100
+Gained 10 XP! Total: 105/100, Lifetime: 105
+LEVEL UP! Reached level 2! Next level at 150 XP
+Food collected: Hope at 27,38
+Collected Hope - Hunger: +15, HP: +0, XP: +10 | Now: HP=100/100, Hunger=100/100, XP=5/150, Level=2
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Gained 10 XP! Total: 15/150, Lifetime: 115
+Food collected: Hope at 25,37
+Collected Hope - Hunger: +15, HP: +0, XP: +10 | Now: HP=100/100, Hunger=100/100, XP=15/150, Level=2
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Attempting to spawn 10 food items
+Spawned Hope at 42,27
+Spawned Hope at 67,6
+Spawned Faith at 42,25
+Spawned Faith at 61,1
+Spawned Star at 33,36
+Food spawning completed: 10/10 items spawned (10 attempts)
+Periodic food respawn: added 10 items
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Render Stats - FPS: 111 | Avg: 300 | Min: 91 | Max: 490 | Efficiency: 0% | Tiles: 3/3444
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 92/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 91/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 90/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 89/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 88/100
+Gained 10 XP! Total: 25/150, Lifetime: 125
+Food collected: Hope at 14,38
+Collected Hope - Hunger: +15, HP: +0, XP: +10 | Now: HP=100/100, Hunger=100/100, XP=25/150, Level=2
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Gained 30 XP! Total: 55/150, Lifetime: 155
+Food collected: Star at 8,37
+Collected Star - Hunger: +20, HP: +30, XP: +30 | Now: HP=100/100, Hunger=100/100, XP=55/150, Level=2
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 92/100
+Gained 10 XP! Total: 65/150, Lifetime: 165
+Food collected: Hope at 4,35
+Collected Hope - Hunger: +15, HP: +0, XP: +10 | Now: HP=100/100, Hunger=100/100, XP=65/150, Level=2
+Render Stats - FPS: 277 | Avg: 300 | Min: 91 | Max: 490 | Efficiency: 0% | Tiles: 4/3444
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 92/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 91/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 90/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 89/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 88/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 87/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 86/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 85/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 84/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 83/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 82/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 81/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 80/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 79/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 78/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 77/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 76/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 75/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 74/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 73/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 72/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 71/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 70/100
+Gained 10 XP! Total: 75/150, Lifetime: 175
+Food collected: Hope at 27,28
+Collected Hope - Hunger: +15, HP: +0, XP: +10 | Now: HP=100/100, Hunger=85/100, XP=75/150, Level=2
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 84/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 83/100
+Render Stats - FPS: 330 | Avg: 308 | Min: 91 | Max: 490 | Efficiency: 0% | Tiles: 3/3444
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 82/100
+Render Stats - FPS: 403 | Avg: 295 | Min: 52 | Max: 490 | Efficiency: 0% | Tiles: 2/3444
+Attempting to spawn 10 food items
+Spawned Hope at 30,0
+Spawned Hope at 31,1
+Spawned Hope at 77,12
+Spawned Hope at 68,1
+Spawned Faith at 2,11
+Food spawning completed: 10/10 items spawned (10 attempts)
+Periodic food respawn: added 10 items
+Render Stats - FPS: 203 | Avg: 285 | Min: 46 | Max: 490 | Efficiency: 0% | Tiles: 2/3444
+Render Stats - FPS: 161 | Avg: 275 | Min: 45 | Max: 490 | Efficiency: 0% | Tiles: 2/3444
+Render Stats - FPS: 182 | Avg: 265 | Min: 45 | Max: 490 | Efficiency: 0% | Tiles: 2/3444
+Game paused
+Pause menu requested return to main menu
+Returning to main menu from pause...
+Successfully returned to main menu
+=== MainMenu::InitializeSaveSelection ===
+Mode: 0
+Current MainMenu state: 0
+=== SaveSelectionMenu CONSTRUCTOR ===
+Mode: 0
+Initial state: 0
+Selected slot: 1
+Constructor completed. Saves count: 5
+=== END CONSTRUCTOR ===
+SaveSelectionMenu Initialize() - State reset to MAIN_LIST
+Current state after init: 0
+New SaveSelectionMenu created and initialized
+MainMenu state changed to SAVE_SELECTION
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 1, ShowActions: 0
+Showing actions for slot 1
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 1, ShowActions: 1
+SaveSelectionMenu Action selected: Load for slot 1
+SaveSelectionMenu Loading save slot 1
+Loading save from slot 1
+Successfully loaded save: New_World
+Save loaded successfully, starting game...
+MainMenu::RunSaveSelection - Starting game from save
+SaveSelectionMenu destroyed, game starting from save...
+Starting game from save: mode=0, slot=1
+Loading save from slot 1
+Successfully loaded save: New_World
+Loading world from save configuration...
+Initializing ConfigManager
+
+Loading player configuration from: config/player.cfg
+Player configuration loaded: 9 parameters
+Player config - HP: 20 (enabled), Hunger: 20 (disabled)
+=== LOADING TILE TYPES FROM: config/tiles.json ===
+File opened successfully, size: 459 bytes
+Cleaned JSON: [  {    "id": 0,    "name": "grass",    "character": ".",    "color": 8,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 1,    "name": "water",    "character": "+",    "color": 2,    "isPassable": false,    "isDestructible": false,    "damage": 0  },  {    "id": 2,    "name": "mountain",    "character": "#",    "color": 13,    "isPassable": false,    "isDestructible": false,    "damage": 0  }]
+
+Found object: {    "id": 0,    "name": "grass",    "character": ".",    "color": 8,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
+Found object: {    "id": 1,    "name": "water",    "character": "+",    "color": 2,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
+Found object: {    "id": 2,    "name": "mountain",    "character": "#",    "color": 13,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
+
+Parsed 3 objects from JSON array
+Found 3 tile objects in JSON
+
+Parsed tile - id: 0, name: grass, character: '.', color: 8, passable: true
+Successfully registered tile: grass
+Parsed tile - id: 1, name: water, character: '+', color: 2, passable: false
+Successfully registered tile: water
+Parsed tile - id: 2, name: mountain, character: '#', color: 13, passable: false
+Successfully registered tile: mountain
+
+=== TILE LOADING COMPLETED: 3 tiles loaded ===
+
+=== LOADED TILES SUMMARY ===
+
+Tile 0: '.' - grass (color: 8)
+Tile 1: '+' - water (color: 2)
+Tile 2: '#' - mountain (color: 13)
+
+=== END LOADED TILES SUMMARY ===
+
+=== LOADED FOOD SUMMARY ===
+
+Loaded food: Hope (ID: 1, XP: 10)
+Loaded food: Faith (ID: 2, XP: 15)
+Loaded food: Star (ID: 3, XP: 30)
+Loaded food: Abyss (ID: 4, XP: 5)
+
+Food manager loaded 4 food types
+
+=== END LOADED FOOD SUMMARY ===
+
+DEBUG: Started new tile '.'
+DEBUG: Saved rule for tile '.'
+DEBUG: Started new tile '+'
+DEBUG: Saved rule for tile '+'
+DEBUG: Started new tile '#'
+DEBUG: Saved final rule for tile '#'
+
+=== LOADED CELLULAR AUTOMATON RULES SUMMARY ===
+
+Tile '.': 
+Survival=(count['.'] >= 2 && count['.'] <= 5) || (count['.'] == 1 && count['+'] >= 6), 
+Birth=(count['.'] >= 2 && count['#'] <= 1)
+Death=ERROR
+Tile '#': 
+Survival=(count['#'] >= 2 && count['#'] <= 5) || (count['#'] == 1 && count['.'] >= 4), 
+Birth=(count['#'] >= 3 && count['+'] == 0) || (count['.'] <= 3 && count['#'] >= 2)
+Death=ERROR
+Tile '+': 
+Survival=(count['+'] >= 2 && count['+'] <= 7) || (count['.'] >= 2 && count['+'] >= 2) || (count['.'] >= 4), 
+Birth=(count['+'] >= 2 && count['+'] <= 5) || (count['.'] == 0 && count['#'] <= 2) || (count['.'] >= 2)
+Death=ERROR
+
+=== END CELLULAR AUTOMATON RULES SUMMARY ===
+
+DEBUG: Total rules loaded: 3
+DEBUG: Rule for '.' is in map
+DEBUG: Rule for '#' is in map
+DEBUG: Rule for '+' is in map
+Started watching file: config/tiles.json
+Started watching file: config/food.cfg
+Started watching file: config/cellular_automaton.cfg
+
+ConfigManager initialized successfully
+World config set from save: 80x40, seed: 1337, mode: RANDOM
+Generating world from save configuration...
+
+=== STARTING WORLD GENERATION ===
+
+WorldConfig settings:
+  Width: 80
+  Height: 40
+  Seed: 1337
+  NoiseFrequency: 0.700000
+  GenerationMode: 0
+Using parameters from save, skipping file config load
+Generating random world with save parameters...
+Generating random world...
+Content size: 80x40
+Total size with border: 82x42
+Generation mode: RANDOM
+Using seed: 1337
+Cellular automaton config is available (external)
+Looking for terrain type: water
+Looking for terrain type: grass
+Looking for terrain type: mountain
+Zone-based terrain generated: 1752 tiles placed
+  '.' (grass): 1752
+Creating border with tile ID: 2
+Border created successfully
+Smoothing terrain with natural transitions...
+Looking for terrain type: water
+Looking for terrain type: grass
+Looking for terrain type: mountain
+Attempting to spawn 30 food items
+Spawned Hope at 23,33
+Spawned Hope at 39,37
+Spawned Star at 66,14
+Spawned Abyss at 18,32
+Spawned Hope at 75,35
+Food spawning completed: 30/30 items spawned (30 attempts)
+=== WORLD GENERATION COMPLETED ===
+=== WORLD GENERATION COMPLETED ===
+World loaded successfully from save
+World size: 80x40
+Player position: 40,20
+=== GAME STARTED FROM SAVE ===
+Attempting to spawn 10 food items
+Spawned Faith at 16,0
+Spawned Hope at 75,28
+Spawned Hope at 28,34
+Spawned Abyss at 76,17
+Spawned Hope at 22,3
+Food spawning completed: 10/10 items spawned (10 attempts)
+Periodic food respawn: added 10 items
+Game paused
+Pause menu requested return to main menu
+Returning to main menu from pause...
+Successfully returned to main menu
+=== MainMenu::InitializeSaveSelection ===
+Mode: 0
+Current MainMenu state: 0
+=== SaveSelectionMenu CONSTRUCTOR ===
+Mode: 0
+Initial state: 0
+Selected slot: 1
+Constructor completed. Saves count: 5
+=== END CONSTRUCTOR ===
+SaveSelectionMenu Initialize() - State reset to MAIN_LIST
+Current state after init: 0
+New SaveSelectionMenu created and initialized
+MainMenu state changed to SAVE_SELECTION
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 1, ShowActions: 0
+Showing actions for slot 1
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 1, ShowActions: 1
+SaveSelectionMenu Action selected: Load for slot 1
+SaveSelectionMenu Loading save slot 1
+Loading save from slot 1
+Successfully loaded save: New_World
+Save loaded successfully, starting game...
+MainMenu::RunSaveSelection - Starting game from save
+SaveSelectionMenu destroyed, game starting from save...
+Starting game from save: mode=0, slot=1
+Loading save from slot 1
+Successfully loaded save: New_World
+Loading world from save configuration...
+Initializing ConfigManager
+
+Loading player configuration from: config/player.cfg
+Player configuration loaded: 9 parameters
+Player config - HP: 20 (enabled), Hunger: 20 (disabled)
+=== LOADING TILE TYPES FROM: config/tiles.json ===
+File opened successfully, size: 459 bytes
+Cleaned JSON: [  {    "id": 0,    "name": "grass",    "character": ".",    "color": 8,    "isPassable": true,    "isDestructible": false,    "damage": 0  },  {    "id": 1,    "name": "water",    "character": "+",    "color": 2,    "isPassable": false,    "isDestructible": false,    "damage": 0  },  {    "id": 2,    "name": "mountain",    "character": "#",    "color": 13,    "isPassable": false,    "isDestructible": false,    "damage": 0  }]
+
+Found object: {    "id": 0,    "name": "grass",    "character": ".",    "color": 8,    "isPassable": true,    "isDestructible": false,    "damage": 0  }
+Found object: {    "id": 1,    "name": "water",    "character": "+",    "color": 2,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
+Found object: {    "id": 2,    "name": "mountain",    "character": "#",    "color": 13,    "isPassable": false,    "isDestructible": false,    "damage": 0  }
+
+Parsed 3 objects from JSON array
+Found 3 tile objects in JSON
+
+Parsed tile - id: 0, name: grass, character: '.', color: 8, passable: true
+Successfully registered tile: grass
+Parsed tile - id: 1, name: water, character: '+', color: 2, passable: false
+Successfully registered tile: water
+Parsed tile - id: 2, name: mountain, character: '#', color: 13, passable: false
+Successfully registered tile: mountain
+
+=== TILE LOADING COMPLETED: 3 tiles loaded ===
+
+=== LOADED TILES SUMMARY ===
+
+Tile 0: '.' - grass (color: 8)
+Tile 1: '+' - water (color: 2)
+Tile 2: '#' - mountain (color: 13)
+
+=== END LOADED TILES SUMMARY ===
+
+=== LOADED FOOD SUMMARY ===
+
+Loaded food: Hope (ID: 1, XP: 10)
+Loaded food: Faith (ID: 2, XP: 15)
+Loaded food: Star (ID: 3, XP: 30)
+Loaded food: Abyss (ID: 4, XP: 5)
+
+Food manager loaded 4 food types
+
+=== END LOADED FOOD SUMMARY ===
+
+DEBUG: Started new tile '.'
+DEBUG: Saved rule for tile '.'
+DEBUG: Started new tile '+'
+DEBUG: Saved rule for tile '+'
+DEBUG: Started new tile '#'
+DEBUG: Saved final rule for tile '#'
+
+=== LOADED CELLULAR AUTOMATON RULES SUMMARY ===
+
+Tile '.': 
+Survival=(count['.'] >= 2 && count['.'] <= 5) || (count['.'] == 1 && count['+'] >= 6), 
+Birth=(count['.'] >= 2 && count['#'] <= 1)
+Death=ERROR
+Tile '#': 
+Survival=(count['#'] >= 2 && count['#'] <= 5) || (count['#'] == 1 && count['.'] >= 4), 
+Birth=(count['#'] >= 3 && count['+'] == 0) || (count['.'] <= 3 && count['#'] >= 2)
+Death=ERROR
+Tile '+': 
+Survival=(count['+'] >= 2 && count['+'] <= 7) || (count['.'] >= 2 && count['+'] >= 2) || (count['.'] >= 4), 
+Birth=(count['+'] >= 2 && count['+'] <= 5) || (count['.'] == 0 && count['#'] <= 2) || (count['.'] >= 2)
+Death=ERROR
+
+=== END CELLULAR AUTOMATON RULES SUMMARY ===
+
+DEBUG: Total rules loaded: 3
+DEBUG: Rule for '.' is in map
+DEBUG: Rule for '#' is in map
+DEBUG: Rule for '+' is in map
+Started watching file: config/tiles.json
+Started watching file: config/food.cfg
+Started watching file: config/cellular_automaton.cfg
+
+ConfigManager initialized successfully
+World config set from save: 80x40, seed: 1337, mode: RANDOM
+Generating world from save configuration...
+
+=== STARTING WORLD GENERATION ===
+
+WorldConfig settings:
+  Width: 80
+  Height: 40
+  Seed: 1337
+  NoiseFrequency: 0.700000
+  GenerationMode: 0
+Using parameters from save, skipping file config load
+Generating random world with save parameters...
+Generating random world...
+Content size: 80x40
+Total size with border: 82x42
+Generation mode: RANDOM
+Using seed: 1337
+Cellular automaton config is available (external)
+Looking for terrain type: water
+Looking for terrain type: grass
+Looking for terrain type: mountain
+Zone-based terrain generated: 1752 tiles placed
+  '.' (grass): 1752
+Creating border with tile ID: 2
+Border created successfully
+Smoothing terrain with natural transitions...
+Looking for terrain type: water
+Looking for terrain type: grass
+Looking for terrain type: mountain
+Attempting to spawn 30 food items
+Spawned Faith at 34,35
+Spawned Faith at 53,0
+Spawned Hope at 10,18
+Spawned Hope at 33,1
+Spawned Faith at 25,2
+Food spawning completed: 30/30 items spawned (30 attempts)
+=== WORLD GENERATION COMPLETED ===
+=== WORLD GENERATION COMPLETED ===
+World loaded successfully from save
+World size: 80x40
+Player position: 40,20
+=== GAME STARTED FROM SAVE ===
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 99/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 98/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 97/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 96/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 95/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 94/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 93/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 92/100
+Render Stats - FPS: 231 | Avg: 255 | Min: 231 | Max: 279 | Efficiency: 0% | Tiles: 3/3444
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 91/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 90/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 89/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 88/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 87/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 86/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 85/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 84/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 83/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 82/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 81/100
+Player moved - updating cellular automaton
+Cellular automaton: 3200 births, 0 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 80/100
 Game paused
 Pause menu requested return to main menu
 Returning to main menu from pause...
@@ -173,6 +1256,8 @@ SaveSelectionMenu SelectNext - Slot: 1 -> 2
 SaveSelectionMenu MenuSelect pressed - Current state: 0
 SaveSelectionMenu ConfirmSelection - State: 0, Slot: 2, ShowActions: 0
 Showing actions for slot 2
+SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu MenuUp pressed
 SaveSelectionMenu MenuSelect pressed - Current state: 0
 SaveSelectionMenu ConfirmSelection - State: 0, Slot: 2, ShowActions: 1
 SaveSelectionMenu Action selected: Load for slot 2
@@ -294,11 +1379,11 @@ Looking for terrain type: water
 Looking for terrain type: grass
 Looking for terrain type: mountain
 Attempting to spawn 10 food items
-Spawned Abyss at 9,3
-Spawned Hope at 9,5
-Spawned Hope at 6,2
-Spawned Hope at 7,1
-Spawned Hope at 5,6
+Spawned Faith at 6,3
+Spawned Faith at 4,5
+Spawned Hope at 7,2
+Spawned Star at 8,4
+Spawned Hope at 8,6
 Food spawning completed: 10/10 items spawned (10 attempts)
 === WORLD GENERATION COMPLETED ===
 === WORLD GENERATION COMPLETED ===
@@ -310,31 +1395,3 @@ Game paused
 Pause menu requested return to main menu
 Returning to main menu from pause...
 Successfully returned to main menu
-=== MainMenu::InitializeSaveSelection ===
-Mode: 0
-Current MainMenu state: 0
-=== SaveSelectionMenu CONSTRUCTOR ===
-Mode: 0
-Initial state: 0
-Selected slot: 1
-Constructor completed. Saves count: 5
-=== END CONSTRUCTOR ===
-SaveSelectionMenu Initialize() - State reset to MAIN_LIST
-Current state after init: 0
-New SaveSelectionMenu created and initialized
-MainMenu state changed to SAVE_SELECTION
-SaveSelectionMenu MenuDown pressed
-SaveSelectionMenu SelectNext - Slot: 1 -> 2
-SaveSelectionMenu MenuDown pressed
-SaveSelectionMenu SelectNext - Slot: 2 -> 3
-SaveSelectionMenu MenuDown pressed
-SaveSelectionMenu SelectNext - Slot: 3 -> 4
-SaveSelectionMenu MenuDown pressed
-SaveSelectionMenu SelectNext - Slot: 4 -> 5
-SaveSelectionMenu MenuDown pressed
-SaveSelectionMenu SelectNext - Slot: 5 -> 6
-SaveSelectionMenu MenuSelect pressed - Current state: 0
-SaveSelectionMenu ConfirmSelection - State: 0, Slot: 6, ShowActions: 0
-SaveSelectionMenu Back selected - returning to main menu
-MainMenu::RunSaveSelection - Returning to main menu
-SaveSelectionMenu destroyed

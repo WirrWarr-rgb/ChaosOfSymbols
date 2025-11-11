@@ -47,7 +47,6 @@ MainMenu::MainMenu()
 void MainMenu::Initialize() {
     rlutil::hideCursor();
     if (m_inputManager) {
-        // Инициализация InputManager если нужна
     }
 }
 
@@ -182,7 +181,6 @@ void MainMenu::RenderOnlyChanges() {
 void MainMenu::RenderMenuItem(int index, int line, const std::string& text, bool selected) {
     rlutil::locate(0, line);
 
-    // Очищаем строку
     std::cout << "                                          ";
     rlutil::locate(0, line);
 
@@ -331,7 +329,6 @@ void MainMenu::InitializeSaveSelection(GameMode mode) {
     Logger::Log("New SaveSelectionMenu created and initialized");
     Logger::Log("MainMenu state changed to SAVE_SELECTION");
 
-    // Отладочный вывод для проверки
     std::cout << "Created new SaveSelectionMenu for mode: "
         << static_cast<int>(mode) << std::endl;
 }
@@ -375,7 +372,6 @@ void MainMenu::ClearLine(int line) {
 void MainMenu::ProcessInput() {
     if (!m_inputManager) return;
 
-    // Если находимся в выборе сейва, передаем управление ему
     if (m_currentState == MenuState::SAVE_SELECTION && m_saveSelectionMenu) {
         m_saveSelectionMenu->ProcessInput();
         return;

@@ -23,6 +23,7 @@ public:
     void Update();
     void Render();
     void Shutdown();
+    void SetDefaultConsoleSize();
 
     // Геттеры
     int GetPlayerSteps() const { return m_playerSteps; }

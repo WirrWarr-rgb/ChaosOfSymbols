@@ -28,11 +28,10 @@ WorldEditor::WorldEditor(GameMode mode, int slot)
     , m_prevSelectedField(-1)
     , m_prevSelectedButton(-1)
     , m_needFullRedraw(true)
-    , m_prevFieldCount(0) // Добавьте эту строку
+    , m_prevFieldCount(0)
 {
     m_inputManager = std::make_unique<InputManager>();
 
-    // Инициализация значений по умолчанию для WorldEditorConfig
     m_config.tileProbabilities['.'] = { 0.1f, 0.8f, 0.1f }; // Grass
     m_config.tileProbabilities['~'] = { 0.7f, 0.2f, 0.1f }; // Water
     m_config.tileProbabilities['^'] = { 0.1f, 0.2f, 0.7f }; // Mountain
@@ -61,7 +60,7 @@ void WorldEditor::Render() {
         rlutil::cls();
         m_needFullRedraw = true;
         m_prevTab = m_currentTab;
-        m_prevFieldCount = 0; // Сбрасываем счетчик полей при смене вкладки
+        m_prevFieldCount = 0;
     }
 
     if (m_needFullRedraw || NeedsRedraw()) {
@@ -84,21 +83,17 @@ void WorldEditor::RenderOnlyChanges() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
     if (m_needFullRedraw) {
-        // Заголовок
         SetConsoleTextAttribute(hConsole, 14);
         rlutil::locate(2, 1);
         std::cout << "World Editor";
         SetConsoleTextAttribute(hConsole, 7);
 
-        // Вкладки
         RenderTabHeader();
 
-        // Разделитель
         rlutil::locate(2, 4);
         std::cout << "------------------------------------------------------------";
     }
 
-    // Содержимое вкладки
     switch (m_currentTab) {
     case EditorTab::WORLD: RenderWorldTab(); break;
     case EditorTab::PLAYER: RenderPlayerTab(); break;
@@ -110,12 +105,9 @@ void WorldEditor::RenderOnlyChanges() {
     case EditorTab::LOSE: RenderLoseTab(); break;
     }
 
-    // Кнопки внизу
     RenderBottomButtons();
 
-    // Инструкции (только при полной перерисовке)
     if (m_needFullRedraw) {
-        // Очищаем строку инструкций перед выводом
         ClearLine(22);
         rlutil::locate(2, 22);
         if (m_isEditingText) {
@@ -126,7 +118,7 @@ void WorldEditor::RenderOnlyChanges() {
         }
     }
 
-    SetConsoleTextAttribute(hConsole, 7); // Всегда возвращаем белый цвет в конце
+    SetConsoleTextAttribute(hConsole, 7);
 }
 
 void WorldEditor::RenderTabHeader() {
@@ -148,17 +140,15 @@ void WorldEditor::RenderTabHeader() {
             std::cout << tabNames[i] << " ";
         }
     }
-    SetConsoleTextAttribute(hConsole, 7); // Возвращаем белый цвет
+    SetConsoleTextAttribute(hConsole, 7);
 }
 
 void WorldEditor::RenderWorldTab() {
     int line = 6;
 
     if (m_isEditingText && m_editingField >= 0) {
-        // Режим редактирования - рендерим все поля последовательно
         int visibleFieldIndex = 0;
         for (int i = 0; i < 7; ++i) {
-            // Пропускаем поле Seed если оно не должно отображаться
             if (i == 4 && !ShouldShowSeedField()) {
                 continue;
             }
@@ -189,14 +179,12 @@ void WorldEditor::RenderWorldTab() {
             visibleFieldIndex++;
         }
 
-        // Очищаем оставшиеся строки, если количество полей уменьшилось
         int currentFieldsCount = GetVisibleWorldFieldsCount();
         for (int i = currentFieldsCount; i < 7; ++i) {
             ClearLine(line + i);
         }
     }
     else {
-        // Обычный режим - всегда рендерим все видимые поля
         std::vector<std::string> fields;
         fields.push_back("World Name: " + m_config.worldName);
         fields.push_back("Width: " + std::to_string(m_config.width));
@@ -210,20 +198,17 @@ void WorldEditor::RenderWorldTab() {
         fields.push_back("Noise Frequency: " + std::to_string(m_config.noiseFrequency));
         fields.push_back("Neighbor Radius: " + std::to_string(m_config.neighborRadius));
 
-        // Всегда рендерим все поля при изменении количества полей
         if (m_needFullRedraw || fields.size() != m_prevFieldCount) {
             for (int i = 0; i < fields.size(); ++i) {
                 bool isSelected = (i == m_selectedField && m_selectedButton == 0);
                 RenderMenuItem(line + i, fields[i], isSelected);
             }
-            // Очищаем оставшиеся строки
             for (int i = fields.size(); i < m_prevFieldCount; ++i) {
                 ClearLine(line + i);
             }
             m_prevFieldCount = fields.size();
         }
         else {
-            // Только измененные поля
             for (int i = 0; i < fields.size(); ++i) {
                 bool isSelected = (i == m_selectedField && m_selectedButton == 0);
                 bool wasSelected = (i == m_prevSelectedField && m_prevSelectedButton == 0);
@@ -244,10 +229,8 @@ void WorldEditor::RenderWorldTab() {
 }
 
 void WorldEditor::RenderBottomButtons() {
-    // Определяем позицию для кнопок - после всех полей
-    int line = 6 + GetMaxFields() + 2; // +2 для отступа
+    int line = 6 + GetMaxFields() + 2;
 
-    // Очищаем всю область от конца полей до инструкций (строки 6+7+2=15 до 21)
     for (int i = 15; i < 22; ++i) {
         ClearLine(i);
     }
@@ -255,7 +238,6 @@ void WorldEditor::RenderBottomButtons() {
     bool createSelected = (m_selectedButton == 1);
     bool backSelected = (m_selectedButton == 2);
 
-    // Всегда рендерим обе кнопки
     RenderMenuItem(line, "CREATE", createSelected);
     RenderMenuItem(line + 1, "BACK", backSelected);
 }
@@ -264,7 +246,6 @@ void WorldEditor::RenderPlayerTab() {
     int line = 6;
 
     if (m_isEditingText && m_editingField >= 0) {
-        // Режим редактирования для Player tab
         for (int i = 0; i < 6; ++i) {
             bool isSelected = (i == m_editingField);
             if (isSelected) {
@@ -290,7 +271,6 @@ void WorldEditor::RenderPlayerTab() {
         }
     }
     else {
-        // Обычный режим
         std::vector<std::string> fields = {
             "Start X: " + std::to_string(m_config.playerStartX),
             "Start Y: " + std::to_string(m_config.playerStartY),
@@ -311,7 +291,6 @@ void WorldEditor::RenderPlayerTab() {
     }
 }
 
-// Остальные методы Render...Tab остаются похожими, но с поддержкой редактирования
 
 void WorldEditor::RenderTilesTab() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -410,39 +389,37 @@ void WorldEditor::RenderLoseTab() {
 void WorldEditor::RenderMenuItem(int line, const std::string& text, bool selected) {
     rlutil::locate(4, line);
 
-    // Очищаем строку
     std::cout << "                                                                        ";
     rlutil::locate(4, line);
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (selected) {
-        SetConsoleTextAttribute(hConsole, 10); // Зеленый цвет для выделения
+        SetConsoleTextAttribute(hConsole, 10); 
         std::cout << "> " << text;
     }
     else {
-        SetConsoleTextAttribute(hConsole, 7); // Белый цвет для обычного текста
+        SetConsoleTextAttribute(hConsole, 7);
         std::cout << "  " << text;
     }
-    SetConsoleTextAttribute(hConsole, 7); // Всегда возвращаем белый цвет
+    SetConsoleTextAttribute(hConsole, 7);
 }
 
 void WorldEditor::RenderEditField(int line, const std::string& label, const std::string& value, bool selected) {
     rlutil::locate(4, line);
 
-    // Очищаем строку
     std::cout << "                                                                        ";
     rlutil::locate(4, line);
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (selected) {
-        SetConsoleTextAttribute(hConsole, 11); // Голубой цвет для редактирования
-        std::cout << "> " << label << value << "_"; // Курсор в конце
+        SetConsoleTextAttribute(hConsole, 11);
+        std::cout << "> " << label << value << "_";
     }
     else {
-        SetConsoleTextAttribute(hConsole, 7); // Белый цвет для обычного текста
+        SetConsoleTextAttribute(hConsole, 7);
         std::cout << "  " << label << value;
     }
-    SetConsoleTextAttribute(hConsole, 7); // Всегда возвращаем белый цвет
+    SetConsoleTextAttribute(hConsole, 7);
 }
 
 void WorldEditor::ProcessInput() {
@@ -461,40 +438,32 @@ void WorldEditor::ProcessInput() {
     }
     else if (m_inputManager->IsMenuSelect()) {
         if (m_selectedButton == 0) {
-            // Нажатие на поле - начинаем редактирование
             StartEditing();
         }
         else {
-            // Нажатие на кнопку
             ConfirmSelection();
         }
     }
     else if (m_inputManager->IsKeyPressed(VK_TAB)) {
         SelectNextTab();
     }
-    // Убрал обработку SPACE, так как теперь навигация работает через W/S
 }
 
 void WorldEditor::SelectNextOption() {
     if (m_selectedButton == 0) {
-        // Навигация по полям
         if (m_selectedField < GetMaxFields() - 1) {
             m_selectedField++;
         }
         else {
-            // Если достигли последнего поля - переходим на первую кнопку (CREATE)
             m_selectedButton = 1;
-            m_selectedField = GetMaxFields() - 1; // Остаемся на последнем поле визуально
+            m_selectedField = GetMaxFields() - 1;
         }
     }
     else {
-        // На кнопках
         if (m_selectedButton == 1) {
-            // С CREATE переходим на BACK
             m_selectedButton = 2;
         }
         else if (m_selectedButton == 2) {
-            // С BACK переходим на первое поле
             m_selectedButton = 0;
             m_selectedField = 0;
         }
@@ -503,24 +472,19 @@ void WorldEditor::SelectNextOption() {
 
 void WorldEditor::SelectPreviousOption() {
     if (m_selectedButton == 0) {
-        // Навигация по полям
         if (m_selectedField > 0) {
             m_selectedField--;
         }
         else {
-            // Если достигли первого поля - переходим на последнюю кнопку (BACK)
             m_selectedButton = 2;
-            m_selectedField = 0; // Остаемся на первом поле визуально
+            m_selectedField = 0;
         }
     }
     else {
-        // На кнопках
         if (m_selectedButton == 2) {
-            // С BACK переходим на CREATE
             m_selectedButton = 1;
         }
         else if (m_selectedButton == 1) {
-            // С CREATE переходим на последнее поле
             m_selectedButton = 0;
             m_selectedField = GetMaxFields() - 1;
         }
@@ -528,7 +492,6 @@ void WorldEditor::SelectPreviousOption() {
 }
 
 void WorldEditor::StartEditing() {
-    // Начинаем редактирование только если выбрано поле (selectedButton == 0)
     if (m_selectedButton != 0) {
         return;
     }
@@ -540,11 +503,10 @@ void WorldEditor::StartEditing() {
     switch (m_currentTab) {
     case EditorTab::WORLD:
     {
-        // Создаем отображение видимых полей на фактические индексы
         std::vector<int> fieldMapping;
         for (int i = 0; i < 7; ++i) {
             if (i == 4 && !ShouldShowSeedField()) {
-                continue; // Пропускаем поле Seed если оно скрыто
+                continue;
             }
             fieldMapping.push_back(i);
         }
@@ -556,10 +518,9 @@ void WorldEditor::StartEditing() {
             case 1: m_tempStringInput = std::to_string(m_config.width); break;
             case 2: m_tempStringInput = std::to_string(m_config.height); break;
             case 3:
-                // Random Generation - булево поле, не требует текстового ввода
-                m_isEditingText = false; // Отменяем текстовый ввод для этого поля
+                m_isEditingText = false;
                 m_config.randomGeneration = !m_config.randomGeneration;
-                m_needFullRedraw = true; // Принудительная перерисовка
+                m_needFullRedraw = true;
                 return;
             case 4: m_tempStringInput = std::to_string(m_config.seed); break;
             case 5: m_tempStringInput = std::to_string(m_config.noiseFrequency); break;
@@ -576,13 +537,11 @@ void WorldEditor::StartEditing() {
         case 2: m_tempStringInput = std::to_string(m_config.playerMaxHP); break;
         case 3: m_tempStringInput = std::to_string(m_config.playerMaxHunger); break;
         case 4:
-            // Enable HP - булево поле
             m_isEditingText = false;
             m_config.enableHP = !m_config.enableHP;
             m_needFullRedraw = true;
             return;
         case 5:
-            // Enable Hunger - булево поле
             m_isEditingText = false;
             m_config.enableHunger = !m_config.enableHunger;
             m_needFullRedraw = true;
@@ -594,7 +553,6 @@ void WorldEditor::StartEditing() {
 
 void WorldEditor::HandleTextInput() {
     if (m_inputManager->IsKeyPressed(VK_RETURN) || m_inputManager->IsKeyPressed(VK_SPACE)) {
-        // Применяем введенное значение
         ApplyEditedValue();
         m_isEditingText = false;
         m_editingField = -1;
@@ -603,7 +561,6 @@ void WorldEditor::HandleTextInput() {
     }
 
     if (m_inputManager->IsKeyPressed(VK_ESCAPE)) {
-        // Отмена редактирования
         m_isEditingText = false;
         m_editingField = -1;
         m_needFullRedraw = true;
@@ -613,26 +570,25 @@ void WorldEditor::HandleTextInput() {
     switch (m_currentTab) {
     case EditorTab::WORLD:
         switch (m_editingField) {
-        case 0: // World Name - обычный текст
+        case 0:
             HandleTextInputGeneral();
             break;
-        case 1: // Width - только числа
-        case 2: // Height - только числа  
-        case 4: // Seed - только числа
-        case 6: // Neighbor Radius - только числа
+        case 1:
+        case 2:
+        case 4:
+        case 6:
             HandleNumericInput();
             break;
-        case 3: // Random Generation - переключение Yes/No
+        case 3:
             HandleBooleanInput();
             break;
-        case 5: // Noise Frequency - регулировка 0.0-1.0
+        case 5:
             HandleFrequencyInput();
             break;
         }
         break;
 
     case EditorTab::PLAYER:
-        // Все поля Player tab - только числа
         HandleNumericInput();
         break;
 
@@ -643,7 +599,6 @@ void WorldEditor::HandleTextInput() {
 }
 
 void WorldEditor::HandleTextInputGeneral() {
-    // Общая обработка текстового ввода (для World Name и других текстовых полей)
     for (char c = '0'; c <= '9'; c++) {
         if (m_inputManager->IsKeyPressed(c)) {
             m_tempStringInput += c;
@@ -682,7 +637,6 @@ void WorldEditor::ApplyEditedValue() {
         switch (m_currentTab) {
         case EditorTab::WORLD:
         {
-            // Создаем маппинг видимых полей на фактические индексы
             std::vector<int> fieldMapping;
             for (int i = 0; i < 7; ++i) {
                 if (i == 4 && !ShouldShowSeedField()) {
@@ -694,11 +648,25 @@ void WorldEditor::ApplyEditedValue() {
             if (m_editingField < fieldMapping.size()) {
                 int actualField = fieldMapping[m_editingField];
                 switch (actualField) {
-                case 0: m_config.worldName = m_tempStringInput; break;
-                case 1: m_config.width = max(10, std::stoi(m_tempStringInput)); break;
-                case 2: m_config.height = max(10, std::stoi(m_tempStringInput)); break;
+                case 0:
+                    m_config.worldName = m_tempStringInput;
+                    break;
+                case 1:
+                {
+                    int newWidth = std::stoi(m_tempStringInput);
+                    m_config.width = std::clamp(newWidth, MIN_WORLD_WIDTH, MAX_WORLD_WIDTH);
+                    Logger::Log("World width set to: " + std::to_string(m_config.width));
+                }
+                break;
+                case 2:
+                {
+                    int newHeight = std::stoi(m_tempStringInput);
+                    m_config.height = std::clamp(newHeight, MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT);
+                    Logger::Log("World height set to: " + std::to_string(m_config.height));
+                }
+                break;
                 case 4: m_config.seed = std::stoi(m_tempStringInput); break;
-                case 5: m_config.noiseFrequency = max(0.1f, std::stof(m_tempStringInput)); break;
+                case 5: m_config.noiseFrequency = std::clamp(std::stof(m_tempStringInput), 0.1f, 1.0f); break;
                 case 6: m_config.neighborRadius = max(1, std::stoi(m_tempStringInput)); break;
                 }
             }
@@ -707,8 +675,18 @@ void WorldEditor::ApplyEditedValue() {
 
         case EditorTab::PLAYER:
             switch (m_editingField) {
-            case 0: m_config.playerStartX = max(1, std::stoi(m_tempStringInput)); break;
-            case 1: m_config.playerStartY = max(1, std::stoi(m_tempStringInput)); break;
+            case 0:
+            {
+                int newX = std::stoi(m_tempStringInput);
+                m_config.playerStartX = std::clamp(newX, 1, m_config.width - 2);
+            }
+            break;
+            case 1:
+            {
+                int newY = std::stoi(m_tempStringInput);
+                m_config.playerStartY = std::clamp(newY, 1, m_config.height - 2);
+            }
+            break;
             case 2: m_config.playerMaxHP = max(10, std::stoi(m_tempStringInput)); break;
             case 3: m_config.playerMaxHunger = max(10, std::stoi(m_tempStringInput)); break;
             }
@@ -716,11 +694,9 @@ void WorldEditor::ApplyEditedValue() {
         }
     }
     catch (const std::exception& e) {
-        // Обработка ошибок преобразования
         Logger::Log("ERROR: Invalid input: " + m_tempStringInput);
     }
 }
-
 int WorldEditor::GetMaxFields() {
     switch (m_currentTab) {
     case EditorTab::WORLD:
@@ -746,11 +722,8 @@ void WorldEditor::SelectNextTab() {
 }
 
 void WorldEditor::ChangeFieldValue(int delta) {
-    // Этот метод теперь не используется для числовых полей
-    // Вместо этого используется текстовый ввод
     if (m_selectedButton != 0) return;
 
-    // Только для булевых полей
     switch (m_currentTab) {
     case EditorTab::WORLD:
         if (m_selectedField == 3) {
@@ -775,14 +748,13 @@ void WorldEditor::ChangeFieldValue(int delta) {
 
 void WorldEditor::ConfirmSelection() {
     if (m_selectedButton == 0) {
-        // Нажатие на поле - начинаем редактирование
         StartEditing();
     }
-    else if (m_selectedButton == 1) { // Create
+    else if (m_selectedButton == 1) {
         CreateNewWorld();
         m_shouldCreate = true;
     }
-    else if (m_selectedButton == 2) { // Back
+    else if (m_selectedButton == 2) {
         m_shouldReturn = true;
     }
 }
@@ -792,17 +764,14 @@ void WorldEditor::CreateNewWorld() {
     Logger::Log("World name: " + m_config.worldName);
     Logger::Log("Size: " + std::to_string(m_config.width) + "x" + std::to_string(m_config.height));
 
-    // Создаем SaveSystem если еще не создан
     if (!m_saveSystem) {
         m_saveSystem = std::make_unique<SaveSystem>();
     }
 
-    // Создаем сейв с конфигурацией из редактора
     if (m_saveSystem->CreateNewSave(m_gameMode, m_slot, m_config.worldName, m_config)) {
         Logger::Log("Successfully created world: " + m_config.worldName);
         m_shouldCreate = true;
 
-        // Дополнительно сохраняем информацию о том, что это новый мир
         SaveWorldConfiguration();
     }
     else {
@@ -822,19 +791,18 @@ void WorldEditor::ClearLine(int line) {
 }
 
 bool WorldEditor::ShouldShowSeedField() const {
-    return !m_config.randomGeneration; // Seed показывается только при Random Generation = No (false)
+    return !m_config.randomGeneration;
 }
 
 int WorldEditor::GetVisibleWorldFieldsCount() const {
-    int count = 7; // Все поля
+    int count = 7;
     if (!ShouldShowSeedField()) {
-        count--; // Убираем поле Seed
+        count--;
     }
     return count;
 }
 
 void WorldEditor::HandleNumericInput() {
-    // Только цифры 0-9
     for (char c = '0'; c <= '9'; c++) {
         if (m_inputManager->IsKeyPressed(c)) {
             m_tempStringInput += c;
@@ -851,7 +819,6 @@ void WorldEditor::HandleNumericInput() {
 }
 
 void WorldEditor::HandleBooleanInput() {
-    // Переключение между Yes/No с помощью A/D
     if (m_inputManager->IsKeyPressed('A') || m_inputManager->IsKeyPressed('D') ||
         m_inputManager->IsKeyPressed(VK_LEFT) || m_inputManager->IsKeyPressed(VK_RIGHT)) {
         m_config.randomGeneration = !m_config.randomGeneration;
@@ -861,7 +828,6 @@ void WorldEditor::HandleBooleanInput() {
 }
 
 void WorldEditor::HandleFrequencyInput() {
-    // Частота от 0.0 до 1.0 с шагом 0.1
     if (m_inputManager->IsKeyPressed(VK_LEFT) || m_inputManager->IsKeyPressed('A')) {
         m_config.noiseFrequency = max(0.1f, m_config.noiseFrequency - 0.1f);
         m_needFullRedraw = true;

@@ -92,13 +92,11 @@ bool WorldConfig::ParseKeyValue(const std::string& key, const std::string& value
     else if (key == "WorldName") {
     }
     else if (key == "UseRandomSeed") {
-        // Старый параметр для обратной совместимости - игнорируем
         Logger::Log("WARNING: UseRandomSeed is deprecated, use GenerationMode instead");
         bool useRandom = (value == "true");
         if (useRandom) {
             m_generationMode = WorldGenerationMode::RANDOM;
         }
-        // Если UseRandomSeed=false, оставляем текущий режим (скорее всего SEEDED)
     }
     else {
         Logger::Log("WARNING: Unknown config key: " + key);
@@ -108,7 +106,6 @@ bool WorldConfig::ParseKeyValue(const std::string& key, const std::string& value
     return true;
 }
 
-// Остальной код ParseSpawnConfig() и другие методы остаются без изменений
 /// <summary>
 /// Загрука и парсинг конфигурации спавна тайлов для разных зон высот
 /// </summary>
@@ -177,7 +174,6 @@ bool WorldConfig::ParseSpawnConfig() {
 /// <summary>
 /// Возвращение сида для генерации
 /// </summary>
-/// <returns></returns>
 int WorldConfig::GetEffectiveSeed() const {
     return m_seed;
 }
@@ -185,8 +181,6 @@ int WorldConfig::GetEffectiveSeed() const {
 /// <summary>
 /// Возвращение правил спавна для указанного символа
 /// </summary>
-/// <param name="spawnTile"></param>
-/// <returns></returns>
 const SpawnRule* WorldConfig::GetSpawnRule(char spawnTile) const {
     auto it = m_spawnRules.find(spawnTile);
     if (it != m_spawnRules.end()) {

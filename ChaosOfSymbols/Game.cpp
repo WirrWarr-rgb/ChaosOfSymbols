@@ -28,8 +28,10 @@ Game::Game()
     m_inMainMenu(true),
     m_isPaused(false)
 {
+    SetDefaultConsoleSize();
+
     m_mainMenu = std::make_unique<MainMenu>();
-    m_pauseMenu = std::make_unique<PauseMenu>(); 
+    m_pauseMenu = std::make_unique<PauseMenu>();
 }
 
 Game::~Game() {
@@ -49,7 +51,7 @@ bool Game::Initialize() {
     Logger::Initialize(LogFile);
     Logger::Log("=== GAME INITIALIZATION STARTED ===\n");
 
-    InitializeMainMenu(); // Запускаем главное меню вместо прямой инициализации игры
+    InitializeMainMenu();
 
     return true;
 }
@@ -95,7 +97,6 @@ void Game::Run() {
             RunPauseMenu();
         }
         else {
-            // ТОЛЬКО если мы действительно в игре, а не возвращаемся в меню
             if (!m_inMainMenu) {
                 ProcessInput();
                 Update();
@@ -112,16 +113,12 @@ void Game::RunMainMenu() {
 
     if (m_mainMenu->ShouldStartGame()) {
         if (m_mainMenu->ShouldLoadSave()) {
-            // Загружаем игру из сейва
             StartGameFromSave(m_mainMenu->GetSelectedSaveGameMode(), m_mainMenu->GetSelectedSaveSlot());
         }
         else {
-            // Запускаем обычную игру
             Logger::Log("Starting NEW game from menu selection...");
             StartGameFromMenu();
         }
-
-        // Сбрасываем флаги главного меню
         m_mainMenu->ResetStartFlags();
     }
     else if (m_mainMenu->ShouldExitGame()) {
@@ -137,23 +134,18 @@ void Game::StartGameFromSave(GameMode mode, int slot) {
         std::to_string(static_cast<int>(mode)) +
         ", slot=" + std::to_string(slot));
 
-    // Инициализируем систему сохранений если еще не инициализирована
     if (!m_saveSystem) {
         m_saveSystem = std::make_unique<SaveSystem>();
     }
 
-    // Загружаем сейв
     if (!m_saveSystem->LoadSave(mode, slot)) {
         Logger::Log("ERROR: Failed to load save slot " + std::to_string(slot));
-        // Fallback к обычной игре
         StartGameFromMenu();
         return;
     }
 
-    // Получаем загруженную конфигурацию
     const WorldEditorConfig& loadedConfig = m_saveSystem->GetLoadedConfig();
 
-    // Загружаем мир из сейва
     LoadWorldFromSave(loadedConfig);
 
     m_inMainMenu = false;
@@ -165,17 +157,14 @@ void Game::StartGameFromSave(GameMode mode, int slot) {
 void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
     Logger::Log("Loading world from save configuration...");
 
-    // Инициализируем ConfigManager
     m_configManager = std::make_unique<ConfigManager>();
     if (!m_configManager->Initialize()) {
         Logger::Log("ERROR: Failed to initialize config manager!");
         return;
     }
 
-    // Устанавливаем начальные значения игрока ИЗ СЕЙВА
     m_playerConfig = m_configManager->GetPlayerConfig();
 
-    // ПЕРЕОПРЕДЕЛЯЕМ значения в PlayerConfig
     m_playerConfig->SetMaxHP(config.playerMaxHP);
     m_playerConfig->SetMaxHunger(config.playerMaxHunger);
     m_playerConfig->SetHPEnabled(config.enableHP);
@@ -189,11 +178,10 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
     if (m_playerX < 0) m_playerX = 1;
     if (m_playerY < 0) m_playerY = 1;
 
-    m_playerHP = config.playerMaxHP;  // Начинаем с максимального HP
-    m_playerHunger = config.playerMaxHunger;  // Начинаем с максимального голода
+    m_playerHP = config.playerMaxHP;
+    m_playerHunger = config.playerMaxHunger;
     m_xpToNextLevel = 100;
 
-    // Настраиваем мир
     TileTypeManager* tileManager = m_configManager->GetTileManager();
     FoodManager* foodManager = m_configManager->GetFoodManager();
 
@@ -203,17 +191,14 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
     m_currentWorld->SetAutomatonEnabled(true);
     m_currentWorld->SetAutomatonConfig(m_configManager->GetAutomatonConfig());
 
-    // ВАЖНО: ВРУЧНУЮ устанавливаем параметры мира из сейва
     WorldConfig* worldConfig = m_currentWorld->GetWorldConfig();
     if (worldConfig) {
-        // Устанавливаем параметры напрямую, а не через загрузку файлов
         worldConfig->SetWidth(config.width);
         worldConfig->SetHeight(config.height);
         worldConfig->SetSeed(config.seed);
         worldConfig->SetNoiseFrequency(config.noiseFrequency);
         worldConfig->SetNeighborRadius(config.neighborRadius);
 
-        // ВАЖНО: Принудительно устанавливаем режим генерации на SEEDED или RANDOM
         if (config.randomGeneration) {
             worldConfig->SetGenerationMode(WorldGenerationMode::RANDOM);
         }
@@ -221,13 +206,10 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
             worldConfig->SetGenerationMode(WorldGenerationMode::SEEDED);
         }
 
-        // ОЧИЩАЕМ путь к файлу карты
         worldConfig->SetMapFilePath("");
 
-        // Помечаем, что параметры загружены из сейва
         worldConfig->MarkAsLoadedFromSave();
 
-        // ВРУЧНУЮ устанавливаем правила спавна тайлов из сейва
         auto& spawnRules = const_cast<std::unordered_map<char, SpawnRule>&>(worldConfig->GetAllSpawnRules());
         spawnRules.clear();
 
@@ -244,29 +226,31 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
             ", mode: " + (config.randomGeneration ? "RANDOM" : "SEEDED"));
     }
 
-    // Генерируем мир
     Logger::Log("Generating world from save configuration...");
     m_currentWorld->GenerateFromConfig();
 
-    // Настраиваем рендер систему
     m_renderSystem = new RenderSystem(tileManager);
-    m_renderSystem->SetScreenSize(m_currentWorld->GetTotalWidth(), m_currentWorld->GetTotalHeight());
 
-    // Проверяем позицию игрока
+    int worldWidth = m_currentWorld->GetTotalWidth();
+    int worldHeight = m_currentWorld->GetTotalHeight();
+    m_renderSystem->SetScreenSize(worldWidth, worldHeight);
+
     EnsureValidPlayerPosition();
 
-    // Настраиваем колбэки
     m_configManager->OnTilesChanged = [this]() { this->OnTilesChanged(); };
     m_configManager->OnFoodChanged = [this]() { this->OnFoodChanged(); };
     m_configManager->OnAutomatonRulesChanged = [this]() { this->OnAutomatonRulesChanged(); };
 
     Logger::Log("World loaded successfully from save");
     Logger::Log("World size: " + std::to_string(config.width) + "x" + std::to_string(config.height));
+    Logger::Log("Render system size: " + std::to_string(worldWidth) + "x" + std::to_string(worldHeight));
     Logger::Log("Player position: " + std::to_string(m_playerX) + "," + std::to_string(m_playerY));
 }
 
 void Game::StartGameFromMenu() {
     Logger::Log("Starting game from main menu...");
+
+    SetDefaultConsoleSize();
 
     m_configManager = std::make_unique<ConfigManager>();
     if (!m_configManager->Initialize()) {
@@ -329,7 +313,7 @@ void Game::ProcessInput() {
     HandlePauseInput();
 
     if (m_isPaused) {
-        return; // Не обрабатываем игровой ввод во время паузы
+        return;
     }
 
     if (m_playerHP <= 0) {
@@ -412,20 +396,17 @@ void Game::ProcessInput() {
 /// Система голода и здоровья
 /// </summary>
 void Game::ConsumeEnergy() {
-    // Уменьшаем голод на 1
     if (m_playerHunger > 0) {
         m_playerHunger--;
         Logger::Log("Hunger decreased: " + std::to_string(m_playerHunger) + "/" +
             std::to_string(m_playerConfig->GetMaxHunger()));
     }
 
-    // Если голод 0, отнимаем HP (если HP система включена)
     if (m_playerHunger <= 0 && m_playerConfig->IsHPEnabled()) {
         m_playerHP -= 2;
         Logger::Log("Starving! HP decreased: " + std::to_string(m_playerHP) + "/" +
             std::to_string(m_playerConfig->GetMaxHP()));
 
-        // Проверяем смерть
         if (m_playerHP <= 0) {
             m_playerHP = 0;
             Logger::Log("Player died from starvation!");
@@ -510,12 +491,13 @@ void Game::CollectFood() {
 /// </summary>
 void Game::Render() {
     if (m_isPaused) {
-        // ПРИ ПАУЗЕ: полностью очищаем и рисуем только меню паузы
+        rlutil::hideCursor();
         m_pauseMenu->Render();
         return;
     }
 
-    // ПРИ ВОЗОБНОВЛЕНИИ: полностью перерисовываем игровой мир
+    rlutil::hideCursor();
+
     static int lastPlayerX = m_playerX;
     static int lastPlayerY = m_playerY;
 
@@ -549,10 +531,8 @@ bool Game::MovePlayer(int dx, int dy) {
     int newX = m_playerX + dx;
     int newY = m_playerY + dy;
 
-    // Получаем tileManager из configManager
     TileTypeManager* tileManager = m_configManager->GetTileManager();
 
-    // Проверяем границы игрового пространства (без учета границы)
     if (newX >= 0 && newX < m_currentWorld->GetWidth() &&
         newY >= 0 && newY < m_currentWorld->GetHeight()) {
 
@@ -757,7 +737,6 @@ void Game::CheckLevelUp() {
 
         m_xpToNextLevel = static_cast<int>(m_xpToNextLevel * m_playerConfig->GetXPMultiplier());
 
-        // Восстанавливаем HP и голод только если системы включены
         if (m_playerConfig->IsHPEnabled()) {
             m_playerHP = m_playerConfig->GetMaxHP();
         }
@@ -824,7 +803,7 @@ void Game::OnAutomatonRulesChanged() {
 }
 
 void Game::HandlePauseInput() {
-    static bool escapePressed = false; // Вынести объявление на уровень метода
+    static bool escapePressed = false;
 
     if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
         if (!escapePressed) {
@@ -854,7 +833,6 @@ void Game::RunPauseMenu() {
         m_isPaused = false;
         m_pauseMenu->Reset();
 
-        // При возобновлении полностью перерисовываем игровой мир
         if (m_renderSystem) {
             m_renderSystem->ClearScreen();
         }
@@ -862,10 +840,8 @@ void Game::RunPauseMenu() {
     }
     else if (m_pauseMenu->ShouldReturnToMainMenu()) {
         Logger::Log("Pause menu requested return to main menu");
-        ReturnToMainMenu(); // Вызываем исправленный метод
+        ReturnToMainMenu();
     }
-
-    // Добавьте небольшую задержку для уменьшения нагрузки на CPU
     std::this_thread::sleep_for(std::chrono::milliseconds(16));
 }
 
@@ -876,7 +852,8 @@ void Game::ReturnToMainMenu() {
     m_inMainMenu = true;
     m_pauseMenu->Reset();
 
-    // ПОЛНОСТЬЮ очищаем игровые ресурсы
+    SetDefaultConsoleSize();
+
     if (m_currentWorld) {
         delete m_currentWorld;
         m_currentWorld = nullptr;
@@ -889,7 +866,6 @@ void Game::ReturnToMainMenu() {
 
     m_configManager.reset();
 
-    // Сбрасываем состояние игрока
     m_playerX = 0;
     m_playerY = 0;
     m_playerSteps = 0;
@@ -901,12 +877,22 @@ void Game::ReturnToMainMenu() {
     m_totalXP = 0;
     m_foodEaten.clear();
 
-    // Сбрасываем главное меню
     m_mainMenu->Reset();
-    m_mainMenu->ResetStartFlags(); // Дополнительно сбрасываем флаги старта
+    m_mainMenu->ResetStartFlags();
 
-    // ПОЛНАЯ очистка экрана
     rlutil::cls();
 
     Logger::Log("Successfully returned to main menu");
+}
+
+void Game::SetDefaultConsoleSize() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    COORD bufferSize = { 80, 25 };
+    SetConsoleScreenBufferSize(hConsole, bufferSize);
+
+    SMALL_RECT windowSize = { 0, 0, 79, 24 };
+    SetConsoleWindowInfo(hConsole, TRUE, &windowSize);
+
+    Logger::Log("Default console size set to 80x25");
 }

@@ -99,4 +99,9 @@ private:
     bool m_needFullRedraw;
 
     int m_prevFieldCount = 0;
+
+    static const int MAX_WORLD_WIDTH = 200;
+    static const int MAX_WORLD_HEIGHT = 45;
+    static const int MIN_WORLD_WIDTH = 1;
+    static const int MIN_WORLD_HEIGHT = 1;
 };

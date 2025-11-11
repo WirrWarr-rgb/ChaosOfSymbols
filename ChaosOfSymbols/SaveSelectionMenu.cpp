@@ -37,13 +37,12 @@ SaveSelectionMenu::SaveSelectionMenu(GameMode mode)
     m_prevSaves = m_saves;
     m_inputManager = std::make_unique<InputManager>();
 
-    // Действия для пустых сейвов
     m_emptySaveActions = {
         "Create",
         "Back"
     };
 
-    // Действия для существующих сейвов
+
     m_usedSaveActions = {
         "Load",
         "Delete",
@@ -57,7 +56,6 @@ SaveSelectionMenu::SaveSelectionMenu(GameMode mode)
 void SaveSelectionMenu::Initialize() {
     rlutil::hideCursor();
 
-    // Принудительно устанавливаем начальное состояние
     m_currentState = SaveActionState::MAIN_LIST;
     m_prevState = SaveActionState::MAIN_LIST;
     m_selectedSlot = 1;
@@ -89,13 +87,11 @@ void SaveSelectionMenu::Update() {
 }
 
 void SaveSelectionMenu::Render() {
-    // Если активен редактор мира - рендерим его
     if (m_currentState == SaveActionState::WORLD_EDITOR && m_worldEditor) {
         m_worldEditor->Render();
         return;
     }
 
-    // Если состояние изменилось - нужна полная перерисовка
     if (m_currentState != m_prevState) {
         Logger::Log("SaveSelectionMenu State changed from " + std::to_string(static_cast<int>(m_prevState)) +
             " to " + std::to_string(static_cast<int>(m_currentState)));
@@ -104,14 +100,12 @@ void SaveSelectionMenu::Render() {
         m_prevState = m_currentState;
     }
 
-    // Если нужно полное обновление - очищаем экран
     if (m_needFullRedraw) {
         rlutil::cls();
     }
 
     RenderOnlyChanges();
 
-    // Сохраняем текущее состояние для следующего кадра
     m_prevSelectedSlot = m_selectedSlot;
     m_prevSelectedActionIndex = m_selectedActionIndex;
     m_prevSaves = m_saves;
@@ -128,7 +122,6 @@ bool SaveSelectionMenu::NeedsRedraw() const {
 void SaveSelectionMenu::RenderOnlyChanges() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    // Заголовок (рисуем только при полной перерисовке)
     if (m_needFullRedraw) {
         SetConsoleTextAttribute(hConsole, 14);
         rlutil::locate(2, 1);
@@ -142,10 +135,8 @@ void SaveSelectionMenu::RenderOnlyChanges() {
         std::cout << "------------------------------------------------------------";
     }
 
-    // Список сейвов
     RenderSavesList();
 
-    // Инструкции (рисуем только при полной перерисовке)
     if (m_needFullRedraw) {
         rlutil::locate(2, 22);
         std::cout << "Controls: W/S - Navigate, SPACE/ENTER - Select, Q/ESC - Back";
@@ -157,20 +148,16 @@ void SaveSelectionMenu::RenderOnlyChanges() {
 void SaveSelectionMenu::RenderSavesList() {
     int currentLine = 6;
 
-    // Рендерим слоты 1-5
     for (size_t i = 0; i < m_saves.size(); ++i) {
         const auto& save = m_saves[i];
         bool isSelected = (save.slotNumber == m_selectedSlot && !m_showActionsForSlot);
         bool wasSelected = (m_prevSaves.size() > i && m_prevSaves[i].slotNumber == m_prevSelectedSlot && !m_showActionsForSlot);
 
-        // Перерисовываем только если изменилось состояние выбора или нужно полное обновление
         if (m_needFullRedraw || isSelected != wasSelected) {
             RenderSaveItem(currentLine, save, isSelected);
         }
 
-        // Если это слот, для которого показываем действия, и он выбран
         if (m_showActionsForSlot && save.slotNumber == m_actionSlot) {
-            // Рендерим действия под этим слотом
             const auto& actions = save.isEmpty ? m_emptySaveActions : m_usedSaveActions;
             for (size_t actionIndex = 0; actionIndex < actions.size(); ++actionIndex) {
                 bool actionSelected = (actionIndex == m_selectedActionIndex);
@@ -188,10 +175,9 @@ void SaveSelectionMenu::RenderSavesList() {
         }
     }
 
-    // Кнопка Back внизу (только если не показываем действия)
     if (!m_showActionsForSlot) {
         int backLine = 6 + m_saves.size() + 1;
-        bool backSelected = (m_selectedSlot == 6); // 6 - специальный номер для Back
+        bool backSelected = (m_selectedSlot == 6);
 
         if (m_needFullRedraw || backSelected != (m_prevSelectedSlot == 6)) {
             RenderActionItem(backLine, "Back", backSelected);
@@ -202,7 +188,6 @@ void SaveSelectionMenu::RenderSavesList() {
 void SaveSelectionMenu::RenderSaveItem(int line, const SaveInfo& save, bool selected) {
     rlutil::locate(4, line);
 
-    // Очищаем строку
     std::cout << "                                                                                ";
     rlutil::locate(4, line);
 
@@ -233,7 +218,6 @@ void SaveSelectionMenu::RenderSaveItem(int line, const SaveInfo& save, bool sele
 void SaveSelectionMenu::RenderActionItem(int line, const std::string& text, bool selected) {
     rlutil::locate(4, line);
 
-    // Очищаем строку
     std::cout << "                                                                                ";
     rlutil::locate(4, line);
 
@@ -254,11 +238,9 @@ void SaveSelectionMenu::RenderActionItem(int line, const std::string& text, bool
 void SaveSelectionMenu::ProcessInput() {
     if (!m_inputManager) return;
 
-    // Если активен редактор мира - передаем управление ему
     if (m_currentState == SaveActionState::WORLD_EDITOR && m_worldEditor) {
         m_worldEditor->ProcessInput();
 
-        // Проверяем, не завершил ли работу редактор
         if (m_worldEditor->ShouldReturnToSaves()) {
             m_currentState = SaveActionState::MAIN_LIST;
             m_worldEditor.reset();
@@ -268,13 +250,11 @@ void SaveSelectionMenu::ProcessInput() {
             Logger::Log("World Editor closed, returning to save selection");
         }
         else if (m_worldEditor->ShouldCreateWorld()) {
-            // Обработка создания мира
             m_currentState = SaveActionState::MAIN_LIST;
             m_worldEditor.reset();
             m_needFullRedraw = true;
             m_showActionsForSlot = false;
             m_actionSlot = -1;
-            // Обновляем список сейвов
             m_saves = m_saveSystem->GetSaves(m_gameMode);
             Logger::Log("World created, returning to save selection");
         }
@@ -296,7 +276,6 @@ void SaveSelectionMenu::ProcessInput() {
     }
     else if (m_inputManager->IsMenuBack()) {
         Logger::Log("SaveSelectionMenu MenuBack pressed");
-        // Обработка возврата
         if (m_showActionsForSlot) {
             m_showActionsForSlot = false;
             m_actionSlot = -1;
@@ -313,7 +292,6 @@ void SaveSelectionMenu::ProcessInput() {
 
 void SaveSelectionMenu::SelectNextOption() {
     if (m_showActionsForSlot) {
-        // Навигация по действиям
         SaveInfo selectedSave;
         for (const auto& save : m_saves) {
             if (save.slotNumber == m_actionSlot) {
@@ -325,7 +303,6 @@ void SaveSelectionMenu::SelectNextOption() {
         m_selectedActionIndex = (m_selectedActionIndex + 1) % actions.size();
     }
     else {
-        // Навигация по слотам
         int oldSlot = m_selectedSlot;
         m_selectedSlot = (m_selectedSlot % 6) + 1;
         Logger::Log("SaveSelectionMenu SelectNext - Slot: " + std::to_string(oldSlot) +
@@ -335,7 +312,6 @@ void SaveSelectionMenu::SelectNextOption() {
 
 void SaveSelectionMenu::SelectPreviousOption() {
     if (m_showActionsForSlot) {
-        // Навигация по действиям
         SaveInfo selectedSave;
         for (const auto& save : m_saves) {
             if (save.slotNumber == m_actionSlot) {
@@ -347,7 +323,6 @@ void SaveSelectionMenu::SelectPreviousOption() {
         m_selectedActionIndex = (m_selectedActionIndex - 1 + actions.size()) % actions.size();
     }
     else {
-        // Навигация по слотам
         int oldSlot = m_selectedSlot;
         m_selectedSlot = (m_selectedSlot - 2 + 6) % 6 + 1;
         Logger::Log("SaveSelectionMenu SelectPrevious - Slot: " + std::to_string(oldSlot) +
@@ -362,7 +337,6 @@ void SaveSelectionMenu::ConfirmSelection() {
         ", ShowActions: " + std::to_string(m_showActionsForSlot));
 
     if (m_showActionsForSlot) {
-        // Обработка выбора действия
         SaveInfo selectedSave;
         for (const auto& save : m_saves) {
             if (save.slotNumber == m_actionSlot) {
@@ -391,7 +365,6 @@ void SaveSelectionMenu::ConfirmSelection() {
         else if (selectedAction == "Load") {
             Logger::Log("SaveSelectionMenu Loading save slot " + std::to_string(m_actionSlot));
 
-            // Устанавливаем выбранный слот в SaveSystem
             m_saveSystem->SetSelectedSlot(m_actionSlot);
 
             if (m_saveSystem->LoadSave(m_gameMode, m_actionSlot)) {
@@ -403,7 +376,6 @@ void SaveSelectionMenu::ConfirmSelection() {
             }
         }
         else if (selectedAction == "Create") {
-            // Открываем редактор мира
             m_worldEditor = std::make_unique<WorldEditor>(m_gameMode, m_actionSlot);
             m_worldEditor->Initialize();
             m_currentState = SaveActionState::WORLD_EDITOR;
@@ -416,14 +388,11 @@ void SaveSelectionMenu::ConfirmSelection() {
         else if (selectedAction == "Delete") {
             Logger::Log("SaveSelectionMenu Deleting save slot " + std::to_string(m_actionSlot));
 
-            // Подтверждение удаления
             if (m_saveSystem->DeleteSave(m_gameMode, m_actionSlot)) {
                 Logger::Log("Successfully deleted save slot " + std::to_string(m_actionSlot));
-                // Обновляем список сейвов
                 m_saves = m_saveSystem->GetSaves(m_gameMode);
                 m_prevSaves = m_saves;
 
-                // Скрываем действия
                 m_showActionsForSlot = false;
                 m_actionSlot = -1;
                 m_needFullRedraw = true;
@@ -436,14 +405,12 @@ void SaveSelectionMenu::ConfirmSelection() {
         }
     }
     else {
-        // Обработка выбора слота
-        if (m_selectedSlot == 6) { // Back
+        if (m_selectedSlot == 6) {
             Logger::Log("SaveSelectionMenu Back selected - returning to main menu");
             m_shouldReturn = true;
             return;
         }
 
-        // Показываем действия для выбранного слота
         m_showActionsForSlot = true;
         m_actionSlot = m_selectedSlot;
         m_selectedActionIndex = 0;
