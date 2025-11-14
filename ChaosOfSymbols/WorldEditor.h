@@ -5,8 +5,10 @@
 #include <vector>
 #include "InputManager.h"
 #include "SaveTypes.h"
-#include "WorldEditorConfig.h"  // Используем WorldEditorConfig вместо WorldConfigData
+#include "WorldEditorConfig.h"
 #include "SaveSystem.h"
+#include "TileTypeManager.h"
+#include "TileType.h"
 
 enum class EditorTab {
     WORLD,
@@ -19,10 +21,16 @@ enum class EditorTab {
     LOSE
 };
 
+// Состояния для вкладки Tiles
+enum class TilesState {
+    MAIN_LIST,
+    EDITING_TILE,
+    ADDING_TILE
+};
+
 class WorldEditor {
 public:
     WorldEditor(GameMode mode, int slot);
-
     void Initialize();
     void Update();
     void Render();
@@ -30,14 +38,21 @@ public:
 
     bool ShouldReturnToSaves() const { return m_shouldReturn; }
     bool ShouldCreateWorld() const { return m_shouldCreate; }
-
     const WorldEditorConfig& GetConfig() const { return m_config; }
 
 private:
-    void CreateNewWorld();  // ОДИН раз объявляем!
+    // Основные методы
+    void CreateNewWorld();
     void SaveWorldConfiguration();
-
     void RenderOnlyChanges();
+    void RenderTabHeader();
+    void RenderMenuItem(int line, const std::string& text, bool selected);
+    void RenderEditField(int line, const std::string& label, const std::string& value, bool selected);
+    void ClearLine(int line);
+    bool NeedsRedraw() const;
+    int GetMaxFields();
+
+    // Вкладки
     void RenderWorldTab();
     void RenderPlayerTab();
     void RenderTilesTab();
@@ -47,36 +62,48 @@ private:
     void RenderWinTab();
     void RenderLoseTab();
     void RenderBottomButtons();
-    void RenderTabHeader();
-    void RenderMenuItem(int line, const std::string& text, bool selected);
-    void RenderEditField(int line, const std::string& label, const std::string& value, bool selected);
-    void HandleNumericInput();  // Только числа 0-9
-    void HandleBooleanInput();  // Переключение Yes/No
-    void HandleFrequencyInput(); // Частота 0.0-1.0
-    bool ShouldShowSeedField() const; // Показывать ли поле Seed
-    int GetVisibleWorldFieldsCount() const; // Количество видимых полей
 
+    // Обработка ввода
+    void HandleStandardInput();
     void SelectNextTab();
     void SelectNextOption();
     void SelectPreviousOption();
     void StartEditing();
     void HandleTextInput();
     void ApplyEditedValue();
-    void ChangeFieldValue(int delta);
     void ConfirmSelection();
     void HandleTextInputGeneral();
+    void HandleNumericInput();
+    void HandleBooleanInput();
+    void HandleFrequencyInput();
+    void ChangeFieldValue(int delta);
+    void HandleTileEditNavigation();
+    void StartAddingTile();
+    void StartEditingTileField();
 
-    void ClearLine(int line);
+    // Вспомогательные методы
+    bool ShouldShowSeedField() const;
+    int GetVisibleWorldFieldsCount() const;
 
-    int GetMaxFields();
-    bool NeedsRedraw() const;
+    // Вкладка Tiles - полностью переработанная
+    void HandleTileInput();
+    void RenderTileList();
+    void RenderTileDetails();
+    void RenderTileEditing();
+    void StartEditingTile();
+    void HandleTileEditInput();
+    void ApplyTileEdit();
+    void AddNewTile();
+    void DeleteSelectedTile();
+    void ChangeTileColor(int delta);
+    void LoadAvailableTiles();
 
     // Навигация
     EditorTab m_currentTab;
     int m_selectedField;
-    int m_selectedButton; // 0 = поля, 1 = Create, 2 = Back
+    int m_selectedButton;
 
-    // Состояние - используем WorldEditorConfig вместо WorldConfigData
+    // Состояние
     WorldEditorConfig m_config;
     std::unique_ptr<SaveSystem> m_saveSystem;
     GameMode m_gameMode;
@@ -97,11 +124,21 @@ private:
     int m_prevSelectedField;
     int m_prevSelectedButton;
     bool m_needFullRedraw;
+    int m_prevFieldCount;
 
-    int m_prevFieldCount = 0;
-
+    // Константы
     static const int MAX_WORLD_WIDTH = 200;
     static const int MAX_WORLD_HEIGHT = 45;
     static const int MIN_WORLD_WIDTH = 1;
     static const int MIN_WORLD_HEIGHT = 1;
+
+    // Для вкладки Tiles
+    std::unique_ptr<TileTypeManager> m_tileManager;
+    std::vector<int> m_availableTileIds;
+    TilesState m_tilesState;
+    TilesState m_prevTilesState;
+    int m_selectedTileIndex;
+    bool m_editingTileField;
+    int m_editingTileFieldIndex;
+    std::string m_tempTileStringInput;
 };

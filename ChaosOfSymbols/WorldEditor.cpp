@@ -29,13 +29,17 @@ WorldEditor::WorldEditor(GameMode mode, int slot)
     , m_prevSelectedButton(-1)
     , m_needFullRedraw(true)
     , m_prevFieldCount(0)
+    , m_tilesState(TilesState::MAIN_LIST)
+    , m_prevTilesState(TilesState::MAIN_LIST)
+    , m_selectedTileIndex(0)
+    , m_editingTileField(false)
+    , m_editingTileFieldIndex(0)
 {
     m_inputManager = std::make_unique<InputManager>();
 
-    m_config.tileProbabilities['.'] = { 0.1f, 0.8f, 0.1f }; // Grass
-    m_config.tileProbabilities['~'] = { 0.7f, 0.2f, 0.1f }; // Water
-    m_config.tileProbabilities['^'] = { 0.1f, 0.2f, 0.7f }; // Mountain
-    m_config.tileProbabilities['#'] = { 0.0f, 0.3f, 0.7f }; // Stone
+    m_tileManager = std::make_unique<TileTypeManager>();
+    m_tileManager->LoadFromFile();
+    LoadAvailableTiles();
 
     Logger::Log("WorldEditor created for slot " + std::to_string(slot));
 }
@@ -76,7 +80,7 @@ bool WorldEditor::NeedsRedraw() const {
     return m_prevSelectedField != m_selectedField ||
         m_prevSelectedButton != m_selectedButton ||
         m_isEditingText ||
-        m_currentTab != m_prevTab; 
+        m_currentTab != m_prevTab;
 }
 
 void WorldEditor::RenderOnlyChanges() {
@@ -294,32 +298,658 @@ void WorldEditor::RenderPlayerTab() {
 
 void WorldEditor::RenderTilesTab() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    int line = 6;
 
+    // Заголовок
     if (m_needFullRedraw) {
-        rlutil::locate(4, line);
-        std::cout << "Symbol Spawn Probabilities (Low/Mid/High zones):";
+        rlutil::locate(2, 5);
+        SetConsoleTextAttribute(hConsole, 14);
+        std::cout << "Tile Configuration";
+        SetConsoleTextAttribute(hConsole, 7);
+
+        rlutil::locate(2, 6);
+        std::cout << "------------------------------------------------------------";
     }
+
+    // В зависимости от состояния показываем разные экраны
+    switch (m_tilesState) {
+    case TilesState::MAIN_LIST:
+        RenderTileList();
+        break;
+    case TilesState::EDITING_TILE:
+        RenderTileEditing();
+        break;
+    case TilesState::ADDING_TILE:
+        RenderTileEditing(); // Используем тот же интерфейс для добавления
+        break;
+    }
+}
+
+void WorldEditor::RenderTileList() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int line = 8;
+
+    // Если нет тайлов, показываем сообщение
+    if (m_availableTileIds.empty()) {
+        rlutil::locate(4, line);
+        std::cout << "No tiles available. Add your first tile to get started.";
+        line += 2;
+    }
+    else {
+        // Заголовок списка
+        if (m_needFullRedraw) {
+            rlutil::locate(4, line);
+            std::cout << "Available Tiles:";
+        }
+        line++;
+
+        // Список тайлов
+        for (size_t i = 0; i < m_availableTileIds.size(); ++i) {
+            int tileId = m_availableTileIds[i];
+            TileType* tile = m_tileManager->GetTileType(tileId);
+
+            if (!tile) continue;
+
+            bool isSelected = (i == m_selectedField && m_selectedButton == 0);
+
+            rlutil::locate(4, line + i);
+
+            // Очищаем линию
+            std::cout << "                                                                    ";
+            rlutil::locate(4, line + i);
+
+            if (isSelected) {
+                SetConsoleTextAttribute(hConsole, 10);
+                std::cout << "> ";
+            }
+            else {
+                SetConsoleTextAttribute(hConsole, 7);
+                std::cout << "  ";
+            }
+
+            // Символ с цветом
+            SetConsoleTextAttribute(hConsole, tile->GetColor());
+            std::cout << tile->GetCharacter();
+
+            SetConsoleTextAttribute(hConsole, isSelected ? 10 : 7);
+            std::cout << " - " << tile->GetName() << " (ID: " << tile->GetId() << ")";
+
+            SetConsoleTextAttribute(hConsole, 7);
+        }
+
+        line += m_availableTileIds.size() + 1;
+    }
+
+    // Кнопки действий
+    if (!m_availableTileIds.empty() && m_selectedField < static_cast<int>(m_availableTileIds.size())) {
+        // Кнопка редактирования выбранного тайла
+        bool editSelected = (m_selectedField == static_cast<int>(m_availableTileIds.size()) && m_selectedButton == 0);
+        RenderMenuItem(line, "Edit Selected Tile", editSelected);
+        line++;
+
+        // Кнопка удаления выбранного тайла
+        bool deleteSelected = (m_selectedField == static_cast<int>(m_availableTileIds.size()) + 1 && m_selectedButton == 0);
+        RenderMenuItem(line, "Delete Selected Tile", deleteSelected);
+        line++;
+    }
+
+    // Кнопка добавления нового тайла
+    int addIndex = m_availableTileIds.empty() ? 0 :
+        (m_availableTileIds.empty() ? 0 : static_cast<int>(m_availableTileIds.size()) +
+            ((!m_availableTileIds.empty() && m_selectedField < static_cast<int>(m_availableTileIds.size())) ? 2 : 0));
+
+    bool addSelected = (m_selectedField == addIndex && m_selectedButton == 0);
+    RenderMenuItem(line, "+ Add New Tile", addSelected);
+    line++;
+
+    // Кнопка назад
+    bool backSelected = (m_selectedField == addIndex + 1 && m_selectedButton == 0);
+    RenderMenuItem(line, "Back", backSelected);
+
+    // Детали выбранного тайла (если есть тайлы и выбран один)
+    if (!m_availableTileIds.empty() && m_selectedField < static_cast<int>(m_availableTileIds.size())) {
+        RenderTileDetails();
+    }
+}
+
+void WorldEditor::RenderTileDetails() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int detailLine = 8;
+    int detailColumn = 40;
+
+    int tileId = m_availableTileIds[m_selectedField];
+    TileType* tile = m_tileManager->GetTileType(tileId);
+
+    if (!tile) return;
+
+    // Заголовок деталей
+    rlutil::locate(detailColumn, detailLine);
+    SetConsoleTextAttribute(hConsole, 14);
+    std::cout << "Tile Properties:";
+
+    rlutil::locate(detailColumn, detailLine + 1);
+    SetConsoleTextAttribute(hConsole, 7);
+    std::cout << "-------------------------";
+
+    // Свойства тайла
+    rlutil::locate(detailColumn, detailLine + 3);
+    std::cout << "ID: " << tile->GetId();
+
+    rlutil::locate(detailColumn, detailLine + 4);
+    std::cout << "Name: " << tile->GetName();
+
+    rlutil::locate(detailColumn, detailLine + 5);
+    std::cout << "Symbol: '";
+    SetConsoleTextAttribute(hConsole, tile->GetColor());
+    std::cout << tile->GetCharacter();
+    SetConsoleTextAttribute(hConsole, 7);
+    std::cout << "'";
+
+    rlutil::locate(detailColumn, detailLine + 6);
+    std::cout << "Color: " << tile->GetColor();
+
+    rlutil::locate(detailColumn, detailLine + 7);
+    std::cout << "Passable: " << (tile->IsPassable() ? "Yes" : "No");
+
+    rlutil::locate(detailColumn, detailLine + 8);
+    std::cout << "Destructible: " << (tile->IsDestructible() ? "Yes" : "No");
+
+    rlutil::locate(detailColumn, detailLine + 9);
+    std::cout << "Damage: " << tile->GetDamage();
+
+    // Подсказки
+    rlutil::locate(detailColumn, detailLine + 11);
+    SetConsoleTextAttribute(hConsole, 8);
+    std::cout << "A/D - Change color";
+
+    rlutil::locate(detailColumn, detailLine + 12);
+    std::cout << "ENTER - Edit properties";
+
+    SetConsoleTextAttribute(hConsole, 7);
+}
+
+void WorldEditor::RenderTileEditing() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int line = 8;
+
+    // Заголовок редактирования
+    rlutil::locate(4, line);
+    SetConsoleTextAttribute(hConsole, 14);
+    if (m_tilesState == TilesState::ADDING_TILE) {
+        std::cout << "Add New Tile";
+    }
+    else {
+        std::cout << "Edit Tile";
+    }
+    SetConsoleTextAttribute(hConsole, 7);
+
     line += 2;
 
-    int i = 0;
-    for (const auto& pair : m_config.tileProbabilities) {
-        char tileChar = pair.first;
-        const auto& probs = pair.second;
+    // Поля для редактирования
+    std::vector<std::string> fields = {
+        "Name: ",
+        "Symbol: ",
+        "Color: ",
+        "Passable: ",
+        "Destructible: ",
+        "Damage: "
+    };
 
-        std::string display = std::string("'") + tileChar + "': " +
-            std::to_string(probs[0]) + " / " +
-            std::to_string(probs[1]) + " / " +
-            std::to_string(probs[2]);
+    // Получаем текущий тайл или создаем временный для нового
+    TileType* currentTile = nullptr;
+    TileType tempTile(0, "", ' ', 7, true, false, 0);
 
-        bool isSelected = (i == m_selectedField && m_selectedButton == 0);
-        bool wasSelected = (i == m_prevSelectedField && m_prevSelectedButton == 0);
-
-        if (m_needFullRedraw || isSelected != wasSelected) {
-            RenderMenuItem(line + i, display, isSelected);
-        }
-        i++;
+    if (m_tilesState == TilesState::EDITING_TILE && m_selectedTileIndex < static_cast<int>(m_availableTileIds.size())) {
+        int tileId = m_availableTileIds[m_selectedTileIndex];
+        currentTile = m_tileManager->GetTileType(tileId);
     }
+
+    for (int i = 0; i < fields.size(); ++i) {
+        bool isSelected = (i == m_selectedField && m_selectedButton == 0);
+        bool isEditing = (m_isEditingText && m_editingTileField && m_editingTileFieldIndex == i);
+
+        rlutil::locate(6, line + i);
+
+        // Очищаем линию
+        std::cout << "                                                                    ";
+        rlutil::locate(6, line + i);
+
+        if (isSelected) {
+            SetConsoleTextAttribute(hConsole, 10);
+            std::cout << "> ";
+        }
+        else {
+            SetConsoleTextAttribute(hConsole, 7);
+            std::cout << "  ";
+        }
+
+        std::cout << fields[i];
+
+        if (isEditing) {
+            // Режим редактирования
+            SetConsoleTextAttribute(hConsole, 11);
+            std::cout << m_tempTileStringInput << "_";
+        }
+        else {
+            // Режим отображения
+            SetConsoleTextAttribute(hConsole, 7);
+
+            // Отображаем текущее значение
+            if (currentTile) {
+                switch (i) {
+                case 0: std::cout << currentTile->GetName(); break;
+                case 1:
+                    std::cout << "'";
+                    SetConsoleTextAttribute(hConsole, currentTile->GetColor());
+                    std::cout << currentTile->GetCharacter();
+                    SetConsoleTextAttribute(hConsole, 7);
+                    std::cout << "'";
+                    break;
+                case 2: std::cout << currentTile->GetColor(); break;
+                case 3: std::cout << (currentTile->IsPassable() ? "Yes" : "No"); break;
+                case 4: std::cout << (currentTile->IsDestructible() ? "Yes" : "No"); break;
+                case 5: std::cout << currentTile->GetDamage(); break;
+                }
+            }
+            else if (m_tilesState == TilesState::ADDING_TILE) {
+                // Значения по умолчанию для нового тайла
+                switch (i) {
+                case 0: std::cout << "new_tile"; break;
+                case 1: std::cout << "'A'"; break;
+                case 2: std::cout << "7"; break;
+                case 3: std::cout << "Yes"; break;
+                case 4: std::cout << "No"; break;
+                case 5: std::cout << "0"; break;
+                }
+            }
+        }
+
+        SetConsoleTextAttribute(hConsole, 7);
+    }
+
+    // Кнопки действий
+    int buttonsStart = line + fields.size() + 1;
+
+    bool saveSelected = (m_selectedField == static_cast<int>(fields.size()) && m_selectedButton == 0);
+    RenderMenuItem(buttonsStart, "Save", saveSelected);
+
+    bool cancelSelected = (m_selectedField == static_cast<int>(fields.size()) + 1 && m_selectedButton == 0);
+    RenderMenuItem(buttonsStart + 1, "Cancel", cancelSelected);
+}
+
+void WorldEditor::HandleTileInput() {
+    if (m_tilesState == TilesState::EDITING_TILE || m_tilesState == TilesState::ADDING_TILE) {
+        if (m_isEditingText && m_editingTileField) {
+            HandleTileEditInput();
+            return;
+        }
+        HandleTileEditNavigation();
+        return;
+    }
+
+    // Навигация по основному списку
+    if (m_inputManager->IsMenuUp()) {
+        if (m_selectedField > 0) {
+            m_selectedField--;
+        }
+        else {
+            m_selectedField = GetMaxFields() - 1;
+        }
+    }
+    else if (m_inputManager->IsMenuDown()) {
+        if (m_selectedField < GetMaxFields() - 1) {
+            m_selectedField++;
+        }
+        else {
+            m_selectedField = 0;
+        }
+    }
+    else if (m_inputManager->IsMenuSelect()) {
+        if (m_availableTileIds.empty()) {
+            // Единственная кнопка - добавить
+            if (m_selectedField == 0) {
+                StartAddingTile();
+            }
+        }
+        else {
+            if (m_selectedField < static_cast<int>(m_availableTileIds.size())) {
+                // Выбран существующий тайл - можно менять цвет
+                ChangeTileColor(1); // Просто для примера - можно убрать
+            }
+            else if (m_selectedField == static_cast<int>(m_availableTileIds.size())) {
+                // Редактировать выбранный тайл
+                StartEditingTile();
+            }
+            else if (m_selectedField == static_cast<int>(m_availableTileIds.size()) + 1) {
+                // Удалить выбранный тайл
+                DeleteSelectedTile();
+            }
+            else if (m_selectedField == static_cast<int>(m_availableTileIds.size()) + 2) {
+                // Добавить новый тайл
+                StartAddingTile();
+            }
+            else if (m_selectedField == static_cast<int>(m_availableTileIds.size()) + 3) {
+                // Назад
+                m_shouldReturn = true;
+            }
+        }
+    }
+    else if (m_inputManager->IsKeyPressed('A') || m_inputManager->IsKeyPressed(VK_LEFT)) {
+        // Изменение цвета выбранного тайла
+        if (!m_availableTileIds.empty() && m_selectedField < static_cast<int>(m_availableTileIds.size())) {
+            ChangeTileColor(-1);
+        }
+    }
+    else if (m_inputManager->IsKeyPressed('D') || m_inputManager->IsKeyPressed(VK_RIGHT)) {
+        // Изменение цвета выбранного тайла
+        if (!m_availableTileIds.empty() && m_selectedField < static_cast<int>(m_availableTileIds.size())) {
+            ChangeTileColor(1);
+        }
+    }
+}
+
+void WorldEditor::HandleTileEditNavigation() {
+    if (m_inputManager->IsMenuUp()) {
+        if (m_selectedField > 0) {
+            m_selectedField--;
+        }
+    }
+    else if (m_inputManager->IsMenuDown()) {
+        int maxFields = 6 + 2; // 6 полей + 2 кнопки
+        if (m_selectedField < maxFields - 1) {
+            m_selectedField++;
+        }
+    }
+    else if (m_inputManager->IsMenuSelect()) {
+        if (m_selectedField < 6) {
+            // Начало редактирования поля
+            StartEditingTileField();
+        }
+        else if (m_selectedField == 6) {
+            // Сохранить
+            ApplyTileEdit();
+            m_tilesState = TilesState::MAIN_LIST;
+            m_selectedField = m_selectedTileIndex;
+            m_needFullRedraw = true;
+        }
+        else if (m_selectedField == 7) {
+            // Отмена
+            m_tilesState = TilesState::MAIN_LIST;
+            m_selectedField = m_selectedTileIndex;
+            m_needFullRedraw = true;
+        }
+    }
+    else if (m_inputManager->IsMenuBack()) {
+        // Отмена по ESC
+        m_tilesState = TilesState::MAIN_LIST;
+        m_selectedField = m_selectedTileIndex;
+        m_needFullRedraw = true;
+    }
+}
+
+void WorldEditor::StartEditingTile() {
+    if (m_availableTileIds.empty() || m_selectedField >= static_cast<int>(m_availableTileIds.size())) return;
+
+    m_tilesState = TilesState::EDITING_TILE;
+    m_selectedTileIndex = m_selectedField;
+    m_selectedField = 0;
+    m_editingTileField = false;
+    m_needFullRedraw = true;
+}
+
+void WorldEditor::StartAddingTile() {
+    m_tilesState = TilesState::ADDING_TILE;
+    m_selectedTileIndex = -1;
+    m_selectedField = 0;
+    m_editingTileField = false;
+    m_needFullRedraw = true;
+}
+
+void WorldEditor::StartEditingTileField() {
+    m_isEditingText = true;
+    m_editingTileField = true;
+    m_editingTileFieldIndex = m_selectedField;
+    m_tempTileStringInput = "";
+
+    // Заполняем начальное значение
+    if (m_tilesState == TilesState::EDITING_TILE && m_selectedTileIndex < static_cast<int>(m_availableTileIds.size())) {
+        int tileId = m_availableTileIds[m_selectedTileIndex];
+        TileType* tile = m_tileManager->GetTileType(tileId);
+
+        if (tile) {
+            switch (m_editingTileFieldIndex) {
+            case 0: m_tempTileStringInput = tile->GetName(); break;
+            case 1: m_tempTileStringInput = std::string(1, tile->GetCharacter()); break;
+            case 2: m_tempTileStringInput = std::to_string(tile->GetColor()); break;
+            case 3: m_tempTileStringInput = tile->IsPassable() ? "true" : "false"; break;
+            case 4: m_tempTileStringInput = tile->IsDestructible() ? "true" : "false"; break;
+            case 5: m_tempTileStringInput = std::to_string(tile->GetDamage()); break;
+            }
+        }
+    }
+    else if (m_tilesState == TilesState::ADDING_TILE) {
+        // Значения по умолчанию для нового тайла
+        switch (m_editingTileFieldIndex) {
+        case 0: m_tempTileStringInput = "new_tile"; break;
+        case 1: m_tempTileStringInput = "A"; break;
+        case 2: m_tempTileStringInput = "7"; break;
+        case 3: m_tempTileStringInput = "true"; break;
+        case 4: m_tempTileStringInput = "false"; break;
+        case 5: m_tempTileStringInput = "0"; break;
+        }
+    }
+}
+
+void WorldEditor::HandleTileEditInput() {
+    if (m_inputManager->IsKeyPressed(VK_RETURN)) {
+        ApplyTileEdit();
+        m_isEditingText = false;
+        m_editingTileField = false;
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_ESCAPE)) {
+        m_isEditingText = false;
+        m_editingTileField = false;
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_TAB)) {
+        // Переход к следующему полю
+        m_editingTileFieldIndex = (m_editingTileFieldIndex + 1) % 6;
+        m_tempTileStringInput = "";
+        m_needFullRedraw = true;
+        return;
+    }
+
+    // Обработка ввода в зависимости от типа поля
+    switch (m_editingTileFieldIndex) {
+    case 0: // Имя - текст
+    case 1: // Символ - один символ
+        HandleTextInputGeneral();
+        break;
+    case 2: // Цвет - числа
+        HandleNumericInput();
+        break;
+    case 3: // Проходимость - true/false
+    case 4: // Разрушаемость - true/false
+        HandleBooleanInput();
+        break;
+    case 5: // Урон - числа (могут быть отрицательные)
+        HandleNumericInput();
+        break;
+    }
+}
+
+void WorldEditor::ApplyTileEdit() {
+    if (m_tempTileStringInput.empty()) return;
+
+    int tileId = m_availableTileIds[m_selectedField];
+    TileType* tile = m_tileManager->GetTileType(tileId);
+
+    if (!tile) return;
+
+    try {
+        switch (m_editingTileFieldIndex) {
+        case 0: // Имя
+            // Для изменения имени нужно создать новый тайл
+        {
+            TileType newTile = *tile;
+            newTile.SetName(m_tempTileStringInput);
+            m_tileManager->RegisterTileType(newTile);
+            // Обновляем список
+            LoadAvailableTiles();
+        }
+        break;
+        case 1: // Символ
+            if (!m_tempTileStringInput.empty()) {
+                TileType newTile = *tile;
+                newTile.SetCharacter(m_tempTileStringInput[0]);
+                m_tileManager->RegisterTileType(newTile);
+                LoadAvailableTiles();
+            }
+            break;
+        case 2: // Цвет
+        {
+            int newColor = std::stoi(m_tempTileStringInput);
+            TileType newTile = *tile;
+            newTile.SetColor(std::clamp(newColor, 0, 15));
+            m_tileManager->RegisterTileType(newTile);
+            LoadAvailableTiles();
+        }
+        break;
+        case 3: // Проходимость
+        {
+            bool passable = (m_tempTileStringInput == "true");
+            TileType newTile = *tile;
+            newTile.SetPassable(passable);
+            m_tileManager->RegisterTileType(newTile);
+            LoadAvailableTiles();
+        }
+        break;
+        case 4: // Разрушаемость
+        {
+            bool destructible = (m_tempTileStringInput == "true");
+            TileType newTile = *tile;
+            newTile.SetDestructible(destructible);
+            m_tileManager->RegisterTileType(newTile);
+            LoadAvailableTiles();
+        }
+        break;
+        case 5: // Урон
+        {
+            int damage = std::stoi(m_tempTileStringInput);
+            TileType newTile = *tile;
+            newTile.SetDamage(damage);
+            m_tileManager->RegisterTileType(newTile);
+            LoadAvailableTiles();
+        }
+        break;
+        }
+
+        // Сохраняем изменения в файл
+        m_tileManager->SaveToFile();
+
+    }
+    catch (const std::exception& e) {
+        Logger::Log("ERROR: Invalid tile input: " + m_tempTileStringInput);
+    }
+}
+
+void WorldEditor::ChangeTileColor(int delta) {
+    int tileId = m_availableTileIds[m_selectedField];
+    TileType* tile = m_tileManager->GetTileType(tileId);
+
+    if (!tile) return;
+
+    int newColor = tile->GetColor() + delta;
+    newColor = std::clamp(newColor, 0, 15);
+
+    TileType newTile = *tile;
+    newTile.SetColor(newColor);
+    m_tileManager->RegisterTileType(newTile);
+    m_tileManager->SaveToFile();
+
+    m_needFullRedraw = true;
+}
+
+void WorldEditor::AddNewTile() {
+    // Находим максимальный ID и создаем новый тайл
+    int newId = 0;
+    for (int id : m_availableTileIds) {
+        if (id >= newId) newId = id + 1;
+    }
+
+    // Создаем тайл с разумными значениями по умолчанию
+    TileType newTile(newId, "new_tile_" + std::to_string(newId),
+        static_cast<char>('A' + (newId % 26)), // A, B, C, ...
+        7, // Белый цвет по умолчанию
+        true, // Проходимый по умолчанию
+        false, // Неразрушаемый по умолчанию
+        0); // Без урона по умолчанию
+
+    m_tileManager->RegisterTileType(newTile);
+    m_tileManager->SaveToFile();
+
+    LoadAvailableTiles();
+
+    // Автоматически выбираем новый тайл для редактирования
+    m_selectedField = static_cast<int>(m_availableTileIds.size()) - 1;
+    m_needFullRedraw = true;
+
+    Logger::Log("Added new tile with ID: " + std::to_string(newId));
+
+    // Автоматически начинаем редактирование имени нового тайла
+    StartEditingTileField();
+}
+
+void WorldEditor::DeleteSelectedTile() {
+    if (m_availableTileIds.empty() || m_selectedField >= static_cast<int>(m_availableTileIds.size())) return;
+
+    int tileId = m_availableTileIds[m_selectedField];
+
+    // Не позволяем удалять базовые тайлы (ID 0, 1, 2)
+    if (tileId <= 2) {
+        Logger::Log("Cannot delete basic tiles (ID 0-2)");
+        return;
+    }
+
+    // Удаляем тайл из менеджера
+    // Note: Вам нужно добавить метод RemoveTile в TileTypeManager
+    // m_tileManager->RemoveTile(tileId);
+
+    // Временно: создаем новый список без удаленного тайла
+    std::vector<int> newTileIds;
+    for (int id : m_availableTileIds) {
+        if (id != tileId) {
+            newTileIds.push_back(id);
+        }
+    }
+    m_availableTileIds = newTileIds;
+
+    m_tileManager->SaveToFile();
+
+    if (m_selectedField >= static_cast<int>(m_availableTileIds.size())) {
+        m_selectedField = max(0, static_cast<int>(m_availableTileIds.size()) - 1);
+    }
+
+    m_needFullRedraw = true;
+    Logger::Log("Deleted tile with ID: " + std::to_string(tileId));
+}
+
+void WorldEditor::LoadAvailableTiles() {
+    m_availableTileIds.clear();
+
+    if (!m_tileManager) return;
+
+    const auto& allTiles = m_tileManager->GetAllTiles();
+    for (const auto& pair : allTiles) {
+        m_availableTileIds.push_back(pair.first);
+    }
+
+    // Сортируем по ID для удобства
+    std::sort(m_availableTileIds.begin(), m_availableTileIds.end());
 }
 
 void WorldEditor::RenderCellularAutomatonTab() {
@@ -394,7 +1024,7 @@ void WorldEditor::RenderMenuItem(int line, const std::string& text, bool selecte
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     if (selected) {
-        SetConsoleTextAttribute(hConsole, 10); 
+        SetConsoleTextAttribute(hConsole, 10);
         std::cout << "> " << text;
     }
     else {
@@ -426,10 +1056,33 @@ void WorldEditor::ProcessInput() {
     if (!m_inputManager) return;
 
     if (m_isEditingText) {
-        HandleTextInput();
+        if (m_editingTileField) {
+            HandleTileInput();
+        }
+        else {
+            HandleTextInput();
+        }
         return;
     }
 
+    // Обработка в зависимости от текущей вкладки
+    switch (m_currentTab) {
+    case EditorTab::TILES:
+        HandleTileInput();
+        break;
+    case EditorTab::WORLD:
+    case EditorTab::PLAYER:
+    case EditorTab::CELLULAR_AUTOMATON:
+    case EditorTab::FOOD:
+    case EditorTab::ENEMIES:
+    case EditorTab::WIN:
+    case EditorTab::LOSE:
+        HandleStandardInput();
+        break;
+    }
+}
+
+void WorldEditor::HandleStandardInput() {
     if (m_inputManager->IsMenuUp()) {
         SelectPreviousOption();
     }
@@ -701,14 +1354,32 @@ int WorldEditor::GetMaxFields() {
     switch (m_currentTab) {
     case EditorTab::WORLD:
         return GetVisibleWorldFieldsCount();
-    case EditorTab::PLAYER: return 6;
-    case EditorTab::TILES: return static_cast<int>(m_config.tileProbabilities.size());
-    case EditorTab::CELLULAR_AUTOMATON: return 3;
-    case EditorTab::FOOD: return 0;
-    case EditorTab::ENEMIES: return 2;
-    case EditorTab::WIN: return 0;
-    case EditorTab::LOSE: return 0;
-    default: return 0;
+    case EditorTab::PLAYER:
+        return 6;
+    case EditorTab::TILES:
+        if (m_tilesState == TilesState::MAIN_LIST) {
+            if (m_availableTileIds.empty()) {
+                return 2; // Сообщение + Add New Tile + Back
+            }
+            else {
+                return static_cast<int>(m_availableTileIds.size()) + 4; // Тайлы + Edit + Delete + Add New + Back
+            }
+        }
+        else {
+            return 8; // 6 полей + Save + Cancel
+        }
+    case EditorTab::CELLULAR_AUTOMATON:
+        return 3;
+    case EditorTab::FOOD:
+        return 0;
+    case EditorTab::ENEMIES:
+        return 2;
+    case EditorTab::WIN:
+        return 0;
+    case EditorTab::LOSE:
+        return 0;
+    default:
+        return 0;
     }
 }
 

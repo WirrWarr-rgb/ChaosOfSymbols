@@ -13,14 +13,24 @@ int main() {
     cursorInfo.bVisible = FALSE;
     SetConsoleCursorInfo(hConsole, &cursorInfo);
 
-    Game game;
+    bool restartGame = true;
 
-    if (game.Initialize()) {
-        game.Run();
-    }
-    else {
-        cout << "\nFailed to initialize game!" << '\n';
-        return -1;
+    while (restartGame) {
+        Game game;
+
+        if (game.Initialize()) {
+            game.Run();
+
+            // После завершения игры спросить, хочет ли игрок сыграть еще раз?
+            // Или автоматически перезапускать
+            // restartGame = AskToRestart(); 
+            // Для простоты всегда перезапускаем
+            restartGame = true;
+        }
+        else {
+            cout << "\nFailed to initialize game!" << '\n';
+            restartGame = false;
+        }
     }
 
     cout << "\n\nThanks for playing!" << '\n';

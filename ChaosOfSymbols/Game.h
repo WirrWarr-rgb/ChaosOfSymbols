@@ -104,4 +104,7 @@ private:
 
     void HandlePauseInput();
     void RunPauseMenu();
+    bool m_shouldReturnToMainMenu = false;
+    void ClearScreenCompletely();
+
 };

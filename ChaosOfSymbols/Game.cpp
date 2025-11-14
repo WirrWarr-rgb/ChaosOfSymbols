@@ -62,14 +62,17 @@ bool Game::Initialize() {
 void Game::Shutdown() {
     Logger::Log("=== GAME SHUTDOWN STARTED ===");
 
-    cout << "\nShutting down game...\n";
-
-    delete m_currentWorld;
-    delete m_renderSystem;
+    if (m_currentWorld) {
+        delete m_currentWorld;
+        m_currentWorld = nullptr;
+    }
+    if (m_renderSystem) {
+        delete m_renderSystem;
+        m_renderSystem = nullptr;
+    }
 
     cout << "\nGame shutdown complete.\n";
     Logger::Log("=== GAME SHUTDOWN COMPLETED ===");
-
     Logger::Close();
 }
 
@@ -80,6 +83,11 @@ void Game::Run() {
     auto lastTime = chrono::steady_clock::now();
 
     while (m_isRunning) {
+        if (m_shouldReturnToMainMenu) {
+            ReturnToMainMenu();
+            m_shouldReturnToMainMenu = false;
+            continue; // Пропускаем остальную логику этого кадра
+        }
         auto currentTime = chrono::steady_clock::now();
         auto deltaTime = chrono::duration_cast<chrono::milliseconds>(currentTime - lastTime);
 
@@ -308,7 +316,7 @@ void Game::StartGameFromMenu() {
 /// Обработка ввода
 /// </summary>
 void Game::ProcessInput() {
-    if (!m_isRunning) return;
+    if (!m_isRunning || m_shouldReturnToMainMenu) return;
 
     HandlePauseInput();
 
@@ -410,7 +418,7 @@ void Game::ConsumeEnergy() {
         if (m_playerHP <= 0) {
             m_playerHP = 0;
             Logger::Log("Player died from starvation!");
-            m_isRunning = false;
+            //m_isRunning = false;
             ShowDeathScreen();
         }
     }
@@ -493,6 +501,10 @@ void Game::Render() {
     if (m_isPaused) {
         rlutil::hideCursor();
         m_pauseMenu->Render();
+        return;
+    }
+
+    if (!m_renderSystem) {
         return;
     }
 
@@ -636,7 +648,11 @@ void Game::FindRandomPassablePosition() {
 /// Экран смерти
 /// </summary>
 void Game::ShowDeathScreen() {
-    m_isRunning = false;
+    int finalSteps = m_playerSteps;
+    int finalTotalXP = m_totalXP;
+    int finalLevel = m_playerLevel;
+    int finalXP = m_playerXP;
+    auto finalFoodEaten = m_foodEaten;
 
     std::this_thread::sleep_for(std::chrono::milliseconds(100));
 
@@ -657,8 +673,6 @@ void Game::ShowDeathScreen() {
     FillConsoleOutputAttribute(hConsole, 7, consoleSize, topLeft, &written);
     SetConsoleCursorPosition(hConsole, topLeft);
 
-    m_currentWorld->ClearAllFood();
-
     SetConsoleTextAttribute(hConsole, 7);
     cout << "==========================================\n";
 
@@ -667,10 +681,10 @@ void Game::ShowDeathScreen() {
 
     SetConsoleTextAttribute(hConsole, 7);
     cout << "\n==========================================\n";
-    cout << "\nSteps: " << m_playerSteps << "\n";
-    cout << "Total XP: " << m_totalXP << "\n";
-    cout << "Current Level: " << m_playerLevel << "\n";
-    cout << "Current XP: " << m_playerXP << "\n";
+    cout << "\nSteps: " << finalSteps << "\n";
+    cout << "Total XP: " << finalTotalXP << "\n";
+    cout << "Current Level: " << finalLevel << "\n";
+    cout << "Current XP: " << finalXP << "\n";
     cout << "\n==========================================\n";
     cout << "\nFood consumed:\n";
 
@@ -682,8 +696,8 @@ void Game::ShowDeathScreen() {
         int foodId = foodType->GetId();
 
         int count = 0;
-        auto it = m_foodEaten.find(foodId);
-        if (it != m_foodEaten.end()) {
+        auto it = finalFoodEaten.find(foodId);
+        if (it != finalFoodEaten.end()) {
             count = it->second;
         }
 
@@ -698,7 +712,7 @@ void Game::ShowDeathScreen() {
     SetConsoleTextAttribute(hConsole, 7);
     cout << "\n==========================================\n";
     SetConsoleTextAttribute(hConsole, 7);
-    cout << "\nPress ESC to exit..." << "\n";
+    cout << "\nPress ESC to return to Main Menu..." << "\n";
 
     while (true) {
         if (GetAsyncKeyState(VK_ESCAPE) & 0x8000) {
@@ -709,8 +723,33 @@ void Game::ShowDeathScreen() {
 
     SetConsoleTextAttribute(hConsole, 7);
 
-    exit(0);
+    ClearScreenCompletely();
+
+    m_isRunning = false;
 }
+
+void Game::ClearScreenCompletely() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
+    // Получаем размеры консоли
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+
+    // Вычисляем размер буфера
+    DWORD consoleSize = csbi.dwSize.X * csbi.dwSize.Y;
+    COORD topLeft = { 0, 0 };
+    DWORD written;
+
+    // Заполняем весь буфер пробелами
+    FillConsoleOutputCharacterA(hConsole, ' ', consoleSize, topLeft, &written);
+
+    // Сбрасываем атрибуты
+    FillConsoleOutputAttribute(hConsole, csbi.wAttributes, consoleSize, topLeft, &written);
+
+    // Устанавливаем курсор в начало
+    SetConsoleCursorPosition(hConsole, topLeft);
+}
+
 
 /// <summary>
 /// Добавление опыта игроку; проверка возможность lvl up
@@ -846,26 +885,37 @@ void Game::RunPauseMenu() {
 }
 
 void Game::ReturnToMainMenu() {
-    Logger::Log("Returning to main menu from pause...");
+    Logger::Log("Returning to main menu...");
 
+    // Сначала останавливаем игровой процесс
     m_isPaused = false;
     m_inMainMenu = true;
+
+    // Сбрасываем флаги меню
     m_pauseMenu->Reset();
+    m_mainMenu->Reset();
+    m_mainMenu->ResetStartFlags();
 
-    SetDefaultConsoleSize();
-
+    // БЕЗОПАСНОЕ удаление объектов
     if (m_currentWorld) {
+        Logger::Log("Deleting world...");
         delete m_currentWorld;
         m_currentWorld = nullptr;
     }
 
     if (m_renderSystem) {
+        Logger::Log("Deleting render system...");
         delete m_renderSystem;
         m_renderSystem = nullptr;
     }
 
-    m_configManager.reset();
+    // Сброс менеджера конфигураций
+    if (m_configManager) {
+        Logger::Log("Resetting config manager...");
+        m_configManager.reset();
+    }
 
+    // Сброс состояния игрока
     m_playerX = 0;
     m_playerY = 0;
     m_playerSteps = 0;
@@ -877,9 +927,7 @@ void Game::ReturnToMainMenu() {
     m_totalXP = 0;
     m_foodEaten.clear();
 
-    m_mainMenu->Reset();
-    m_mainMenu->ResetStartFlags();
-
+    SetDefaultConsoleSize();
     rlutil::cls();
 
     Logger::Log("Successfully returned to main menu");
