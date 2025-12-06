@@ -29,7 +29,6 @@ public:
     void ClearAllFood();
     void NotifyTilesChanged() {}
 
-    // Новый метод для загрузки карты из файла
     bool LoadMapFromFile(const std::string& filePath);
 
     // Геттеры
@@ -66,7 +65,7 @@ public:
 
 private:
     // Приватные методы
-    void GenerateRandomWorld(); // ДОБАВИТЬ ЭТУ СТРОКУ
+    void GenerateRandomWorld();
     void GenerateBaseTerrain();
     void CreateBorder();
     void SmoothTerrain();

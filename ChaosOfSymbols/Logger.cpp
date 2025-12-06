@@ -1,4 +1,5 @@
 #include <iostream>
+#include <ctime>
 #include "Logger.h"
 
 std::ofstream Logger::logFile;
@@ -32,6 +33,16 @@ void Logger::Log(const std::string& message) {
         logFile << message << std::endl;
         logFile.flush();
     }
+}
+
+std::string Logger::GetTickCount() {
+    std::time_t now = std::time(nullptr);
+    std::tm localTime;
+    localtime_s(&localTime, &now);
+
+    char timeStr[100];
+    std::strftime(timeStr, sizeof(timeStr), "%Y-%m-%d %H:%M:%S", &localTime);
+    return std::string(timeStr);
 }
 
 void Logger::Close() {

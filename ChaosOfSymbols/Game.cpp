@@ -86,7 +86,7 @@ void Game::Run() {
         if (m_shouldReturnToMainMenu) {
             ReturnToMainMenu();
             m_shouldReturnToMainMenu = false;
-            continue; // Пропускаем остальную логику этого кадра
+            continue;
         }
         auto currentTime = chrono::steady_clock::now();
         auto deltaTime = chrono::duration_cast<chrono::milliseconds>(currentTime - lastTime);
@@ -164,12 +164,25 @@ void Game::StartGameFromSave(GameMode mode, int slot) {
 
 void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
     Logger::Log("Loading world from save configuration...");
+    Logger::Log("Starting game from save at: " + Logger::GetTickCount());
 
     m_configManager = std::make_unique<ConfigManager>();
     if (!m_configManager->Initialize()) {
         Logger::Log("ERROR: Failed to initialize config manager!");
         return;
     }
+
+    std::string tilesPath = "saves/proceduralGeneration/slot" + std::to_string(m_mainMenu->GetSelectedSaveSlot()) + "/tiles.json";
+    TileTypeManager* tileManager = m_configManager->GetTileManager();
+
+    tileManager->SetFilePath(tilesPath);
+
+    if (!tileManager->LoadFromFile()) {
+        Logger::Log("WARNING: Could not load tiles from slot");
+    }
+
+    Logger::Log("Loaded " + std::to_string(tileManager->GetAllTiles().size()) +
+        " tiles from slot " + std::to_string(m_mainMenu->GetSelectedSaveSlot()));
 
     m_playerConfig = m_configManager->GetPlayerConfig();
 
@@ -190,10 +203,10 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
     m_playerHunger = config.playerMaxHunger;
     m_xpToNextLevel = 100;
 
-    TileTypeManager* tileManager = m_configManager->GetTileManager();
     FoodManager* foodManager = m_configManager->GetFoodManager();
 
     m_currentWorld = new World();
+
     m_currentWorld->SetTileManager(tileManager);
     m_currentWorld->SetFoodManager(foodManager);
     m_currentWorld->SetAutomatonEnabled(true);
@@ -418,7 +431,6 @@ void Game::ConsumeEnergy() {
         if (m_playerHP <= 0) {
             m_playerHP = 0;
             Logger::Log("Player died from starvation!");
-            //m_isRunning = false;
             ShowDeathScreen();
         }
     }
@@ -731,22 +743,17 @@ void Game::ShowDeathScreen() {
 void Game::ClearScreenCompletely() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    // Получаем размеры консоли
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(hConsole, &csbi);
 
-    // Вычисляем размер буфера
     DWORD consoleSize = csbi.dwSize.X * csbi.dwSize.Y;
     COORD topLeft = { 0, 0 };
     DWORD written;
 
-    // Заполняем весь буфер пробелами
     FillConsoleOutputCharacterA(hConsole, ' ', consoleSize, topLeft, &written);
 
-    // Сбрасываем атрибуты
     FillConsoleOutputAttribute(hConsole, csbi.wAttributes, consoleSize, topLeft, &written);
 
-    // Устанавливаем курсор в начало
     SetConsoleCursorPosition(hConsole, topLeft);
 }
 
@@ -887,16 +894,13 @@ void Game::RunPauseMenu() {
 void Game::ReturnToMainMenu() {
     Logger::Log("Returning to main menu...");
 
-    // Сначала останавливаем игровой процесс
     m_isPaused = false;
     m_inMainMenu = true;
 
-    // Сбрасываем флаги меню
     m_pauseMenu->Reset();
     m_mainMenu->Reset();
     m_mainMenu->ResetStartFlags();
 
-    // БЕЗОПАСНОЕ удаление объектов
     if (m_currentWorld) {
         Logger::Log("Deleting world...");
         delete m_currentWorld;
@@ -909,13 +913,11 @@ void Game::ReturnToMainMenu() {
         m_renderSystem = nullptr;
     }
 
-    // Сброс менеджера конфигураций
     if (m_configManager) {
         Logger::Log("Resetting config manager...");
         m_configManager.reset();
     }
 
-    // Сброс состояния игрока
     m_playerX = 0;
     m_playerY = 0;
     m_playerSteps = 0;

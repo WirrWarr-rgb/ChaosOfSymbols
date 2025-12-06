@@ -3,6 +3,7 @@
 #include <iostream>
 #include <filesystem>
 #include <sstream>
+#include <algorithm>
 #include "Logger.h"
 
 namespace fs = std::filesystem;
@@ -21,11 +22,41 @@ void SaveSystem::InitializeSaveDirectories() {
     }
 }
 
+std::vector<SaveInfo> SaveSystem::GetAllSaves() {
+    std::vector<SaveInfo> allSaves;
+
+    auto proceduralSaves = GetSaves(GameMode::PROCEDURAL_GENERATION);
+    for (auto& save : proceduralSaves) {
+        if (!save.isEmpty) {
+            save.gameMode = GameMode::PROCEDURAL_GENERATION;
+            allSaves.push_back(save);
+        }
+    }
+
+    auto preloadedSaves = GetSaves(GameMode::PRELOADED_MAPS);
+    for (auto& save : preloadedSaves) {
+        if (!save.isEmpty) {
+            save.gameMode = GameMode::PRELOADED_MAPS;
+            allSaves.push_back(save);
+        }
+    }
+
+    std::sort(allSaves.begin(), allSaves.end(),
+        [](const SaveInfo& a, const SaveInfo& b) {
+            return a.slotNumber < b.slotNumber;
+        });
+
+    Logger::Log("GetAllSaves: Found " + std::to_string(allSaves.size()) + " saves total");
+    return allSaves;
+}
+
 std::vector<SaveInfo> SaveSystem::GetSaves(GameMode mode) {
     std::vector<SaveInfo> saves;
 
     for (int slot = 1; slot <= 5; slot++) {
-        saves.push_back(GetSaveInfo(mode, slot));
+        SaveInfo info = GetSaveInfo(mode, slot);
+        info.gameMode = mode;
+        saves.push_back(info);
     }
 
     return saves;
@@ -35,6 +66,7 @@ SaveInfo SaveSystem::GetSaveInfo(GameMode mode, int slot) const {
     SaveInfo info;
     info.slotNumber = slot;
     info.savePath = GetSaveSlotPath(mode, slot);
+    info.gameMode = mode;
 
     std::string infoFile = info.savePath + "/save_info.txt";
 
@@ -56,6 +88,31 @@ SaveInfo SaveSystem::GetSaveInfo(GameMode mode, int slot) const {
     }
 
     return info;
+}
+
+SaveInfo SaveSystem::GetSaveInfoUnified(int slot) const {
+    SaveInfo proceduralInfo = GetSaveInfo(GameMode::PROCEDURAL_GENERATION, slot);
+    if (!proceduralInfo.isEmpty) {
+        return proceduralInfo;
+    }
+
+    SaveInfo preloadedInfo = GetSaveInfo(GameMode::PRELOADED_MAPS, slot);
+    if (!preloadedInfo.isEmpty) {
+        return preloadedInfo;
+    }
+
+    proceduralInfo.name = "Empty";
+    return proceduralInfo;
+}
+
+bool SaveSystem::SaveExistsAnywhere(int slot) const {
+    SaveInfo proceduralInfo = GetSaveInfo(GameMode::PROCEDURAL_GENERATION, slot);
+    if (!proceduralInfo.isEmpty) {
+        return true;
+    }
+
+    SaveInfo preloadedInfo = GetSaveInfo(GameMode::PRELOADED_MAPS, slot);
+    return !preloadedInfo.isEmpty;
 }
 
 bool SaveSystem::CreateNewSave(GameMode mode, int slot, const std::string& name, const WorldEditorConfig& config) {
@@ -95,7 +152,8 @@ bool SaveSystem::CreateNewSave(GameMode mode, int slot, const std::string& name,
         return false;
     }
 
-    Logger::Log("Successfully created new save: " + name + " in slot " + std::to_string(slot));
+    Logger::Log("Successfully created new save: " + name + " in slot " + std::to_string(slot) +
+        " (mode: " + std::to_string(static_cast<int>(mode)) + ")");
     return true;
 }
 
@@ -239,7 +297,8 @@ bool SaveSystem::LoadSave(GameMode mode, int slot) {
         return false;
     }
 
-    Logger::Log("Loading save from slot " + std::to_string(slot));
+    Logger::Log("Loading save from slot " + std::to_string(slot) +
+        " (mode: " + std::to_string(static_cast<int>(mode)) + ")");
 
     m_loadedConfig = LoadWorldConfig(mode, slot);
 
@@ -265,6 +324,21 @@ bool SaveSystem::LoadSave(GameMode mode, int slot) {
 
     Logger::Log("Successfully loaded save: " + info.name);
     return true;
+}
+
+bool SaveSystem::LoadSaveUnified(int slot) {
+    SaveInfo proceduralInfo = GetSaveInfo(GameMode::PROCEDURAL_GENERATION, slot);
+    if (!proceduralInfo.isEmpty) {
+        return LoadSave(GameMode::PROCEDURAL_GENERATION, slot);
+    }
+
+    SaveInfo preloadedInfo = GetSaveInfo(GameMode::PRELOADED_MAPS, slot);
+    if (!preloadedInfo.isEmpty) {
+        return LoadSave(GameMode::PRELOADED_MAPS, slot);
+    }
+
+    Logger::Log("ERROR: Cannot load empty save slot " + std::to_string(slot));
+    return false;
 }
 
 bool SaveSystem::LoadPlayerConfig(GameMode mode, int slot) {

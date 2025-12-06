@@ -28,6 +28,7 @@ MainMenu::MainMenu()
     , m_inSaveSelection(false)
     , m_selectedSaveGameMode(GameMode::PROCEDURAL_GENERATION)
     , m_selectedSaveSlot(1)
+    , m_inTemplateSelection(false)
 {
     m_inputManager = std::make_unique<InputManager>();
 
@@ -38,8 +39,8 @@ MainMenu::MainMenu()
     };
 
     m_playSubOptions = {
-        "With procedural generation",
-        "With a preloaded map",
+        "Select save",
+        "Create a world template",
         "Back"
     };
 }
@@ -47,6 +48,8 @@ MainMenu::MainMenu()
 void MainMenu::Initialize() {
     rlutil::hideCursor();
     if (m_inputManager) {
+        m_inputManager->ClearSystemBuffer();
+        m_inputManager->ClearState();
     }
 }
 
@@ -58,6 +61,10 @@ void MainMenu::Update() {
     if (m_currentState == MenuState::SAVE_SELECTION && m_saveSelectionMenu) {
         m_saveSelectionMenu->Update();
         RunSaveSelection();
+    }
+    else if (m_currentState == MenuState::WORLD_TEMPLATE_MENU && m_worldTemplateMenu) {
+        m_worldTemplateMenu->Update();
+        RunWorldTemplateMenu();
     }
 }
 
@@ -82,6 +89,11 @@ void MainMenu::Render() {
     case MenuState::SAVE_SELECTION:
         if (m_saveSelectionMenu) {
             m_saveSelectionMenu->Render();
+        }
+        break;
+    case MenuState::WORLD_TEMPLATE_MENU:
+        if (m_worldTemplateMenu) {
+            m_worldTemplateMenu->Render();
         }
         break;
     case MenuState::IN_GAME:
@@ -285,11 +297,11 @@ void MainMenu::ConfirmSelection() {
 
     if (m_inPlaySubmenu) {
         switch (m_selectedSubIndex) {
-        case 0: // with procedural generation
-            InitializeSaveSelection(GameMode::PROCEDURAL_GENERATION);
+        case 0: // Select save
+            InitializeSaveSelection();
             break;
-        case 1: // with a preloaded map
-            InitializeSaveSelection(GameMode::PRELOADED_MAPS);
+        case 1: // Create a world template
+            InitializeWorldTemplateMenu();
             break;
         case 2: // back
             m_inPlaySubmenu = false;
@@ -315,24 +327,31 @@ void MainMenu::ConfirmSelection() {
     }
 }
 
-void MainMenu::InitializeSaveSelection(GameMode mode) {
+void MainMenu::InitializeSaveSelection() {
     Logger::Log("=== MainMenu::InitializeSaveSelection ===");
-    Logger::Log("Mode: " + std::to_string(static_cast<int>(mode)));
-    Logger::Log("Current MainMenu state: " + std::to_string(static_cast<int>(m_currentState)));
-    m_saveSelectionMenu = std::make_unique<SaveSelectionMenu>(mode);
+
+    m_saveSelectionMenu = std::make_unique<SaveSelectionMenu>();
     m_saveSelectionMenu->Initialize();
 
     m_currentState = MenuState::SAVE_SELECTION;
     m_inSaveSelection = true;
     m_needFullRedraw = true;
 
-    Logger::Log("New SaveSelectionMenu created and initialized");
-    Logger::Log("MainMenu state changed to SAVE_SELECTION");
-
-    std::cout << "Created new SaveSelectionMenu for mode: "
-        << static_cast<int>(mode) << std::endl;
+    Logger::Log("SaveSelectionMenu created and initialized");
 }
 
+void MainMenu::InitializeWorldTemplateMenu() {
+    Logger::Log("=== MainMenu::InitializeWorldTemplateMenu ===");
+    m_worldTemplateMenu = std::make_unique<WorldTemplateMenu>();
+    m_worldTemplateMenu->Initialize();
+
+    m_currentState = MenuState::WORLD_TEMPLATE_MENU;
+    m_inTemplateSelection = true;
+    m_needFullRedraw = true;
+
+    Logger::Log("WorldTemplateMenu created and initialized");
+    Logger::Log("MainMenu state changed to WORLD_TEMPLATE_MENU");
+}
 
 void MainMenu::RunSaveSelection() {
     if (m_saveSelectionMenu) {
@@ -347,11 +366,31 @@ void MainMenu::RunSaveSelection() {
         else if (m_saveSelectionMenu->ShouldStartGame()) {
             Logger::Log("MainMenu::RunSaveSelection - Starting game from save");
             m_shouldLoadSave = true;
-            m_selectedSaveGameMode = m_saveSelectionMenu->GetGameMode();
             m_selectedSaveSlot = m_saveSelectionMenu->GetSelectedSlot();
             m_shouldStartGame = true;
             m_saveSelectionMenu.reset();
             Logger::Log("SaveSelectionMenu destroyed, game starting from save...");
+        }
+    }
+}
+
+void MainMenu::RunWorldTemplateMenu() {
+    if (m_worldTemplateMenu) {
+        if (m_worldTemplateMenu->ShouldReturnToMainMenu()) {
+            Logger::Log("MainMenu::RunWorldTemplateMenu - Returning to main menu");
+            m_currentState = MenuState::MAIN_MENU;
+            m_inTemplateSelection = false;
+            m_needFullRedraw = true;
+            m_worldTemplateMenu.reset();
+            Logger::Log("WorldTemplateMenu destroyed");
+        }
+        else if (m_worldTemplateMenu->ShouldCreateTemplate()) {
+            Logger::Log("MainMenu::RunWorldTemplateMenu - Template created successfully");
+            m_currentState = MenuState::MAIN_MENU;
+            m_inTemplateSelection = false;
+            m_needFullRedraw = true;
+            m_worldTemplateMenu.reset();
+            Logger::Log("WorldTemplateMenu destroyed, template created");
         }
     }
 }
@@ -374,6 +413,11 @@ void MainMenu::ProcessInput() {
 
     if (m_currentState == MenuState::SAVE_SELECTION && m_saveSelectionMenu) {
         m_saveSelectionMenu->ProcessInput();
+        return;
+    }
+
+    if (m_currentState == MenuState::WORLD_TEMPLATE_MENU && m_worldTemplateMenu) {
+        m_worldTemplateMenu->ProcessInput();
         return;
     }
 

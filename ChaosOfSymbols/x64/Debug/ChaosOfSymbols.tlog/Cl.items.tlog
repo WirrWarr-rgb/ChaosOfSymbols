@@ -4,6 +4,8 @@ C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FileWatcher.cpp;C:\User
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\Food.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\Food.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\FoodManager.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\Game.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\Game.obj
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\HelpPanel.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\HelpPanel.obj
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\HelpSystem.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\HelpSystem.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\InputManager.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\InputManager.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\Logger.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\Logger.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\main.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\main.obj
@@ -13,8 +15,10 @@ C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PlayerConfig.cpp;C:\Use
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\RenderSystem.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\RenderSystem.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\SaveSelectionMenu.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\SaveSystem.obj
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\TemplateSystem.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\TemplateSystem.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\TileType.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\TileType.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\TileTypeManager.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\TileTypeManager.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\World.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\World.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldConfig.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\WorldConfig.obj
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\WorldEditor.obj
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldTemplateMenu.cpp;C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\x64\Debug\WorldTemplateMenu.obj

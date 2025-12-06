@@ -5,6 +5,7 @@
 #include <memory>
 #include "SaveTypes.h"
 #include "SaveSelectionMenu.h"
+#include "WorldTemplateMenu.h"
 #include "InputManager.h"
 
 enum class MainMenuOption {
@@ -18,8 +19,9 @@ enum class MainMenuOption {
 enum class MenuState {
     MAIN_MENU,
     ABOUT_SCREEN,
-    IN_GAME,
-    SAVE_SELECTION
+    SAVE_SELECTION,
+    WORLD_TEMPLATE_MENU,
+    IN_GAME
 };
 
 class MainMenu {
@@ -35,7 +37,6 @@ public:
     MenuState GetCurrentState() const { return m_currentState; }
     MainMenuOption GetSelectedGameMode() const { return m_selectedGameMode; }
 
-    // Добавляем геттеры для информации о выбранном сейве
     GameMode GetSelectedSaveGameMode() const { return m_selectedSaveGameMode; }
     int GetSelectedSaveSlot() const { return m_selectedSaveSlot; }
     bool ShouldLoadSave() const { return m_shouldLoadSave; }
@@ -49,6 +50,9 @@ public:
         m_selectedMainIndex = 0;
         m_selectedSubIndex = 0;
         m_needFullRedraw = true;
+
+        m_saveSelectionMenu.reset();
+        m_worldTemplateMenu.reset();
     }
 
     void ResetStartFlags() {
@@ -69,9 +73,10 @@ private:
     void RenderMenuItem(int index, int line, const std::string& text, bool selected);
     void RenderSubMenuItem(int index, int line, const std::string& text, bool selected);
 
-    // Методы для работы с выбором сейвов
-    void InitializeSaveSelection(GameMode mode);
+    void InitializeSaveSelection();
+    void InitializeWorldTemplateMenu();
     void RunSaveSelection();
+    void RunWorldTemplateMenu();
 
 private:
     MenuState m_currentState;
@@ -85,19 +90,19 @@ private:
     bool m_shouldLoadSave;
     MainMenuOption m_selectedGameMode;
 
-    // Поля для работы с выбором сейвов
     std::unique_ptr<SaveSelectionMenu> m_saveSelectionMenu;
     bool m_inSaveSelection;
     GameMode m_selectedSaveGameMode;
     int m_selectedSaveSlot;
 
-    // Поля для отслеживания предыдущего состояния
+    std::unique_ptr<WorldTemplateMenu> m_worldTemplateMenu;
+    bool m_inTemplateSelection;
+
     int m_prevSelectedMainIndex;
     int m_prevSelectedSubIndex;
     bool m_prevInPlaySubmenu;
     MenuState m_prevState;
     bool m_needFullRedraw;
 
-    // Добавляем InputManager
     std::unique_ptr<InputManager> m_inputManager;
 };

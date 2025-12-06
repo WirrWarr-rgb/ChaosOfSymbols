@@ -20,15 +20,9 @@ int main() {
 
         if (game.Initialize()) {
             game.Run();
-
-            // После завершения игры спросить, хочет ли игрок сыграть еще раз?
-            // Или автоматически перезапускать
-            // restartGame = AskToRestart(); 
-            // Для простоты всегда перезапускаем
             restartGame = true;
         }
         else {
-            cout << "\nFailed to initialize game!" << '\n';
             restartGame = false;
         }
     }

@@ -63,7 +63,6 @@ void PauseMenu::ProcessInput() {
         ConfirmSelection();
     }
     else if (m_inputManager->IsMenuBack()) {
-        // ESC также продолжает игру
         m_shouldResume = true;
     }
 }
@@ -75,70 +74,61 @@ bool PauseMenu::NeedsRedraw() const {
 void PauseMenu::RenderOnlyChanges() {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    // Получаем размеры консоли для центрирования
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(hConsole, &csbi);
     int consoleWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
     int consoleHeight = csbi.srWindow.Bottom - csbi.srWindow.Top + 1;
 
-    // Центрируем меню
     int centerX = consoleWidth / 2;
     int centerY = consoleHeight / 2;
 
     int menuHeight = m_menuOptions.size() + 4;
     int startY = centerY - menuHeight / 2;
 
-    // Заголовок (рисуем только при полной перерисовке)
     if (m_needRedraw) {
-        SetConsoleTextAttribute(hConsole, 14); // Желтый
+        SetConsoleTextAttribute(hConsole, 14);
         rlutil::locate(centerX - 10, startY);
         std::cout << "=== PAUSE MENU ===";
     }
 
-    // Опции меню
     for (int i = 0; i < m_menuOptions.size(); ++i) {
         int line = startY + 2 + i;
         bool isSelected = (i == m_selectedIndex);
         bool wasSelected = (i == m_prevSelectedIndex);
 
-        // Перерисовываем только если изменилось состояние выбора или нужно полное обновление
         if (m_needRedraw || isSelected != wasSelected) {
             RenderMenuItem(line, m_menuOptions[i], isSelected);
         }
     }
 
-    // Инструкции (рисуем только при полной перерисовке)
     if (m_needRedraw) {
         rlutil::locate(centerX - 12, startY + m_menuOptions.size() + 2);
-        SetConsoleTextAttribute(hConsole, 8); // Серый
+        SetConsoleTextAttribute(hConsole, 8);
         std::cout << "Press ESC to continue";
     }
 
-    SetConsoleTextAttribute(hConsole, 7); // Возвращаем белый цвет
+    SetConsoleTextAttribute(hConsole, 7);
 }
 
 void PauseMenu::RenderMenuItem(int line, const std::string& text, bool selected) {
-    // Очищаем строку перед отрисовкой
     ClearLine(line);
     rlutil::locate(0, line);
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    // Получаем размеры консоли для центрирования
     CONSOLE_SCREEN_BUFFER_INFO csbi;
     GetConsoleScreenBufferInfo(hConsole, &csbi);
     int consoleWidth = csbi.srWindow.Right - csbi.srWindow.Left + 1;
     int centerX = consoleWidth / 2;
 
-    // Позиционируем по центру
     rlutil::locate(centerX - 8, line);
 
     if (selected) {
-        SetConsoleTextAttribute(hConsole, 10); // Зеленый
+        SetConsoleTextAttribute(hConsole, 10);
         std::cout << "> " << text;
     }
     else {
-        SetConsoleTextAttribute(hConsole, 7); // Белый
+        SetConsoleTextAttribute(hConsole, 7);
         std::cout << "  " << text;
     }
 }

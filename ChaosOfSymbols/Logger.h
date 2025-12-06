@@ -7,6 +7,7 @@ class Logger {
 public:
     static void Initialize(const std::string& filename = "debug.log");
     static void Log(const std::string& message);
+    static std::string GetTickCount();
     static void Close();
 
 private:

@@ -5,7 +5,8 @@
 
 class TileTypeManager {
 public:
-    TileTypeManager(const std::string& filePath = "config/tiles.json");
+    TileTypeManager(const std::string& filePath = "");
+    void SetFilePath(const std::string& filePath);
 
     bool LoadFromFile();
     bool LoadFromFile(const std::string& filePath);

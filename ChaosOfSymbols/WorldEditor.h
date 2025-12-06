@@ -21,25 +21,32 @@ enum class EditorTab {
     LOSE
 };
 
+enum class EditorMode {
+    CREATE_WORLD,      // Создать мир и начать игру
+    CREATE_TEMPLATE    // Создать только шаблон (для меню шаблонов)
+};
+
 // Состояния для вкладки Tiles
 enum class TilesState {
-    MAIN_LIST,
-    EDITING_TILE,
-    ADDING_TILE
+    MAIN_LIST,        // Основной список тайлов
+    TILE_ACTIONS,     // Меню действий (Изменить/Удалить)
+    EDITING_TILE,     // Редактирование тайла
+    ADDING_TILE       // Добавление нового тайла
 };
 
 class WorldEditor {
 public:
-    WorldEditor(GameMode mode, int slot);
+    WorldEditor(EditorMode mode, int slot, GameMode gameMode = GameMode::PROCEDURAL_GENERATION);
     void Initialize();
     void Update();
     void Render();
     void ProcessInput();
 
     bool ShouldReturnToSaves() const { return m_shouldReturn; }
-    bool ShouldCreateWorld() const { return m_shouldCreate; }
+    bool ShouldCreateWorld() const { return m_shouldCreate && m_editorMode == EditorMode::CREATE_WORLD; }
+    bool ShouldCreateTemplate() const { return m_shouldCreate && m_editorMode == EditorMode::CREATE_TEMPLATE; }
     const WorldEditorConfig& GetConfig() const { return m_config; }
-
+    void ClearDefaultTiles();
 private:
     // Основные методы
     void CreateNewWorld();
@@ -85,18 +92,71 @@ private:
     bool ShouldShowSeedField() const;
     int GetVisibleWorldFieldsCount() const;
 
+    void RenderTileEditing(int startLine, bool isNewTile);
+    void HandleTileEditInput();
+    void SaveEditedTileField();
+    void SaveNewTileField();
+    void HandleProbabilityInput();
+
+    int m_editedTileLowlandProb;
+    int m_editedTilePlainsProb;
+    int m_editedTileMountainProb;
+    int m_newTileLowlandProb;
+    int m_newTilePlainsProb;
+    int m_newTileMountainProb;
+
     // Вкладка Tiles - полностью переработанная
     void HandleTileInput();
-    void RenderTileList();
+    void RenderTileList(int startLine);
     void RenderTileDetails();
-    void RenderTileEditing();
     void StartEditingTile();
-    void HandleTileEditInput();
     void ApplyTileEdit();
     void AddNewTile();
     void DeleteSelectedTile();
     void ChangeTileColor(int delta);
     void LoadAvailableTiles();
+
+    void HandleTileActionsNavigation();
+    void RenderTileActions(int startLine);
+
+    void HandleSymbolInput();
+    void HandleColorInput();
+    void HandleTileNameInput();
+    void CreateDefaultTiles();
+
+    void CreateDirectoryForSlot(int slot);
+
+    bool CreateTemplate(const std::string& templateName);
+    bool LoadFromTemplate(int templateSlot);
+
+    bool LoadTemplateConfig(const WorldEditorConfig& config);
+
+    bool SaveAllConfigurations(const std::string& directory);
+    bool SaveWorldConfig(const std::string& directory);
+    bool SavePlayerConfig(const std::string& directory);
+    bool SaveTilesConfig(const std::string& directory);
+    bool SaveCellularAutomatonConfig(const std::string& directory);
+    bool SaveFoodConfig(const std::string& directory);
+    bool SaveEnemiesConfig(const std::string& directory);
+
+   /* void RenderHelpPanel();
+    void UpdateHelpInfo();
+    void InitializeHelpSystem(); */
+
+    EditorMode m_editorMode;
+
+    //std::string m_currentHelpItemId;
+
+    int m_tileActionIndex;  // Индекс выбранного действия (Edit/Delete/Back)
+    std::string m_newTileName;  // Имя нового тайла
+    char m_newTileSymbol;       // Символ нового тайла
+    int m_newTileColor;         // Цвет нового тайла
+
+    std::string m_editedTileName;
+    char m_editedTileSymbol;
+    int m_editedTileColor;
+
+    std::string m_tilesConfigPath;
 
     // Навигация
     EditorTab m_currentTab;

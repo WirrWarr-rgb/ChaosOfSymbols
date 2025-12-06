@@ -3,24 +3,868 @@
 Default console size set to 80x25
 === GAME INITIALIZATION STARTED ===
 
+=== MainMenu::InitializeWorldTemplateMenu ===
+=== WorldTemplateMenu CONSTRUCTOR ===
+TemplateSystem initialized successfully
+WorldTemplateMenu constructor completed
+=== END CONSTRUCTOR ===
+=== LOADING TEMPLATES ===
+Checking templates directory: templates/
+Template directory 1 exists
+  Total files: 0
+Template directory 2 exists
+  File: cellular_automaton.cfg
+  File: enemies.cfg
+  File: food.cfg
+  File: player.cfg
+  File: template_info.txt
+  File: tiles.json
+  File: world_gen.cfg
+  File: world_spawn.cfg
+  Total files: 8
+Template directory 3 exists
+  Total files: 0
+Template directory 4 exists
+  Total files: 0
+Template directory 5 exists
+  File: cellular_automaton.cfg
+  File: enemies.cfg
+  File: food.cfg
+  File: player.cfg
+  File: template_info.txt
+  File: tiles.json
+  File: world_gen.cfg
+  File: world_spawn.cfg
+  Total files: 8
+Template directory 6 exists
+  Total files: 0
+Template directory 7 exists
+  Total files: 0
+Template directory 8 exists
+  Total files: 0
+Template directory 9 exists
+  Total files: 0
+Template directory 10 exists
+  Total files: 0
+Template directory 11 exists
+  Total files: 0
+Template directory 12 exists
+  Total files: 0
+Template directory 13 exists
+  Total files: 0
+Template directory 14 exists
+  Total files: 0
+Template directory 15 exists
+  Total files: 0
+Template directory 16 exists
+  Total files: 0
+Template directory 17 exists
+  Total files: 0
+Template directory 18 exists
+  Total files: 0
+Template directory 19 exists
+  Total files: 0
+Template directory 20 exists
+  Total files: 0
+Template directory 21 exists
+  Total files: 0
+Template directory 22 exists
+  Total files: 0
+Template directory 23 exists
+  Total files: 0
+Template directory 24 exists
+  Total files: 0
+Template directory 25 exists
+  Total files: 0
+Template directory 26 exists
+  Total files: 0
+Template directory 27 exists
+  Total files: 0
+Template directory 28 exists
+  Total files: 0
+Template directory 29 exists
+  Total files: 0
+Template directory 30 exists
+  Total files: 0
+Slot 1: Empty, Path: templates/template1
+Slot 2: New_WorldAD3, Path: templates/template2
+  Files in template: 8
+Slot 3: Empty, Path: templates/template3
+Slot 4: Empty, Path: templates/template4
+Slot 5: New_World, Path: templates/template5
+  Files in template: 8
+Slot 6: Empty, Path: templates/template6
+Slot 7: Empty, Path: templates/template7
+Slot 8: Empty, Path: templates/template8
+Slot 9: Empty, Path: templates/template9
+Slot 10: Empty, Path: templates/template10
+Slot 11: Empty, Path: templates/template11
+Slot 12: Empty, Path: templates/template12
+Slot 13: Empty, Path: templates/template13
+Slot 14: Empty, Path: templates/template14
+Slot 15: Empty, Path: templates/template15
+Slot 16: Empty, Path: templates/template16
+Slot 17: Empty, Path: templates/template17
+Slot 18: Empty, Path: templates/template18
+Slot 19: Empty, Path: templates/template19
+Slot 20: Empty, Path: templates/template20
+Slot 21: Empty, Path: templates/template21
+Slot 22: Empty, Path: templates/template22
+Slot 23: Empty, Path: templates/template23
+Slot 24: Empty, Path: templates/template24
+Slot 25: Empty, Path: templates/template25
+Slot 26: Empty, Path: templates/template26
+Slot 27: Empty, Path: templates/template27
+Slot 28: Empty, Path: templates/template28
+Slot 29: Empty, Path: templates/template29
+Slot 30: Empty, Path: templates/template30
+Loaded 30 templates
+=== END LOADING TEMPLATES ===
+WorldTemplateMenu Initialize() - State reset to MAIN_LIST
+WorldTemplateMenu created and initialized
+MainMenu state changed to WORLD_TEMPLATE_MENU
+WorldTemplateMenu: Down -> Slot 2
+WorldTemplateMenu: Down -> Slot 3
+WorldTemplateMenu: Down -> Slot 4
+WorldTemplateMenu: Down -> Slot 5
+WorldTemplateMenu: Down -> Slot 6
+WorldTemplateMenu: Last row -> Back
+WorldTemplateMenu ConfirmSelection - State: 0, Slot: 31, ShowActions: 0
+WorldTemplateMenu Back selected - returning to main menu
+MainMenu::RunWorldTemplateMenu - Returning to main menu
+WorldTemplateMenu destroyed
 === MainMenu::InitializeSaveSelection ===
-Mode: 0
-Current MainMenu state: 0
 === SaveSelectionMenu CONSTRUCTOR ===
-Mode: 0
-Initial state: 0
-Selected slot: 1
-Constructor completed. Saves count: 5
+TemplateSystem initialized successfully
+GetAllSaves: Found 6 saves total
+Constructor completed. Total slots: 5
+Slot 1: New_World
+Slot 2: New_World
+Slot 3: New_World
+Slot 4: Empty
+Slot 5: New_World (from template)
 === END CONSTRUCTOR ===
 SaveSelectionMenu Initialize() - State reset to MAIN_LIST
-Current state after init: 0
-New SaveSelectionMenu created and initialized
-MainMenu state changed to SAVE_SELECTION
-SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu created and initialized
+SaveSelectionMenu MenuDown or S pressed
 SaveSelectionMenu SelectNext - Slot: 1 -> 2
-SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu MenuDown or S pressed
 SaveSelectionMenu SelectNext - Slot: 2 -> 3
-SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu MenuDown or S pressed
 SaveSelectionMenu SelectNext - Slot: 3 -> 4
-SaveSelectionMenu MenuDown pressed
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 4, ShowActions: 0
+Showing actions for slot 4 (Empty)
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 4, ShowActions: 1
+SaveSelectionMenu Action selected: Create for slot 4
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 4, ShowActions: 1
+SaveSelectionMenu Action selected: Create from template for slot 4
+Showing templates for slot 4
+Showing templates for slot 4
+Template selection: Down -> Index 1
+Template index changed from 0 to 1
+Loading template from slot 2
+Successfully loaded template: New_WorldAD3
+Successfully created new save: New_WorldAD3 (from template) in slot 4 (mode: 0)
+Created save from template 2 in slot 4
+GetAllSaves: Found 7 saves total
+Save created from template successfully
+Template index changed from 1 to 0
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 4, ShowActions: 1
+SaveSelectionMenu Action selected: Play for slot 4
+SaveSelectionMenu Playing save slot 4
+Loading save from slot 4 (mode: 0)
+Successfully loaded save: New_WorldAD3 (from template)
+Save loaded successfully, starting game...
+MainMenu::RunSaveSelection - Starting game from save
+SaveSelectionMenu destroyed, game starting from save...
+Starting game from save: mode=0, slot=4
+Loading save from slot 4 (mode: 0)
+Successfully loaded save: New_WorldAD3 (from template)
+Loading world from save configuration...
+Starting game from save at: 2025-12-06 21:58:53
+Initializing ConfigManager
+
+Loading player configuration from: config/player.cfg
+Player configuration loaded: 9 parameters
+Player config - HP: 20 (enabled), Hunger: 20 (disabled)
+=== LOADING TILE TYPES FROM:  ===
+ERROR: Tile config not found: 
+Attempting to create default tile config...
+ERROR: No file path specified for saving tiles
+ERROR: Failed to create default tile config
+Loading default tile types...
+Loaded 8 default tile types
+=== LOADED FOOD SUMMARY ===
+
+Loaded food: Hope (ID: 1, XP: 10)
+Loaded food: Faith (ID: 2, XP: 15)
+Loaded food: Star (ID: 3, XP: 30)
+Loaded food: Abyss (ID: 4, XP: 5)
+
+Food manager loaded 4 food types
+
+=== END LOADED FOOD SUMMARY ===
+
+DEBUG: Started new tile '.'
+DEBUG: Saved rule for tile '.'
+DEBUG: Started new tile '+'
+DEBUG: Saved rule for tile '+'
+DEBUG: Started new tile '#'
+DEBUG: Saved final rule for tile '#'
+
+=== LOADED CELLULAR AUTOMATON RULES SUMMARY ===
+
+Tile '.': 
+Survival=(count['.'] >= 2 && count['.'] <= 5) || (count['.'] == 1 && count['+'] >= 6), 
+Birth=(count['.'] >= 2 && count['#'] <= 1)
+Death=ERROR
+Tile '#': 
+Survival=(count['#'] >= 2 && count['#'] <= 5) || (count['#'] == 1 && count['.'] >= 4), 
+Birth=(count['#'] >= 3 && count['+'] == 0) || (count['.'] <= 3 && count['#'] >= 2)
+Death=ERROR
+Tile '+': 
+Survival=(count['+'] >= 2 && count['+'] <= 7) || (count['.'] >= 2 && count['+'] >= 2) || (count['.'] >= 4), 
+Birth=(count['+'] >= 2 && count['+'] <= 5) || (count['.'] == 0 && count['#'] <= 2) || (count['.'] >= 2)
+Death=ERROR
+
+=== END CELLULAR AUTOMATON RULES SUMMARY ===
+
+DEBUG: Total rules loaded: 3
+DEBUG: Rule for '.' is in map
+DEBUG: Rule for '#' is in map
+DEBUG: Rule for '+' is in map
+Started watching file: config/tiles.json
+Started watching file: config/food.cfg
+Started watching file: config/cellular_automaton.cfg
+
+ConfigManager initialized successfully
+=== LOADING TILE TYPES FROM: saves/proceduralGeneration/slot4/tiles.json ===
+ERROR: Tile config not found: saves/proceduralGeneration/slot4/tiles.json
+Attempting to create default tile config...
+Default tile config created successfully
+File opened successfully, size: 1897 bytes
+Cleaned JSON: [  {    "id": 0,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 1,    "name": "grass",    "character": ".",    "color": 10,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 2,    "name": "stone_wall",    "character": "#",    "color": 8,    "isPassable": false,    "isDestructible": true,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 3,    "name": "water",    "character": "~",    "color": 9,    "isPassable": false,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 4,    "name": "lava",    "character": "~",    "color": 4,    "isPassable": true,    "isDestructible": false,    "damage": 5    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 5,    "name": "tree",    "character": "T",    "color": 2,    "isPassable": false,    "isDestructible": true,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 6,    "name": "sand",    "character": ",",    "color": 14,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 7,    "name": "mountain",    "character": "^",    "color": 7,    "isPassable": false,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }]
+
+Found JSON object: {    "id": 0,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 1,    "name": "grass",    "character": ".",    "color": 10,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 2,    "name": "stone_wall",    "character": "#",    "color": 8,    "isPassable": false,    "isDestructible": true,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 3,    "name": "water",    "character": "~",    "color": 9,    "isPassable": false,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 4,    "name": "lava",    "character": "~",    "color": 4,    "isPassable": true,    "isDestructible": false,    "damage": 5    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 5,    "name": "tree",    "character": "T",    "color": 2,    "isPassable": false,    "isDestructible": true,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 6,    "name": "sand",    "character": ",",    "color": 14,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 7,    "name": "mountain",    "character": "^",    "color": 7,    "isPassable": false,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+
+Parsed 8 objects from JSON array
+Found 8 tile objects in JSON
+
+Parsed tile - id: 0, name: air, character: ' ', color: 0, passable: true
+Parsed tile - id: 0, name: air, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 1, name: grass, character: '.', color: 10, passable: true
+Parsed tile - id: 1, name: grass, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 2, name: stone_wall, character: '#', color: 8, passable: false
+Parsed tile - id: 2, name: stone_wall, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 3, name: water, character: '~', color: 9, passable: false
+Parsed tile - id: 3, name: water, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 4, name: lava, character: '~', color: 4, passable: true
+Parsed tile - id: 4, name: lava, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 5, name: tree, character: 'T', color: 2, passable: false
+Parsed tile - id: 5, name: tree, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 6, name: sand, character: ',', color: 14, passable: true
+Parsed tile - id: 6, name: sand, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 7, name: mountain, character: '^', color: 7, passable: false
+Parsed tile - id: 7, name: mountain, lowland: 0, plains: 0, mountain: 0
+
+=== TILE LOADING COMPLETED: 8 tiles loaded ===
+
+=== LOADED TILES SUMMARY ===
+
+Tile 0: ' ' - air (color: 0)
+Tile 1: '.' - grass (color: 10)
+Tile 2: '#' - stone_wall (color: 8)
+Tile 3: '~' - water (color: 9)
+Tile 4: '~' - lava (color: 4)
+Tile 5: 'T' - tree (color: 2)
+Tile 6: ',' - sand (color: 14)
+Tile 7: '^' - mountain (color: 7)
+
+=== END LOADED TILES SUMMARY ===
+
+Loaded 8 tiles from slot 4
+World config set from save: 10x40, seed: 1337, mode: RANDOM
+Generating world from save configuration...
+
+=== STARTING WORLD GENERATION ===
+
+WorldConfig settings:
+  Width: 10
+  Height: 40
+  Seed: 1337
+  NoiseFrequency: 0.700000
+  GenerationMode: 0
+Using parameters from save, skipping file config load
+Generating random world with save parameters...
+Generating random world...
+Content size: 10x40
+Total size with border: 12x42
+Generation mode: RANDOM
+Using seed: 1337
+Cellular automaton config is available (external)
+Spawn rules count: 3
+Tile manager has 8 tiles
+Tile 0: ' ' - air L:0 P:0 M:0
+Tile 1: '.' - grass L:0 P:0 M:0
+Tile 2: '#' - stone_wall L:0 P:0 M:0
+Tile 3: '~' - water L:0 P:0 M:0
+Tile 4: '~' - lava L:0 P:0 M:0
+Tile 5: 'T' - tree L:0 P:0 M:0
+Tile 6: ',' - sand L:0 P:0 M:0
+Tile 7: '^' - mountain L:0 P:0 M:0
+Looking for terrain type: water
+Looking for terrain type: grass
+Looking for terrain type: mountain
+Zone-based terrain generated: 400 tiles placed
+  '~' (water): 22
+  '^' (mountain): 76
+  '.' (grass): 302
+Creating border with tile ID: 2
+Border created successfully
+Smoothing terrain with natural transitions...
+Looking for terrain type: water
+Looking for terrain type: grass
+Looking for terrain type: mountain
+Natural smoothing applied: 149 changes made
+Attempting to spawn 30 food items
+Spawned Hope at 5,31
+Spawned Star at 4,20
+Spawned Faith at 5,25
+Spawned Faith at 2,33
+Spawned Hope at 3,15
+Food spawning completed: 30/30 items spawned (35 attempts)
+=== WORLD GENERATION COMPLETED ===
+=== WORLD GENERATION COMPLETED ===
+Screen size set to: 70x44 (world: 12x42 + UI)
+World loaded successfully from save
+World size: 10x40
+Render system size: 12x42
+Player position: 5,20
+=== GAME STARTED FROM SAVE ===
+UI redrawn - Steps: 0, HP: 30, FPS: 941
+UI redrawn - Steps: 0, HP: 30, FPS: 360
+Player moved - updating cellular automaton
+Cellular automaton: 0 births, 197 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+UI redrawn - Steps: 2, HP: 30, FPS: 361
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+UI redrawn - Steps: 3, HP: 30, FPS: 382
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Gained 30 XP! Total: 30/100, Lifetime: 30
+Food collected: Star at 4,20
+Collected Star - Hunger: +20, HP: +30, XP: +30 | Now: HP=30/30, Hunger=20/20, XP=30/100, Level=1
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+UI redrawn - Steps: 5, HP: 30, FPS: 451
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+UI redrawn - Steps: 8, HP: 30, FPS: 674
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Gained 15 XP! Total: 45/100, Lifetime: 45
+Food collected: Faith at 2,21
+Collected Faith - Hunger: +25, HP: +5, XP: +15 | Now: HP=30/30, Hunger=20/20, XP=45/100, Level=1
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+UI redrawn - Steps: 11, HP: 30, FPS: 395
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+UI redrawn - Steps: 13, HP: 30, FPS: 277
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Gained 15 XP! Total: 60/100, Lifetime: 60
+Food collected: Faith at 3,21
+Collected Faith - Hunger: +25, HP: +5, XP: +15 | Now: HP=30/30, Hunger=20/20, XP=60/100, Level=1
+UI redrawn - Steps: 14, HP: 30, FPS: 387
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+UI redrawn - Steps: 15, HP: 30, FPS: 672
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+UI redrawn - Steps: 19, HP: 30, FPS: 703
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 12/20
+UI redrawn - Steps: 22, HP: 30, FPS: 589
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 10/20
+UI redrawn - Steps: 24, HP: 30, FPS: 560
+Render Stats - FPS: 333 | Avg: 500 | Min: 333 | Max: 703 | Efficiency: 0% | Tiles: 2/528
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 9/20
+UI redrawn - Steps: 25, HP: 30, FPS: 455
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 8/20
+UI redrawn - Steps: 26, HP: 30, FPS: 705
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 7/20
+Gained 15 XP! Total: 75/100, Lifetime: 75
+Food collected: Faith at 7,20
+Collected Faith - Hunger: +25, HP: +5, XP: +15 | Now: HP=30/30, Hunger=20/20, XP=75/100, Level=1
+UI redrawn - Steps: 27, HP: 30, FPS: 533
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+UI redrawn - Steps: 28, HP: 30, FPS: 716
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+UI redrawn - Steps: 29, HP: 30, FPS: 576
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+UI redrawn - Steps: 30, HP: 30, FPS: 294
+UI redrawn - Steps: 30, HP: 30, FPS: 399
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Gained 10 XP! Total: 85/100, Lifetime: 85
+Food collected: Hope at 6,24
+Collected Hope - Hunger: +15, HP: +0, XP: +10 | Now: HP=30/30, Hunger=20/20, XP=85/100, Level=1
+UI redrawn - Steps: 32, HP: 30, FPS: 604
+UI redrawn - Steps: 32, HP: 30, FPS: 403
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Gained 10 XP! Total: 95/100, Lifetime: 95
+Food collected: Hope at 5,23
+Collected Hope - Hunger: +15, HP: +0, XP: +10 | Now: HP=30/30, Hunger=20/20, XP=95/100, Level=1
+UI redrawn - Steps: 34, HP: 30, FPS: 379
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Gained 15 XP! Total: 110/100, Lifetime: 110
+LEVEL UP! Reached level 2! Next level at 150 XP
+Food collected: Faith at 5,25
+Collected Faith - Hunger: +25, HP: +5, XP: +15 | Now: HP=30/30, Hunger=20/20, XP=10/150, Level=2
+UI redrawn - Steps: 36, HP: 30, FPS: 478
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+UI redrawn - Steps: 38, HP: 30, FPS: 692
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Gained 10 XP! Total: 20/150, Lifetime: 120
+Food collected: Hope at 6,26
+Collected Hope - Hunger: +15, HP: +0, XP: +10 | Now: HP=30/30, Hunger=20/20, XP=20/150, Level=2
+UI redrawn - Steps: 39, HP: 30, FPS: 468
+UI redrawn - Steps: 39, HP: 30, FPS: 356
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Render Stats - FPS: 319 | Avg: 461 | Min: 319 | Max: 703 | Efficiency: 0% | Tiles: 2/528
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Gained 5 XP! Total: 25/150, Lifetime: 125
+Food collected: Abyss at 7,27
+Collected Abyss - Hunger: +5, HP: +-10, XP: +5 | Now: HP=20/30, Hunger=20/20, XP=25/150, Level=2
+UI redrawn - Steps: 41, HP: 20, FPS: 606
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Gained 5 XP! Total: 30/150, Lifetime: 130
+Food collected: Abyss at 7,28
+Collected Abyss - Hunger: +5, HP: +-10, XP: +5 | Now: HP=10/30, Hunger=20/20, XP=30/150, Level=2
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+UI redrawn - Steps: 43, HP: 10, FPS: 691
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+UI redrawn - Steps: 45, HP: 10, FPS: 695
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+UI redrawn - Steps: 49, HP: 10, FPS: 591
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 12/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+UI redrawn - Steps: 51, HP: 10, FPS: 564
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 10/20
+Gained 15 XP! Total: 45/150, Lifetime: 145
+Food collected: Faith at 8,35
+Collected Faith - Hunger: +25, HP: +5, XP: +15 | Now: HP=15/30, Hunger=20/20, XP=45/150, Level=2
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+UI redrawn - Steps: 53, HP: 15, FPS: 571
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+UI redrawn - Steps: 56, HP: 15, FPS: 681
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+UI redrawn - Steps: 58, HP: 15, FPS: 782
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+UI redrawn - Steps: 59, HP: 15, FPS: 346
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 12/20
+UI redrawn - Steps: 60, HP: 15, FPS: 317
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 11/20
+Gained 5 XP! Total: 50/150, Lifetime: 150
+Food collected: Abyss at 4,38
+Collected Abyss - Hunger: +5, HP: +-10, XP: +5 | Now: HP=5/30, Hunger=16/20, XP=50/150, Level=2
+Attempting to spawn 10 food items
+Spawned Hope at 6,10
+Spawned Hope at 4,11
+Spawned Star at 4,10
+Spawned Hope at 5,28
+Spawned Faith at 3,35
+Food spawning completed: 10/10 items spawned (10 attempts)
+Periodic food respawn: added 10 items
+UI redrawn - Steps: 61, HP: 5, FPS: 461
+Game paused
+Pause menu requested return to main menu
+Returning to main menu...
+Deleting world...
+Deleting render system...
+Resetting config manager...
+Default console size set to 80x25
+Successfully returned to main menu
+=== MainMenu::InitializeSaveSelection ===
+=== SaveSelectionMenu CONSTRUCTOR ===
+TemplateSystem initialized successfully
+GetAllSaves: Found 7 saves total
+Constructor completed. Total slots: 5
+Slot 1: New_World
+Slot 2: New_World
+Slot 3: New_World
+Slot 4: New_WorldAD3 (from template)
+Slot 5: New_World (from template)
+=== END CONSTRUCTOR ===
+SaveSelectionMenu Initialize() - State reset to MAIN_LIST
+SaveSelectionMenu created and initialized
+SaveSelectionMenu MenuDown or S pressed
+SaveSelectionMenu SelectNext - Slot: 1 -> 2
+SaveSelectionMenu MenuDown or S pressed
+SaveSelectionMenu SelectNext - Slot: 2 -> 3
+SaveSelectionMenu MenuDown or S pressed
+SaveSelectionMenu SelectNext - Slot: 3 -> 4
+SaveSelectionMenu MenuDown or S pressed
 SaveSelectionMenu SelectNext - Slot: 4 -> 5
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 5, ShowActions: 0
+Showing actions for slot 5 (Used)
+SaveSelectionMenu MenuSelect pressed - Current state: 0
+SaveSelectionMenu ConfirmSelection - State: 0, Slot: 5, ShowActions: 1
+SaveSelectionMenu Action selected: Play for slot 5
+SaveSelectionMenu Playing save slot 5
+Loading save from slot 5 (mode: 0)
+Successfully loaded save: New_World (from template)
+Save loaded successfully, starting game...
+MainMenu::RunSaveSelection - Starting game from save
+SaveSelectionMenu destroyed, game starting from save...
+Starting game from save: mode=0, slot=5
+Loading save from slot 5 (mode: 0)
+Successfully loaded save: New_World (from template)
+Loading world from save configuration...
+Starting game from save at: 2025-12-06 21:59:12
+Initializing ConfigManager
+
+Loading player configuration from: config/player.cfg
+Player configuration loaded: 9 parameters
+Player config - HP: 20 (enabled), Hunger: 20 (disabled)
+=== LOADING TILE TYPES FROM:  ===
+ERROR: Tile config not found: 
+Attempting to create default tile config...
+ERROR: No file path specified for saving tiles
+ERROR: Failed to create default tile config
+Loading default tile types...
+Loaded 8 default tile types
+=== LOADED FOOD SUMMARY ===
+
+Loaded food: Hope (ID: 1, XP: 10)
+Loaded food: Faith (ID: 2, XP: 15)
+Loaded food: Star (ID: 3, XP: 30)
+Loaded food: Abyss (ID: 4, XP: 5)
+
+Food manager loaded 4 food types
+
+=== END LOADED FOOD SUMMARY ===
+
+DEBUG: Started new tile '.'
+DEBUG: Saved rule for tile '.'
+DEBUG: Started new tile '+'
+DEBUG: Saved rule for tile '+'
+DEBUG: Started new tile '#'
+DEBUG: Saved final rule for tile '#'
+
+=== LOADED CELLULAR AUTOMATON RULES SUMMARY ===
+
+Tile '.': 
+Survival=(count['.'] >= 2 && count['.'] <= 5) || (count['.'] == 1 && count['+'] >= 6), 
+Birth=(count['.'] >= 2 && count['#'] <= 1)
+Death=ERROR
+Tile '#': 
+Survival=(count['#'] >= 2 && count['#'] <= 5) || (count['#'] == 1 && count['.'] >= 4), 
+Birth=(count['#'] >= 3 && count['+'] == 0) || (count['.'] <= 3 && count['#'] >= 2)
+Death=ERROR
+Tile '+': 
+Survival=(count['+'] >= 2 && count['+'] <= 7) || (count['.'] >= 2 && count['+'] >= 2) || (count['.'] >= 4), 
+Birth=(count['+'] >= 2 && count['+'] <= 5) || (count['.'] == 0 && count['#'] <= 2) || (count['.'] >= 2)
+Death=ERROR
+
+=== END CELLULAR AUTOMATON RULES SUMMARY ===
+
+DEBUG: Total rules loaded: 3
+DEBUG: Rule for '.' is in map
+DEBUG: Rule for '#' is in map
+DEBUG: Rule for '+' is in map
+Started watching file: config/tiles.json
+Started watching file: config/food.cfg
+Started watching file: config/cellular_automaton.cfg
+
+ConfigManager initialized successfully
+=== LOADING TILE TYPES FROM: saves/proceduralGeneration/slot5/tiles.json ===
+File opened successfully, size: 1897 bytes
+Cleaned JSON: [  {    "id": 0,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 1,    "name": "grass",    "character": ".",    "color": 10,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 2,    "name": "stone_wall",    "character": "#",    "color": 8,    "isPassable": false,    "isDestructible": true,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 3,    "name": "water",    "character": "~",    "color": 9,    "isPassable": false,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 4,    "name": "lava",    "character": "~",    "color": 4,    "isPassable": true,    "isDestructible": false,    "damage": 5    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 5,    "name": "tree",    "character": "T",    "color": 2,    "isPassable": false,    "isDestructible": true,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 6,    "name": "sand",    "character": ",",    "color": 14,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 7,    "name": "mountain",    "character": "^",    "color": 7,    "isPassable": false,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }]
+
+Found JSON object: {    "id": 0,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 1,    "name": "grass",    "character": ".",    "color": 10,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 2,    "name": "stone_wall",    "character": "#",    "color": 8,    "isPassable": false,    "isDestructible": true,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 3,    "name": "water",    "character": "~",    "color": 9,    "isPassable": false,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 4,    "name": "lava",    "character": "~",    "color": 4,    "isPassable": true,    "isDestructible": false,    "damage": 5    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 5,    "name": "tree",    "character": "T",    "color": 2,    "isPassable": false,    "isDestructible": true,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 6,    "name": "sand",    "character": ",",    "color": 14,    "isPassable": true,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": 7,    "name": "mountain",    "character": "^",    "color": 7,    "isPassable": false,    "isDestructible": false,    "damage": 0    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+
+Parsed 8 objects from JSON array
+Found 8 tile objects in JSON
+
+Parsed tile - id: 0, name: air, character: ' ', color: 0, passable: true
+Parsed tile - id: 0, name: air, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 1, name: grass, character: '.', color: 10, passable: true
+Parsed tile - id: 1, name: grass, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 2, name: stone_wall, character: '#', color: 8, passable: false
+Parsed tile - id: 2, name: stone_wall, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 3, name: water, character: '~', color: 9, passable: false
+Parsed tile - id: 3, name: water, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 4, name: lava, character: '~', color: 4, passable: true
+Parsed tile - id: 4, name: lava, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 5, name: tree, character: 'T', color: 2, passable: false
+Parsed tile - id: 5, name: tree, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 6, name: sand, character: ',', color: 14, passable: true
+Parsed tile - id: 6, name: sand, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: 7, name: mountain, character: '^', color: 7, passable: false
+Parsed tile - id: 7, name: mountain, lowland: 0, plains: 0, mountain: 0
+
+=== TILE LOADING COMPLETED: 8 tiles loaded ===
+
+=== LOADED TILES SUMMARY ===
+
+Tile 0: ' ' - air (color: 0)
+Tile 1: '.' - grass (color: 10)
+Tile 2: '#' - stone_wall (color: 8)
+Tile 3: '~' - water (color: 9)
+Tile 4: '~' - lava (color: 4)
+Tile 5: 'T' - tree (color: 2)
+Tile 6: ',' - sand (color: 14)
+Tile 7: '^' - mountain (color: 7)
+
+=== END LOADED TILES SUMMARY ===
+
+Loaded 8 tiles from slot 5
+World config set from save: 80x40, seed: 1337, mode: RANDOM
+Generating world from save configuration...
+
+=== STARTING WORLD GENERATION ===
+
+WorldConfig settings:
+  Width: 80
+  Height: 40
+  Seed: 1337
+  NoiseFrequency: 0.700000
+  GenerationMode: 0
+Using parameters from save, skipping file config load
+Generating random world with save parameters...
+Generating random world...
+Content size: 80x40
+Total size with border: 82x42
+Generation mode: RANDOM
+Using seed: 1337
+Cellular automaton config is available (external)
+Spawn rules count: 3
+Tile manager has 8 tiles
+Tile 0: ' ' - air L:0 P:0 M:0
+Tile 1: '.' - grass L:0 P:0 M:0
+Tile 2: '#' - stone_wall L:0 P:0 M:0
+Tile 3: '~' - water L:0 P:0 M:0
+Tile 4: '~' - lava L:0 P:0 M:0
+Tile 5: 'T' - tree L:0 P:0 M:0
+Tile 6: ',' - sand L:0 P:0 M:0
+Tile 7: '^' - mountain L:0 P:0 M:0
+Looking for terrain type: water
+Looking for terrain type: grass
+Looking for terrain type: mountain
+Zone-based terrain generated: 3200 tiles placed
+  '~' (water): 232
+  '^' (mountain): 421
+  '.' (grass): 2547
+Creating border with tile ID: 2
+Border created successfully
+Smoothing terrain with natural transitions...
+Looking for terrain type: water
+Looking for terrain type: grass
+Looking for terrain type: mountain
+Natural smoothing applied: 1417 changes made
+Attempting to spawn 30 food items
+Spawned Hope at 6,34
+Spawned Faith at 45,28
+Spawned Star at 66,9
+Spawned Abyss at 9,6
+Spawned Star at 36,3
+Food spawning completed: 30/30 items spawned (31 attempts)
+=== WORLD GENERATION COMPLETED ===
+=== WORLD GENERATION COMPLETED ===
+Screen size set to: 82x44 (world: 82x42 + UI)
+World loaded successfully from save
+World size: 80x40
+Render system size: 82x42
+Player position: 40,20
+=== GAME STARTED FROM SAVE ===
+UI redrawn - Steps: 0, HP: 30, FPS: 184
+UI redrawn - Steps: 0, HP: 30, FPS: 206
+UI redrawn - Steps: 0, HP: 30, FPS: 297
+Player moved - updating cellular automaton
+Cellular automaton: 0 births, 1542 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 19/20
+Player moved - updating cellular automaton
+Cellular automaton: 0 births, 2 deaths (0 natural)
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 18/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 17/20
+UI redrawn - Steps: 3, HP: 30, FPS: 493
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 16/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 15/20
+Render Stats - FPS: 408 | Avg: 295 | Min: 181 | Max: 408 | Efficiency: 0% | Tiles: 3/3608
+UI redrawn - Steps: 5, HP: 30, FPS: 460
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 14/20
+Player moved - updating cellular automaton
+=== CELLULAR AUTOMATON UPDATE COMPLETE ===
+Hunger decreased: 13/20
+UI redrawn - Steps: 7, HP: 30, FPS: 200
+Game paused
+Pause menu requested return to main menu
+Returning to main menu...
+Deleting world...
+Deleting render system...
+Resetting config manager...
+Default console size set to 80x25
+Successfully returned to main menu

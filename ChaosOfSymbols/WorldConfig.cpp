@@ -29,13 +29,11 @@ bool WorldConfig::LoadConfig(bool forceReload) {
         return false;
     }
 
-    // Для режима загрузки карты из файла не нужны дополнительные настройки
     if (m_generationMode == WorldGenerationMode::FROM_MAP_FILE) {
         Logger::Log("Using map from file: " + m_mapFilePath);
         return true;
     }
 
-    // Для режима RANDOM генерируем случайный сид
     if (m_generationMode == WorldGenerationMode::RANDOM) {
         m_seed = static_cast<int>(time(nullptr));
         Logger::Log("Using random seed: " + std::to_string(m_seed));

@@ -139,6 +139,8 @@
     <ClCompile Include="Food.cpp" />
     <ClCompile Include="FoodManager.cpp" />
     <ClCompile Include="Game.cpp" />
+    <ClCompile Include="HelpPanel.cpp" />
+    <ClCompile Include="HelpSystem.cpp" />
     <ClCompile Include="InputManager.cpp" />
     <ClCompile Include="Logger.cpp" />
     <ClCompile Include="main.cpp" />
@@ -148,11 +150,13 @@
     <ClCompile Include="RenderSystem.cpp" />
     <ClCompile Include="SaveSelectionMenu.cpp" />
     <ClCompile Include="SaveSystem.cpp" />
+    <ClCompile Include="TemplateSystem.cpp" />
     <ClCompile Include="TileType.cpp" />
     <ClCompile Include="TileTypeManager.cpp" />
     <ClCompile Include="World.cpp" />
     <ClCompile Include="WorldConfig.cpp" />
     <ClCompile Include="WorldEditor.cpp" />
+    <ClCompile Include="WorldTemplateMenu.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="CellularAutomatonRules.h" />
@@ -163,6 +167,8 @@
     <ClInclude Include="Food.h" />
     <ClInclude Include="FoodManager.h" />
     <ClInclude Include="Game.h" />
+    <ClInclude Include="HelpPanel.h" />
+    <ClInclude Include="HelpSystem.h" />
     <ClInclude Include="InputManager.h" />
     <ClInclude Include="Logger.h" />
     <ClInclude Include="MainMenu.h" />
@@ -173,12 +179,14 @@
     <ClInclude Include="SaveSystem.h" />
     <ClInclude Include="SaveTypes.h" />
     <ClInclude Include="SpawnRule.h" />
+    <ClInclude Include="TemplateSystem.h" />
     <ClInclude Include="TileType.h" />
     <ClInclude Include="TileTypeManager.h" />
     <ClInclude Include="World.h" />
     <ClInclude Include="WorldConfig.h" />
     <ClInclude Include="WorldEditor.h" />
     <ClInclude Include="WorldEditorConfig.h" />
+    <ClInclude Include="WorldTemplateMenu.h" />
   </ItemGroup>
   <ItemGroup>
     <None Include="config\cellular_automaton.cfg" />

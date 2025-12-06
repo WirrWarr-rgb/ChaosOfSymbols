@@ -1,12 +1,14 @@
 #pragma once
 #include <string>
+#include <vector>
 
 class TileType {
 public:
     // Конструкторы
-    TileType(int id = 0, const std::string& name = "unknown",
-        char character = '?', int color = 15,
-        bool passable = true, bool destructible = false, int damage = 0);
+    TileType();
+    TileType(int id, const std::string& name, char character, int color,
+        bool passable, bool destructible, int damage,
+        int lowlandProb = 0, int plainsProb = 0, int mountainProb = 0);
 
     // Геттеры
     int GetId() const { return m_id; }
@@ -25,6 +27,12 @@ public:
     void SetDestructible(bool destructible) { m_isDestructible = destructible; }
     void SetDamage(int damage) { m_damage = damage; }
 
+    void SetZoneProbabilities(int lowland, int plains, int mountain);
+    const std::vector<int>& GetZoneProbabilities() const;
+    int GetLowlandProbability() const;
+    int GetPlainsProbability() const;
+    int GetMountainProbability() const;
+
 private:
     int m_id;
     std::string m_name;
@@ -34,4 +42,5 @@ private:
     bool m_isDestructible;
     int m_damage;
 
+    std::vector<int> m_zoneProbabilities; // [низины, равнины, горы]
 };

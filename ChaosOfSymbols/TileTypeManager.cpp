@@ -72,20 +72,15 @@ public:
             prevChar = c;
 
             if (!inString && braceCount == 0 && !currentObj.empty()) {
-                if (currentObj[0] == ',') {
-                    currentObj = currentObj.substr(1);
-                }
-
-                size_t start = currentObj.find_first_not_of(" \t");
-                size_t end = currentObj.find_last_not_of(" \t");
+                size_t start = currentObj.find_first_not_of(" \t,");
+                size_t end = currentObj.find_last_not_of(" \t,");
                 if (start != std::string::npos && end != std::string::npos) {
                     std::string trimmed = currentObj.substr(start, end - start + 1);
-                    if (!trimmed.empty()) {
+                    if (!trimmed.empty() && trimmed != ",") {
                         result.push_back(trimmed);
-                        Logger::Log("Found object: " + trimmed);
+                        Logger::Log("Found JSON object: " + trimmed);
                     }
                 }
-
                 currentObj.clear();
             }
         }
@@ -228,18 +223,25 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
         bool destructible = SimpleJsonParser::GetBoolValue(tileJson, "isDestructible");
         int damage = SimpleJsonParser::GetIntValue(tileJson, "damage");
 
+        int lowlandProb = SimpleJsonParser::GetIntValue(tileJson, "lowlandProbability");
+        int plainsProb = SimpleJsonParser::GetIntValue(tileJson, "plainsProbability");
+        int mountainProb = SimpleJsonParser::GetIntValue(tileJson, "mountainProbability");
+
         Logger::Log("Parsed tile - id: " + std::to_string(id) +
             ", name: " + name +
             ", character: '" + std::string(1, character) + "'" +
             ", color: " + std::to_string(color) +
             ", passable: " + (passable ? "true" : "false"));
+        Logger::Log("Parsed tile - id: " + std::to_string(id) +
+            ", name: " + name +
+            ", lowland: " + std::to_string(lowlandProb) +
+            ", plains: " + std::to_string(plainsProb) +
+            ", mountain: " + std::to_string(mountainProb));
 
         if (id >= 0 && !name.empty()) {
-            RegisterTileType(TileType(id, name, character, color, passable, destructible, damage));
-            Logger::Log("Successfully registered tile: " + name);
-        }
-        else {
-            Logger::Log("WARNING: Invalid tile - id: " + std::to_string(id) + ", name: " + name);
+            RegisterTileType(TileType(id, name, character, color,
+                passable, destructible, damage,
+                lowlandProb, plainsProb, mountainProb));
         }
     }
 
@@ -262,6 +264,10 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
 /// </summary>
 bool TileTypeManager::SaveToFile(const std::string& filePath) {
     std::string outputPath = filePath.empty() ? m_resourceFilePath : filePath;
+    if (outputPath.empty()) {
+        Logger::Log("ERROR: No file path specified for saving tiles");
+        return false;
+    }
     std::ofstream file(outputPath);
 
     if (!file.is_open()) {
@@ -286,6 +292,9 @@ bool TileTypeManager::SaveToFile(const std::string& filePath) {
         file << "    \"isPassable\": " << (tile.IsPassable() ? "true" : "false") << ",\n";
         file << "    \"isDestructible\": " << (tile.IsDestructible() ? "true" : "false") << ",\n";
         file << "    \"damage\": " << tile.GetDamage() << "\n";
+        file << "    \"lowlandProbability\": " << tile.GetLowlandProbability() << ",\n";
+        file << "    \"plainsProbability\": " << tile.GetPlainsProbability() << ",\n";
+        file << "    \"mountainProbability\": " << tile.GetMountainProbability() << "\n";
         file << "  }";
     }
 
@@ -294,6 +303,10 @@ bool TileTypeManager::SaveToFile(const std::string& filePath) {
 
     std::cout << "Saved " << m_tileTypes.size() << " tile types to: " << outputPath << '\n';
     return true;
+}
+
+void TileTypeManager::SetFilePath(const std::string& filePath) {
+    m_resourceFilePath = filePath;
 }
 
 /// <summary>

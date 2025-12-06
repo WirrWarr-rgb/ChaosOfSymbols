@@ -18,7 +18,6 @@ World::World()
 void World::GenerateFromConfig() {
     Logger::Log("\n=== STARTING WORLD GENERATION ===\n");
 
-    // Логируем текущие настройки конфига
     Logger::Log("WorldConfig settings:");
     Logger::Log("  Width: " + std::to_string(m_config.GetWidth()));
     Logger::Log("  Height: " + std::to_string(m_config.GetHeight()));
@@ -28,14 +27,11 @@ void World::GenerateFromConfig() {
 
     if (!m_config.LoadConfig()) {
         Logger::Log("ERROR: Failed to load world generation config");
-        // Пробуем сгенерировать с дефолтными настройками
         Logger::Log("Attempting generation with current settings...");
     }
 
-    // Обработка разных режимов генерации
     switch (m_config.GetGenerationMode()) {
     case WorldGenerationMode::FROM_MAP_FILE:
-        // ПРОВЕРЯЕМ: если путь к файлу карты пустой или файл не существует - используем параметры из сейва
         if (m_config.GetMapFilePath().empty() || !std::filesystem::exists(m_config.GetMapFilePath())) {
             Logger::Log("Map file not found or not specified: " + m_config.GetMapFilePath());
             Logger::Log("Falling back to procedural generation with save parameters");
@@ -45,7 +41,6 @@ void World::GenerateFromConfig() {
             Logger::Log("Generating from map file: " + m_config.GetMapFilePath());
             if (!LoadMapFromFile(m_config.GetMapFilePath())) {
                 Logger::Log("ERROR: Failed to load map from file: " + m_config.GetMapFilePath());
-                // Fallback к случайной генерации с параметрами из сейва
                 Logger::Log("Falling back to random generation with save parameters");
                 GenerateRandomWorld();
             }
@@ -72,6 +67,11 @@ void World::GenerateFromConfig() {
 void World::GenerateRandomWorld() {
     Logger::Log("Generating random world...");
 
+    if (!m_tileManager || m_tileManager->GetAllTiles().empty()) {
+        Logger::Log("ERROR: No tiles available for world generation!");
+        return;
+    }
+
     m_contentWidth = m_config.GetWidth();
     m_contentHeight = m_config.GetHeight();
     m_width = m_contentWidth + 2;
@@ -83,7 +83,6 @@ void World::GenerateRandomWorld() {
     m_noiseGenerator.SetSeed(currentSeed);
     m_noiseGenerator.SetFrequency(m_config.GetNoiseFrequency());
 
-    // Логируем информацию о режиме генерации
     std::string modeStr;
     switch (m_config.GetGenerationMode()) {
     case WorldGenerationMode::RANDOM:
@@ -141,7 +140,6 @@ bool World::LoadMapFromFile(const std::string& filePath) {
     std::string line;
     int maxWidth = 0;
 
-    // Читаем все строки файла
     while (std::getline(file, line)) {
         if (line.empty() || (line.length() >= 2 && line[0] == '/' && line[1] == '/')) {
             continue;
@@ -159,7 +157,6 @@ bool World::LoadMapFromFile(const std::string& filePath) {
         return false;
     }
 
-    // Устанавливаем размеры мира на основе загруженной карты
     m_contentHeight = lines.size();
     m_contentWidth = maxWidth;
     m_width = m_contentWidth + 2;
@@ -167,10 +164,8 @@ bool World::LoadMapFromFile(const std::string& filePath) {
 
     Logger::Log("Loaded map size: " + std::to_string(m_contentWidth) + "x" + std::to_string(m_contentHeight));
 
-    // Инициализируем карту
     m_map.resize(m_height, std::vector<int>(m_width, 0));
 
-    // Заполняем карту данными из файла
     for (int y = 0; y < m_contentHeight; y++) {
         const std::string& currentLine = lines[y];
         for (int x = 0; x < m_contentWidth; x++) {
@@ -181,19 +176,17 @@ bool World::LoadMapFromFile(const std::string& filePath) {
                 Logger::Log("WARNING: Unknown character '" + std::string(1, mapChar) +
                     "' at position " + std::to_string(x) + "," + std::to_string(y) +
                     ", using default tile");
-                tileId = FindTileIdByCharacter('.'); // Используем траву по умолчанию
+                tileId = FindTileIdByCharacter('.');
             }
 
             m_map[y + 1][x + 1] = tileId;
         }
     }
 
-    // Создаем границу
     CreateBorder();
 
-    // Спавним еду
     if (m_foodManager) {
-        int initialFoodCount = (m_contentWidth * m_contentHeight) / 15; // Меньше еды на готовых картах
+        int initialFoodCount = (m_contentWidth * m_contentHeight) / 15;
         initialFoodCount = std::min(initialFoodCount, 20);
         SpawnRandomFood(initialFoodCount);
     }
@@ -212,6 +205,19 @@ void World::GenerateBaseTerrain() {
     }
 
     const auto& spawnRules = m_config.GetAllSpawnRules();
+
+    Logger::Log("Spawn rules count: " + std::to_string(spawnRules.size()));
+    Logger::Log("Tile manager has " + std::to_string(m_tileManager->GetAllTiles().size()) + " tiles");
+
+    const auto& allTiles = m_tileManager->GetAllTiles();
+    for (const auto& pair : allTiles) {
+        const TileType& tile = pair.second;
+        Logger::Log("Tile " + std::to_string(tile.GetId()) + ": '" +
+            std::string(1, tile.GetCharacter()) + "' - " + tile.GetName() +
+            " L:" + std::to_string(tile.GetLowlandProbability()) +
+            " P:" + std::to_string(tile.GetPlainsProbability()) +
+            " M:" + std::to_string(tile.GetMountainProbability()));
+    }
 
     if (spawnRules.empty()) {
         Logger::Log("WARNING: No spawn rules found");
@@ -342,45 +348,55 @@ void World::SmoothTerrain() {
 /// <param name="spawnRules">правила спавна для разных типов terrain</param>
 /// <returns>символ выбранного тайла</returns>
 char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>& spawnRules, int x, int y) {
-    float noise = (m_noiseGenerator.GetNoise((float)x * 0.1f, (float)y * 0.1f) + 1.0f) * 0.5f;
+    if (m_tileManager) {
+        std::vector<std::pair<char, int>> tileProbabilities;
+        const auto& allTiles = m_tileManager->GetAllTiles();
 
-    // Создаем взвешенный выбор на основе вероятностей
-    std::vector<std::pair<char, float>> weightedTiles;
-    float totalWeight = 0.0f;
+        for (const auto& pair : allTiles) {
+            const TileType& tile = pair.second;
+            int probability = 0;
 
-    for (const auto& pair : spawnRules) {
-        char tileChar = pair.first;
-        const SpawnRule& rule = pair.second;
+            switch (zone) {
+            case 0: probability = tile.GetLowlandProbability(); break;
+            case 1: probability = tile.GetPlainsProbability(); break;
+            case 2: probability = tile.GetMountainProbability(); break;
+            }
 
-        if (rule.zoneProbabilities.size() > zone) {
-            float baseProb = rule.zoneProbabilities[zone];
-            // Добавляем небольшую вариативность на основе шума
-            float variedProb = baseProb * (0.9f + noise * 0.2f);
-            weightedTiles.push_back({ tileChar, variedProb });
-            totalWeight += variedProb;
+            if (probability > 0) {
+                tileProbabilities.push_back({ tile.GetCharacter(), probability });
+            }
         }
-    }
 
-    if (totalWeight > 0.0f) {
-        float randomValue = noise * totalWeight;
-        float currentWeight = 0.0f;
+        if (!tileProbabilities.empty()) {
+            int totalProbability = 0;
+            for (const auto& tp : tileProbabilities) {
+                totalProbability += tp.second;
+            }
 
-        for (const auto& weightedTile : weightedTiles) {
-            currentWeight += weightedTile.second;
-            if (randomValue <= currentWeight) {
-                return weightedTile.first;
+            if (totalProbability > 0) {
+                unsigned int hash = (x * 73856093) ^ (y * 19349663) ^ m_config.GetEffectiveSeed();
+                int randomValue = hash % totalProbability;
+
+                int cumulativeProbability = 0;
+                for (const auto& tp : tileProbabilities) {
+                    cumulativeProbability += tp.second;
+                    if (randomValue < cumulativeProbability) {
+                        Logger::Log("Selected tile '" + std::string(1, tp.first) +
+                            "' from manager for zone " + std::to_string(zone) +
+                            " at " + std::to_string(x) + "," + std::to_string(y));
+                        return tp.first;
+                    }
+                }
             }
         }
     }
 
-    if (!weightedTiles.empty()) {
-        std::sort(weightedTiles.begin(), weightedTiles.end(),
-            [](const auto& a, const auto& b) { return a.second > b.second; });
-        return weightedTiles[0].first;
+    switch (zone) {
+    case 0: return '~';
+    case 1: return '.';
+    case 2: return '^';
+    default: return '.';
     }
-
-    Logger::Log("No tiles available for zone " + std::to_string(zone) + ", using '.'");
-    return '.';
 }
 
 /// <summary>
