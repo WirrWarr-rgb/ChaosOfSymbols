@@ -9,6 +9,7 @@
 #include "SaveSystem.h"
 #include "TileTypeManager.h"
 #include "TileType.h"
+#include "World.h"
 
 enum class EditorTab {
     WORLD,
@@ -47,6 +48,10 @@ public:
     bool ShouldCreateTemplate() const { return m_shouldCreate && m_editorMode == EditorMode::CREATE_TEMPLATE; }
     const WorldEditorConfig& GetConfig() const { return m_config; }
     void ClearDefaultTiles();
+
+    void UpdateHelpForCurrentSelection();
+    void RegisterHelpSystemEntries();
+    void RenderHelpPanel();
 private:
     // Основные методы
     void CreateNewWorld();
@@ -139,13 +144,11 @@ private:
     bool SaveFoodConfig(const std::string& directory);
     bool SaveEnemiesConfig(const std::string& directory);
 
-   /* void RenderHelpPanel();
-    void UpdateHelpInfo();
-    void InitializeHelpSystem(); */
+    std::string GetCurrentFieldName() const;
+    std::string GetCurrentButtonName() const;
+    std::string GetCurrentTabName() const;
 
     EditorMode m_editorMode;
-
-    //std::string m_currentHelpItemId;
 
     int m_tileActionIndex;  // Индекс выбранного действия (Edit/Delete/Back)
     std::string m_newTileName;  // Имя нового тайла

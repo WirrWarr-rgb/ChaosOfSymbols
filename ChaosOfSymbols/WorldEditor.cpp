@@ -8,6 +8,7 @@
 #include <sstream>
 #include "Logger.h"
 #include "HelpPanel.h"
+#include "HelpSystem.h"
 
 namespace rlutil {
     void setColor(int color);
@@ -47,9 +48,9 @@ WorldEditor::WorldEditor(EditorMode editorMode, int slot, GameMode gameMode)
     , m_newTileLowlandProb(0)
     , m_newTilePlainsProb(0)
     , m_newTileMountainProb(0)
-    //, m_currentHelpItemId("")
 {
-    //InitializeHelpSystem();
+    HelpPanel::Initialize();
+    RegisterHelpSystemEntries();
 
     if (m_editorMode == EditorMode::CREATE_WORLD) {
         m_tilesConfigPath = "saves/proceduralGeneration/slot" + std::to_string(slot) + "/tiles.json";
@@ -143,6 +144,7 @@ void WorldEditor::Update() {
 }
 
 void WorldEditor::Render() {
+    UpdateHelpForCurrentSelection();
     if (m_currentTab != m_prevTab) {
         rlutil::cls();
         m_needFullRedraw = true;
@@ -150,11 +152,14 @@ void WorldEditor::Render() {
         m_prevFieldCount = 0;
     }
 
+
     if (m_needFullRedraw || NeedsRedraw()) {
         RenderOnlyChanges();
     }
 
-    //RenderHelpPanel();
+    int screenHeight = 25;
+    int screenWidth = 80;
+    HelpPanel::Render(screenWidth, screenHeight);
 
     m_prevSelectedField = m_selectedField;
     m_prevSelectedButton = m_selectedButton;
@@ -195,17 +200,6 @@ void WorldEditor::RenderOnlyChanges() {
     }
 
     RenderBottomButtons();
-
-    if (m_needFullRedraw) {
-        ClearLine(22);
-        rlutil::locate(2, 22);
-        if (m_isEditingText) {
-            std::cout << "Enter value and press ENTER to confirm, ESC to cancel";
-        }
-        else {
-            std::cout << "Controls: TAB - Switch tabs, W/S - Navigate, ENTER - Edit/Select";
-        }
-    }
 
     SetConsoleTextAttribute(hConsole, 7);
 }
@@ -2226,44 +2220,197 @@ bool WorldEditor::LoadTemplateConfig(const WorldEditorConfig& config) {
     return true;
 }
 
-//void WorldEditor::InitializeHelpSystem() {
-//    auto& helpSystem = HelpSystem::GetInstance();
-//
-//    // Основные поля
-//    helpSystem.AddHelpEntry("world_name", "The name of your world. This will be displayed in the saves menu.");
-//    helpSystem.AddHelpEntry("world_width", "Width of the world in tiles. Recommended: 50-200.");
-//    helpSystem.AddHelpEntry("world_height", "Height of the world in tiles. Recommended: 50-200.");
-//    helpSystem.AddHelpEntry("seed", "Random seed for world generation. Same seed = same world.");
-//    helpSystem.AddHelpEntry("noise_frequency", "Controls how 'smooth' or 'detailed' the terrain is. Higher = more detail.");
-//    helpSystem.AddHelpEntry("neighbor_radius", "How far to check for neighboring tiles during generation.");
-//    helpSystem.AddHelpEntry("generation_mode", "Random: fully random. Noise: based on Perlin noise.");
-//
-//    // Player settings
-//    helpSystem.AddHelpEntry("player_start_x", "Starting X position for the player.");
-//    helpSystem.AddHelpEntry("player_start_y", "Starting Y position for the player.");
-//    helpSystem.AddHelpEntry("player_max_hp", "Maximum health points for the player.");
-//    helpSystem.AddHelpEntry("player_max_hunger", "Maximum hunger level for the player.");
-//    helpSystem.AddHelpEntry("enable_hp", "Toggle health system on/off.");
-//    helpSystem.AddHelpEntry("enable_hunger", "Toggle hunger system on/off.");
-//
-//    // Cellular automaton
-//    helpSystem.AddHelpEntry("survival_rules", "Rules for when a cell survives (e.g., '23' = survive with 2 or 3 neighbors).");
-//    helpSystem.AddHelpEntry("birth_rules", "Rules for when a new cell is born (e.g., '3' = born with exactly 3 neighbors).");
-//    helpSystem.AddHelpEntry("death_rules", "Rules for when a cell dies.");
-//
-//    // Buttons
-//    helpSystem.AddHelpEntry("button_generate", "Generate the world with current settings.");
-//    helpSystem.AddHelpEntry("button_save", "Save current configuration as template.");
-//    helpSystem.AddHelpEntry("button_back", "Return to previous menu without saving.");
-//    helpSystem.AddHelpEntry("button_randomize", "Randomize all settings.");
-//    helpSystem.AddHelpEntry("button_reset", "Reset all settings to defaults.");
-//}
-//
-//// Метод для обновления информации помощи:
-//void WorldEditor::UpdateHelpInfo() {
-//}
-//
-//// Метод для рендера панели помощи:
-//void WorldEditor::RenderHelpPanel() {
-//    HelpPanel::Render();
-//}
+void WorldEditor::RegisterHelpSystemEntries() {
+    auto& helpSystem = HelpSystem::GetInstance();
+
+    helpSystem.RegisterWorldTabHelp();
+    helpSystem.RegisterPlayerTabHelp();
+    helpSystem.RegisterTilesTabHelp();
+    helpSystem.RegisterCommonElementsHelp();
+
+    helpSystem.RegisterEditorTabHelp(); 
+    helpSystem.RegisterEditorButtonsHelp();
+}
+
+std::string WorldEditor::GetCurrentFieldName() const {
+    switch (m_currentTab) {
+    case EditorTab::WORLD: {
+        std::vector<std::string> fieldNames = {
+            "World Name: ",
+            "Width: ",
+            "Height: ",
+            "Random Generation: ",
+            "Seed: ",
+            "Noise Frequency: ",
+            "Neighbor Radius: "
+        };
+
+        int visibleIndex = 0;
+        for (int i = 0; i < 7; ++i) {
+            if (i == 4 && !ShouldShowSeedField()) {
+                continue;
+            }
+            if (visibleIndex == m_selectedField) {
+                return fieldNames[i];
+            }
+            visibleIndex++;
+        }
+        break;
+    }
+    case EditorTab::PLAYER: {
+        std::vector<std::string> fieldNames = {
+            "Start X: ",
+            "Start Y: ",
+            "Max HP: ",
+            "Max Hunger: ",
+            "Enable HP: ",
+            "Enable Hunger: "
+        };
+        if (m_selectedField < fieldNames.size()) {
+            return fieldNames[m_selectedField];
+        }
+        break;
+    }
+    case EditorTab::TILES: {
+        if (m_tilesState == TilesState::EDITING_TILE || m_tilesState == TilesState::ADDING_TILE) {
+            std::vector<std::string> fieldNames = {
+                "Symbol: ",
+                "Color: ",
+                "Name: ",
+                "Lowland Probability: ",
+                "Plains Probability: ",
+                "Mountain Probability: "
+            };
+            if (m_selectedField < fieldNames.size()) {
+                return fieldNames[m_selectedField];
+            }
+        }
+        break;
+    }
+    case EditorTab::CELLULAR_AUTOMATON: {
+        std::vector<std::string> fieldNames = {
+            "Survival Rules: ",
+            "Birth Rules: ",
+            "Death Rules: "
+        };
+        if (m_selectedField < fieldNames.size()) {
+            return fieldNames[m_selectedField];
+        }
+        break;
+    }
+    case EditorTab::ENEMIES: {
+        std::vector<std::string> fieldNames = {
+            "Enable Enemies: ",
+            "Enemy Spawn Rate: "
+        };
+        if (m_selectedField < fieldNames.size()) {
+            return fieldNames[m_selectedField];
+        }
+        break;
+    }
+    default:
+        break;
+    }
+    return "";
+}
+
+std::string WorldEditor::GetCurrentButtonName() const {
+    if (m_currentTab == EditorTab::TILES) {
+        if (m_tilesState == TilesState::TILE_ACTIONS) {
+            switch (m_tileActionIndex) {
+            case 0: return "- Edit";
+            case 1: return "- Delete";
+            case 2: return "- Back";
+            }
+        }
+        else if (m_tilesState == TilesState::EDITING_TILE || m_tilesState == TilesState::ADDING_TILE) {
+            int fieldCount = 6;
+            if (m_selectedField == fieldCount) return "Save";
+            if (m_selectedField == fieldCount + 1) return "Cancel";
+        }
+    }
+
+    if (m_selectedButton == 1) {
+        return m_editorMode == EditorMode::CREATE_WORLD ? "CREATE" : "SAVE TEMPLATE";
+    }
+    else if (m_selectedButton == 2) {
+        return "BACK";
+    }
+
+    return "";
+}
+
+std::string WorldEditor::GetCurrentTabName() const {
+    switch (m_currentTab) {
+    case EditorTab::WORLD: return "World";
+    case EditorTab::PLAYER: return "Player";
+    case EditorTab::TILES: return "Tiles";
+    case EditorTab::CELLULAR_AUTOMATON: return "Cellular Automaton";
+    case EditorTab::FOOD: return "Food";
+    case EditorTab::ENEMIES: return "Enemies";
+    case EditorTab::WIN: return "Win";
+    case EditorTab::LOSE: return "Lose";
+    default: return "";
+    }
+}
+
+void WorldEditor::UpdateHelpForCurrentSelection() {
+    auto& helpSystem = HelpSystem::GetInstance();
+    std::string currentItemId;
+
+    if (m_isEditingText && m_editingField >= 0) {
+        currentItemId = GetCurrentFieldName();
+    }
+    else if (m_currentTab == EditorTab::TILES) {
+        if (m_tilesState == TilesState::MAIN_LIST) {
+            if (!m_availableTileIds.empty() &&
+                m_selectedField < static_cast<int>(m_availableTileIds.size())) {
+                currentItemId = "Tile List Item";
+            }
+            else if (m_selectedField == static_cast<int>(m_availableTileIds.size())) {
+                currentItemId = "+ Add New Tile";
+            }
+        }
+        else if (m_tilesState == TilesState::TILE_ACTIONS) {
+            currentItemId = GetCurrentButtonName();
+        }
+        else if (m_tilesState == TilesState::EDITING_TILE ||
+            m_tilesState == TilesState::ADDING_TILE) {
+            currentItemId = GetCurrentFieldName();
+        }
+    }
+    else {
+        currentItemId = GetCurrentFieldName();
+
+        if (currentItemId.empty() && m_selectedButton > 0) {
+            currentItemId = GetCurrentButtonName();
+        }
+    }
+
+    if (!currentItemId.empty()) {
+        std::string helpText = helpSystem.GetHelpForItem(currentItemId);
+        if (!helpText.empty()) {
+            HelpPanel::SetHelpText(helpText);
+        }
+        else {
+            currentItemId = GetCurrentTabName();
+            helpText = helpSystem.GetHelpForItem(currentItemId);
+            if (!helpText.empty()) {
+                HelpPanel::SetHelpText(helpText);
+            }
+            else {
+                HelpPanel::ClearHelpText();
+            }
+        }
+    }
+    else {
+        currentItemId = GetCurrentTabName();
+        std::string helpText = helpSystem.GetHelpForItem(currentItemId);
+        if (!helpText.empty()) {
+            HelpPanel::SetHelpText(helpText);
+        }
+        else {
+            HelpPanel::ClearHelpText();
+        }
+    }
+}

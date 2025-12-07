@@ -37,6 +37,7 @@ private:
     void RenderActionItem(int line, const std::string& text, bool selected);
     bool NeedsRedraw() const;
 
+    void UpdateHelpForCurrentSelection();
 
     void FindNextAvailableSlot();
     void FindPreviousAvailableSlot();

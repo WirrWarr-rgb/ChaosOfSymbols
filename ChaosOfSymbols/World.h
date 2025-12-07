@@ -22,9 +22,9 @@ public:
     // Публичные методы
     void GenerateFromConfig();
     void UpdateTileAppearance();
-    void UpdateCellularAutomaton();
+    virtual void UpdateCellularAutomaton();
     void RemoveDeletedTiles(const std::unordered_set<int>& removedTileIds);
-    void SpawnRandomFood(int count = 10);
+    virtual void SpawnRandomFood(int count = 10);
     void RespawnFoodPeriodically();
     void ClearAllFood();
     void NotifyTilesChanged() {}
@@ -66,9 +66,9 @@ public:
 private:
     // Приватные методы
     void GenerateRandomWorld();
-    void GenerateBaseTerrain();
+    virtual void GenerateBaseTerrain();
     void CreateBorder();
-    void SmoothTerrain();
+    virtual void SmoothTerrain();
     char GetTileCharacter(int tileId) const;
     int FindTileIdByCharacter(char character) const;
     std::unordered_map<char, int> CountNeighbors(int x, int y, const std::vector<std::vector<int>>& currentMap) const;

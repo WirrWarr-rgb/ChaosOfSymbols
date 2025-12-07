@@ -46,6 +46,8 @@ private:
     bool NeedsRedraw() const;
     void ShowCreateOptionsForSlot(int slot);
 
+    void UpdateHelpForCurrentSelection();
+
     void ShowTemplatesForSlot(int slot);
     void SelectTemplateForSave(int templateSlot);
 

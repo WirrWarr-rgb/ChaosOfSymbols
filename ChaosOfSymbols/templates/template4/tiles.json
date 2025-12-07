@@ -1,0 +1,62 @@
+[
+  {
+    "id": 0,
+    "name": "air",
+    "character": " ",
+    "color": 0,
+    "isPassable": true,
+    "isDestructible": false,
+    "damage": 0
+    "lowlandProbability": 0,
+    "plainsProbability": 0,
+    "mountainProbability": 0
+  },
+  {
+    "id": 1,
+    "name": "grass",
+    "character": ".",
+    "color": 10,
+    "isPassable": true,
+    "isDestructible": false,
+    "damage": 0
+    "lowlandProbability": 10,
+    "plainsProbability": 80,
+    "mountainProbability": 10
+  },
+  {
+    "id": 2,
+    "name": "stone_wall",
+    "character": "#",
+    "color": 8,
+    "isPassable": false,
+    "isDestructible": true,
+    "damage": 0
+    "lowlandProbability": 0,
+    "plainsProbability": 0,
+    "mountainProbability": 0
+  },
+  {
+    "id": 3,
+    "name": "water",
+    "character": "~",
+    "color": 9,
+    "isPassable": false,
+    "isDestructible": false,
+    "damage": 0
+    "lowlandProbability": 80,
+    "plainsProbability": 20,
+    "mountainProbability": 0
+  },
+  {
+    "id": 4,
+    "name": "mountain",
+    "character": "^",
+    "color": 7,
+    "isPassable": false,
+    "isDestructible": false,
+    "damage": 0
+    "lowlandProbability": 0,
+    "plainsProbability": 10,
+    "mountainProbability": 80
+  }
+]

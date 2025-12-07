@@ -4,6 +4,8 @@
 #include <chrono>
 #include <thread>
 #include "Logger.h"
+#include "HelpPanel.h"
+#include "HelpSystem.h"
 
 namespace rlutil {
     void setColor(int color);
@@ -96,6 +98,11 @@ SaveSelectionMenu::SaveSelectionMenu()
         Logger::Log("Slot " + std::to_string(save.slotNumber) +
             ": " + (save.isEmpty ? "Empty" : save.name));
     }
+
+    HelpPanel::Initialize();
+    auto& helpSystem = HelpSystem::GetInstance();
+    helpSystem.RegisterSaveMenuHelp();
+
     Logger::Log("=== END CONSTRUCTOR ===");
 }
 
@@ -141,8 +148,6 @@ void SaveSelectionMenu::Render() {
     }
 
     if (m_currentState != m_prevState) {
-        Logger::Log("SaveSelectionMenu State changed from " + std::to_string(static_cast<int>(m_prevState)) +
-            " to " + std::to_string(static_cast<int>(m_currentState)));
         rlutil::cls();
         m_needFullRedraw = true;
         m_prevState = m_currentState;
@@ -152,6 +157,7 @@ void SaveSelectionMenu::Render() {
         rlutil::cls();
     }
 
+    UpdateHelpForCurrentSelection();
     RenderOnlyChanges();
 
     m_prevSelectedSlot = m_selectedSlot;
@@ -162,6 +168,10 @@ void SaveSelectionMenu::Render() {
         m_prevSelectedTemplateIndex = m_selectedTemplateIndex;
         m_prevBackSelected = (m_selectedTemplateIndex == 30);
     }
+
+    int screenHeight = 25;
+    int screenWidth = 80;
+    HelpPanel::Render(screenWidth, screenHeight);
 
     m_needFullRedraw = false;
 }
@@ -1072,4 +1082,50 @@ void SaveSelectionMenu::Reset() {
     m_prevSaves = m_saves;
 
     Logger::Log("SaveSelectionMenu Reset completed");
+}
+
+void SaveSelectionMenu::UpdateHelpForCurrentSelection() {
+    auto& helpSystem = HelpSystem::GetInstance();
+    std::string currentItemId;
+
+    if (m_showActionsForSlot) {
+        SaveInfo selectedSave;
+        for (const auto& save : m_saves) {
+            if (save.slotNumber == m_actionSlot) {
+                selectedSave = save;
+                break;
+            }
+        }
+
+        if (selectedSave.isEmpty) {
+            switch (m_selectedActionIndex) {
+            case 0: currentItemId = "Create"; break;
+            case 1: currentItemId = "Back"; break;
+            }
+        }
+        else {
+            switch (m_selectedActionIndex) {
+            case 0: currentItemId = "Play"; break;
+            case 1: currentItemId = "Delete"; break;
+            case 2: currentItemId = "Back"; break;
+            }
+        }
+    }
+    else {
+        const int TOTAL_SLOTS = 5;
+        if (m_selectedSlot <= TOTAL_SLOTS) {
+            currentItemId = "save_slot_" + std::to_string(m_selectedSlot);
+        }
+        else {
+            currentItemId = "Back";
+        }
+    }
+
+    std::string helpText = helpSystem.GetHelpForItem(currentItemId);
+    if (!helpText.empty()) {
+        HelpPanel::SetHelpText(helpText);
+    }
+    else {
+        HelpPanel::ClearHelpText();
+    }
 }

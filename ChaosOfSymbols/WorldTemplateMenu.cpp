@@ -5,6 +5,8 @@
 #include <thread>
 #include <algorithm>
 #include "Logger.h"
+#include "HelpPanel.h"
+#include "HelpSystem.h"
 
 namespace rlutil {
     void setColor(int color);
@@ -47,6 +49,10 @@ WorldTemplateMenu::WorldTemplateMenu()
         "Load",
         "Back"
     };
+
+    HelpPanel::Initialize();
+    auto& helpSystem = HelpSystem::GetInstance();
+    helpSystem.RegisterTemplateMenuHelp();
 
     Logger::Log("WorldTemplateMenu constructor completed");
     Logger::Log("=== END CONSTRUCTOR ===");
@@ -171,6 +177,7 @@ void WorldTemplateMenu::Render() {
         rlutil::cls();
     }
 
+    UpdateHelpForCurrentSelection();
     RenderOnlyChanges();
 
     m_prevSelectedSlot = m_selectedSlot;
@@ -182,6 +189,10 @@ void WorldTemplateMenu::Render() {
         m_needFullRedraw = true;
         prevShowActions = m_showActionsForSlot;
     }
+
+    int screenHeight = 25;
+    int screenWidth = 80;
+    HelpPanel::Render(screenWidth, screenHeight);
 
     m_needFullRedraw = false;
 }
@@ -869,4 +880,51 @@ void WorldTemplateMenu::Reset() {
     LoadTemplates();
 
     Logger::Log("WorldTemplateMenu Reset completed");
+}
+
+void WorldTemplateMenu::UpdateHelpForCurrentSelection() {
+    auto& helpSystem = HelpSystem::GetInstance();
+    std::string currentItemId;
+
+    if (m_showActionsForSlot) {
+        TemplateInfo selectedTemplate;
+        for (const auto& tmpl : m_templates) {
+            if (tmpl.slotNumber == m_actionSlot) {
+                selectedTemplate = tmpl;
+                break;
+            }
+        }
+
+        if (selectedTemplate.isEmpty) {
+            switch (m_selectedActionIndex) {
+            case 0: currentItemId = "Create"; break;
+            case 1: currentItemId = "Back"; break;
+            }
+        }
+        else {
+            switch (m_selectedActionIndex) {
+            case 0: currentItemId = "Edit"; break;
+            case 1: currentItemId = "Delete"; break;
+            case 2: currentItemId = "Load"; break;
+            case 3: currentItemId = "Back"; break;
+            }
+        }
+    }
+    else {
+        const int TOTAL_TEMPLATES = 30;
+        if (m_selectedSlot <= TOTAL_TEMPLATES) {
+            currentItemId = "template_slot_" + std::to_string(m_selectedSlot);
+        }
+        else {
+            currentItemId = "Back";
+        }
+    }
+
+    std::string helpText = helpSystem.GetHelpForItem(currentItemId);
+    if (!helpText.empty()) {
+        HelpPanel::SetHelpText(helpText);
+    }
+    else {
+        HelpPanel::ClearHelpText();
+    }
 }

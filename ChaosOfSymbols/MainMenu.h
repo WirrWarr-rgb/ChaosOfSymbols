@@ -78,6 +78,9 @@ private:
     void RunSaveSelection();
     void RunWorldTemplateMenu();
 
+    void UpdateHelpForCurrentSelection();
+    void RegisterMenuHelpEntries();
+
 private:
     MenuState m_currentState;
     std::vector<std::string> m_mainMenuOptions;

@@ -3,6 +3,8 @@
 #include <chrono>
 #include <iostream>
 #include "Logger.h"
+#include "HelpPanel.h"
+#include "HelpSystem.h"
 
 namespace rlutil {
     void setColor(int color);
@@ -43,6 +45,12 @@ MainMenu::MainMenu()
         "Create a world template",
         "Back"
     };
+
+    HelpPanel::Initialize();
+    auto& helpSystem = HelpSystem::GetInstance();
+    helpSystem.RegisterMainMenuHelp();
+    helpSystem.RegisterSaveMenuHelp();
+    helpSystem.RegisterTemplateMenuHelp();
 }
 
 void MainMenu::Initialize() {
@@ -78,6 +86,7 @@ void MainMenu::Render() {
     switch (m_currentState) {
     case MenuState::MAIN_MENU:
         if (m_needFullRedraw || NeedsRedraw()) {
+            UpdateHelpForCurrentSelection();
             RenderOnlyChanges();
         }
         break;
@@ -99,6 +108,10 @@ void MainMenu::Render() {
     case MenuState::IN_GAME:
         break;
     }
+
+    int screenHeight = 25;
+    int screenWidth = 80;
+    HelpPanel::Render(screenWidth, screenHeight);
 
     m_prevSelectedMainIndex = m_selectedMainIndex;
     m_prevSelectedSubIndex = m_selectedSubIndex;
@@ -438,5 +451,36 @@ void MainMenu::ProcessInput() {
         else {
             m_shouldExit = true;
         }
+    }
+}
+
+void MainMenu::UpdateHelpForCurrentSelection() {
+    auto& helpSystem = HelpSystem::GetInstance();
+    std::string currentItemId;
+
+    if (m_currentState == MenuState::ABOUT_SCREEN) {
+        currentItemId = "Back";
+    }
+    else if (m_inPlaySubmenu) {
+        switch (m_selectedSubIndex) {
+        case 0: currentItemId = "Select save"; break;
+        case 1: currentItemId = "Create a world template"; break;
+        case 2: currentItemId = "Back"; break;
+        }
+    }
+    else {
+        switch (m_selectedMainIndex) {
+        case 0: currentItemId = "Play"; break;
+        case 1: currentItemId = "About the Game"; break;
+        case 2: currentItemId = "Exit"; break;
+        }
+    }
+
+    std::string helpText = helpSystem.GetHelpForItem(currentItemId);
+    if (!helpText.empty()) {
+        HelpPanel::SetHelpText(helpText);
+    }
+    else {
+        HelpPanel::ClearHelpText();
     }
 }
