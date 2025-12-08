@@ -172,8 +172,12 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
         return;
     }
 
-    std::string tilesPath = "saves/proceduralGeneration/slot" + std::to_string(m_mainMenu->GetSelectedSaveSlot()) + "/tiles.json";
+    std::string saveSlot = std::to_string(m_mainMenu->GetSelectedSaveSlot());
+    std::string tilesPath = "saves/proceduralGeneration/slot" + saveSlot + "/tiles.json";
+    std::string foodPath = "saves/proceduralGeneration/slot" + saveSlot + "/food.cfg";  // ВАЖНО!
+
     TileTypeManager* tileManager = m_configManager->GetTileManager();
+    FoodManager* foodManager = m_configManager->GetFoodManager();  // Получаем менеджер еды
 
     tileManager->SetFilePath(tilesPath);
 
@@ -181,8 +185,18 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
         Logger::Log("WARNING: Could not load tiles from slot");
     }
 
+    // ЗАГРУЖАЕМ КОНФИГУРАЦИЮ ЕДЫ ИЗ СЕЙВА
+    if (!foodManager->LoadFromFile(foodPath)) {
+        Logger::Log("WARNING: Could not load food config from save slot");
+        // Можно загрузить дефолтную конфигурацию
+        if (!foodManager->LoadFromFile("config/default_food.cfg")) {
+            Logger::Log("ERROR: Failed to load default food config");
+        }
+    }
+
     Logger::Log("Loaded " + std::to_string(tileManager->GetAllTiles().size()) +
-        " tiles from slot " + std::to_string(m_mainMenu->GetSelectedSaveSlot()));
+        " tiles and " + std::to_string(foodManager->GetAllFood().size()) +
+        " food items from slot " + saveSlot);
 
     m_playerConfig = m_configManager->GetPlayerConfig();
 
@@ -206,12 +220,13 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
     m_playerHunger = config.GetPlayerMaxHunger();
     m_xpToNextLevel = 100;
 
-    FoodManager* foodManager = m_configManager->GetFoodManager();
+    // УДАЛИТЬ ЭТУ СТРОКУ - foodManager уже объявлен выше!
+    // FoodManager* foodManager = m_configManager->GetFoodManager();  // <-- ЭТО ДУБЛИРОВАНИЕ
 
     m_currentWorld = new World();
 
     m_currentWorld->SetTileManager(tileManager);
-    m_currentWorld->SetFoodManager(foodManager);
+    m_currentWorld->SetFoodManager(foodManager);  // Используем уже объявленный foodManager
     m_currentWorld->SetAutomatonEnabled(true);
     m_currentWorld->SetAutomatonConfig(m_configManager->GetAutomatonConfig());
 

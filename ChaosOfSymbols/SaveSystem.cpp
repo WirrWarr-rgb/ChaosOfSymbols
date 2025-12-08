@@ -562,7 +562,7 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
     // Создаем директорию сейва
     fs::create_directories(savePath);
 
-    // Копируем ВСЕ файлы из шаблона
+    // Копируем ВСЕ файлы из шаблона, включая food.cfg
     bool allCopied = true;
 
     try {
@@ -572,7 +572,7 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
                 std::string sourceFile = templatePath + "/" + filename;
                 std::string destFile = savePath + "/" + filename;
 
-                // Не копируем template_info.txt - используем save_info.txt
+                // Обработка специальных файлов
                 if (filename == "template_info.txt") {
                     // Читаем template_info.txt и создаем на его основе save_info.txt
                     std::ifstream templateInfoFile(sourceFile);
@@ -594,14 +594,19 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
                         }
                     }
                 }
+                else if (filename == "food.cfg") {
+                    // Копируем food.cfg напрямую
+                    fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
+                    Logger::Log("Copied: " + filename + " (food configuration)");
+                }
                 else {
+                    // Копируем все остальные файлы
                     fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
                     Logger::Log("Copied: " + filename);
                 }
             }
         }
 
-        // Проверяем, какие файлы были скопированы
         Logger::Log("=== COPIED FILES SUMMARY ===");
         for (const auto& entry : fs::directory_iterator(savePath)) {
             if (entry.is_regular_file()) {

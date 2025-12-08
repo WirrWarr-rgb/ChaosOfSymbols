@@ -9,6 +9,10 @@
 #include "Logger.h"
 #include "HelpPanel.h"
 #include "HelpSystem.h"
+#include <filesystem>
+#include "FoodManager.h"
+
+namespace fs = std::filesystem;
 
 namespace rlutil {
     void setColor(int color);
@@ -48,37 +52,120 @@ WorldEditor::WorldEditor(EditorMode editorMode, int slot, GameMode gameMode)
     , m_newTileLowlandProb(0)
     , m_newTilePlainsProb(0)
     , m_newTileMountainProb(0)
+    , m_foodState(FoodState::MAIN_LIST)
+    , m_prevFoodState(FoodState::MAIN_LIST)
+    , m_selectedFoodIndex(0)
+    , m_foodActionIndex(0)
+    , m_newFoodName("new_food")
+    , m_newFoodSymbol('*')
+    , m_newFoodColor(10) // Зеленый
+    , m_newHungerRestore(10)
+    , m_newHpRestore(5)
+    , m_newSpawnWeight(1)
+    , m_newExperience(5)
 {
     HelpPanel::Initialize();
     RegisterHelpSystemEntries();
 
+    // Определяем путь к конфигурации тайлов
     if (m_editorMode == EditorMode::CREATE_TEMPLATE) {
         m_tilesConfigPath = "templates/template" + std::to_string(slot) + "/tiles.json";
+
+        // ЗАГРУЖАЕМ КОНФИГУРАЦИЮ ТЕМПЛАТА ПРИ РЕДАКТИРОВАНИИ
+        TemplateSystem templateSystem;
+        if (templateSystem.Initialize()) {
+            if (templateSystem.LoadTemplate(slot, m_config)) {
+                Logger::Log("Loaded existing template configuration for slot " + std::to_string(slot));
+
+                // Также загружаем spawn rules из тайлов
+                std::string templateDir = "templates/template" + std::to_string(slot);
+                std::string spawnConfigPath = templateDir + "/world_spawn.cfg";
+
+                // Загружаем spawn rules
+                std::ifstream spawnFile(spawnConfigPath);
+                if (spawnFile.is_open()) {
+                    std::string line;
+                    std::unordered_map<char, std::vector<float>> tileProbabilities;
+
+                    while (std::getline(spawnFile, line)) {
+                        if (line.empty() || line[0] == '#') continue;
+
+                        size_t delimiterPos = line.find('=');
+                        if (delimiterPos != std::string::npos) {
+                            char tileChar = line[0];
+                            std::string probabilitiesStr = line.substr(delimiterPos + 1);
+
+                            std::vector<float> probs;
+                            std::stringstream probStream(probabilitiesStr);
+                            std::string probToken;
+
+                            while (std::getline(probStream, probToken, ':')) {
+                                try {
+                                    probs.push_back(std::stof(probToken));
+                                }
+                                catch (...) {
+                                    probs.push_back(0.1f);
+                                }
+                            }
+                            while (probs.size() < 3) {
+                                probs.push_back(0.1f);
+                            }
+
+                            tileProbabilities[tileChar] = probs;
+                        }
+                    }
+                    spawnFile.close();
+                    m_config.SetTileProbabilities(tileProbabilities);
+                }
+            }
+            else {
+                Logger::Log("No existing template found for slot " + std::to_string(slot) +
+                    ", starting with default configuration");
+            }
+        }
     }
     else {
         m_tilesConfigPath = "saves/proceduralGeneration/slot" + std::to_string(slot) + "/tiles.json";
+
+        // ЗАГРУЖАЕМ КОНФИГУРАЦИЮ СЕЙВА ПРИ РЕДАКТИРОВАНИИ МИРА
+        std::string savePath;
+        if (gameMode == GameMode::PROCEDURAL_GENERATION) {
+            savePath = "saves/proceduralGeneration/slot" + std::to_string(slot);
+        }
+        else {
+            savePath = "saves/preloadedMaps/slot" + std::to_string(slot);
+        }
+
+        if (fs::exists(savePath + "/world_gen.cfg")) {
+            if (m_config.LoadFromDirectory(savePath)) {
+                Logger::Log("Loaded existing world configuration for slot " + std::to_string(slot));
+            }
+        }
     }
 
     CreateDirectoryForSlot(slot);
 
     m_inputManager = std::make_unique<InputManager>();
 
+    // Создаем менеджер тайлов
+    Logger::Log("Creating TileTypeManager with path: " + m_tilesConfigPath);
     m_tileManager = std::make_unique<TileTypeManager>(m_tilesConfigPath);
 
+    // Проверяем существование файла
     std::ifstream file(m_tilesConfigPath);
     if (file.good()) {
         file.close();
+        Logger::Log("Tile config exists: " + m_tilesConfigPath);
         if (m_tileManager->LoadFromFile()) {
-            Logger::Log("Loaded existing tiles from: " + m_tilesConfigPath);
+            Logger::Log("Successfully loaded tiles from: " + m_tilesConfigPath);
         }
         else {
             Logger::Log("WARNING: Failed to load tiles from: " + m_tilesConfigPath);
-            CreateDefaultTiles();
         }
     }
     else {
-        Logger::Log("Tile config not found, creating default tiles");
-        CreateDefaultTiles();
+        Logger::Log("Tile config not found: " + m_tilesConfigPath);
+        Logger::Log("Will create new config when tiles are added");
     }
 
     LoadAvailableTiles();
@@ -90,9 +177,37 @@ WorldEditor::WorldEditor(EditorMode editorMode, int slot, GameMode gameMode)
     m_newTilePlainsProb = 10;
     m_newTileMountainProb = 10;
 
-    Logger::Log("WorldEditor created for slot " + std::to_string(slot) +
+    if (m_editorMode == EditorMode::CREATE_TEMPLATE) {
+        m_tilesConfigPath = "templates/template" + std::to_string(slot) + "/tiles.json";
+        m_foodConfigPath = "templates/template" + std::to_string(slot) + "/food.cfg";
+    }
+    else {
+        if (gameMode == GameMode::PROCEDURAL_GENERATION) {
+            m_tilesConfigPath = "saves/proceduralGeneration/slot" + std::to_string(slot) + "/tiles.json";
+            m_foodConfigPath = "saves/proceduralGeneration/slot" + std::to_string(slot) + "/food.cfg";
+        }
+        else {
+            m_tilesConfigPath = "saves/preloadedMaps/slot" + std::to_string(slot) + "/tiles.json";
+            m_foodConfigPath = "saves/preloadedMaps/slot" + std::to_string(slot) + "/food.cfg";
+        }
+    }
+
+    // Создаем менеджер еды
+    m_foodManager = std::make_unique<FoodManager>();
+
+    // Загружаем существующую еду, если есть
+    std::ifstream foodFile(m_foodConfigPath);
+    if (foodFile.good()) {
+        foodFile.close();
+        if (m_foodManager->LoadFromFile(m_foodConfigPath)) {
+            Logger::Log("Successfully loaded food from: " + m_foodConfigPath);
+            LoadAvailableFood();
+        }
+    }
+
+    Logger::Log("WorldEditor initialized for slot " + std::to_string(slot) +
         " with mode: " + (m_editorMode == EditorMode::CREATE_WORLD ? "CREATE_WORLD" : "CREATE_TEMPLATE") +
-        " and " + std::to_string(m_availableTileIds.size()) + " tiles");
+        " and " + std::to_string(m_availableTileIds.size()) + " user tiles");
 }
 
 void WorldEditor::CreateDefaultTiles() {
@@ -312,10 +427,15 @@ void WorldEditor::RenderWorldTab() {
 }
 
 void WorldEditor::RenderBottomButtons() {
-    if (m_currentTab == EditorTab::TILES &&
+    // Не показываем кнопки CREATE/BACK когда редактируем тайлы или еду
+    if ((m_currentTab == EditorTab::TILES &&
         (m_tilesState == TilesState::EDITING_TILE ||
             m_tilesState == TilesState::ADDING_TILE ||
-            m_tilesState == TilesState::TILE_ACTIONS)) {
+            m_tilesState == TilesState::TILE_ACTIONS)) ||
+        (m_currentTab == EditorTab::FOOD &&
+            (m_foodState == FoodState::EDITING_FOOD ||
+                m_foodState == FoodState::ADDING_FOOD ||
+                m_foodState == FoodState::FOOD_ACTIONS))) {
         return;
     }
 
@@ -440,7 +560,11 @@ void WorldEditor::RenderTileList(int startLine) {
 
     if (m_availableTileIds.empty()) {
         rlutil::locate(4, line);
-        std::cout << "  No tiles available. Add your first tile to get started.";
+        std::cout << "  No user tiles available. Add your first tile to get started.";
+        line += 2;
+
+        rlutil::locate(4, line);
+        std::cout << "  NOTE: World has system tiles (air, border) that are hidden from view.";
         line += 2;
     }
     else {
@@ -488,6 +612,7 @@ void WorldEditor::RenderTileList(int startLine) {
     std::cout << "+ Add New Tile";
     SetConsoleTextAttribute(hConsole, 7);
 }
+
 
 void WorldEditor::RenderTileActions(int startLine) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
@@ -1223,14 +1348,44 @@ void WorldEditor::AddNewTile() {
     }
 
     try {
+        Logger::Log("=== ADDING NEW TILE ===");
+        Logger::Log("New tile ID: " + std::to_string(newId));
+        Logger::Log("Name: " + m_newTileName);
+        Logger::Log("Symbol: '" + std::string(1, m_newTileSymbol) + "'");
+        Logger::Log("Color: " + std::to_string(m_newTileColor));
+        Logger::Log("Probabilities: L=" + std::to_string(m_newTileLowlandProb) +
+            " P=" + std::to_string(m_newTilePlainsProb) +
+            " M=" + std::to_string(m_newTileMountainProb));
+
         TileType newTile(newId, m_newTileName, m_newTileSymbol, m_newTileColor,
             true, false, 0,
             m_newTileLowlandProb, m_newTilePlainsProb, m_newTileMountainProb);
 
+        // Проверяем, есть ли уже такой символ
+        bool symbolExists = false;
+        const auto& allTiles = m_tileManager->GetAllTiles();
+        for (const auto& pair : allTiles) {
+            if (pair.second.GetCharacter() == m_newTileSymbol) {
+                symbolExists = true;
+                Logger::Log("WARNING: Symbol '" + std::string(1, m_newTileSymbol) +
+                    "' already exists in tile: " + pair.second.GetName());
+                break;
+            }
+        }
+
         m_tileManager->RegisterTileType(newTile);
+        Logger::Log("Tile registered in manager");
 
-        m_tileManager->SaveToFile();
+        // Сохраняем файл
+        if (m_tileManager->SaveToFile()) {
+            Logger::Log("Tile saved to file successfully");
+        }
+        else {
+            Logger::Log("ERROR: Failed to save tile to file");
+        }
 
+        // Загружаем заново
+        Logger::Log("Reloading available tiles...");
         LoadAvailableTiles();
 
         Logger::Log("Added new tile: " + m_newTileName + " (ID: " + std::to_string(newId) +
@@ -1239,6 +1394,7 @@ void WorldEditor::AddNewTile() {
             " P:" + std::to_string(m_newTilePlainsProb) +
             " M:" + std::to_string(m_newTileMountainProb));
 
+        // Сбрасываем значения для следующего тайла
         m_newTileName = "new_tile_" + std::to_string(newId + 1);
         m_newTileSymbol = static_cast<char>('A' + ((newId + 1) % 26));
         m_newTileColor = 7;
@@ -1253,6 +1409,13 @@ void WorldEditor::AddNewTile() {
         m_editedTilePlainsProb = 0;
         m_editedTileMountainProb = 0;
 
+        m_tilesState = TilesState::MAIN_LIST;
+        m_selectedField = 0;
+        m_selectedButton = 0;
+        m_needFullRedraw = true;
+
+        Logger::Log("=== NEW TILE ADDED ===");
+
     }
     catch (const std::exception& e) {
         Logger::Log("ERROR: Failed to add new tile: " + std::string(e.what()));
@@ -1264,10 +1427,25 @@ void WorldEditor::DeleteSelectedTile() {
 
     int tileId = m_availableTileIds[m_selectedTileIndex];
 
-    if (tileId <= 2) {
-        Logger::Log("Cannot delete basic tiles (ID 0-2)");
+    // Защищаем системные тайлы от удаления
+    if (tileId == 0 || tileId == -1 || tileId == 2) {
+        Logger::Log("Cannot delete system tiles (air/border)");
         return;
     }
+
+    TileType* tile = m_tileManager->GetTileType(tileId);
+    if (!tile) return;
+
+    // Также защищаем по имени и символу
+    if (tile->GetName() == "air" || tile->GetName() == "border" ||
+        tile->GetName() == "stone_wall" || tile->GetCharacter() == ' ' ||
+        tile->GetCharacter() == '#') {
+        Logger::Log("Cannot delete system tiles (air/border)");
+        return;
+    }
+
+    // Удаляем тайл из менеджера
+    m_tileManager->RemoveTileType(tileId); // Нужно добавить этот метод в TileTypeManager
 
     m_tileManager->SaveToFile();
 
@@ -1277,14 +1455,20 @@ void WorldEditor::DeleteSelectedTile() {
         m_selectedTileIndex = max(0, static_cast<int>(m_availableTileIds.size()) - 1);
     }
 
-    Logger::Log("Deleted tile with ID: " + std::to_string(tileId));
+    Logger::Log("Deleted user tile with ID: " + std::to_string(tileId));
 }
 
 void WorldEditor::LoadAvailableTiles() {
+    Logger::Log("=== LOADING AVAILABLE TILES ===");
+
     m_availableTileIds.clear();
 
-    if (!m_tileManager) return;
+    if (!m_tileManager) {
+        Logger::Log("ERROR: No tile manager");
+        return;
+    }
 
+    // Загружаем заново из файла
     if (!m_tileManager->LoadFromFile(m_tilesConfigPath)) {
         Logger::Log("ERROR: Failed to load tiles from: " + m_tilesConfigPath);
         return;
@@ -1293,20 +1477,51 @@ void WorldEditor::LoadAvailableTiles() {
     const auto& allTiles = m_tileManager->GetAllTiles();
     Logger::Log("Tile manager has " + std::to_string(allTiles.size()) + " tiles");
 
+    // Выводим все тайлы для отладки
     for (const auto& pair : allTiles) {
-        m_availableTileIds.push_back(pair.first);
-
+        int tileId = pair.first;
         const TileType& tile = pair.second;
-        Logger::Log("  Tile ID " + std::to_string(tile.GetId()) + ": '" +
-            std::string(1, tile.GetCharacter()) + "' - " + tile.GetName() +
-            " L:" + std::to_string(tile.GetLowlandProbability()) +
-            " P:" + std::to_string(tile.GetPlainsProbability()) +
-            " M:" + std::to_string(tile.GetMountainProbability()));
+
+        Logger::Log("Found tile ID " + std::to_string(tileId) +
+            ": '" + std::string(1, tile.GetCharacter()) + "' - " +
+            tile.GetName() + " (color: " + std::to_string(tile.GetColor()) + ")");
+    }
+
+    // Фильтруем системные тайлы (воздух и границу)
+    for (const auto& pair : allTiles) {
+        int tileId = pair.first;
+        const TileType& tile = pair.second;
+
+        // Пропускаем только системные тайлы с отрицательными ID
+        if (tileId < 0) {
+            Logger::Log("Skipping system tile ID " + std::to_string(tileId) +
+                ": '" + std::string(1, tile.GetCharacter()) + "' - " + tile.GetName());
+            continue;
+        }
+
+        // Также пропускаем тайлы с пустым символом (пробел)
+        if (tile.GetCharacter() == ' ' || tile.GetCharacter() == 0) {
+            Logger::Log("Skipping tile with empty character ID " + std::to_string(tileId) +
+                ": " + tile.GetName());
+            continue;
+        }
+
+        m_availableTileIds.push_back(tileId);
     }
 
     std::sort(m_availableTileIds.begin(), m_availableTileIds.end());
 
-    Logger::Log("Loaded " + std::to_string(m_availableTileIds.size()) + " tiles into available list");
+    Logger::Log("Loaded " + std::to_string(m_availableTileIds.size()) +
+        " user-available tiles (system tiles filtered out)");
+
+    // Выводим ID доступных тайлов
+    std::string availableIds = "Available tile IDs: ";
+    for (int id : m_availableTileIds) {
+        availableIds += std::to_string(id) + " ";
+    }
+    Logger::Log(availableIds);
+
+    Logger::Log("=== LOADING COMPLETE ===");
 }
 
 void WorldEditor::RenderCellularAutomatonTab() {
@@ -1329,12 +1544,287 @@ void WorldEditor::RenderCellularAutomatonTab() {
 }
 
 void WorldEditor::RenderFoodTab() {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+
     if (m_needFullRedraw) {
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        int line = 6;
-        rlutil::locate(4, line);
-        std::cout << "Food Spawn Settings (to be implemented)";
+        for (int i = 5; i < 22; i++) {
+            ClearLine(i);
+        }
+
+        rlutil::locate(2, 5);
+        SetConsoleTextAttribute(hConsole, 14);
+        std::cout << "Food Configuration";
+        SetConsoleTextAttribute(hConsole, 7);
+
+        rlutil::locate(2, 6);
+        std::cout << "------------------------------------------------------------";
+
+        rlutil::locate(0, 8);
     }
+
+    if (m_needFullRedraw || m_foodState != m_prevFoodState) {
+        for (int i = 8; i < 17; i++) {
+            ClearLine(i);
+        }
+        m_prevFoodState = m_foodState;
+
+        rlutil::locate(0, 8);
+    }
+
+    switch (m_foodState) {
+    case FoodState::MAIN_LIST:
+        RenderFoodList(8);
+        RenderBottomButtons();
+        break;
+    case FoodState::FOOD_ACTIONS:
+        RenderFoodActions(8);
+        break;
+    case FoodState::EDITING_FOOD:
+        RenderFoodEditing(8, false);
+        break;
+    case FoodState::ADDING_FOOD:
+        RenderFoodEditing(8, true);
+        break;
+    }
+}
+
+void WorldEditor::RenderFoodList(int startLine) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int line = startLine;
+
+    rlutil::locate(2, line);
+    std::cout << "  Available Food:";
+    line++;
+
+    const auto& allFoods = m_foodManager->GetAllFood(); // Получаем все еды
+
+    if (allFoods.empty()) {
+        rlutil::locate(4, line);
+        std::cout << "  No food items available. Add your first food to get started.";
+        line += 2;
+    }
+    else {
+        for (size_t i = 0; i < allFoods.size(); ++i) {
+            const Food* food = allFoods[i];
+
+            if (!food) continue;
+
+            bool isSelected = (i == m_selectedField && m_selectedButton == 0);
+
+            rlutil::locate(4, line);
+
+            if (isSelected) {
+                SetConsoleTextAttribute(hConsole, 10);
+                std::cout << "> ";
+            }
+            else {
+                SetConsoleTextAttribute(hConsole, 7);
+                std::cout << "  ";
+            }
+
+            SetConsoleTextAttribute(hConsole, food->GetColor());
+            std::cout << food->GetSymbol();
+
+            SetConsoleTextAttribute(hConsole, isSelected ? 10 : 7);
+            std::cout << " - " << food->GetName();
+
+            SetConsoleTextAttribute(hConsole, 7);
+            line++;
+        }
+    }
+
+    bool addSelected = (m_selectedField == GetMaxFields() - 1 && m_selectedButton == 0);
+    rlutil::locate(4, line);
+
+    if (addSelected) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "> ";
+    }
+    else {
+        SetConsoleTextAttribute(hConsole, 7);
+        std::cout << "  ";
+    }
+    std::cout << "+ Add New Food";
+    SetConsoleTextAttribute(hConsole, 7);
+}
+
+void WorldEditor::RenderFoodActions(int startLine) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int line = startLine;
+
+    const auto& allFoods = m_foodManager->GetAllFood();
+    if (m_selectedFoodIndex >= 0 && m_selectedFoodIndex < static_cast<int>(allFoods.size())) {
+        const Food* food = allFoods[m_selectedFoodIndex];
+
+        if (food) {
+            rlutil::locate(4, line);
+            SetConsoleTextAttribute(hConsole, food->GetColor());
+            std::cout << food->GetSymbol();
+            SetConsoleTextAttribute(hConsole, 7);
+            std::cout << " - " << food->GetName();
+            line += 2;
+        }
+    }
+
+    bool editSelected = (m_foodActionIndex == 0);
+    RenderMenuItem(line, "- Edit", editSelected);
+    line++;
+
+    bool deleteSelected = (m_foodActionIndex == 1);
+    RenderMenuItem(line, "- Delete", deleteSelected);
+    line++;
+
+    bool backSelected = (m_foodActionIndex == 2);
+    RenderMenuItem(line, "- Back", backSelected);
+}
+
+void WorldEditor::RenderFoodEditing(int startLine, bool isNewFood) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int line = startLine;
+
+    // Заголовок
+    rlutil::locate(4, line);
+    SetConsoleTextAttribute(hConsole, 14);
+    if (isNewFood) {
+        std::cout << "Add New Food";
+    }
+    else {
+        std::cout << "Edit Food";
+    }
+    SetConsoleTextAttribute(hConsole, 7);
+    line += 2;
+
+    // Очистка области
+    for (int i = line; i < line + 7; ++i) {
+        ClearLine(i);
+    }
+
+    // Рендерим левый столбец (поля 0-4)
+    std::vector<std::string> leftFields = {
+        "Name: ",
+        "Symbol: ",
+        "Color: ",
+        "Hunger Restore: ",
+        "HP Restore: "
+    };
+
+    // Рендерим правый столбец (поля 5-6)
+    std::vector<std::string> rightFields = {
+        "Spawn Weight: ",
+        "Experience: "
+    };
+
+    // Рендерим левый столбец
+    for (int i = 0; i < leftFields.size(); ++i) {
+        bool isSelected = (i == m_selectedField);
+        bool isEditing = (m_isEditingText && m_editingTileFieldIndex == i);
+
+        rlutil::locate(6, line + i);
+
+        if (isSelected) {
+            SetConsoleTextAttribute(hConsole, 10);
+            std::cout << "> ";
+        }
+        else {
+            SetConsoleTextAttribute(hConsole, 7);
+            std::cout << "  ";
+        }
+
+        std::cout << leftFields[i];
+
+        if (isEditing) {
+            SetConsoleTextAttribute(hConsole, 11);
+            std::cout << m_tempTileStringInput << "_";
+        }
+        else {
+            SetConsoleTextAttribute(hConsole, 7);
+
+            if (isNewFood) {
+                switch (i) {
+                case 0: std::cout << m_newFoodName; break;
+                case 1:
+                    std::cout << "'";
+                    SetConsoleTextAttribute(hConsole, m_newFoodColor);
+                    std::cout << m_newFoodSymbol;
+                    SetConsoleTextAttribute(hConsole, 7);
+                    std::cout << "'";
+                    break;
+                case 2: std::cout << m_newFoodColor; break;
+                case 3: std::cout << m_newHungerRestore; break;
+                case 4: std::cout << m_newHpRestore; break;
+                }
+            }
+            else {
+                switch (i) {
+                case 0: std::cout << m_editedFoodName; break;
+                case 1:
+                    std::cout << "'";
+                    SetConsoleTextAttribute(hConsole, m_editedFoodColor);
+                    std::cout << m_editedFoodSymbol;
+                    SetConsoleTextAttribute(hConsole, 7);
+                    std::cout << "'";
+                    break;
+                case 2: std::cout << m_editedFoodColor; break;
+                case 3: std::cout << m_editedHungerRestore; break;
+                case 4: std::cout << m_editedHpRestore; break;
+                }
+            }
+        }
+    }
+
+    // Рендерим правый столбец (начинаем с 3 строки, чтобы выровнять с Hunger Restore и HP Restore)
+    for (int i = 0; i < rightFields.size(); ++i) {
+        int fieldIndex = i + 5; // поля 5 и 6
+        bool isSelected = (fieldIndex == m_selectedField);
+        bool isEditing = (m_isEditingText && m_editingTileFieldIndex == fieldIndex);
+
+        rlutil::locate(40, line + 3 + i); // Начинаем с 3 строки
+
+        if (isSelected) {
+            SetConsoleTextAttribute(hConsole, 10);
+            std::cout << "> ";
+        }
+        else {
+            SetConsoleTextAttribute(hConsole, 7);
+            std::cout << "  ";
+        }
+
+        std::cout << rightFields[i];
+
+        if (isEditing) {
+            SetConsoleTextAttribute(hConsole, 11);
+            std::cout << m_tempTileStringInput << "_";
+        }
+        else {
+            SetConsoleTextAttribute(hConsole, 7);
+
+            if (isNewFood) {
+                switch (fieldIndex) {
+                case 5: std::cout << m_newSpawnWeight; break;
+                case 6: std::cout << m_newExperience; break;
+                }
+            }
+            else {
+                switch (fieldIndex) {
+                case 5: std::cout << m_editedSpawnWeight; break;
+                case 6: std::cout << m_editedExperience; break;
+                }
+            }
+        }
+    }
+
+    // Кнопки Save и Cancel
+    int buttonsStart = line + 6;
+    ClearLine(buttonsStart);
+    ClearLine(buttonsStart + 1);
+
+    bool saveSelected = (m_selectedField == 7); // Поле 7 - Save
+    RenderMenuItem(buttonsStart, "Save", saveSelected);
+
+    bool cancelSelected = (m_selectedField == 8); // Поле 8 - Cancel
+    RenderMenuItem(buttonsStart + 1, "Cancel", cancelSelected);
+
+    SetConsoleTextAttribute(hConsole, 7);
 }
 
 void WorldEditor::RenderEnemiesTab() {
@@ -1403,7 +1893,12 @@ void WorldEditor::ProcessInput() {
 
     if (m_isEditingText) {
         if (m_editingTileField) {
-            HandleTileEditInput();
+            if (m_currentTab == EditorTab::TILES) {
+                HandleTileEditInput();
+            }
+            else if (m_currentTab == EditorTab::FOOD) {
+                HandleFoodEditInput();
+            }
             return;
         }
         HandleTextInput();
@@ -1411,10 +1906,19 @@ void WorldEditor::ProcessInput() {
     }
 
     if (m_inputManager->IsMenuBack()) {
-        if (m_tilesState == TilesState::MAIN_LIST && m_selectedButton == 0) {
+        if (m_currentTab == EditorTab::FOOD && m_foodState == FoodState::MAIN_LIST && m_selectedButton == 0) {
             m_shouldReturn = true;
         }
-        else if (m_tilesState != TilesState::MAIN_LIST) {
+        else if (m_currentTab == EditorTab::FOOD && m_foodState != FoodState::MAIN_LIST) {
+            m_foodState = FoodState::MAIN_LIST;
+            m_selectedField = 0;
+            m_selectedButton = 0;
+            m_needFullRedraw = true;
+        }
+        else if (m_currentTab == EditorTab::TILES && m_tilesState == TilesState::MAIN_LIST && m_selectedButton == 0) {
+            m_shouldReturn = true;
+        }
+        else if (m_currentTab == EditorTab::TILES && m_tilesState != TilesState::MAIN_LIST) {
             m_tilesState = TilesState::MAIN_LIST;
             m_selectedField = 0;
             m_selectedButton = 0;
@@ -1430,10 +1934,12 @@ void WorldEditor::ProcessInput() {
     case EditorTab::TILES:
         HandleTileInput();
         break;
+    case EditorTab::FOOD:
+        HandleFoodInput();
+        break;
     case EditorTab::WORLD:
     case EditorTab::PLAYER:
     case EditorTab::CELLULAR_AUTOMATON:
-    case EditorTab::FOOD:
     case EditorTab::ENEMIES:
     case EditorTab::WIN:
     case EditorTab::LOSE:
@@ -1523,8 +2029,10 @@ void WorldEditor::StartEditing() {
             case 1: m_tempStringInput = std::to_string(m_config.GetWidth()); break;
             case 2: m_tempStringInput = std::to_string(m_config.GetHeight()); break;
             case 3:
-                m_isEditingText = false;
+                // Сохраняем изменение
                 m_config.SetRandomGeneration(!m_config.GetRandomGeneration());
+                m_isEditingText = false;
+                m_editingField = -1;
                 m_needFullRedraw = true;
                 return;
             case 4: m_tempStringInput = std::to_string(m_config.GetSeed()); break;
@@ -1574,24 +2082,29 @@ void WorldEditor::HandleTextInput() {
 
     switch (m_currentTab) {
     case EditorTab::WORLD:
-        switch (m_editingField) {
-        case 0:
-            HandleTextInputGeneral();
-            break;
-        case 1:
-        case 2:
-        case 4:
-        case 6:
-            HandleNumericInput();
-            break;
-        case 3:
-            HandleBooleanInput();
-            break;
-        case 5:
-            HandleFrequencyInput();
-            break;
+    {
+        std::vector<int> fieldMapping;
+        for (int i = 0; i < 7; ++i) {
+            if (i == 4 && !ShouldShowSeedField()) {
+                continue;
+            }
+            fieldMapping.push_back(i);
+        }
+
+        if (m_editingField < fieldMapping.size()) {
+            int actualField = fieldMapping[m_editingField];
+            switch (actualField) {
+            case 0: HandleTextInputGeneral(); break;
+            case 1: HandleNumericInput(); break;
+            case 2: HandleNumericInput(); break;
+            case 3: HandleBooleanInput(); break;
+            case 4: HandleNumericInput(); break;
+            case 5: HandleFrequencyInput(); break;
+            case 6: HandleNeighborRadiusInput(); break;
+            }
         }
         break;
+    }
 
     case EditorTab::PLAYER:
         HandleNumericInput();
@@ -1725,10 +2238,23 @@ int WorldEditor::GetMaxFields() {
             return 5;
         }
         return 0;
+    case EditorTab::FOOD:
+        if (m_foodState == FoodState::MAIN_LIST) {
+            const auto& allFoods = m_foodManager->GetAllFood();
+            if (allFoods.empty()) {
+                return 1; // Только "Add New Food"
+            }
+            return static_cast<int>(allFoods.size()) + 1; // Все еды + "Add New Food"
+        }
+        else if (m_foodState == FoodState::FOOD_ACTIONS) {
+            return 3;
+        }
+        else if (m_foodState == FoodState::EDITING_FOOD || m_foodState == FoodState::ADDING_FOOD) {
+            return 7; // 7 полей + 2 кнопки
+        }
+        return 0;
     case EditorTab::CELLULAR_AUTOMATON:
         return 3;
-    case EditorTab::FOOD:
-        return 0;
     case EditorTab::ENEMIES:
         return 2;
     case EditorTab::WIN:
@@ -1781,20 +2307,23 @@ void WorldEditor::ChangeFieldValue(int delta) {
 void WorldEditor::ConfirmSelection() {
     if (m_currentTab == EditorTab::TILES && m_tilesState == TilesState::MAIN_LIST) {
         if (m_selectedButton == 0) {
+            // Должно работать с тайлами, а не с едой!
             if (m_availableTileIds.empty()) {
                 if (m_selectedField == 0) {
-                    StartAddingTile();
+                    Logger::Log("Starting to add new tile...");
+                    StartAddingTile(); // <-- Должно быть StartAddingTile()
                 }
             }
             else {
                 if (m_selectedField < static_cast<int>(m_availableTileIds.size())) {
-                    m_selectedTileIndex = m_selectedField;
+                    m_selectedTileIndex = m_selectedField; // Выбор существующего тайла
                     m_tileActionIndex = 0;
                     m_tilesState = TilesState::TILE_ACTIONS;
                     m_needFullRedraw = true;
                 }
                 else if (m_selectedField == static_cast<int>(m_availableTileIds.size())) {
-                    StartAddingTile();
+                    Logger::Log("Starting to add new tile...");
+                    StartAddingTile(); // <-- Должно быть StartAddingTile()
                 }
             }
         }
@@ -1804,6 +2333,54 @@ void WorldEditor::ConfirmSelection() {
         }
         else if (m_selectedButton == 2) {
             m_shouldReturn = true;
+        }
+    }
+    else if (m_currentTab == EditorTab::FOOD && m_foodState == FoodState::MAIN_LIST) {
+        if (m_selectedButton == 0) {
+            if (m_availableFoodIds.empty()) {
+                if (m_selectedField == 0) {
+                    Logger::Log("Starting to add new food...");
+                    StartAddingFood();
+                }
+            }
+            else {
+                if (m_selectedField < static_cast<int>(m_availableFoodIds.size())) {
+                    m_selectedFoodIndex = m_availableFoodIds[m_selectedField];
+                    m_foodActionIndex = 0;
+                    m_foodState = FoodState::FOOD_ACTIONS;
+                    m_needFullRedraw = true;
+                    Logger::Log("Selected food at index " + std::to_string(m_selectedField));
+                }
+                else if (m_selectedField == static_cast<int>(m_availableFoodIds.size())) {
+                    Logger::Log("Starting to add new food (from list)...");
+                    StartAddingFood();
+                }
+            }
+        }
+        else if (m_selectedButton == 1) {
+            CreateNewWorld();
+            m_shouldCreate = true;
+        }
+        else if (m_selectedButton == 2) {
+            m_shouldReturn = true;
+        }
+    }
+    else if (m_currentTab == EditorTab::FOOD && m_foodState == FoodState::FOOD_ACTIONS) {
+        switch (m_foodActionIndex) {
+        case 0: // Edit
+            StartEditingFood();
+            break;
+        case 1: // Delete
+            DeleteSelectedFood();
+            m_foodState = FoodState::MAIN_LIST;
+            m_selectedField = min(m_selectedField, static_cast<int>(m_availableFoodIds.size()) - 1);
+            if (m_selectedField < 0) m_selectedField = 0;
+            m_needFullRedraw = true;
+            break;
+        case 2: // Back
+            m_foodState = FoodState::MAIN_LIST;
+            m_needFullRedraw = true;
+            break;
         }
     }
     else if (m_currentTab == EditorTab::TILES && m_tilesState == TilesState::TILE_ACTIONS) {
@@ -1841,7 +2418,13 @@ void WorldEditor::ConfirmSelection() {
 void WorldEditor::CreateNewWorld() {
     Logger::Log("=== CREATE NEW WORLD STARTED ===");
 
-    SaveWorldConfiguration(); // Сохраняем конфигурацию в памяти
+    if (m_tileManager && m_tileManager->GetAllTiles().size() <= 2) { // только воздух и граница
+        Logger::Log("WARNING: No user-defined tiles found!");
+        Logger::Log("World will be created with only system tiles (air/border).");
+        Logger::Log("Player can add tiles later in the Tiles tab.");
+    }
+
+    SaveWorldConfiguration();
 
     if (m_editorMode == EditorMode::CREATE_WORLD) {
         if (!m_saveSystem) {
@@ -1870,7 +2453,6 @@ void WorldEditor::CreateNewWorld() {
         }
     }
     else {
-        // Создание шаблона
         CreateTemplate(m_config.GetWorldName());
     }
 }
@@ -1949,12 +2531,69 @@ void WorldEditor::HandleBooleanInput() {
 
 void WorldEditor::HandleFrequencyInput() {
     if (m_inputManager->IsKeyPressed(VK_LEFT) || m_inputManager->IsKeyPressed('A')) {
-        m_config.SetNoiseFrequency(max(0.1f, m_config.GetNoiseFrequency() - 0.1f));
+        float newValue = max(0.0f, m_config.GetNoiseFrequency() - 0.01f);
+        m_config.SetNoiseFrequency(newValue);
+        m_tempStringInput = std::to_string(m_config.GetNoiseFrequency());
         m_needFullRedraw = true;
         return;
     }
     else if (m_inputManager->IsKeyPressed(VK_RIGHT) || m_inputManager->IsKeyPressed('D')) {
-        m_config.SetNoiseFrequency(min(1.0f, m_config.GetNoiseFrequency() + 0.1f));
+        float newValue = min(1.0f, m_config.GetNoiseFrequency() + 0.01f);
+        m_config.SetNoiseFrequency(newValue);
+        m_tempStringInput = std::to_string(m_config.GetNoiseFrequency());
+        m_needFullRedraw = true;
+        return;
+    }
+
+    for (char c = '0'; c <= '9'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            m_tempStringInput += c;
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    if (m_inputManager->IsKeyPressed('.')) {
+        if (m_tempStringInput.find('.') == std::string::npos) {
+            m_tempStringInput += '.';
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempStringInput.empty()) {
+        m_tempStringInput.pop_back();
+        m_needFullRedraw = true;
+        return;
+    }
+}
+
+void WorldEditor::HandleNeighborRadiusInput() {
+    if (m_inputManager->IsKeyPressed(VK_LEFT) || m_inputManager->IsKeyPressed('A')) {
+        int newValue = max(0, m_config.GetNeighborRadius() - 1);
+        m_config.SetNeighborRadius(newValue);
+        m_tempStringInput = std::to_string(m_config.GetNeighborRadius());
+        m_needFullRedraw = true;
+        return;
+    }
+    else if (m_inputManager->IsKeyPressed(VK_RIGHT) || m_inputManager->IsKeyPressed('D')) {
+        int newValue = min(10, m_config.GetNeighborRadius() + 1);
+        m_config.SetNeighborRadius(newValue);
+        m_tempStringInput = std::to_string(m_config.GetNeighborRadius());
+        m_needFullRedraw = true;
+        return;
+    }
+
+    for (char c = '0'; c <= '9'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            m_tempStringInput += c;
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempStringInput.empty()) {
+        m_tempStringInput.pop_back();
         m_needFullRedraw = true;
         return;
     }
@@ -1984,6 +2623,24 @@ bool WorldEditor::CreateTemplate(const std::string& templateName) {
     Logger::Log("=== CREATE TEMPLATE FUNCTION STARTED ===");
     Logger::Log("Template name from World Name field: " + templateName);
     Logger::Log("Slot: " + std::to_string(m_slot));
+
+    // Проверяем наличие пользовательских тайлов
+    int userTileCount = 0;
+    if (m_tileManager) {
+        const auto& allTiles = m_tileManager->GetAllTiles();
+        for (const auto& pair : allTiles) {
+            int tileId = pair.first;
+            // Считаем только не-системные тайлы
+            if (tileId != 0 && tileId != -1 && tileId != 2) {
+                userTileCount++;
+            }
+        }
+    }
+
+    if (userTileCount == 0) {
+        Logger::Log("NOTE: Template has no user-defined tiles.");
+        Logger::Log("System tiles (air/border) are hidden from user view.");
+    }
 
     if (m_editorMode != EditorMode::CREATE_TEMPLATE) {
         Logger::Log("ERROR: Cannot create template in CREATE_WORLD mode");
@@ -2026,6 +2683,7 @@ bool WorldEditor::CreateTemplate(const std::string& templateName) {
 
 bool WorldEditor::SaveAllConfigurations(const std::string& directory) {
     Logger::Log("=== SAVING ALL CONFIGURATIONS TO: " + directory + " ===");
+    Logger::Log("Current food config path: " + m_foodConfigPath);
 
     if (!fs::exists(directory)) {
         if (!fs::create_directories(directory)) {
@@ -2191,19 +2849,47 @@ bool WorldEditor::SaveCellularAutomatonConfig(const std::string& directory) {
 
 bool WorldEditor::SaveFoodConfig(const std::string& directory) {
     std::string foodConfigPath = directory + "/food.cfg";
-    std::ofstream file(foodConfigPath);
+    std::ofstream destFile(foodConfigPath);
 
-    if (!file.is_open()) {
+    if (!destFile.is_open()) {
         Logger::Log("ERROR: Cannot open food config file: " + foodConfigPath);
         return false;
     }
 
-    file << "# Food configuration\n";
-    file << "# To be implemented\n";
-    file << "FoodSpawnRate=10\n";
-    file << "FoodNutrition=20\n";
+    // Получаем все текущие данные еды из менеджера
+    const auto& allFoods = m_foodManager->GetAllFood();
 
-    file.close();
+    destFile << "# Food configuration\n";
+    destFile << "# Format: ID Name Symbol Color HungerRestore HpRestore SpawnWeight Experience\n";
+
+    if (allFoods.empty()) {
+        // Если нет еды, создаем базовую конфигурацию
+        Logger::Log("No food items found, creating default food config");
+        destFile << "0 apple @ 12 20 10 5 10\n";
+        destFile << "1 bread % 14 30 5 3 8\n";
+        destFile << "2 meat & 4 50 30 2 20\n";
+    }
+    else {
+        // Сохраняем все существующие элементы еды
+        Logger::Log("Saving " + std::to_string(allFoods.size()) + " food items");
+        for (size_t i = 0; i < allFoods.size(); ++i) {
+            const Food* food = allFoods[i];
+            if (food) {
+                destFile << i << " "
+                    << food->GetName() << " "
+                    << food->GetSymbol() << " "
+                    << food->GetColor() << " "
+                    << food->GetHungerRestore() << " "
+                    << food->GetHpRestore() << " "
+                    << food->GetSpawnWeight() << " "
+                    << food->GetExperience() << "\n";
+
+                Logger::Log("  - " + food->GetName() + " (ID: " + std::to_string(i) + ")");
+            }
+        }
+    }
+
+    destFile.close();
     Logger::Log("Saved food config to: " + foodConfigPath);
     return true;
 }
@@ -2247,7 +2933,19 @@ bool WorldEditor::LoadFromTemplate(int templateSlot) {
 
 bool WorldEditor::LoadTemplateConfig(const WorldConfig& config) {
     m_config = config;
-    Logger::Log("Loaded template configuration: " + config.GetWorldName());
+
+    // Обновляем пути к конфигурации еды на основе текущего слота
+    if (m_editorMode == EditorMode::CREATE_WORLD) {
+        if (m_gameMode == GameMode::PROCEDURAL_GENERATION) {
+            m_foodConfigPath = "saves/proceduralGeneration/slot" + std::to_string(m_slot) + "/food.cfg";
+        }
+        else {
+            m_foodConfigPath = "saves/preloadedMaps/slot" + std::to_string(m_slot) + "/food.cfg";
+        }
+    }
+
+    Logger::Log("Loaded template configuration: " + config.GetWorldName() +
+        ", food config path: " + m_foodConfigPath);
     return true;
 }
 
@@ -2443,5 +3141,647 @@ void WorldEditor::UpdateHelpForCurrentSelection() {
         else {
             HelpPanel::ClearHelpText();
         }
+    }
+}
+
+void WorldEditor::LoadAvailableFood() {
+    Logger::Log("=== LOADING AVAILABLE FOOD ===");
+    // Убираем m_availableFoodIds, так как будем использовать индексы напрямую
+    // m_availableFoodIds.clear();
+
+    if (!m_foodManager) {
+        Logger::Log("ERROR: No food manager");
+        return;
+    }
+
+    const auto& allFoods = m_foodManager->GetAllFood();
+    Logger::Log("Food manager has " + std::to_string(allFoods.size()) + " food items");
+
+    // Просто логируем загрузку, не сохраняем индексы
+    for (size_t i = 0; i < allFoods.size(); ++i) {
+        if (const Food* food = allFoods[i]) {
+            Logger::Log("Found food [" + std::to_string(i) + "]: " +
+                food->GetName() + " ('" + std::string(1, food->GetSymbol()) + "')");
+        }
+    }
+
+    Logger::Log("Loaded " + std::to_string(allFoods.size()) + " food items");
+}
+
+void WorldEditor::HandleFoodInput() {
+    if (m_foodState == FoodState::EDITING_FOOD || m_foodState == FoodState::ADDING_FOOD) {
+        if (m_isEditingText && m_editingTileField) {
+            HandleFoodEditInput();
+            return;
+        }
+        HandleFoodEditNavigation();
+        return;
+    }
+
+    if (m_foodState == FoodState::FOOD_ACTIONS) {
+        HandleFoodActionsNavigation();
+        return;
+    }
+
+    HandleStandardInput();
+}
+
+void WorldEditor::HandleFoodActionsNavigation() {
+    if (m_inputManager->IsMenuUp()) {
+        m_foodActionIndex = (m_foodActionIndex - 1 + 3) % 3;
+    }
+    else if (m_inputManager->IsMenuDown()) {
+        m_foodActionIndex = (m_foodActionIndex + 1) % 3;
+    }
+    else if (m_inputManager->IsMenuSelect()) {
+        switch (m_foodActionIndex) {
+        case 0: // Edit
+            StartEditingFood();
+            break;
+        case 1: // Delete
+            DeleteSelectedFood();
+            m_foodState = FoodState::MAIN_LIST;
+            m_selectedField = min(m_selectedField, static_cast<int>(m_availableFoodIds.size()) - 1);
+            if (m_selectedField < 0) m_selectedField = 0;
+            m_needFullRedraw = true;
+            break;
+        case 2: // Back
+            m_foodState = FoodState::MAIN_LIST;
+            m_needFullRedraw = true;
+            break;
+        }
+    }
+    else if (m_inputManager->IsMenuBack()) {
+        m_foodState = FoodState::MAIN_LIST;
+        m_needFullRedraw = true;
+    }
+}
+
+void WorldEditor::StartEditingFood() {
+    const auto& allFoods = m_foodManager->GetAllFood();
+    if (m_availableFoodIds.empty() || m_selectedFoodIndex >= static_cast<int>(allFoods.size())) return;
+
+    const Food* food = allFoods[m_selectedFoodIndex];
+
+    if (!food) return;
+
+    m_editedFoodName = food->GetName();
+    m_editedFoodSymbol = food->GetSymbol();
+    m_editedFoodColor = food->GetColor();
+    m_editedHungerRestore = food->GetHungerRestore();
+    m_editedHpRestore = food->GetHpRestore();
+    m_editedSpawnWeight = food->GetSpawnWeight();
+    m_editedExperience = food->GetExperience();
+
+    m_foodState = FoodState::EDITING_FOOD;
+    m_selectedField = 0;
+    m_editingTileField = false;
+    m_needFullRedraw = true;
+}
+
+void WorldEditor::HandleFoodEditNavigation() {
+    int fieldCount = 7; // 7 полей (Name, Symbol, Color, HungerRestore, HpRestore, SpawnWeight, Experience)
+    int buttonCount = 2; // Save, Cancel
+    int totalCount = fieldCount + buttonCount;
+
+    // Матрица навигации: [столбец][строка]
+    // 0: Name (0,0)
+    // 1: Symbol (0,1)
+    // 2: Color (0,2)
+    // 3: Hunger Restore (0,3)
+    // 4: HP Restore (0,4)
+    // 5: Spawn Weight (1,3)
+    // 6: Experience (1,4)
+
+    if (m_inputManager->IsMenuUp()) {
+        // Перемещение вверх
+        switch (m_selectedField) {
+        case 0: // Name -> остаемся на Name
+            break;
+        case 1: // Symbol -> Name
+            m_selectedField = 0;
+            break;
+        case 2: // Color -> Symbol
+            m_selectedField = 1;
+            break;
+        case 3: // Hunger Restore -> Color
+            m_selectedField = 2;
+            break;
+        case 4: // HP Restore -> Hunger Restore
+            m_selectedField = 3;
+            break;
+        case 5: // Spawn Weight -> Hunger Restore
+            m_selectedField = 3;
+            break;
+        case 6: // Experience -> HP Restore или Spawn Weight
+            if (m_selectedField == 4) m_selectedField = 4; // если был в левом столбце
+            else m_selectedField = 5; // если был в правом
+            break;
+        case 7: // Save -> HP Restore
+            m_selectedField = 4;
+            break;
+        case 8: // Cancel -> Experience
+            m_selectedField = 6;
+            break;
+        }
+    }
+    else if (m_inputManager->IsMenuDown()) {
+        // Перемещение вниз
+        switch (m_selectedField) {
+        case 0: // Name -> Symbol
+            m_selectedField = 1;
+            break;
+        case 1: // Symbol -> Color
+            m_selectedField = 2;
+            break;
+        case 2: // Color -> Hunger Restore
+            m_selectedField = 3;
+            break;
+        case 3: // Hunger Restore -> HP Restore или Spawn Weight
+            // По умолчанию переходим на HP Restore
+            m_selectedField = 4;
+            break;
+        case 4: // HP Restore -> Save
+            m_selectedField = 7;
+            break;
+        case 5: // Spawn Weight -> Experience
+            m_selectedField = 6;
+            break;
+        case 6: // Experience -> Cancel
+            m_selectedField = 8;
+            break;
+        case 7: // Save -> Cancel
+            m_selectedField = 8;
+            break;
+        case 8: // Cancel -> Save
+            m_selectedField = 7;
+            break;
+        }
+    }
+    else if (m_inputManager->IsKeyPressed(VK_LEFT) || m_inputManager->IsKeyPressed('A')) {
+        // Перемещение влево между столбцами
+        switch (m_selectedField) {
+        case 5: // Spawn Weight -> Hunger Restore
+            m_selectedField = 3;
+            break;
+        case 6: // Experience -> HP Restore
+            m_selectedField = 4;
+            break;
+        case 7: // Save -> HP Restore (если нужно)
+            m_selectedField = 4;
+            break;
+        case 8: // Cancel -> Experience
+            m_selectedField = 6;
+            break;
+        }
+    }
+    else if (m_inputManager->IsKeyPressed(VK_RIGHT) || m_inputManager->IsKeyPressed('D')) {
+        // Перемещение вправо между столбцами
+        switch (m_selectedField) {
+        case 3: // Hunger Restore -> Spawn Weight
+            m_selectedField = 5;
+            break;
+        case 4: // HP Restore -> Experience
+            m_selectedField = 6;
+            break;
+        }
+    }
+    else if (m_inputManager->IsMenuSelect()) {
+        if (m_selectedField < fieldCount) {
+            StartEditingFoodField();
+        }
+        else if (m_selectedField == fieldCount) { // Save
+            if (m_foodState == FoodState::ADDING_FOOD) {
+                AddNewFood();
+                m_foodState = FoodState::MAIN_LIST;
+                m_selectedField = 0;
+                m_selectedButton = 0;
+            }
+            else {
+                ApplyFoodEdit();
+                m_foodState = FoodState::MAIN_LIST;
+                m_selectedField = m_selectedFoodIndex;
+                m_selectedButton = 0;
+            }
+            m_needFullRedraw = true;
+        }
+        else if (m_selectedField == fieldCount + 1) { // Cancel
+            m_foodState = FoodState::MAIN_LIST;
+            m_selectedField = (m_foodState == FoodState::MAIN_LIST && m_availableFoodIds.empty()) ? 0 :
+                (m_selectedFoodIndex < static_cast<int>(m_availableFoodIds.size()) ? m_selectedFoodIndex : 0);
+            m_selectedButton = 0;
+            m_needFullRedraw = true;
+        }
+    }
+    else if (m_inputManager->IsMenuBack()) {
+        m_foodState = FoodState::MAIN_LIST;
+        m_selectedField = (m_foodState == FoodState::MAIN_LIST && m_availableFoodIds.empty()) ? 0 :
+            (m_selectedFoodIndex < static_cast<int>(m_availableFoodIds.size()) ? m_selectedFoodIndex : 0);
+        m_selectedButton = 0;
+        m_needFullRedraw = true;
+    }
+}
+
+void WorldEditor::StartAddingFood() {
+    m_newFoodName = "new_food";
+    m_newFoodSymbol = '*';
+    m_newFoodColor = 10;
+    m_newHungerRestore = 10;
+    m_newHpRestore = 5;
+    m_newSpawnWeight = 1;
+    m_newExperience = 5;
+
+    m_foodState = FoodState::ADDING_FOOD;
+    m_selectedField = 0;
+    m_editingTileField = false;
+    m_needFullRedraw = true;
+}
+
+void WorldEditor::StartEditingFoodField() {
+    m_isEditingText = true;
+    m_editingTileField = true;
+    m_editingTileFieldIndex = m_selectedField;
+
+    m_tempTileStringInput = "";
+
+    if (m_foodState == FoodState::EDITING_FOOD) {
+        const auto& allFoods = m_foodManager->GetAllFood();
+        if (m_selectedFoodIndex >= 0 && m_selectedFoodIndex < static_cast<int>(allFoods.size())) {
+            const Food* food = allFoods[m_selectedFoodIndex];
+
+            if (food) {
+                switch (m_editingTileFieldIndex) {
+                case 0: // Name
+                    m_tempTileStringInput = food->GetName();
+                    break;
+                case 1: // Symbol
+                    m_tempTileStringInput = std::string(1, food->GetSymbol());
+                    break;
+                case 2: // Color
+                    m_tempTileStringInput = std::to_string(food->GetColor());
+                    break;
+                case 3: // Hunger Restore
+                    m_tempTileStringInput = std::to_string(food->GetHungerRestore());
+                    break;
+                case 4: // HP Restore
+                    m_tempTileStringInput = std::to_string(food->GetHpRestore());
+                    break;
+                case 5: // Spawn Weight
+                    m_tempTileStringInput = std::to_string(food->GetSpawnWeight());
+                    break;
+                case 6: // Experience
+                    m_tempTileStringInput = std::to_string(food->GetExperience());
+                    break;
+                }
+            }
+        }
+    }
+    else if (m_foodState == FoodState::ADDING_FOOD) {
+        switch (m_editingTileFieldIndex) {
+        case 0: // Name
+            m_tempTileStringInput = m_newFoodName;
+            break;
+        case 1: // Symbol
+            m_tempTileStringInput = std::string(1, m_newFoodSymbol);
+            break;
+        case 2: // Color
+            m_tempTileStringInput = std::to_string(m_newFoodColor);
+            break;
+        case 3: // Hunger Restore
+            m_tempTileStringInput = std::to_string(m_newHungerRestore);
+            break;
+        case 4: // HP Restore
+            m_tempTileStringInput = std::to_string(m_newHpRestore);
+            break;
+        case 5: // Spawn Weight
+            m_tempTileStringInput = std::to_string(m_newSpawnWeight);
+            break;
+        case 6: // Experience
+            m_tempTileStringInput = std::to_string(m_newExperience);
+            break;
+        }
+    }
+
+    m_needFullRedraw = true;
+}
+
+void WorldEditor::HandleFoodEditInput() {
+    if (m_inputManager->IsKeyPressed(VK_RETURN) || m_inputManager->IsKeyPressed(VK_SPACE)) {
+        if (m_foodState == FoodState::ADDING_FOOD) {
+            SaveNewFoodField();
+        }
+        else {
+            SaveEditedFoodField();
+        }
+        m_isEditingText = false;
+        m_editingTileField = false;
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_ESCAPE)) {
+        m_isEditingText = false;
+        m_editingTileField = false;
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_TAB)) {
+        if (m_foodState == FoodState::ADDING_FOOD) {
+            SaveNewFoodField();
+        }
+        else {
+            SaveEditedFoodField();
+        }
+
+        m_editingTileFieldIndex = (m_editingTileFieldIndex + 1) % 7;
+        m_tempTileStringInput = "";
+
+        StartEditingFoodField();
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_editingTileFieldIndex >= 2 && m_editingTileFieldIndex <= 6) {
+        HandleNumericInput();
+    }
+    else {
+        switch (m_editingTileFieldIndex) {
+        case 0:
+            HandleTileNameInput();
+            break;
+        case 1:
+            HandleSymbolInput();
+            break;
+        case 2:
+            HandleColorInput();
+            break;
+        }
+    }
+}
+
+void WorldEditor::SaveEditedFoodField() {
+    if (m_tempTileStringInput.empty()) return;
+
+    if (m_foodState == FoodState::EDITING_FOOD) {
+        try {
+            switch (m_editingTileFieldIndex) {
+            case 0:
+                m_editedFoodName = m_tempTileStringInput;
+                break;
+            case 1:
+                if (!m_tempTileStringInput.empty()) {
+                    m_editedFoodSymbol = m_tempTileStringInput[0];
+                }
+                break;
+            case 2:
+            {
+                int newColor = std::stoi(m_tempTileStringInput);
+                m_editedFoodColor = std::clamp(newColor, 0, 15);
+            }
+            break;
+            case 3:
+            {
+                int value = std::stoi(m_tempTileStringInput);
+                m_editedHungerRestore = std::clamp(value, 0, 100);
+            }
+            break;
+            case 4:
+            {
+                int value = std::stoi(m_tempTileStringInput);
+                m_editedHpRestore = std::clamp(value, 0, 100);
+            }
+            break;
+            case 5:
+            {
+                int value = std::stoi(m_tempTileStringInput);
+                m_editedSpawnWeight = std::clamp(value, 1, 100);
+            }
+            break;
+            case 6:
+            {
+                int value = std::stoi(m_tempTileStringInput);
+                m_editedExperience = std::clamp(value, 0, 1000);
+            }
+            break;
+            }
+        }
+        catch (const std::exception& e) {
+            Logger::Log("ERROR: Invalid food input: " + m_tempTileStringInput);
+        }
+    }
+}
+
+void WorldEditor::SaveNewFoodField() {
+    if (m_tempTileStringInput.empty()) return;
+
+    try {
+        switch (m_editingTileFieldIndex) {
+        case 0:
+            m_newFoodName = m_tempTileStringInput;
+            break;
+        case 1:
+            if (!m_tempTileStringInput.empty()) {
+                m_newFoodSymbol = m_tempTileStringInput[0];
+            }
+            break;
+        case 2:
+        {
+            int newColor = std::stoi(m_tempTileStringInput);
+            m_newFoodColor = std::clamp(newColor, 0, 15);
+        }
+        break;
+        case 3:
+        {
+            int value = std::stoi(m_tempTileStringInput);
+            m_newHungerRestore = std::clamp(value, 0, 100);
+        }
+        break;
+        case 4:
+        {
+            int value = std::stoi(m_tempTileStringInput);
+            m_newHpRestore = std::clamp(value, 0, 100);
+        }
+        break;
+        case 5:
+        {
+            int value = std::stoi(m_tempTileStringInput);
+            m_newSpawnWeight = std::clamp(value, 1, 100);
+        }
+        break;
+        case 6:
+        {
+            int value = std::stoi(m_tempTileStringInput);
+            m_newExperience = std::clamp(value, 0, 1000);
+        }
+        break;
+        }
+    }
+    catch (const std::exception& e) {
+        Logger::Log("ERROR: Invalid food input: " + m_tempTileStringInput);
+    }
+}
+
+void WorldEditor::AddNewFood() {
+    try {
+        Logger::Log("=== ADDING NEW FOOD ===");
+
+        // Сохраняем в файл
+        std::ofstream foodFile(m_foodConfigPath, std::ios::app);
+        if (!foodFile.is_open()) {
+            Logger::Log("ERROR: Cannot open food config file: " + m_foodConfigPath);
+            return;
+        }
+
+        int newId = m_availableFoodIds.empty() ? 0 : (*std::max_element(m_availableFoodIds.begin(), m_availableFoodIds.end())) + 1;
+
+        foodFile << newId << " "
+            << m_newFoodName << " "
+            << m_newFoodSymbol << " "
+            << m_newFoodColor << " "
+            << m_newHungerRestore << " "
+            << m_newHpRestore << " "
+            << m_newSpawnWeight << " "
+            << m_newExperience << "\n";
+
+        foodFile.close();
+
+        // Перезагружаем менеджер еды
+        m_foodManager->LoadFromFile(m_foodConfigPath);
+        LoadAvailableFood();
+
+        Logger::Log("Added new food: " + m_newFoodName +
+            " (Hunger: " + std::to_string(m_newHungerRestore) +
+            ", HP: " + std::to_string(m_newHpRestore) +
+            ", XP: " + std::to_string(m_newExperience) + ")");
+
+        // Сбрасываем значения для следующей еды
+        m_newFoodName = "new_food_" + std::to_string(newId + 1);
+        m_newFoodSymbol = static_cast<char>('*' + ((newId + 1) % 10));
+        m_newFoodColor = (newId + 1) % 15 + 1;
+        m_newHungerRestore = 10;
+        m_newHpRestore = 5;
+        m_newSpawnWeight = 1;
+        m_newExperience = 5;
+
+        m_foodState = FoodState::MAIN_LIST;
+        m_selectedField = 0;
+        m_selectedButton = 0;
+        m_needFullRedraw = true;
+
+        Logger::Log("=== NEW FOOD ADDED ===");
+
+    }
+    catch (const std::exception& e) {
+        Logger::Log("ERROR: Failed to add new food: " + std::string(e.what()));
+    }
+}
+
+void WorldEditor::ApplyFoodEdit() {
+    // Для редактирования еды нужно перезаписать весь файл
+    try {
+        Logger::Log("=== EDITING FOOD ===");
+
+        const auto& allFoods = m_foodManager->GetAllFood();
+        if (m_selectedFoodIndex < 0 || m_selectedFoodIndex >= static_cast<int>(allFoods.size())) {
+            Logger::Log("ERROR: Invalid food index");
+            return;
+        }
+
+        // Открываем файл для полной перезаписи
+        std::ofstream foodFile(m_foodConfigPath);
+        if (!foodFile.is_open()) {
+            Logger::Log("ERROR: Cannot open food config file for editing: " + m_foodConfigPath);
+            return;
+        }
+
+        // Записываем все элементы еды, заменяя отредактированный
+        for (size_t i = 0; i < allFoods.size(); ++i) {
+            if (i == static_cast<size_t>(m_selectedFoodIndex)) {
+                // Записываем отредактированный элемент
+                foodFile << i << " "
+                    << m_editedFoodName << " "
+                    << m_editedFoodSymbol << " "
+                    << m_editedFoodColor << " "
+                    << m_editedHungerRestore << " "
+                    << m_editedHpRestore << " "
+                    << m_editedSpawnWeight << " "
+                    << m_editedExperience << "\n";
+            }
+            else {
+                // Записываем неизмененные элементы
+                const Food* food = allFoods[i];
+                foodFile << i << " "
+                    << food->GetName() << " "
+                    << food->GetSymbol() << " "
+                    << food->GetColor() << " "
+                    << food->GetHungerRestore() << " "
+                    << food->GetHpRestore() << " "
+                    << food->GetSpawnWeight() << " "
+                    << food->GetExperience() << "\n";
+            }
+        }
+
+        foodFile.close();
+
+        // Перезагружаем менеджер еды
+        m_foodManager->LoadFromFile(m_foodConfigPath);
+        LoadAvailableFood();
+
+        Logger::Log("Food updated: " + m_editedFoodName);
+
+    }
+    catch (const std::exception& e) {
+        Logger::Log("ERROR: Failed to edit food: " + std::string(e.what()));
+    }
+}
+
+void WorldEditor::DeleteSelectedFood() {
+    const auto& allFoods = m_foodManager->GetAllFood();
+    if (allFoods.empty() || m_selectedFoodIndex >= static_cast<int>(allFoods.size())) return;
+
+    try {
+        Logger::Log("=== DELETING FOOD ===");
+
+        std::ofstream foodFile(m_foodConfigPath);
+        if (!foodFile.is_open()) {
+            Logger::Log("ERROR: Cannot open food config file for deletion: " + m_foodConfigPath);
+            return;
+        }
+
+        // Записываем все элементы еды, кроме удаляемого
+        int newId = 0;
+        for (size_t i = 0; i < allFoods.size(); ++i) {
+            if (i == static_cast<size_t>(m_selectedFoodIndex)) {
+                continue;
+            }
+
+            const Food* food = allFoods[i];
+            foodFile << newId << " "
+                << food->GetName() << " "
+                << food->GetSymbol() << " "
+                << food->GetColor() << " "
+                << food->GetHungerRestore() << " "
+                << food->GetHpRestore() << " "
+                << food->GetSpawnWeight() << " "
+                << food->GetExperience() << "\n";
+            newId++;
+        }
+
+        foodFile.close();
+
+        // Перезагружаем менеджер еды
+        m_foodManager->LoadFromFile(m_foodConfigPath);
+
+        // Сбрасываем выбранный индекс
+        if (m_selectedFoodIndex >= static_cast<int>(m_foodManager->GetAllFood().size())) {
+            m_selectedFoodIndex = m_foodManager->GetAllFood().size() - 1;
+        }
+
+        Logger::Log("Food deleted successfully");
+
+    }
+    catch (const std::exception& e) {
+        Logger::Log("ERROR: Failed to delete food: " + std::string(e.what()));
     }
 }

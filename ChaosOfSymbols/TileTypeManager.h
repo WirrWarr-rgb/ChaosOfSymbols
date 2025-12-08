@@ -17,6 +17,7 @@ public:
     const std::unordered_map<int, TileType>& GetAllTiles() const { return m_tileTypes; }
     TileType* GetTileType(int id);
     size_t GetTileCount() const { return m_tileTypes.size(); }
+    bool RemoveTileType(int id);
 
 private:
     void LoadDefaultTiles();

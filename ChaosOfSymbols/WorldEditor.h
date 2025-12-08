@@ -35,6 +35,13 @@ enum class TilesState {
     ADDING_TILE       // Добавление нового тайла
 };
 
+enum class FoodState {
+    MAIN_LIST,
+    FOOD_ACTIONS,
+    EDITING_FOOD,
+    ADDING_FOOD
+};
+
 class WorldEditor {
 public:
     WorldEditor(EditorMode mode, int slot, GameMode gameMode = GameMode::PROCEDURAL_GENERATION);
@@ -52,10 +59,12 @@ public:
     void UpdateHelpForCurrentSelection();
     void RegisterHelpSystemEntries();
     void RenderHelpPanel();
+    bool LoadTemplateConfig(const WorldConfig& config);
+    void SaveWorldConfiguration();
+    bool SaveAllConfigurations(const std::string& directory);
 private:
     // Основные методы
     void CreateNewWorld();
-    void SaveWorldConfiguration();
     void RenderOnlyChanges();
     void RenderTabHeader();
     void RenderMenuItem(int line, const std::string& text, bool selected);
@@ -121,6 +130,8 @@ private:
     void ChangeTileColor(int delta);
     void LoadAvailableTiles();
 
+    void HandleNeighborRadiusInput();
+
     void HandleTileActionsNavigation();
     void RenderTileActions(int startLine);
 
@@ -134,15 +145,29 @@ private:
     bool CreateTemplate(const std::string& templateName);
     bool LoadFromTemplate(int templateSlot);
 
-    bool LoadTemplateConfig(const WorldConfig& config);
-
-    bool SaveAllConfigurations(const std::string& directory);
     bool SaveWorldConfig(const std::string& directory);
     bool SavePlayerConfig(const std::string& directory);
     bool SaveTilesConfig(const std::string& directory);
     bool SaveCellularAutomatonConfig(const std::string& directory);
     bool SaveFoodConfig(const std::string& directory);
     bool SaveEnemiesConfig(const std::string& directory);
+
+    void LoadAvailableFood();
+    void RenderFoodList(int startLine);
+    void RenderFoodActions(int startLine);
+    void RenderFoodEditing(int startLine, bool isNewFood);
+    void HandleFoodInput();
+    void HandleFoodActionsNavigation();
+    void StartEditingFood();
+    void HandleFoodEditNavigation();
+    void StartAddingFood();
+    void HandleFoodEditInput();
+    void SaveEditedFoodField();
+    void SaveNewFoodField();
+    void AddNewFood();
+    void ApplyFoodEdit();
+    void StartEditingFoodField();
+    void DeleteSelectedFood();
 
     std::string GetCurrentFieldName() const;
     std::string GetCurrentButtonName() const;
@@ -204,4 +229,34 @@ private:
     bool m_editingTileField;
     int m_editingTileFieldIndex;
     std::string m_tempTileStringInput;
+
+    FoodState m_foodState;
+    FoodState m_prevFoodState;
+
+    // Индексы и выбор
+    int m_selectedFoodIndex;
+    int m_foodActionIndex;
+
+    // Данные для редактирования еды
+    std::string m_editedFoodName;
+    char m_editedFoodSymbol;
+    int m_editedFoodColor;
+    int m_editedHungerRestore;
+    int m_editedHpRestore;
+    int m_editedSpawnWeight;
+    int m_editedExperience;
+
+    // Данные для добавления новой еды
+    std::string m_newFoodName;
+    char m_newFoodSymbol;
+    int m_newFoodColor;
+    int m_newHungerRestore;
+    int m_newHpRestore;
+    int m_newSpawnWeight;
+    int m_newExperience;
+
+    // Менеджер еды
+    std::unique_ptr<FoodManager> m_foodManager;
+    std::vector<int> m_availableFoodIds;
+    std::string m_foodConfigPath;
 };

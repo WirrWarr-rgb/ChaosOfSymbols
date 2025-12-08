@@ -1011,6 +1011,24 @@ void SaveSelectionMenu::SelectTemplateForSave(int templateSlot) {
             Logger::Log("WARNING: Failed to copy all files from template");
         }
 
+        // ТЕПЕРЬ СОЗДАЕМ WORLD EDITOR С КОНФИГОМ ШАБЛОНА
+        // Это важно для инициализации правильных путей к еде
+        m_worldEditor = std::make_unique<WorldEditor>(
+            EditorMode::CREATE_WORLD,
+            m_templateForSlot,
+            GameMode::PROCEDURAL_GENERATION
+        );
+
+        // Загружаем конфигурацию из шаблона в редактор
+        m_worldEditor->LoadTemplateConfig(templateConfig);
+
+        // Теперь сохраняем конфигурацию через редактор
+        m_worldEditor->SaveWorldConfiguration();
+
+        // Сохраняем все конфигурации (включая food.cfg)
+        std::string savePath = m_saveSystem->GetSaveSlotPath(GameMode::PROCEDURAL_GENERATION, m_templateForSlot);
+        m_worldEditor->SaveAllConfigurations(savePath);
+
         Logger::Log("Created save from template " + std::to_string(templateSlot) +
             " in slot " + std::to_string(m_templateForSlot));
 

@@ -49,13 +49,14 @@ bool WorldConfig::LoadConfig(bool forceReload) {
         return true;
     }
 
-    if (m_generationMode == WorldGenerationMode::RANDOM) {
-        m_seed = static_cast<int>(time(nullptr));
-        Logger::Log("Using random seed: " + std::to_string(m_seed));
-    }
-    else if (m_generationMode == WorldGenerationMode::SEEDED) {
-        Logger::Log("Using configured seed: " + std::to_string(m_seed));
-    }
+    // УБИРАЕМ эту часть - она не нужна, так как GetEffectiveSeed() сам решит
+    // if (m_generationMode == WorldGenerationMode::RANDOM) {
+    //     m_seed = static_cast<int>(time(nullptr));
+    //     Logger::Log("Using random seed: " + std::to_string(m_seed));
+    // }
+    // else if (m_generationMode == WorldGenerationMode::SEEDED) {
+    //     Logger::Log("Using configured seed: " + std::to_string(m_seed));
+    // }
 
     Logger::Log("World config loaded successfully: " +
         std::to_string(m_width) + "x" + std::to_string(m_height) +
@@ -83,11 +84,13 @@ bool WorldConfig::ParseKeyValue(const std::string& key, const std::string& value
     }
     else if (key == "GenerationMode") {
         int mode = std::stoi(value);
-        if (mode >= 0 && mode <= 2) {
-            m_generationMode = static_cast<WorldGenerationMode>(mode);
+        if (mode == 1) {
+            m_generationMode = WorldGenerationMode::RANDOM;
+        }
+        else if (mode == 2) {
+            m_generationMode = WorldGenerationMode::SEEDED;
         }
         else {
-            Logger::Log("WARNING: Invalid GenerationMode value: " + value + ", using RANDOM");
             m_generationMode = WorldGenerationMode::RANDOM;
         }
     }
@@ -273,6 +276,9 @@ WorldConfig WorldConfig::ToEditorConfig() const {
 }
 
 int WorldConfig::GetEffectiveSeed() const {
+    if (m_generationMode == WorldGenerationMode::RANDOM) {
+        return static_cast<int>(time(nullptr));
+    }
     return m_seed;
 }
 

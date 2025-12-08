@@ -158,23 +158,18 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
 
     std::ifstream file(filePath);
     if (!file.is_open()) {
-        Logger::Log("ERROR: Tile config not found: " + filePath);
+        Logger::Log("Tile config not found: " + filePath);
+        Logger::Log("Starting with empty tile list (no defaults)");
 
-        Logger::Log("Attempting to create default tile config...");
-        if (SaveToFile(filePath)) {
-            Logger::Log("Default tile config created successfully");
-            file.open(filePath);
-            if (!file.is_open()) {
-                Logger::Log("ERROR: Still cannot open tile config after creation");
-                LoadDefaultTiles();
-                return true;
-            }
-        }
-        else {
-            Logger::Log("ERROR: Failed to create default tile config");
-            LoadDefaultTiles();
-            return true;
-        }
+        m_tileTypes.clear();
+
+        // Создаем только системные тайлы, но с отрицательным ID для границы
+        // чтобы их можно было легко фильтровать
+        RegisterTileType(TileType(-1, "air", ' ', 0, true, false, 0, 0, 0, 0));
+        RegisterTileType(TileType(-2, "border", '#', 8, false, true, 0, 0, 0, 0));
+
+        Logger::Log("Created system tiles (air and border) - hidden from user");
+        return true;
     }
 
     std::stringstream buffer;
@@ -245,15 +240,25 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
         }
     }
 
-    Logger::Log("\n=== TILE LOADING COMPLETED: " + std::to_string(m_tileTypes.size()) + " tiles loaded ===\n");
+    if (m_tileTypes.find(0) == m_tileTypes.end()) {
+        RegisterTileType(TileType(0, "air", ' ', 0, true, false, 0, 0, 0, 0));
+    }
 
-    Logger::Log("=== LOADED TILES SUMMARY ===\n");
+    // Ищем или создаем границу
+    bool hasBorder = false;
     for (const auto& pair : m_tileTypes) {
         const TileType& tile = pair.second;
-        Logger::Log("Tile " + std::to_string(tile.GetId()) + ": '" +
-            std::string(1, tile.GetCharacter()) + "' - " + tile.GetName() +
-            " (color: " + std::to_string(tile.GetColor()) + ")");
+        if (tile.GetCharacter() == '#' && !tile.IsPassable()) {
+            hasBorder = true;
+            break;
+        }
     }
+
+    if (!hasBorder) {
+        // Используем отрицательный ID для системной границы
+        RegisterTileType(TileType(-1, "border", '#', 8, false, true, 0, 0, 0, 0));
+    }
+
     Logger::Log("\n=== END LOADED TILES SUMMARY ===\n");
 
     return true;
@@ -268,10 +273,19 @@ bool TileTypeManager::SaveToFile(const std::string& filePath) {
         Logger::Log("ERROR: No file path specified for saving tiles");
         return false;
     }
-    std::ofstream file(outputPath);
 
+    Logger::Log("=== SAVING TILES TO: " + outputPath + " ===");
+    Logger::Log("Saving " + std::to_string(m_tileTypes.size()) + " tiles");
+
+    for (const auto& pair : m_tileTypes) {
+        const TileType& tile = pair.second;
+        Logger::Log("  Tile " + std::to_string(tile.GetId()) + ": '" +
+            std::string(1, tile.GetCharacter()) + "' - " + tile.GetName());
+    }
+
+    std::ofstream file(outputPath);
     if (!file.is_open()) {
-        std::cout << "Failed to save tile config: " << outputPath << '\n';
+        Logger::Log("ERROR: Failed to open file for writing: " + outputPath);
         return false;
     }
 
@@ -291,7 +305,7 @@ bool TileTypeManager::SaveToFile(const std::string& filePath) {
         file << "    \"color\": " << tile.GetColor() << ",\n";
         file << "    \"isPassable\": " << (tile.IsPassable() ? "true" : "false") << ",\n";
         file << "    \"isDestructible\": " << (tile.IsDestructible() ? "true" : "false") << ",\n";
-        file << "    \"damage\": " << tile.GetDamage() << "\n";
+        file << "    \"damage\": " << tile.GetDamage() << ",\n"; // Добавлена запятая
         file << "    \"lowlandProbability\": " << tile.GetLowlandProbability() << ",\n";
         file << "    \"plainsProbability\": " << tile.GetPlainsProbability() << ",\n";
         file << "    \"mountainProbability\": " << tile.GetMountainProbability() << "\n";
@@ -301,7 +315,8 @@ bool TileTypeManager::SaveToFile(const std::string& filePath) {
     file << "\n]";
     file.close();
 
-    std::cout << "Saved " << m_tileTypes.size() << " tile types to: " << outputPath << '\n';
+    Logger::Log("Successfully saved " + std::to_string(m_tileTypes.size()) +
+        " tile types to: " + outputPath);
     return true;
 }
 
@@ -327,4 +342,30 @@ TileType* TileTypeManager::GetTileType(int id) {
 /// </summary>
 void TileTypeManager::RegisterTileType(const TileType& tileType) {
     m_tileTypes[tileType.GetId()] = tileType;
+}
+
+/// <summary>
+/// Удаляет тайл по ID
+/// </summary>
+bool TileTypeManager::RemoveTileType(int id) {
+    auto it = m_tileTypes.find(id);
+    if (it != m_tileTypes.end()) {
+        // Не позволяем удалять системные тайлы
+        if (id == 0 || id == -1 || id == 2) {
+            Logger::Log("ERROR: Cannot delete system tile with ID " + std::to_string(id));
+            return false;
+        }
+
+        const TileType& tile = it->second;
+        if (tile.GetCharacter() == ' ' || tile.GetCharacter() == '#') {
+            Logger::Log("ERROR: Cannot delete system tile with character '" +
+                std::string(1, tile.GetCharacter()) + "'");
+            return false;
+        }
+
+        m_tileTypes.erase(it);
+        Logger::Log("Removed tile with ID: " + std::to_string(id));
+        return true;
+    }
+    return false;
 }

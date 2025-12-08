@@ -68,8 +68,16 @@ void World::GenerateRandomWorld() {
     Logger::Log("Generating random world...");
 
     if (!m_tileManager || m_tileManager->GetAllTiles().empty()) {
-        Logger::Log("ERROR: No tiles available for world generation!");
-        return;
+        Logger::Log("WARNING: No tiles available for world generation!");
+        Logger::Log("Creating minimal essential tiles...");
+
+        if (m_tileManager) {
+            m_tileManager->RegisterTileType(TileType(0, "air", ' ', 0, true, false, 0, 0, 0, 0));
+            m_tileManager->RegisterTileType(TileType(1, "grass", '.', 10, true, false, 0, 0, 100, 0));
+            m_tileManager->RegisterTileType(TileType(2, "border", '#', 8, false, true, 0, 0, 0, 0));
+
+            Logger::Log("Created minimal tile set for world generation");
+        }
     }
 
     m_contentWidth = m_config.GetWidth();
@@ -79,7 +87,9 @@ void World::GenerateRandomWorld() {
 
     m_map.resize(m_height, std::vector<int>(m_width, 0));
 
+    // ВАЖНО: Используем GetEffectiveSeed(), который сам решит, какой seed использовать
     int currentSeed = m_config.GetEffectiveSeed();
+
     m_noiseGenerator.SetSeed(currentSeed);
     m_noiseGenerator.SetFrequency(m_config.GetNoiseFrequency());
 
@@ -383,6 +393,7 @@ char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>
             }
 
             if (totalProbability > 0) {
+                // ИСПРАВЛЕНО: используем GetEffectiveSeed() вместо GetSeed()
                 unsigned int hash = (x * 73856093) ^ (y * 19349663) ^ m_config.GetEffectiveSeed();
                 int randomValue = hash % totalProbability;
 
@@ -401,13 +412,9 @@ char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>
         }
     }
 
-    // Fallback значения
-    switch (zone) {
-    case 0: return '3'; // вода
-    case 1: return '1'; // трава  
-    case 2: return '^'; // горы
-    default: return '1';
-    }
+    Logger::Log("WARNING: No tiles available for zone " + std::to_string(zone) +
+        ", using default '.'");
+    return '.';
 }
 
 /// <summary>
