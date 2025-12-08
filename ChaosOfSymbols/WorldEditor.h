@@ -5,7 +5,7 @@
 #include <vector>
 #include "InputManager.h"
 #include "SaveTypes.h"
-#include "WorldEditorConfig.h"
+#include "WorldConfig.h"
 #include "SaveSystem.h"
 #include "TileTypeManager.h"
 #include "TileType.h"
@@ -46,7 +46,7 @@ public:
     bool ShouldReturnToSaves() const { return m_shouldReturn; }
     bool ShouldCreateWorld() const { return m_shouldCreate && m_editorMode == EditorMode::CREATE_WORLD; }
     bool ShouldCreateTemplate() const { return m_shouldCreate && m_editorMode == EditorMode::CREATE_TEMPLATE; }
-    const WorldEditorConfig& GetConfig() const { return m_config; }
+    const WorldConfig& GetConfig() const { return m_config; }
     void ClearDefaultTiles();
 
     void UpdateHelpForCurrentSelection();
@@ -134,7 +134,7 @@ private:
     bool CreateTemplate(const std::string& templateName);
     bool LoadFromTemplate(int templateSlot);
 
-    bool LoadTemplateConfig(const WorldEditorConfig& config);
+    bool LoadTemplateConfig(const WorldConfig& config);
 
     bool SaveAllConfigurations(const std::string& directory);
     bool SaveWorldConfig(const std::string& directory);
@@ -167,7 +167,7 @@ private:
     int m_selectedButton;
 
     // Состояние
-    WorldEditorConfig m_config;
+    WorldConfig m_config;
     std::unique_ptr<SaveSystem> m_saveSystem;
     GameMode m_gameMode;
     int m_slot;

@@ -61,7 +61,7 @@ private:
     void RunSaveSelection();
     void StartGameFromSave(GameMode mode, int slot);
 
-    void LoadWorldFromSave(const WorldEditorConfig& config);
+    void LoadWorldFromSave(const WorldConfig& config);
 
     void ReturnToMainMenu();
 

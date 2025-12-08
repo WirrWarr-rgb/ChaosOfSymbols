@@ -65,7 +65,7 @@ TemplateInfo TemplateSystem::GetTemplateInfo(int slot) const {
 }
 
 
-bool TemplateSystem::CreateTemplate(int slot, const std::string& name, const WorldEditorConfig& config) {
+bool TemplateSystem::CreateTemplate(int slot, const std::string& name, const WorldConfig& config) {
     if (slot < 1 || slot > MAX_TEMPLATES) {
         Logger::Log("ERROR: Invalid template slot: " + std::to_string(slot));
         return false;
@@ -122,7 +122,7 @@ bool TemplateSystem::CreateTemplate(int slot, const std::string& name, const Wor
     }
 }
 
-bool TemplateSystem::LoadTemplate(int slot, WorldEditorConfig& config) {
+bool TemplateSystem::LoadTemplate(int slot, WorldConfig& config) {
     if (slot < 1 || slot > MAX_TEMPLATES) {
         Logger::Log("ERROR: Invalid template slot: " + std::to_string(slot));
         return false;
@@ -193,6 +193,7 @@ bool TemplateSystem::DeleteTemplate(int slot) {
                 templatePath + "/world_gen.cfg",
                 templatePath + "/player.cfg",
                 templatePath + "/tiles.json",
+                templatePath + "/world_spawn.cfg",
                 templatePath + "/cellular_automaton.cfg",
                 templatePath + "/food.cfg"
             };
@@ -217,8 +218,8 @@ bool TemplateSystem::DeleteTemplate(int slot) {
     }
 }
 
-bool TemplateSystem::SaveTemplate(int slot, const WorldEditorConfig& config) {
-    return CreateTemplate(slot, config.worldName, config);
+bool TemplateSystem::SaveTemplate(int slot, const WorldConfig& config) {
+    return CreateTemplate(slot, config.GetWorldName(), config);
 }
 
 bool TemplateSystem::IsTemplateSlotEmpty(int slot) const {
@@ -233,33 +234,51 @@ std::string TemplateSystem::GetTemplateSlotPath(int slot) const {
     return GetTemplatesDirectory() + "/template" + std::to_string(slot);
 }
 
-bool TemplateSystem::SaveWorldConfig(int slot, const WorldEditorConfig& config) {
+bool TemplateSystem::SaveWorldConfig(int slot, const WorldConfig& config) {
     std::string templatePath = GetTemplateSlotPath(slot);
     std::string configPath = templatePath + "/world_gen.cfg";
 
     std::stringstream content;
-    content << "Width=" << config.width << "\n";
-    content << "Height=" << config.height << "\n";
-    content << "Seed=" << config.seed << "\n";
-    content << "NoiseFrequency=" << config.noiseFrequency << "\n";
-    content << "NeighborRadius=" << config.neighborRadius << "\n";
-    content << "GenerationMode=" << (config.randomGeneration ? "1" : "2") << "\n";
-    content << "WorldName=" << config.worldName << "\n";
+    content << "Width=" << config.GetWidth() << "\n";
+    content << "Height=" << config.GetHeight() << "\n";
+    content << "Seed=" << config.GetSeed() << "\n";
+    content << "NoiseFrequency=" << config.GetNoiseFrequency() << "\n";
+    content << "NeighborRadius=" << config.GetNeighborRadius() << "\n";
+    content << "GenerationMode=" << (config.GetRandomGeneration() ? "1" : "2") << "\n";
+    content << "WorldName=" << config.GetWorldName() << "\n";
+    content << "PlayerStartX=" << config.GetPlayerStartX() << "\n";
+    content << "PlayerStartY=" << config.GetPlayerStartY() << "\n";
+    content << "PlayerMaxHP=" << config.GetPlayerMaxHP() << "\n";
+    content << "PlayerMaxHunger=" << config.GetPlayerMaxHunger() << "\n";
+    content << "EnableHP=" << (config.GetEnableHP() ? "true" : "false") << "\n";
+    content << "EnableHunger=" << (config.GetEnableHunger() ? "true" : "false") << "\n";
+    content << "EnableEnemies=" << (config.GetEnableEnemies() ? "true" : "false") << "\n";
+    content << "EnemySpawnRate=" << config.GetEnemySpawnRate() << "\n";
+
+    if (!config.GetSurvivalRules().empty()) {
+        content << "SurvivalRules=" << config.GetSurvivalRules() << "\n";
+    }
+    if (!config.GetBirthRules().empty()) {
+        content << "BirthRules=" << config.GetBirthRules() << "\n";
+    }
+    if (!config.GetDeathRules().empty()) {
+        content << "DeathRules=" << config.GetDeathRules() << "\n";
+    }
 
     return SaveConfigToFile(configPath, content.str());
 }
 
-bool TemplateSystem::SavePlayerConfig(int slot, const WorldEditorConfig& config) {
+bool TemplateSystem::SavePlayerConfig(int slot, const WorldConfig& config) {
     std::string templatePath = GetTemplateSlotPath(slot);
     std::string configPath = templatePath + "/player.cfg";
 
     std::stringstream content;
-    content << "DefaultPlayerX=" << config.playerStartX << "\n";
-    content << "DefaultPlayerY=" << config.playerStartY << "\n";
-    content << "MAX_HP=" << config.playerMaxHP << "\n";
-    content << "MAX_HUNGER=" << config.playerMaxHunger << "\n";
-    content << "EnableHP=" << (config.enableHP ? "true" : "false") << "\n";
-    content << "EnableHunger=" << (config.enableHunger ? "true" : "false") << "\n";
+    content << "DefaultPlayerX=" << config.GetPlayerStartX() << "\n";
+    content << "DefaultPlayerY=" << config.GetPlayerStartY() << "\n";
+    content << "MAX_HP=" << config.GetPlayerMaxHP() << "\n";
+    content << "MAX_HUNGER=" << config.GetPlayerMaxHunger() << "\n";
+    content << "EnableHP=" << (config.GetEnableHP() ? "true" : "false") << "\n";
+    content << "EnableHunger=" << (config.GetEnableHunger() ? "true" : "false") << "\n";
     content << "BaseXP=100\n";
     content << "XPMultiplier=1.5\n";
     content << "MoveCooldownMs=50\n";
@@ -267,47 +286,65 @@ bool TemplateSystem::SavePlayerConfig(int slot, const WorldEditorConfig& config)
     return SaveConfigToFile(configPath, content.str());
 }
 
-bool TemplateSystem::SaveTilesConfig(int slot, const WorldEditorConfig& config) {
+bool TemplateSystem::SaveTilesConfig(int slot, const WorldConfig& config) {
+    // Сохраняем правила спавна тайлов
     std::string templatePath = GetTemplateSlotPath(slot);
-    std::string configPath = templatePath + "/tiles.json";
+    std::string spawnConfigPath = templatePath + "/world_spawn.cfg";
 
     std::stringstream content;
-    content << "[\n";
+    const auto& tileProbabilities = config.GetTileProbabilities();
+    for (const auto& pair : tileProbabilities) {
+        char tileChar = pair.first;
+        const auto& probs = pair.second;
 
-    content << "  {\n";
-    content << "    \"id\": 0,\n";
-    content << "    \"name\": \"air\",\n";
-    content << "    \"character\": \" \",\n";
-    content << "    \"color\": 0,\n";
-    content << "    \"isPassable\": true,\n";
-    content << "    \"isDestructible\": false,\n";
-    content << "    \"damage\": 0\n";
-    content << "  }\n";
-    content << "]";
+        if (probs.size() >= 3) {
+            content << tileChar << "="
+                << probs[0] << ":" << probs[1] << ":" << probs[2] << "\n";
+        }
+    }
 
-    return SaveConfigToFile(configPath, content.str());
+    bool spawnSaved = SaveConfigToFile(spawnConfigPath, content.str());
+
+    // Также создаем минимальный tiles.json для TileTypeManager
+    std::string tilesJsonPath = templatePath + "/tiles.json";
+    std::stringstream jsonContent;
+    jsonContent << "[\n";
+    jsonContent << "  {\n";
+    jsonContent << "    \"id\": 0,\n";
+    jsonContent << "    \"name\": \"air\",\n";
+    jsonContent << "    \"character\": \" \",\n";
+    jsonContent << "    \"color\": 0,\n";
+    jsonContent << "    \"isPassable\": true,\n";
+    jsonContent << "    \"isDestructible\": false,\n";
+    jsonContent << "    \"damage\": 0\n";
+    jsonContent << "  }\n";
+    jsonContent << "]";
+
+    bool jsonSaved = SaveConfigToFile(tilesJsonPath, jsonContent.str());
+
+    return spawnSaved && jsonSaved;
 }
 
-bool TemplateSystem::SaveAutomatonConfig(int slot, const WorldEditorConfig& config) {
+bool TemplateSystem::SaveAutomatonConfig(int slot, const WorldConfig& config) {
     std::string templatePath = GetTemplateSlotPath(slot);
     std::string configPath = templatePath + "/cellular_automaton.cfg";
 
     std::stringstream content;
-    if (!config.survivalRules.empty()) {
+    if (!config.GetSurvivalRules().empty()) {
         content << ".\n";
-        content << "survival=" << config.survivalRules << "\n";
+        content << "survival=" << config.GetSurvivalRules() << "\n";
     }
-    if (!config.birthRules.empty()) {
-        content << "birth=" << config.birthRules << "\n";
+    if (!config.GetBirthRules().empty()) {
+        content << "birth=" << config.GetBirthRules() << "\n";
     }
-    if (!config.deathRules.empty()) {
-        content << "death=" << config.deathRules << "\n";
+    if (!config.GetDeathRules().empty()) {
+        content << "death=" << config.GetDeathRules() << "\n";
     }
 
     return SaveConfigToFile(configPath, content.str());
 }
 
-bool TemplateSystem::SaveFoodConfig(int slot, const WorldEditorConfig& config) {
+bool TemplateSystem::SaveFoodConfig(int slot, const WorldConfig& config) {
     std::string templatePath = GetTemplateSlotPath(slot);
     std::string configPath = templatePath + "/food.cfg";
 
@@ -320,7 +357,7 @@ bool TemplateSystem::SaveFoodConfig(int slot, const WorldEditorConfig& config) {
     return SaveConfigToFile(configPath, content.str());
 }
 
-bool TemplateSystem::LoadWorldConfig(int slot, WorldEditorConfig& config) {
+bool TemplateSystem::LoadWorldConfig(int slot, WorldConfig& config) {
     std::string templatePath = GetTemplateSlotPath(slot);
     std::string configPath = templatePath + "/world_gen.cfg";
 
@@ -329,17 +366,28 @@ bool TemplateSystem::LoadWorldConfig(int slot, WorldEditorConfig& config) {
     }
 
     return LoadConfigFromFile(configPath, [&config](const std::string& key, const std::string& value) {
-        if (key == "Width") config.width = std::stoi(value);
-        else if (key == "Height") config.height = std::stoi(value);
-        else if (key == "Seed") config.seed = std::stoi(value);
-        else if (key == "NoiseFrequency") config.noiseFrequency = std::stof(value);
-        else if (key == "NeighborRadius") config.neighborRadius = std::stoi(value);
-        else if (key == "GenerationMode") config.randomGeneration = (value == "1");
-        else if (key == "WorldName") config.worldName = value;
+        if (key == "Width") config.SetWidth(std::stoi(value));
+        else if (key == "Height") config.SetHeight(std::stoi(value));
+        else if (key == "Seed") config.SetSeed(std::stoi(value));
+        else if (key == "NoiseFrequency") config.SetNoiseFrequency(std::stof(value));
+        else if (key == "NeighborRadius") config.SetNeighborRadius(std::stoi(value));
+        else if (key == "GenerationMode") config.SetRandomGeneration(value == "1");
+        else if (key == "WorldName") config.SetWorldName(value);
+        else if (key == "PlayerStartX") config.SetPlayerStartX(std::stoi(value));
+        else if (key == "PlayerStartY") config.SetPlayerStartY(std::stoi(value));
+        else if (key == "PlayerMaxHP") config.SetPlayerMaxHP(std::stoi(value));
+        else if (key == "PlayerMaxHunger") config.SetPlayerMaxHunger(std::stoi(value));
+        else if (key == "EnableHP") config.SetEnableHP(value == "true");
+        else if (key == "EnableHunger") config.SetEnableHunger(value == "true");
+        else if (key == "EnableEnemies") config.SetEnableEnemies(value == "true");
+        else if (key == "EnemySpawnRate") config.SetEnemySpawnRate(std::stof(value));
+        else if (key == "SurvivalRules") config.SetSurvivalRules(value);
+        else if (key == "BirthRules") config.SetBirthRules(value);
+        else if (key == "DeathRules") config.SetDeathRules(value);
         });
 }
 
-bool TemplateSystem::LoadPlayerConfig(int slot, WorldEditorConfig& config) {
+bool TemplateSystem::LoadPlayerConfig(int slot, WorldConfig& config) {
     std::string templatePath = GetTemplateSlotPath(slot);
     std::string configPath = templatePath + "/player.cfg";
 
@@ -348,16 +396,16 @@ bool TemplateSystem::LoadPlayerConfig(int slot, WorldEditorConfig& config) {
     }
 
     return LoadConfigFromFile(configPath, [&config](const std::string& key, const std::string& value) {
-        if (key == "DefaultPlayerX") config.playerStartX = std::stoi(value);
-        else if (key == "DefaultPlayerY") config.playerStartY = std::stoi(value);
-        else if (key == "MAX_HP") config.playerMaxHP = std::stoi(value);
-        else if (key == "MAX_HUNGER") config.playerMaxHunger = std::stoi(value);
-        else if (key == "EnableHP") config.enableHP = (value == "true");
-        else if (key == "EnableHunger") config.enableHunger = (value == "true");
+        if (key == "DefaultPlayerX") config.SetPlayerStartX(std::stoi(value));
+        else if (key == "DefaultPlayerY") config.SetPlayerStartY(std::stoi(value));
+        else if (key == "MAX_HP") config.SetPlayerMaxHP(std::stoi(value));
+        else if (key == "MAX_HUNGER") config.SetPlayerMaxHunger(std::stoi(value));
+        else if (key == "EnableHP") config.SetEnableHP(value == "true");
+        else if (key == "EnableHunger") config.SetEnableHunger(value == "true");
         });
 }
 
-bool TemplateSystem::LoadTilesConfig(int slot, WorldEditorConfig& config) {
+bool TemplateSystem::LoadTilesConfig(int slot, WorldConfig& config) {
     std::string templatePath = GetTemplateSlotPath(slot);
     std::string configPath = templatePath + "/world_spawn.cfg";
 
@@ -371,6 +419,8 @@ bool TemplateSystem::LoadTilesConfig(int slot, WorldEditorConfig& config) {
     }
 
     std::string line;
+    std::unordered_map<char, std::vector<float>> tileProbabilities;
+
     while (std::getline(file, line)) {
         if (line.empty() || line[0] == '#') continue;
 
@@ -395,15 +445,16 @@ bool TemplateSystem::LoadTilesConfig(int slot, WorldEditorConfig& config) {
                 probs.push_back(0.1f);
             }
 
-            config.tileProbabilities[tileChar] = probs;
+            tileProbabilities[tileChar] = probs;
         }
     }
 
     file.close();
+    config.SetTileProbabilities(tileProbabilities);
     return true;
 }
 
-bool TemplateSystem::LoadAutomatonConfig(int slot, WorldEditorConfig& config) {
+bool TemplateSystem::LoadAutomatonConfig(int slot, WorldConfig& config) {
     std::string templatePath = GetTemplateSlotPath(slot);
     std::string configPath = templatePath + "/cellular_automaton.cfg";
 
@@ -425,9 +476,9 @@ bool TemplateSystem::LoadAutomatonConfig(int slot, WorldEditorConfig& config) {
             std::string key = line.substr(0, delimiterPos);
             std::string value = line.substr(delimiterPos + 1);
 
-            if (key == "survival") config.survivalRules = value;
-            else if (key == "birth") config.birthRules = value;
-            else if (key == "death") config.deathRules = value;
+            if (key == "survival") config.SetSurvivalRules(value);
+            else if (key == "birth") config.SetBirthRules(value);
+            else if (key == "death") config.SetDeathRules(value);
         }
     }
 
@@ -435,7 +486,7 @@ bool TemplateSystem::LoadAutomatonConfig(int slot, WorldEditorConfig& config) {
     return true;
 }
 
-bool TemplateSystem::LoadFoodConfig(int slot, WorldEditorConfig& config) {
+bool TemplateSystem::LoadFoodConfig(int slot, WorldConfig& config) {
     return true;
 }
 

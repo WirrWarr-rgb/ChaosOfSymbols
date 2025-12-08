@@ -14,7 +14,7 @@
   {
     "id": 1,
     "name": "grass",
-    "character": ".",
+    "character": "1",
     "color": 10,
     "isPassable": true,
     "isDestructible": false,
@@ -26,10 +26,10 @@
   {
     "id": 2,
     "name": "stone_wall",
-    "character": "#",
+    "character": "2",
     "color": 8,
-    "isPassable": false,
-    "isDestructible": true,
+    "isPassable": true,
+    "isDestructible": false,
     "damage": 0
     "lowlandProbability": 0,
     "plainsProbability": 0,

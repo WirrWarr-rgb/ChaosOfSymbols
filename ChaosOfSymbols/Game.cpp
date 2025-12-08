@@ -152,7 +152,7 @@ void Game::StartGameFromSave(GameMode mode, int slot) {
         return;
     }
 
-    const WorldEditorConfig& loadedConfig = m_saveSystem->GetLoadedConfig();
+    const WorldConfig& loadedConfig = m_saveSystem->GetLoadedConfig();
 
     LoadWorldFromSave(loadedConfig);
 
@@ -162,7 +162,7 @@ void Game::StartGameFromSave(GameMode mode, int slot) {
     Logger::Log("=== GAME STARTED FROM SAVE ===");
 }
 
-void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
+void Game::LoadWorldFromSave(const WorldConfig& config) {
     Logger::Log("Loading world from save configuration...");
     Logger::Log("Starting game from save at: " + Logger::GetTickCount());
 
@@ -186,21 +186,24 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
 
     m_playerConfig = m_configManager->GetPlayerConfig();
 
-    m_playerConfig->SetMaxHP(config.playerMaxHP);
-    m_playerConfig->SetMaxHunger(config.playerMaxHunger);
-    m_playerConfig->SetHPEnabled(config.enableHP);
-    m_playerConfig->SetHungerEnabled(config.enableHunger);
+    m_playerConfig->SetMaxHP(config.GetPlayerMaxHP());
+    m_playerConfig->SetMaxHunger(config.GetPlayerMaxHunger());
+    m_playerConfig->SetHPEnabled(config.GetEnableHP());
+    m_playerConfig->SetHungerEnabled(config.GetEnableHunger());
 
-    m_playerX = config.playerStartX;
-    m_playerY = config.playerStartY;
+    m_playerX = config.GetPlayerStartX();
+    m_playerY = config.GetPlayerStartY();
 
-    if (m_playerX >= config.width) m_playerX = config.width / 2;
-    if (m_playerY >= config.height) m_playerY = config.height / 2;
+    int worldWidth = config.GetWidth();
+    int worldHeight = config.GetHeight();
+
+    if (m_playerX >= worldWidth) m_playerX = worldWidth / 2;
+    if (m_playerY >= worldHeight) m_playerY = worldHeight / 2;
     if (m_playerX < 0) m_playerX = 1;
     if (m_playerY < 0) m_playerY = 1;
 
-    m_playerHP = config.playerMaxHP;
-    m_playerHunger = config.playerMaxHunger;
+    m_playerHP = config.GetPlayerMaxHP();
+    m_playerHunger = config.GetPlayerMaxHunger();
     m_xpToNextLevel = 100;
 
     FoodManager* foodManager = m_configManager->GetFoodManager();
@@ -214,13 +217,13 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
 
     WorldConfig* worldConfig = m_currentWorld->GetWorldConfig();
     if (worldConfig) {
-        worldConfig->SetWidth(config.width);
-        worldConfig->SetHeight(config.height);
-        worldConfig->SetSeed(config.seed);
-        worldConfig->SetNoiseFrequency(config.noiseFrequency);
-        worldConfig->SetNeighborRadius(config.neighborRadius);
+        worldConfig->SetWidth(worldWidth);
+        worldConfig->SetHeight(worldHeight);
+        worldConfig->SetSeed(config.GetSeed());
+        worldConfig->SetNoiseFrequency(config.GetNoiseFrequency());
+        worldConfig->SetNeighborRadius(config.GetNeighborRadius());
 
-        if (config.randomGeneration) {
+        if (config.GetRandomGeneration()) {
             worldConfig->SetGenerationMode(WorldGenerationMode::RANDOM);
         }
         else {
@@ -234,7 +237,7 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
         auto& spawnRules = const_cast<std::unordered_map<char, SpawnRule>&>(worldConfig->GetAllSpawnRules());
         spawnRules.clear();
 
-        for (const auto& pair : config.tileProbabilities) {
+        for (const auto& pair : config.GetTileProbabilities()) {
             SpawnRule rule;
             rule.character = pair.first;
             rule.zoneProbabilities = pair.second;
@@ -242,9 +245,9 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
         }
 
         Logger::Log("World config set from save: " +
-            std::to_string(config.width) + "x" + std::to_string(config.height) +
-            ", seed: " + std::to_string(config.seed) +
-            ", mode: " + (config.randomGeneration ? "RANDOM" : "SEEDED"));
+            std::to_string(worldWidth) + "x" + std::to_string(worldHeight) +
+            ", seed: " + std::to_string(config.GetSeed()) +
+            ", mode: " + (config.GetRandomGeneration() ? "RANDOM" : "SEEDED"));
     }
 
     Logger::Log("Generating world from save configuration...");
@@ -252,9 +255,9 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
 
     m_renderSystem = new RenderSystem(tileManager);
 
-    int worldWidth = m_currentWorld->GetTotalWidth();
-    int worldHeight = m_currentWorld->GetTotalHeight();
-    m_renderSystem->SetScreenSize(worldWidth, worldHeight);
+    int totalWorldWidth = m_currentWorld->GetTotalWidth();
+    int totalWorldHeight = m_currentWorld->GetTotalHeight();
+    m_renderSystem->SetScreenSize(totalWorldWidth, totalWorldHeight);
 
     EnsureValidPlayerPosition();
 
@@ -263,8 +266,8 @@ void Game::LoadWorldFromSave(const WorldEditorConfig& config) {
     m_configManager->OnAutomatonRulesChanged = [this]() { this->OnAutomatonRulesChanged(); };
 
     Logger::Log("World loaded successfully from save");
-    Logger::Log("World size: " + std::to_string(config.width) + "x" + std::to_string(config.height));
-    Logger::Log("Render system size: " + std::to_string(worldWidth) + "x" + std::to_string(worldHeight));
+    Logger::Log("World size: " + std::to_string(worldWidth) + "x" + std::to_string(worldHeight));
+    Logger::Log("Render system size: " + std::to_string(totalWorldWidth) + "x" + std::to_string(totalWorldHeight));
     Logger::Log("Player position: " + std::to_string(m_playerX) + "," + std::to_string(m_playerY));
 }
 

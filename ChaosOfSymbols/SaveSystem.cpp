@@ -115,7 +115,7 @@ bool SaveSystem::SaveExistsAnywhere(int slot) const {
     return !preloadedInfo.isEmpty;
 }
 
-bool SaveSystem::CreateNewSave(GameMode mode, int slot, const std::string& name, const WorldEditorConfig& config) {
+bool SaveSystem::CreateNewSave(GameMode mode, int slot, const std::string& name, const WorldConfig& config) {
     std::string savePath = GetSaveSlotPath(mode, slot);
 
     fs::create_directories(savePath);
@@ -157,33 +157,51 @@ bool SaveSystem::CreateNewSave(GameMode mode, int slot, const std::string& name,
     return true;
 }
 
-bool SaveSystem::SaveWorldConfig(GameMode mode, int slot, const WorldEditorConfig& config) {
+bool SaveSystem::SaveWorldConfig(GameMode mode, int slot, const WorldConfig& config) {
     std::string savePath = GetSaveSlotPath(mode, slot);
     std::string configPath = savePath + "/world_gen.cfg";
 
     std::stringstream content;
-    content << "Width=" << config.width << "\n";
-    content << "Height=" << config.height << "\n";
-    content << "Seed=" << config.seed << "\n";
-    content << "NoiseFrequency=" << config.noiseFrequency << "\n";
-    content << "NeighborRadius=" << config.neighborRadius << "\n";
-    content << "GenerationMode=" << (config.randomGeneration ? "1" : "2") << "\n";
-    content << "WorldName=" << config.worldName << "\n";
+    content << "Width=" << config.GetWidth() << "\n";
+    content << "Height=" << config.GetHeight() << "\n";
+    content << "Seed=" << config.GetSeed() << "\n";
+    content << "NoiseFrequency=" << config.GetNoiseFrequency() << "\n";
+    content << "NeighborRadius=" << config.GetNeighborRadius() << "\n";
+    content << "GenerationMode=" << (config.GetRandomGeneration() ? "1" : "2") << "\n";
+    content << "WorldName=" << config.GetWorldName() << "\n";
+    content << "PlayerStartX=" << config.GetPlayerStartX() << "\n";
+    content << "PlayerStartY=" << config.GetPlayerStartY() << "\n";
+    content << "PlayerMaxHP=" << config.GetPlayerMaxHP() << "\n";
+    content << "PlayerMaxHunger=" << config.GetPlayerMaxHunger() << "\n";
+    content << "EnableHP=" << (config.GetEnableHP() ? "true" : "false") << "\n";
+    content << "EnableHunger=" << (config.GetEnableHunger() ? "true" : "false") << "\n";
+    content << "EnableEnemies=" << (config.GetEnableEnemies() ? "true" : "false") << "\n";
+    content << "EnemySpawnRate=" << config.GetEnemySpawnRate() << "\n";
+
+    if (!config.GetSurvivalRules().empty()) {
+        content << "SurvivalRules=" << config.GetSurvivalRules() << "\n";
+    }
+    if (!config.GetBirthRules().empty()) {
+        content << "BirthRules=" << config.GetBirthRules() << "\n";
+    }
+    if (!config.GetDeathRules().empty()) {
+        content << "DeathRules=" << config.GetDeathRules() << "\n";
+    }
 
     return SaveConfigToFile(configPath, content.str());
 }
 
-bool SaveSystem::SavePlayerConfig(GameMode mode, int slot, const WorldEditorConfig& config) {
+bool SaveSystem::SavePlayerConfig(GameMode mode, int slot, const WorldConfig& config) {
     std::string savePath = GetSaveSlotPath(mode, slot);
     std::string configPath = savePath + "/player.cfg";
 
     std::stringstream content;
-    content << "DefaultPlayerX=" << config.playerStartX << "\n";
-    content << "DefaultPlayerY=" << config.playerStartY << "\n";
-    content << "MAX_HP=" << config.playerMaxHP << "\n";
-    content << "MAX_HUNGER=" << config.playerMaxHunger << "\n";
-    content << "EnableHP=" << (config.enableHP ? "true" : "false") << "\n";
-    content << "EnableHunger=" << (config.enableHunger ? "true" : "false") << "\n";
+    content << "DefaultPlayerX=" << config.GetPlayerStartX() << "\n";
+    content << "DefaultPlayerY=" << config.GetPlayerStartY() << "\n";
+    content << "MAX_HP=" << config.GetPlayerMaxHP() << "\n";
+    content << "MAX_HUNGER=" << config.GetPlayerMaxHunger() << "\n";
+    content << "EnableHP=" << (config.GetEnableHP() ? "true" : "false") << "\n";
+    content << "EnableHunger=" << (config.GetEnableHunger() ? "true" : "false") << "\n";
     content << "BaseXP=100\n";
     content << "XPMultiplier=1.5\n";
     content << "MoveCooldownMs=50\n";
@@ -191,12 +209,13 @@ bool SaveSystem::SavePlayerConfig(GameMode mode, int slot, const WorldEditorConf
     return SaveConfigToFile(configPath, content.str());
 }
 
-bool SaveSystem::SaveTilesConfig(GameMode mode, int slot, const WorldEditorConfig& config) {
+bool SaveSystem::SaveTilesConfig(GameMode mode, int slot, const WorldConfig& config) {
     std::string savePath = GetSaveSlotPath(mode, slot);
     std::string configPath = savePath + "/world_spawn.cfg";
 
     std::stringstream content;
-    for (const auto& pair : config.tileProbabilities) {
+    const auto& tileProbabilities = config.GetTileProbabilities();
+    for (const auto& pair : tileProbabilities) {
         char tileChar = pair.first;
         const auto& probs = pair.second;
 
@@ -209,27 +228,27 @@ bool SaveSystem::SaveTilesConfig(GameMode mode, int slot, const WorldEditorConfi
     return SaveConfigToFile(configPath, content.str());
 }
 
-bool SaveSystem::SaveAutomatonConfig(GameMode mode, int slot, const WorldEditorConfig& config) {
+bool SaveSystem::SaveAutomatonConfig(GameMode mode, int slot, const WorldConfig& config) {
     std::string savePath = GetSaveSlotPath(mode, slot);
     std::string configPath = savePath + "/cellular_automaton.cfg";
 
     std::stringstream content;
-    if (!config.survivalRules.empty()) {
+    if (!config.GetSurvivalRules().empty()) {
         content << ".\n";
-        content << "survival=" << config.survivalRules << "\n";
+        content << "survival=" << config.GetSurvivalRules() << "\n";
     }
-    if (!config.birthRules.empty()) {
-        content << "birth=" << config.birthRules << "\n";
+    if (!config.GetBirthRules().empty()) {
+        content << "birth=" << config.GetBirthRules() << "\n";
     }
-    if (!config.deathRules.empty()) {
-        content << "death=" << config.deathRules << "\n";
+    if (!config.GetDeathRules().empty()) {
+        content << "death=" << config.GetDeathRules() << "\n";
     }
 
     return SaveConfigToFile(configPath, content.str());
 }
 
-WorldEditorConfig SaveSystem::LoadWorldConfig(GameMode mode, int slot) {
-    WorldEditorConfig config;
+WorldConfig SaveSystem::LoadWorldConfig(GameMode mode, int slot) {
+    WorldConfig config;
     std::string savePath = GetSaveSlotPath(mode, slot);
 
     std::ifstream worldFile(savePath + "/world_gen.cfg");
@@ -241,13 +260,24 @@ WorldEditorConfig SaveSystem::LoadWorldConfig(GameMode mode, int slot) {
                 std::string key = line.substr(0, delimiterPos);
                 std::string value = line.substr(delimiterPos + 1);
 
-                if (key == "Width") config.width = std::stoi(value);
-                else if (key == "Height") config.height = std::stoi(value);
-                else if (key == "Seed") config.seed = std::stoi(value);
-                else if (key == "NoiseFrequency") config.noiseFrequency = std::stof(value);
-                else if (key == "NeighborRadius") config.neighborRadius = std::stoi(value);
-                else if (key == "GenerationMode") config.randomGeneration = (value == "1");
-                else if (key == "WorldName") config.worldName = value;
+                if (key == "Width") config.SetWidth(std::stoi(value));
+                else if (key == "Height") config.SetHeight(std::stoi(value));
+                else if (key == "Seed") config.SetSeed(std::stoi(value));
+                else if (key == "NoiseFrequency") config.SetNoiseFrequency(std::stof(value));
+                else if (key == "NeighborRadius") config.SetNeighborRadius(std::stoi(value));
+                else if (key == "GenerationMode") config.SetRandomGeneration(value == "1");
+                else if (key == "WorldName") config.SetWorldName(value);
+                else if (key == "PlayerStartX") config.SetPlayerStartX(std::stoi(value));
+                else if (key == "PlayerStartY") config.SetPlayerStartY(std::stoi(value));
+                else if (key == "PlayerMaxHP") config.SetPlayerMaxHP(std::stoi(value));
+                else if (key == "PlayerMaxHunger") config.SetPlayerMaxHunger(std::stoi(value));
+                else if (key == "EnableHP") config.SetEnableHP(value == "true");
+                else if (key == "EnableHunger") config.SetEnableHunger(value == "true");
+                else if (key == "EnableEnemies") config.SetEnableEnemies(value == "true");
+                else if (key == "EnemySpawnRate") config.SetEnemySpawnRate(std::stof(value));
+                else if (key == "SurvivalRules") config.SetSurvivalRules(value);
+                else if (key == "BirthRules") config.SetBirthRules(value);
+                else if (key == "DeathRules") config.SetDeathRules(value);
             }
         }
         worldFile.close();
@@ -346,12 +376,12 @@ bool SaveSystem::LoadPlayerConfig(GameMode mode, int slot) {
     std::string configPath = savePath + "/player.cfg";
 
     return LoadConfigFromFile(configPath, [this](const std::string& key, const std::string& value) {
-        if (key == "DefaultPlayerX") m_loadedConfig.playerStartX = std::stoi(value);
-        else if (key == "DefaultPlayerY") m_loadedConfig.playerStartY = std::stoi(value);
-        else if (key == "MAX_HP") m_loadedConfig.playerMaxHP = std::stoi(value);
-        else if (key == "MAX_HUNGER") m_loadedConfig.playerMaxHunger = std::stoi(value);
-        else if (key == "EnableHP") m_loadedConfig.enableHP = (value == "true");
-        else if (key == "EnableHunger") m_loadedConfig.enableHunger = (value == "true");
+        if (key == "DefaultPlayerX") m_loadedConfig.SetPlayerStartX(std::stoi(value));
+        else if (key == "DefaultPlayerY") m_loadedConfig.SetPlayerStartY(std::stoi(value));
+        else if (key == "MAX_HP") m_loadedConfig.SetPlayerMaxHP(std::stoi(value));
+        else if (key == "MAX_HUNGER") m_loadedConfig.SetPlayerMaxHunger(std::stoi(value));
+        else if (key == "EnableHP") m_loadedConfig.SetEnableHP(value == "true");
+        else if (key == "EnableHunger") m_loadedConfig.SetEnableHunger(value == "true");
         });
 }
 
@@ -365,6 +395,8 @@ bool SaveSystem::LoadTilesConfig(GameMode mode, int slot) {
     }
 
     std::string line;
+    std::unordered_map<char, std::vector<float>> tileProbabilities;
+
     while (std::getline(file, line)) {
         if (line.empty() || line[0] == '#') continue;
 
@@ -389,11 +421,12 @@ bool SaveSystem::LoadTilesConfig(GameMode mode, int slot) {
                 probs.push_back(0.1f);
             }
 
-            m_loadedConfig.tileProbabilities[tileChar] = probs;
+            tileProbabilities[tileChar] = probs;
         }
     }
 
     file.close();
+    m_loadedConfig.SetTileProbabilities(tileProbabilities);
     return true;
 }
 
@@ -422,9 +455,9 @@ bool SaveSystem::LoadAutomatonConfig(GameMode mode, int slot) {
             std::string key = line.substr(0, delimiterPos);
             std::string value = line.substr(delimiterPos + 1);
 
-            if (key == "survival") m_loadedConfig.survivalRules = value;
-            else if (key == "birth") m_loadedConfig.birthRules = value;
-            else if (key == "death") m_loadedConfig.deathRules = value;
+            if (key == "survival") m_loadedConfig.SetSurvivalRules(value);
+            else if (key == "birth") m_loadedConfig.SetBirthRules(value);
+            else if (key == "death") m_loadedConfig.SetDeathRules(value);
         }
     }
 

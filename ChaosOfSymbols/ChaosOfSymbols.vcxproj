@@ -185,7 +185,6 @@
     <ClInclude Include="World.h" />
     <ClInclude Include="WorldConfig.h" />
     <ClInclude Include="WorldEditor.h" />
-    <ClInclude Include="WorldEditorConfig.h" />
     <ClInclude Include="WorldTemplateMenu.h" />
   </ItemGroup>
   <ItemGroup>

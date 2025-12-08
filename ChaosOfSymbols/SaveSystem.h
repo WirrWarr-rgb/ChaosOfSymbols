@@ -5,7 +5,7 @@
 #include <ctime>
 #include <functional>
 #include "SaveTypes.h"
-#include "WorldEditorConfig.h"
+#include "WorldConfig.h"
 
 class SaveSystem {
 public:
@@ -13,22 +13,22 @@ public:
 
     std::vector<SaveInfo> GetAllSaves();
     std::vector<SaveInfo> GetSaves(GameMode mode);
-    bool CreateNewSave(GameMode mode, int slot, const std::string& name, const WorldEditorConfig& config);
+    bool CreateNewSave(GameMode mode, int slot, const std::string& name, const WorldConfig& config);
     bool LoadSave(GameMode mode, int slot);
     bool SaveGame(GameMode mode, int slot, const std::string& name = "");
     bool DeleteSave(GameMode mode, int slot);
 
-    bool SaveWorldConfig(GameMode mode, int slot, const WorldEditorConfig& config);
-    WorldEditorConfig LoadWorldConfig(GameMode mode, int slot);
-    bool SavePlayerConfig(GameMode mode, int slot, const WorldEditorConfig& config);
-    bool SaveTilesConfig(GameMode mode, int slot, const WorldEditorConfig& config);
-    bool SaveAutomatonConfig(GameMode mode, int slot, const WorldEditorConfig& config);
+    bool SaveWorldConfig(GameMode mode, int slot, const WorldConfig& config);
+    WorldConfig LoadWorldConfig(GameMode mode, int slot);
+    bool SavePlayerConfig(GameMode mode, int slot, const WorldConfig& config);
+    bool SaveTilesConfig(GameMode mode, int slot, const WorldConfig& config);
+    bool SaveAutomatonConfig(GameMode mode, int slot, const WorldConfig& config);
 
     bool LoadPlayerConfig(GameMode mode, int slot);
     bool LoadTilesConfig(GameMode mode, int slot);
     bool LoadAutomatonConfig(GameMode mode, int slot);
 
-    const WorldEditorConfig& GetLoadedConfig() const { return m_loadedConfig; }
+    const WorldConfig& GetLoadedConfig() const { return m_loadedConfig; }
 
     std::string GetSavesDirectory(GameMode mode) const;
     std::string GetSaveSlotPath(GameMode mode, int slot) const;
@@ -49,7 +49,7 @@ private:
     bool SaveConfigToFile(const std::string& filePath, const std::string& content);
     bool LoadConfigFromFile(const std::string& filePath, std::function<void(const std::string&, const std::string&)> parser);
 
-    WorldEditorConfig m_loadedConfig;
+    WorldConfig m_loadedConfig;
 
     const std::string BASE_SAVES_DIR = "saves";
     const std::string PROCEDURAL_DIR = "proceduralGeneration";

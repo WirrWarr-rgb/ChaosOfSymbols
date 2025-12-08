@@ -140,9 +140,6 @@
     <ClInclude Include="World.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>
-    <ClInclude Include="WorldEditorConfig.h">
-      <Filter>Файлы заголовков</Filter>
-    </ClInclude>
     <ClInclude Include="ConfigManager.h">
       <Filter>Файлы заголовков</Filter>
     </ClInclude>

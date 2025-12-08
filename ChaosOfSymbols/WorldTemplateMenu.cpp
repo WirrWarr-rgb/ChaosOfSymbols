@@ -823,7 +823,7 @@ void WorldTemplateMenu::EditTemplate(int slot) {
         slot
     );
 
-    WorldEditorConfig templateConfig;
+    WorldConfig templateConfig;
     if (m_templateSystem->LoadTemplate(slot, templateConfig)) {
         Logger::Log("Loaded template configuration");
     }

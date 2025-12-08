@@ -993,13 +993,13 @@ void SaveSelectionMenu::SelectTemplateForSave(int templateSlot) {
         return;
     }
 
-    WorldEditorConfig templateConfig;
+    WorldConfig templateConfig;
     if (!m_templateSystem->LoadTemplate(templateSlot, templateConfig)) {
         Logger::Log("ERROR: Failed to load template " + std::to_string(templateSlot));
         return;
     }
 
-    std::string saveName = templateConfig.worldName + " (from template)";
+    std::string saveName = templateConfig.GetWorldName() + " (from template)";
     if (m_saveSystem->CreateNewSave(GameMode::PROCEDURAL_GENERATION, m_templateForSlot, saveName, templateConfig)) {
         Logger::Log("Created save from template " + std::to_string(templateSlot) +
             " in slot " + std::to_string(m_templateForSlot));

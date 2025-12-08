@@ -1,6 +1,7 @@
 #pragma once
 #include <string>
 #include <unordered_map>
+#include <vector>
 #include "ConfigParser.h"
 #include "SpawnRule.h"
 
@@ -19,6 +20,14 @@ public:
     // Публичные методы
     bool LoadConfig(bool forceReload = false);
 
+    // Методы для сохранения/загрузки
+    bool SaveToDirectory(const std::string& directory) const;
+    bool LoadFromDirectory(const std::string& directory);
+
+    // Методы для конвертации в/из WorldEditorConfig
+    void FromEditorConfig(const WorldConfig& editorConfig);
+    WorldConfig ToEditorConfig() const;
+
     // Геттеры
     int GetWidth() const { return m_width; }
     int GetHeight() const { return m_height; }
@@ -31,6 +40,25 @@ public:
     WorldGenerationMode GetGenerationMode() const { return m_generationMode; }
     const std::string& GetMapFilePath() const { return m_mapFilePath; }
 
+    // Геттеры для редактора
+    const std::string& GetWorldName() const { return m_worldName; }
+    bool GetRandomGeneration() const { return m_generationMode == WorldGenerationMode::RANDOM; }
+    int GetPlayerStartX() const { return m_playerStartX; }
+    int GetPlayerStartY() const { return m_playerStartY; }
+    int GetPlayerMaxHP() const { return m_playerMaxHP; }
+    int GetPlayerMaxHunger() const { return m_playerMaxHunger; }
+    bool GetEnableHP() const { return m_enableHP; }
+    bool GetEnableHunger() const { return m_enableHunger; }
+    const std::unordered_map<char, std::vector<float>>& GetTileProbabilities() const { return m_tileProbabilities; }
+    const std::string& GetSurvivalRules() const { return m_survivalRules; }
+    const std::string& GetBirthRules() const { return m_birthRules; }
+    const std::string& GetDeathRules() const { return m_deathRules; }
+    bool GetEnableEnemies() const { return m_enableEnemies; }
+    float GetEnemySpawnRate() const { return m_enemySpawnRate; }
+
+    // Проверки
+    bool IsLoadedFromSave() const { return m_parametersLoadedFromSave; }
+
     // Сеттеры
     void SetWidth(int width) { m_width = width; }
     void SetHeight(int height) { m_height = height; }
@@ -41,6 +69,27 @@ public:
     void SetNeighborRadius(int radius) { m_neighborRadius = radius; }
     void SetGenerationMode(WorldGenerationMode mode) { m_generationMode = mode; }
     void SetMapFilePath(const std::string& path) { m_mapFilePath = path; }
+
+    // Сеттеры для редактора
+    void SetWorldName(const std::string& name) { m_worldName = name; }
+    void SetRandomGeneration(bool random) {
+        m_generationMode = random ? WorldGenerationMode::RANDOM : WorldGenerationMode::SEEDED;
+    }
+    void SetPlayerStartX(int x) { m_playerStartX = x; }
+    void SetPlayerStartY(int y) { m_playerStartY = y; }
+    void SetPlayerMaxHP(int hp) { m_playerMaxHP = hp; }
+    void SetPlayerMaxHunger(int hunger) { m_playerMaxHunger = hunger; }
+    void SetEnableHP(bool enable) { m_enableHP = enable; }
+    void SetEnableHunger(bool enable) { m_enableHunger = enable; }
+    void SetTileProbabilities(const std::unordered_map<char, std::vector<float>>& probs) {
+        m_tileProbabilities = probs;
+    }
+    void SetSurvivalRules(const std::string& rules) { m_survivalRules = rules; }
+    void SetBirthRules(const std::string& rules) { m_birthRules = rules; }
+    void SetDeathRules(const std::string& rules) { m_deathRules = rules; }
+    void SetEnableEnemies(bool enable) { m_enableEnemies = enable; }
+    void SetEnemySpawnRate(float rate) { m_enemySpawnRate = rate; }
+
     void MarkAsLoadedFromSave() { m_parametersLoadedFromSave = true; }
     void ClearSaveMark() { m_parametersLoadedFromSave = false; }
 
@@ -49,6 +98,7 @@ protected:
     bool ParseSpawnConfig();
 
 private:
+    // Основные параметры мира
     int m_width;
     int m_height;
     int m_seed;
@@ -56,6 +106,21 @@ private:
     int m_neighborRadius;
     WorldGenerationMode m_generationMode;
     std::string m_mapFilePath;
+
+    // Параметры редактора
+    std::string m_worldName;
+    int m_playerStartX;
+    int m_playerStartY;
+    int m_playerMaxHP;
+    int m_playerMaxHunger;
+    bool m_enableHP;
+    bool m_enableHunger;
+    std::unordered_map<char, std::vector<float>> m_tileProbabilities;
+    std::string m_survivalRules;
+    std::string m_birthRules;
+    std::string m_deathRules;
+    bool m_enableEnemies;
+    float m_enemySpawnRate;
 
     std::unordered_map<char, SpawnRule> m_spawnRules;
 

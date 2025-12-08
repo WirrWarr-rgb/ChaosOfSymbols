@@ -242,21 +242,21 @@ void WorldEditor::RenderWorldTab() {
                 case 0: RenderEditField(line + visibleFieldIndex, "World Name: ", m_tempStringInput, true); break;
                 case 1: RenderEditField(line + visibleFieldIndex, "Width: ", m_tempStringInput, true); break;
                 case 2: RenderEditField(line + visibleFieldIndex, "Height: ", m_tempStringInput, true); break;
-                case 3: RenderMenuItem(line + visibleFieldIndex, "Random Generation: " + std::string(m_config.randomGeneration ? "Yes" : "No"), false); break;
+                case 3: RenderMenuItem(line + visibleFieldIndex, "Random Generation: " + std::string(m_config.GetRandomGeneration() ? "Yes" : "No"), false); break;
                 case 4: RenderEditField(line + visibleFieldIndex, "Seed: ", m_tempStringInput, true); break;
-                case 5: RenderMenuItem(line + visibleFieldIndex, "Noise Frequency: " + std::to_string(m_config.noiseFrequency), false); break;
+                case 5: RenderMenuItem(line + visibleFieldIndex, "Noise Frequency: " + std::to_string(m_config.GetNoiseFrequency()), false); break;
                 case 6: RenderEditField(line + visibleFieldIndex, "Neighbor Radius: ", m_tempStringInput, true); break;
                 }
             }
             else {
                 switch (i) {
-                case 0: RenderMenuItem(line + visibleFieldIndex, "World Name: " + m_config.worldName, false); break;
-                case 1: RenderMenuItem(line + visibleFieldIndex, "Width: " + std::to_string(m_config.width), false); break;
-                case 2: RenderMenuItem(line + visibleFieldIndex, "Height: " + std::to_string(m_config.height), false); break;
-                case 3: RenderMenuItem(line + visibleFieldIndex, "Random Generation: " + std::string(m_config.randomGeneration ? "Yes" : "No"), false); break;
-                case 4: RenderMenuItem(line + visibleFieldIndex, "Seed: " + std::to_string(m_config.seed), false); break;
-                case 5: RenderMenuItem(line + visibleFieldIndex, "Noise Frequency: " + std::to_string(m_config.noiseFrequency), false); break;
-                case 6: RenderMenuItem(line + visibleFieldIndex, "Neighbor Radius: " + std::to_string(m_config.neighborRadius), false); break;
+                case 0: RenderMenuItem(line + visibleFieldIndex, "World Name: " + m_config.GetWorldName(), false); break;
+                case 1: RenderMenuItem(line + visibleFieldIndex, "Width: " + std::to_string(m_config.GetWidth()), false); break;
+                case 2: RenderMenuItem(line + visibleFieldIndex, "Height: " + std::to_string(m_config.GetHeight()), false); break;
+                case 3: RenderMenuItem(line + visibleFieldIndex, "Random Generation: " + std::string(m_config.GetRandomGeneration() ? "Yes" : "No"), false); break;
+                case 4: RenderMenuItem(line + visibleFieldIndex, "Seed: " + std::to_string(m_config.GetSeed()), false); break;
+                case 5: RenderMenuItem(line + visibleFieldIndex, "Noise Frequency: " + std::to_string(m_config.GetNoiseFrequency()), false); break;
+                case 6: RenderMenuItem(line + visibleFieldIndex, "Neighbor Radius: " + std::to_string(m_config.GetNeighborRadius()), false); break;
                 }
             }
             visibleFieldIndex++;
@@ -269,17 +269,17 @@ void WorldEditor::RenderWorldTab() {
     }
     else {
         std::vector<std::string> fields;
-        fields.push_back("World Name: " + m_config.worldName);
-        fields.push_back("Width: " + std::to_string(m_config.width));
-        fields.push_back("Height: " + std::to_string(m_config.height));
-        fields.push_back("Random Generation: " + std::string(m_config.randomGeneration ? "Yes" : "No"));
+        fields.push_back("World Name: " + m_config.GetWorldName());
+        fields.push_back("Width: " + std::to_string(m_config.GetWidth()));
+        fields.push_back("Height: " + std::to_string(m_config.GetHeight()));
+        fields.push_back("Random Generation: " + std::string(m_config.GetRandomGeneration() ? "Yes" : "No"));
 
         if (ShouldShowSeedField()) {
-            fields.push_back("Seed: " + std::to_string(m_config.seed));
+            fields.push_back("Seed: " + std::to_string(m_config.GetSeed()));
         }
 
-        fields.push_back("Noise Frequency: " + std::to_string(m_config.noiseFrequency));
-        fields.push_back("Neighbor Radius: " + std::to_string(m_config.neighborRadius));
+        fields.push_back("Noise Frequency: " + std::to_string(m_config.GetNoiseFrequency()));
+        fields.push_back("Neighbor Radius: " + std::to_string(m_config.GetNeighborRadius()));
 
         if (m_needFullRedraw || fields.size() != m_prevFieldCount) {
             for (int i = 0; i < fields.size(); ++i) {
@@ -310,6 +310,7 @@ void WorldEditor::RenderWorldTab() {
         ClearLine(i);
     }
 }
+
 void WorldEditor::RenderBottomButtons() {
     if (m_currentTab == EditorTab::TILES &&
         (m_tilesState == TilesState::EDITING_TILE ||
@@ -346,30 +347,30 @@ void WorldEditor::RenderPlayerTab() {
                 case 1: RenderEditField(line + i, "Start Y: ", m_tempStringInput, true); break;
                 case 2: RenderEditField(line + i, "Max HP: ", m_tempStringInput, true); break;
                 case 3: RenderEditField(line + i, "Max Hunger: ", m_tempStringInput, true); break;
-                case 4: RenderMenuItem(line + i, "Enable HP: " + std::string(m_config.enableHP ? "Yes" : "No"), false); break;
-                case 5: RenderMenuItem(line + i, "Enable Hunger: " + std::string(m_config.enableHunger ? "Yes" : "No"), false); break;
+                case 4: RenderMenuItem(line + i, "Enable HP: " + std::string(m_config.GetEnableHP() ? "Yes" : "No"), false); break;
+                case 5: RenderMenuItem(line + i, "Enable Hunger: " + std::string(m_config.GetEnableHunger() ? "Yes" : "No"), false); break;
                 }
             }
             else {
                 switch (i) {
-                case 0: RenderMenuItem(line + i, "Start X: " + std::to_string(m_config.playerStartX), false); break;
-                case 1: RenderMenuItem(line + i, "Start Y: " + std::to_string(m_config.playerStartY), false); break;
-                case 2: RenderMenuItem(line + i, "Max HP: " + std::to_string(m_config.playerMaxHP), false); break;
-                case 3: RenderMenuItem(line + i, "Max Hunger: " + std::to_string(m_config.playerMaxHunger), false); break;
-                case 4: RenderMenuItem(line + i, "Enable HP: " + std::string(m_config.enableHP ? "Yes" : "No"), false); break;
-                case 5: RenderMenuItem(line + i, "Enable Hunger: " + std::string(m_config.enableHunger ? "Yes" : "No"), false); break;
+                case 0: RenderMenuItem(line + i, "Start X: " + std::to_string(m_config.GetPlayerStartX()), false); break;
+                case 1: RenderMenuItem(line + i, "Start Y: " + std::to_string(m_config.GetPlayerStartY()), false); break;
+                case 2: RenderMenuItem(line + i, "Max HP: " + std::to_string(m_config.GetPlayerMaxHP()), false); break;
+                case 3: RenderMenuItem(line + i, "Max Hunger: " + std::to_string(m_config.GetPlayerMaxHunger()), false); break;
+                case 4: RenderMenuItem(line + i, "Enable HP: " + std::string(m_config.GetEnableHP() ? "Yes" : "No"), false); break;
+                case 5: RenderMenuItem(line + i, "Enable Hunger: " + std::string(m_config.GetEnableHunger() ? "Yes" : "No"), false); break;
                 }
             }
         }
     }
     else {
         std::vector<std::string> fields = {
-            "Start X: " + std::to_string(m_config.playerStartX),
-            "Start Y: " + std::to_string(m_config.playerStartY),
-            "Max HP: " + std::to_string(m_config.playerMaxHP),
-            "Max Hunger: " + std::to_string(m_config.playerMaxHunger),
-            "Enable HP: " + std::string(m_config.enableHP ? "Yes" : "No"),
-            "Enable Hunger: " + std::string(m_config.enableHunger ? "Yes" : "No")
+            "Start X: " + std::to_string(m_config.GetPlayerStartX()),
+            "Start Y: " + std::to_string(m_config.GetPlayerStartY()),
+            "Max HP: " + std::to_string(m_config.GetPlayerMaxHP()),
+            "Max Hunger: " + std::to_string(m_config.GetPlayerMaxHunger()),
+            "Enable HP: " + std::string(m_config.GetEnableHP() ? "Yes" : "No"),
+            "Enable Hunger: " + std::string(m_config.GetEnableHunger() ? "Yes" : "No")
         };
 
         for (int i = 0; i < fields.size(); ++i) {
@@ -1307,9 +1308,9 @@ void WorldEditor::RenderCellularAutomatonTab() {
     int line = 6;
 
     std::vector<std::string> fields = {
-        "Survival Rules: " + m_config.survivalRules,
-        "Birth Rules: " + m_config.birthRules,
-        "Death Rules: " + m_config.deathRules
+        "Survival Rules: " + m_config.GetSurvivalRules(),
+        "Birth Rules: " + m_config.GetBirthRules(),
+        "Death Rules: " + m_config.GetDeathRules()
     };
 
     for (int i = 0; i < fields.size(); ++i) {
@@ -1335,8 +1336,8 @@ void WorldEditor::RenderEnemiesTab() {
     int line = 6;
 
     std::vector<std::string> fields = {
-        "Enable Enemies: " + std::string(m_config.enableEnemies ? "Yes" : "No"),
-        "Enemy Spawn Rate: " + std::to_string(m_config.enemySpawnRate)
+        "Enable Enemies: " + std::string(m_config.GetEnableEnemies() ? "Yes" : "No"),
+        "Enemy Spawn Rate: " + std::to_string(m_config.GetEnemySpawnRate())
     };
 
     for (int i = 0; i < fields.size(); ++i) {
@@ -1513,17 +1514,17 @@ void WorldEditor::StartEditing() {
         if (m_editingField < fieldMapping.size()) {
             int actualField = fieldMapping[m_editingField];
             switch (actualField) {
-            case 0: m_tempStringInput = m_config.worldName; break;
-            case 1: m_tempStringInput = std::to_string(m_config.width); break;
-            case 2: m_tempStringInput = std::to_string(m_config.height); break;
+            case 0: m_tempStringInput = m_config.GetWorldName(); break;
+            case 1: m_tempStringInput = std::to_string(m_config.GetWidth()); break;
+            case 2: m_tempStringInput = std::to_string(m_config.GetHeight()); break;
             case 3:
                 m_isEditingText = false;
-                m_config.randomGeneration = !m_config.randomGeneration;
+                m_config.SetRandomGeneration(!m_config.GetRandomGeneration());
                 m_needFullRedraw = true;
                 return;
-            case 4: m_tempStringInput = std::to_string(m_config.seed); break;
-            case 5: m_tempStringInput = std::to_string(m_config.noiseFrequency); break;
-            case 6: m_tempStringInput = std::to_string(m_config.neighborRadius); break;
+            case 4: m_tempStringInput = std::to_string(m_config.GetSeed()); break;
+            case 5: m_tempStringInput = std::to_string(m_config.GetNoiseFrequency()); break;
+            case 6: m_tempStringInput = std::to_string(m_config.GetNeighborRadius()); break;
             }
         }
         break;
@@ -1531,18 +1532,18 @@ void WorldEditor::StartEditing() {
 
     case EditorTab::PLAYER:
         switch (m_editingField) {
-        case 0: m_tempStringInput = std::to_string(m_config.playerStartX); break;
-        case 1: m_tempStringInput = std::to_string(m_config.playerStartY); break;
-        case 2: m_tempStringInput = std::to_string(m_config.playerMaxHP); break;
-        case 3: m_tempStringInput = std::to_string(m_config.playerMaxHunger); break;
+        case 0: m_tempStringInput = std::to_string(m_config.GetPlayerStartX()); break;
+        case 1: m_tempStringInput = std::to_string(m_config.GetPlayerStartY()); break;
+        case 2: m_tempStringInput = std::to_string(m_config.GetPlayerMaxHP()); break;
+        case 3: m_tempStringInput = std::to_string(m_config.GetPlayerMaxHunger()); break;
         case 4:
             m_isEditingText = false;
-            m_config.enableHP = !m_config.enableHP;
+            m_config.SetEnableHP(!m_config.GetEnableHP());
             m_needFullRedraw = true;
             return;
         case 5:
             m_isEditingText = false;
-            m_config.enableHunger = !m_config.enableHunger;
+            m_config.SetEnableHunger(!m_config.GetEnableHunger());
             m_needFullRedraw = true;
             return;
         }
@@ -1646,25 +1647,27 @@ void WorldEditor::ApplyEditedValue() {
                 int actualField = fieldMapping[m_editingField];
                 switch (actualField) {
                 case 0:
-                    m_config.worldName = m_tempStringInput;
+                    m_config.SetWorldName(m_tempStringInput);
                     break;
                 case 1:
                 {
                     int newWidth = std::stoi(m_tempStringInput);
-                    m_config.width = std::clamp(newWidth, MIN_WORLD_WIDTH, MAX_WORLD_WIDTH);
-                    Logger::Log("World width set to: " + std::to_string(m_config.width));
+                    int clampedWidth = std::clamp(newWidth, MIN_WORLD_WIDTH, MAX_WORLD_WIDTH);
+                    m_config.SetWidth(clampedWidth);
+                    Logger::Log("World width set to: " + std::to_string(m_config.GetWidth()));
                 }
                 break;
                 case 2:
                 {
                     int newHeight = std::stoi(m_tempStringInput);
-                    m_config.height = std::clamp(newHeight, MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT);
-                    Logger::Log("World height set to: " + std::to_string(m_config.height));
+                    int clampedHeight = std::clamp(newHeight, MIN_WORLD_HEIGHT, MAX_WORLD_HEIGHT);
+                    m_config.SetHeight(clampedHeight);
+                    Logger::Log("World height set to: " + std::to_string(m_config.GetHeight()));
                 }
                 break;
-                case 4: m_config.seed = std::stoi(m_tempStringInput); break;
-                case 5: m_config.noiseFrequency = std::clamp<float>(std::stof(m_tempStringInput), 0.1f, 1.0f); break;
-                case 6: m_config.neighborRadius = max(1, std::stoi(m_tempStringInput)); break;
+                case 4: m_config.SetSeed(std::stoi(m_tempStringInput)); break;
+                case 5: m_config.SetNoiseFrequency(std::clamp<float>(std::stof(m_tempStringInput), 0.1f, 1.0f)); break;
+                case 6: m_config.SetNeighborRadius(max(1, std::stoi(m_tempStringInput))); break;
                 }
             }
             break;
@@ -1675,17 +1678,19 @@ void WorldEditor::ApplyEditedValue() {
             case 0:
             {
                 int newX = std::stoi(m_tempStringInput);
-                m_config.playerStartX = std::clamp(newX, 1, m_config.width - 2);
+                int clampedX = std::clamp(newX, 1, m_config.GetWidth() - 2);
+                m_config.SetPlayerStartX(clampedX);
             }
             break;
             case 1:
             {
                 int newY = std::stoi(m_tempStringInput);
-                m_config.playerStartY = std::clamp(newY, 1, m_config.height - 2);
+                int clampedY = std::clamp(newY, 1, m_config.GetHeight() - 2);
+                m_config.SetPlayerStartY(clampedY);
             }
             break;
-            case 2: m_config.playerMaxHP = max(10, std::stoi(m_tempStringInput)); break;
-            case 3: m_config.playerMaxHunger = max(10, std::stoi(m_tempStringInput)); break;
+            case 2: m_config.SetPlayerMaxHP(max(10, std::stoi(m_tempStringInput))); break;
+            case 3: m_config.SetPlayerMaxHunger(max(10, std::stoi(m_tempStringInput))); break;
             }
             break;
         }
@@ -1749,20 +1754,20 @@ void WorldEditor::ChangeFieldValue(int delta) {
     switch (m_currentTab) {
     case EditorTab::WORLD:
         if (m_selectedField == 3) {
-            m_config.randomGeneration = !m_config.randomGeneration;
+            m_config.SetRandomGeneration(!m_config.GetRandomGeneration());
         }
         break;
     case EditorTab::PLAYER:
         if (m_selectedField == 4) {
-            m_config.enableHP = !m_config.enableHP;
+            m_config.SetEnableHP(!m_config.GetEnableHP());
         }
         else if (m_selectedField == 5) {
-            m_config.enableHunger = !m_config.enableHunger;
+            m_config.SetEnableHunger(!m_config.GetEnableHunger());
         }
         break;
     case EditorTab::ENEMIES:
         if (m_selectedField == 0) {
-            m_config.enableEnemies = !m_config.enableEnemies;
+            m_config.SetEnableEnemies(!m_config.GetEnableEnemies());
         }
         break;
     }
@@ -1827,10 +1832,11 @@ void WorldEditor::ConfirmSelection() {
         }
     }
 }
+
 void WorldEditor::CreateNewWorld() {
     Logger::Log("=== CREATE NEW WORLD STARTED ===");
-    Logger::Log("World name: " + m_config.worldName);
-    Logger::Log("Size: " + std::to_string(m_config.width) + "x" + std::to_string(m_config.height));
+    Logger::Log("World name: " + m_config.GetWorldName());
+    Logger::Log("Size: " + std::to_string(m_config.GetWidth()) + "x" + std::to_string(m_config.GetHeight()));
     Logger::Log("Editor mode: " + std::to_string(static_cast<int>(m_editorMode)));
     Logger::Log("Slot: " + std::to_string(m_slot));
 
@@ -1839,23 +1845,23 @@ void WorldEditor::CreateNewWorld() {
             m_saveSystem = std::make_unique<SaveSystem>();
         }
 
-        if (m_saveSystem->CreateNewSave(m_gameMode, m_slot, m_config.worldName, m_config)) {
-            Logger::Log("Successfully created world: " + m_config.worldName);
+        if (m_saveSystem->CreateNewSave(m_gameMode, m_slot, m_config.GetWorldName(), m_config)) {
+            Logger::Log("Successfully created world: " + m_config.GetWorldName());
             m_shouldCreate = true;
             SaveWorldConfiguration();
         }
         else {
-            Logger::Log("ERROR: Failed to create world: " + m_config.worldName);
+            Logger::Log("ERROR: Failed to create world: " + m_config.GetWorldName());
         }
     }
     else {
         Logger::Log("=== CREATING TEMPLATE ===");
-        Logger::Log("Using world name as template name: " + m_config.worldName);
+        Logger::Log("Using world name as template name: " + m_config.GetWorldName());
 
         SaveWorldConfiguration();
 
-        if (CreateTemplate(m_config.worldName)) {
-            Logger::Log("=== TEMPLATE '" + m_config.worldName + "' CREATED SUCCESSFULLY ===");
+        if (CreateTemplate(m_config.GetWorldName())) {
+            Logger::Log("=== TEMPLATE '" + m_config.GetWorldName() + "' CREATED SUCCESSFULLY ===");
             m_shouldCreate = true;
         }
         else {
@@ -1865,11 +1871,11 @@ void WorldEditor::CreateNewWorld() {
 }
 
 void WorldEditor::SaveWorldConfiguration() {
-    Logger::Log("World configuration saved successfully for: " + m_config.worldName);
+    Logger::Log("World configuration saved successfully for: " + m_config.GetWorldName());
 
     if (m_tileManager) {
         const auto& allTiles = m_tileManager->GetAllTiles();
-        m_config.tileProbabilities.clear();
+        std::unordered_map<char, std::vector<float>> tileProbabilities;
 
         for (const auto& pair : allTiles) {
             const TileType& tile = pair.second;
@@ -1880,13 +1886,15 @@ void WorldEditor::SaveWorldConfiguration() {
                 static_cast<float>(tile.GetMountainProbability())
             };
 
-            m_config.tileProbabilities[tile.GetCharacter()] = probs;
+            tileProbabilities[tile.GetCharacter()] = probs;
 
             Logger::Log("Saved tile '" + std::string(1, tile.GetCharacter()) +
                 "' probabilities: L=" + std::to_string(probs[0]) +
                 "%, P=" + std::to_string(probs[1]) +
                 "%, M=" + std::to_string(probs[2]) + "%");
         }
+
+        m_config.SetTileProbabilities(tileProbabilities);
     }
 }
 
@@ -1898,7 +1906,7 @@ void WorldEditor::ClearLine(int line) {
 }
 
 bool WorldEditor::ShouldShowSeedField() const {
-    return !m_config.randomGeneration;
+    return !m_config.GetRandomGeneration();
 }
 
 int WorldEditor::GetVisibleWorldFieldsCount() const {
@@ -1928,7 +1936,7 @@ void WorldEditor::HandleNumericInput() {
 void WorldEditor::HandleBooleanInput() {
     if (m_inputManager->IsKeyPressed('A') || m_inputManager->IsKeyPressed('D') ||
         m_inputManager->IsKeyPressed(VK_LEFT) || m_inputManager->IsKeyPressed(VK_RIGHT)) {
-        m_config.randomGeneration = !m_config.randomGeneration;
+        m_config.SetRandomGeneration(!m_config.GetRandomGeneration());
         m_needFullRedraw = true;
         return;
     }
@@ -1936,12 +1944,12 @@ void WorldEditor::HandleBooleanInput() {
 
 void WorldEditor::HandleFrequencyInput() {
     if (m_inputManager->IsKeyPressed(VK_LEFT) || m_inputManager->IsKeyPressed('A')) {
-        m_config.noiseFrequency = max(0.1f, m_config.noiseFrequency - 0.1f);
+        m_config.SetNoiseFrequency(max(0.1f, m_config.GetNoiseFrequency() - 0.1f));
         m_needFullRedraw = true;
         return;
     }
     else if (m_inputManager->IsKeyPressed(VK_RIGHT) || m_inputManager->IsKeyPressed('D')) {
-        m_config.noiseFrequency = min(1.0f, m_config.noiseFrequency + 0.1f);
+        m_config.SetNoiseFrequency(min(1.0f, m_config.GetNoiseFrequency() + 0.1f));
         m_needFullRedraw = true;
         return;
     }
@@ -2061,13 +2069,31 @@ bool WorldEditor::SaveWorldConfig(const std::string& directory) {
         return false;
     }
 
-    file << "Width=" << m_config.width << "\n";
-    file << "Height=" << m_config.height << "\n";
-    file << "Seed=" << m_config.seed << "\n";
-    file << "NoiseFrequency=" << m_config.noiseFrequency << "\n";
-    file << "NeighborRadius=" << m_config.neighborRadius << "\n";
-    file << "GenerationMode=" << (m_config.randomGeneration ? "1" : "2") << "\n";
-    file << "WorldName=" << m_config.worldName << "\n";
+    file << "Width=" << m_config.GetWidth() << "\n";
+    file << "Height=" << m_config.GetHeight() << "\n";
+    file << "Seed=" << m_config.GetSeed() << "\n";
+    file << "NoiseFrequency=" << m_config.GetNoiseFrequency() << "\n";
+    file << "NeighborRadius=" << m_config.GetNeighborRadius() << "\n";
+    file << "GenerationMode=" << (m_config.GetRandomGeneration() ? "1" : "2") << "\n";
+    file << "WorldName=" << m_config.GetWorldName() << "\n";
+    file << "PlayerStartX=" << m_config.GetPlayerStartX() << "\n";
+    file << "PlayerStartY=" << m_config.GetPlayerStartY() << "\n";
+    file << "PlayerMaxHP=" << m_config.GetPlayerMaxHP() << "\n";
+    file << "PlayerMaxHunger=" << m_config.GetPlayerMaxHunger() << "\n";
+    file << "EnableHP=" << (m_config.GetEnableHP() ? "true" : "false") << "\n";
+    file << "EnableHunger=" << (m_config.GetEnableHunger() ? "true" : "false") << "\n";
+    file << "EnableEnemies=" << (m_config.GetEnableEnemies() ? "true" : "false") << "\n";
+    file << "EnemySpawnRate=" << m_config.GetEnemySpawnRate() << "\n";
+
+    if (!m_config.GetSurvivalRules().empty()) {
+        file << "SurvivalRules=" << m_config.GetSurvivalRules() << "\n";
+    }
+    if (!m_config.GetBirthRules().empty()) {
+        file << "BirthRules=" << m_config.GetBirthRules() << "\n";
+    }
+    if (!m_config.GetDeathRules().empty()) {
+        file << "DeathRules=" << m_config.GetDeathRules() << "\n";
+    }
 
     file.close();
     Logger::Log("Saved world config to: " + worldConfigPath);
@@ -2083,12 +2109,12 @@ bool WorldEditor::SavePlayerConfig(const std::string& directory) {
         return false;
     }
 
-    file << "DefaultPlayerX=" << m_config.playerStartX << "\n";
-    file << "DefaultPlayerY=" << m_config.playerStartY << "\n";
-    file << "MAX_HP=" << m_config.playerMaxHP << "\n";
-    file << "MAX_HUNGER=" << m_config.playerMaxHunger << "\n";
-    file << "EnableHP=" << (m_config.enableHP ? "true" : "false") << "\n";
-    file << "EnableHunger=" << (m_config.enableHunger ? "true" : "false") << "\n";
+    file << "DefaultPlayerX=" << m_config.GetPlayerStartX() << "\n";
+    file << "DefaultPlayerY=" << m_config.GetPlayerStartY() << "\n";
+    file << "MAX_HP=" << m_config.GetPlayerMaxHP() << "\n";
+    file << "MAX_HUNGER=" << m_config.GetPlayerMaxHunger() << "\n";
+    file << "EnableHP=" << (m_config.GetEnableHP() ? "true" : "false") << "\n";
+    file << "EnableHunger=" << (m_config.GetEnableHunger() ? "true" : "false") << "\n";
     file << "BaseXP=100\n";
     file << "XPMultiplier=1.5\n";
     file << "MoveCooldownMs=50\n";
@@ -2140,17 +2166,17 @@ bool WorldEditor::SaveCellularAutomatonConfig(const std::string& directory) {
         return false;
     }
 
-    if (!m_config.survivalRules.empty()) {
+    if (!m_config.GetSurvivalRules().empty()) {
         file << ".\n";
-        file << "survival=" << m_config.survivalRules << "\n";
+        file << "survival=" << m_config.GetSurvivalRules() << "\n";
     }
 
-    if (!m_config.birthRules.empty()) {
-        file << "birth=" << m_config.birthRules << "\n";
+    if (!m_config.GetBirthRules().empty()) {
+        file << "birth=" << m_config.GetBirthRules() << "\n";
     }
 
-    if (!m_config.deathRules.empty()) {
-        file << "death=" << m_config.deathRules << "\n";
+    if (!m_config.GetDeathRules().empty()) {
+        file << "death=" << m_config.GetDeathRules() << "\n";
     }
 
     file.close();
@@ -2187,8 +2213,8 @@ bool WorldEditor::SaveEnemiesConfig(const std::string& directory) {
     }
 
     file << "# Enemies configuration\n";
-    file << "EnableEnemies=" << (m_config.enableEnemies ? "true" : "false") << "\n";
-    file << "EnemySpawnRate=" << m_config.enemySpawnRate << "\n";
+    file << "EnableEnemies=" << (m_config.GetEnableEnemies() ? "true" : "false") << "\n";
+    file << "EnemySpawnRate=" << m_config.GetEnemySpawnRate() << "\n";
     file << "EnemyDamage=10\n";
     file << "EnemyHP=50\n";
 
@@ -2214,9 +2240,9 @@ bool WorldEditor::LoadFromTemplate(int templateSlot) {
     return false;
 }
 
-bool WorldEditor::LoadTemplateConfig(const WorldEditorConfig& config) {
+bool WorldEditor::LoadTemplateConfig(const WorldConfig& config) {
     m_config = config;
-    Logger::Log("Loaded template configuration: " + config.worldName);
+    Logger::Log("Loaded template configuration: " + config.GetWorldName());
     return true;
 }
 
