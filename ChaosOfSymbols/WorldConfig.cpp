@@ -12,7 +12,6 @@ WorldConfig::WorldConfig()
     m_noiseFrequency(0.7f), m_neighborRadius(3),
     m_generationMode(WorldGenerationMode::RANDOM),
     m_worldConfigPath("config/world_gen.cfg"),
-    m_spawnConfigPath("config/world_spawn.cfg"),
     m_worldName("New_World"),
     m_playerStartX(40), m_playerStartY(20),
     m_playerMaxHP(30), m_playerMaxHunger(20),
@@ -25,7 +24,6 @@ WorldConfig::WorldConfig(const std::string& worldConfigPath, const std::string& 
     m_noiseFrequency(0.7f), m_neighborRadius(3),
     m_generationMode(WorldGenerationMode::RANDOM),
     m_worldConfigPath(worldConfigPath),
-    m_spawnConfigPath(spawnConfigPath),
     m_worldName("New_World"),
     m_playerStartX(40), m_playerStartY(20),
     m_playerMaxHP(30), m_playerMaxHunger(20),
@@ -57,11 +55,6 @@ bool WorldConfig::LoadConfig(bool forceReload) {
     }
     else if (m_generationMode == WorldGenerationMode::SEEDED) {
         Logger::Log("Using configured seed: " + std::to_string(m_seed));
-    }
-
-    if (!ParseSpawnConfig()) {
-        Logger::Log("ERROR: Failed to load spawn config: " + m_spawnConfigPath);
-        return false;
     }
 
     Logger::Log("World config loaded successfully: " +
@@ -152,71 +145,6 @@ bool WorldConfig::ParseKeyValue(const std::string& key, const std::string& value
     return true;
 }
 
-bool WorldConfig::ParseSpawnConfig() {
-    std::ifstream file(m_spawnConfigPath);
-    if (!file.is_open()) {
-        return false;
-    }
-
-    m_spawnRules.clear();
-
-    std::string line;
-    while (std::getline(file, line)) {
-        size_t commentPos = line.find("//");
-        if (commentPos != std::string::npos) {
-            line = line.substr(0, commentPos);
-        }
-
-        line.erase(0, line.find_first_not_of(" \t"));
-        if (line.empty()) continue;
-
-        std::stringstream ss(line);
-        std::string spawnTileStr, probabilitiesStr;
-
-        if (std::getline(ss, spawnTileStr, '=') &&
-            std::getline(ss, probabilitiesStr)) {
-
-            if (spawnTileStr.length() != 1) {
-                Logger::Log("WARNING: Invalid spawn tile in config: " + spawnTileStr);
-                continue;
-            }
-
-            char spawnTile = spawnTileStr[0];
-
-            std::vector<float> zoneProbs;
-            std::stringstream probStream(probabilitiesStr);
-            std::string probToken;
-
-            while (std::getline(probStream, probToken, ':')) {
-                try {
-                    zoneProbs.push_back(std::stof(probToken));
-                }
-                catch (const std::exception& e) {
-                    Logger::Log("WARNING: Invalid probability format: " + probToken);
-                    zoneProbs.push_back(0.1f);
-                }
-            }
-
-            while (zoneProbs.size() < 3) {
-                zoneProbs.push_back(0.1f);
-            }
-
-            SpawnRule rule;
-            rule.tileId = -1;
-            rule.character = spawnTile;
-            rule.zoneProbabilities = zoneProbs;
-
-            m_spawnRules[spawnTile] = rule;
-
-            // Также сохраняем в tileProbabilities для обратной совместимости
-            m_tileProbabilities[spawnTile] = zoneProbs;
-        }
-    }
-
-    file.close();
-    return true;
-}
-
 bool WorldConfig::SaveToDirectory(const std::string& directory) const {
     Logger::Log("=== SAVING WORLD CONFIG TO: " + directory + " ===");
 
@@ -266,50 +194,24 @@ bool WorldConfig::SaveToDirectory(const std::string& directory) const {
     worldFile.close();
     Logger::Log("Saved world config to: " + worldConfigPath);
 
-    // Сохраняем правила спавна
-    std::string spawnConfigPath = directory + "/world_spawn.cfg";
-    std::ofstream spawnFile(spawnConfigPath);
-
-    if (!spawnFile.is_open()) {
-        Logger::Log("ERROR: Cannot open spawn config file: " + spawnConfigPath);
-        return false;
-    }
-
-    for (const auto& pair : m_tileProbabilities) {
-        const std::vector<float>& probs = pair.second;
-        if (probs.size() >= 3) {
-            spawnFile << pair.first << "="
-                << probs[0] << ":"
-                << probs[1] << ":"
-                << probs[2] << "\n";
-        }
-    }
-
-    spawnFile.close();
-    Logger::Log("Saved spawn config to: " + spawnConfigPath);
-
     return true;
 }
 
 bool WorldConfig::LoadFromDirectory(const std::string& directory) {
     Logger::Log("=== LOADING WORLD CONFIG FROM: " + directory + " ===");
 
-    std::string worldConfigPath = directory + "/world_gen.cfg";
-    std::string spawnConfigPath = directory + "/world_spawn.cfg";
+    m_worldConfigPath = directory + "/world_gen.cfg";
 
-    if (!fs::exists(worldConfigPath) || !fs::exists(spawnConfigPath)) {
-        Logger::Log("ERROR: Config files not found in directory: " + directory);
-        return false;
+    bool success = LoadConfig(true);
+
+    if (success) {
+        m_parametersLoadedFromSave = true;
     }
 
-    m_worldConfigPath = worldConfigPath;
-    m_spawnConfigPath = spawnConfigPath;
-
-    return LoadConfig(true);
+    return success;
 }
 
 void WorldConfig::FromEditorConfig(const WorldConfig& editorConfig) {
-    // Копируем все параметры из editorConfig
     m_width = editorConfig.m_width;
     m_height = editorConfig.m_height;
     m_seed = editorConfig.m_seed;
@@ -380,4 +282,63 @@ const SpawnRule* WorldConfig::GetSpawnRule(char spawnTile) const {
         return &it->second;
     }
     return nullptr;
+}
+
+void WorldConfig::CalculateSpawnRulesFromTiles(TileTypeManager* tileManager) {
+    if (!tileManager) {
+        Logger::Log("ERROR: No tile manager for spawn rules calculation");
+        return;
+    }
+
+    Logger::Log("Calculating spawn rules from tiles...");
+
+    m_spawnRules.clear();
+    m_tileProbabilities.clear();
+
+    const auto& allTiles = tileManager->GetAllTiles();
+
+    // Рассчитываем суммарные вероятности для каждой зоны
+    std::unordered_map<char, std::vector<int>> zoneProbabilities;
+
+    for (const auto& pair : allTiles) {
+        const TileType& tile = pair.second;
+        char character = tile.GetCharacter();
+
+        if (character == ' ') continue; // Пропускаем воздух
+
+        std::vector<int> probs = {
+            tile.GetLowlandProbability(),
+            tile.GetPlainsProbability(),
+            tile.GetMountainProbability()
+        };
+
+        zoneProbabilities[character] = probs;
+
+        Logger::Log("Tile '" + std::string(1, character) +
+            "' probabilities - L:" + std::to_string(probs[0]) +
+            "%, P:" + std::to_string(probs[1]) +
+            "%, M:" + std::to_string(probs[2]) + "%");
+    }
+
+    // Преобразуем в SpawnRule и сохраняем
+    for (const auto& pair : zoneProbabilities) {
+        char character = pair.first;
+        const std::vector<int>& probs = pair.second;
+
+        // Создаем SpawnRule
+        SpawnRule rule;
+        rule.character = character;
+
+        // Конвертируем int в float
+        std::vector<float> floatProbs;
+        for (int prob : probs) {
+            floatProbs.push_back(static_cast<float>(prob));
+        }
+        rule.zoneProbabilities = floatProbs;
+
+        m_spawnRules[character] = rule;
+        m_tileProbabilities[character] = floatProbs;
+    }
+
+    Logger::Log("Spawn rules calculated: " + std::to_string(m_spawnRules.size()) + " rules");
 }

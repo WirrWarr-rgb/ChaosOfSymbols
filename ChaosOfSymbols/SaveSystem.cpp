@@ -132,25 +132,14 @@ bool SaveSystem::CreateNewSave(GameMode mode, int slot, const std::string& name,
     infoFile << currentTime << "\n";
     infoFile.close();
 
+    // Сохраняем только world_gen.cfg, остальные файлы будут скопированы из шаблона
     if (!SaveWorldConfig(mode, slot, config)) {
         Logger::Log("ERROR: Failed to save world config for slot " + std::to_string(slot));
         return false;
     }
 
-    if (!SavePlayerConfig(mode, slot, config)) {
-        Logger::Log("ERROR: Failed to save player config for slot " + std::to_string(slot));
-        return false;
-    }
-
-    if (!SaveTilesConfig(mode, slot, config)) {
-        Logger::Log("ERROR: Failed to save tiles config for slot " + std::to_string(slot));
-        return false;
-    }
-
-    if (!SaveAutomatonConfig(mode, slot, config)) {
-        Logger::Log("ERROR: Failed to save automaton config for slot " + std::to_string(slot));
-        return false;
-    }
+    // НЕ сохраняем player.cfg, tiles.json и другие - они будут скопированы из шаблона
+    // при вызове CopyTemplateToSave()
 
     Logger::Log("Successfully created new save: " + name + " in slot " + std::to_string(slot) +
         " (mode: " + std::to_string(static_cast<int>(mode)) + ")");
@@ -213,6 +202,7 @@ bool SaveSystem::SaveTilesConfig(GameMode mode, int slot, const WorldConfig& con
     std::string savePath = GetSaveSlotPath(mode, slot);
     std::string configPath = savePath + "/world_spawn.cfg";
 
+    // Сохраняем правила спавна
     std::stringstream content;
     const auto& tileProbabilities = config.GetTileProbabilities();
     for (const auto& pair : tileProbabilities) {
@@ -225,7 +215,12 @@ bool SaveSystem::SaveTilesConfig(GameMode mode, int slot, const WorldConfig& con
         }
     }
 
-    return SaveConfigToFile(configPath, content.str());
+    bool saved = SaveConfigToFile(configPath, content.str());
+
+    // НЕ создаем tiles.json здесь - он должен быть скопирован из шаблона
+    // или создан в WorldEditor при редактировании
+
+    return saved;
 }
 
 bool SaveSystem::SaveAutomatonConfig(GameMode mode, int slot, const WorldConfig& config) {
@@ -547,6 +542,102 @@ bool SaveSystem::CopyDefaultConfigs(const std::string& sourceDir, const std::str
     }
     catch (const std::exception& e) {
         std::cout << "Error copying configs: " << e.what() << std::endl;
+        return false;
+    }
+}
+
+bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mode) {
+    std::string templatePath = "templates/template" + std::to_string(templateSlot);
+    std::string savePath = GetSaveSlotPath(mode, saveSlot);
+
+    Logger::Log("=== COPYING TEMPLATE " + std::to_string(templateSlot) + " TO SAVE " + std::to_string(saveSlot) + " ===");
+    Logger::Log("From: " + templatePath);
+    Logger::Log("To: " + savePath);
+
+    if (!fs::exists(templatePath)) {
+        Logger::Log("ERROR: Template path doesn't exist: " + templatePath);
+        return false;
+    }
+
+    // Создаем директорию сейва
+    fs::create_directories(savePath);
+
+    // Копируем ВСЕ файлы из шаблона
+    bool allCopied = true;
+
+    try {
+        for (const auto& entry : fs::directory_iterator(templatePath)) {
+            if (entry.is_regular_file()) {
+                std::string filename = entry.path().filename().string();
+                std::string sourceFile = templatePath + "/" + filename;
+                std::string destFile = savePath + "/" + filename;
+
+                // Не копируем template_info.txt - используем save_info.txt
+                if (filename == "template_info.txt") {
+                    // Читаем template_info.txt и создаем на его основе save_info.txt
+                    std::ifstream templateInfoFile(sourceFile);
+                    if (templateInfoFile.is_open()) {
+                        std::string templateName, creationDate, modifiedDate;
+                        std::getline(templateInfoFile, templateName);
+                        std::getline(templateInfoFile, creationDate);
+                        std::getline(templateInfoFile, modifiedDate);
+                        templateInfoFile.close();
+
+                        // Создаем save_info.txt с правильными данными
+                        std::ofstream saveInfoFile(savePath + "/save_info.txt");
+                        if (saveInfoFile.is_open()) {
+                            saveInfoFile << templateName << " (from template)\n";
+                            saveInfoFile << GetCurrentDateTime() << "\n";
+                            saveInfoFile << GetCurrentDateTime() << "\n";
+                            saveInfoFile.close();
+                            Logger::Log("Created save_info.txt from template");
+                        }
+                    }
+                }
+                else {
+                    fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
+                    Logger::Log("Copied: " + filename);
+                }
+            }
+        }
+
+        // Проверяем, какие файлы были скопированы
+        Logger::Log("=== COPIED FILES SUMMARY ===");
+        for (const auto& entry : fs::directory_iterator(savePath)) {
+            if (entry.is_regular_file()) {
+                Logger::Log("  " + entry.path().filename().string());
+            }
+        }
+        Logger::Log("=== END COPIED FILES SUMMARY ===");
+
+    }
+    catch (const std::exception& e) {
+        Logger::Log("ERROR copying files: " + std::string(e.what()));
+        allCopied = false;
+    }
+
+    return allCopied;
+}
+
+bool SaveSystem::CopyTemplateTilesToSave(int templateSlot, int saveSlot, GameMode mode) {
+    std::string templatePath = "templates/template" + std::to_string(templateSlot);
+    std::string savePath = GetSaveSlotPath(mode, saveSlot);
+
+    std::string sourceFile = templatePath + "/tiles.json";
+    std::string destFile = savePath + "/tiles.json";
+
+    if (!fs::exists(sourceFile)) {
+        Logger::Log("WARNING: Template tiles.json not found: " + sourceFile);
+        return false;
+    }
+
+    try {
+        fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
+        Logger::Log("Copied tiles.json from template to save");
+        return true;
+    }
+    catch (const std::exception& e) {
+        Logger::Log("ERROR copying tiles.json: " + std::string(e.what()));
         return false;
     }
 }

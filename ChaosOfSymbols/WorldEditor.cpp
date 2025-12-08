@@ -52,11 +52,11 @@ WorldEditor::WorldEditor(EditorMode editorMode, int slot, GameMode gameMode)
     HelpPanel::Initialize();
     RegisterHelpSystemEntries();
 
-    if (m_editorMode == EditorMode::CREATE_WORLD) {
-        m_tilesConfigPath = "saves/proceduralGeneration/slot" + std::to_string(slot) + "/tiles.json";
+    if (m_editorMode == EditorMode::CREATE_TEMPLATE) {
+        m_tilesConfigPath = "templates/template" + std::to_string(slot) + "/tiles.json";
     }
     else {
-        m_tilesConfigPath = "templates\template_tiles_" + std::to_string(slot) + ".json";
+        m_tilesConfigPath = "saves/proceduralGeneration/slot" + std::to_string(slot) + "/tiles.json";
     }
 
     CreateDirectoryForSlot(slot);
@@ -1285,6 +1285,11 @@ void WorldEditor::LoadAvailableTiles() {
 
     if (!m_tileManager) return;
 
+    if (!m_tileManager->LoadFromFile(m_tilesConfigPath)) {
+        Logger::Log("ERROR: Failed to load tiles from: " + m_tilesConfigPath);
+        return;
+    }
+
     const auto& allTiles = m_tileManager->GetAllTiles();
     Logger::Log("Tile manager has " + std::to_string(allTiles.size()) + " tiles");
 
@@ -1835,38 +1840,38 @@ void WorldEditor::ConfirmSelection() {
 
 void WorldEditor::CreateNewWorld() {
     Logger::Log("=== CREATE NEW WORLD STARTED ===");
-    Logger::Log("World name: " + m_config.GetWorldName());
-    Logger::Log("Size: " + std::to_string(m_config.GetWidth()) + "x" + std::to_string(m_config.GetHeight()));
-    Logger::Log("Editor mode: " + std::to_string(static_cast<int>(m_editorMode)));
-    Logger::Log("Slot: " + std::to_string(m_slot));
+
+    SaveWorldConfiguration(); // Сохраняем конфигурацию в памяти
 
     if (m_editorMode == EditorMode::CREATE_WORLD) {
         if (!m_saveSystem) {
             m_saveSystem = std::make_unique<SaveSystem>();
         }
 
-        if (m_saveSystem->CreateNewSave(m_gameMode, m_slot, m_config.GetWorldName(), m_config)) {
+        // Сохраняем все конфиги
+        std::string savePath = m_saveSystem->GetSaveSlotPath(m_gameMode, m_slot);
+        bool allSaved = SaveAllConfigurations(savePath);
+
+        if (allSaved) {
+            // Создаем инфо файл
+            std::ofstream infoFile(savePath + "/save_info.txt");
+            if (infoFile.is_open()) {
+                infoFile << m_config.GetWorldName() << "\n";
+                infoFile << m_saveSystem->GetCurrentDateTime() << "\n";
+                infoFile << m_saveSystem->GetCurrentDateTime() << "\n";
+                infoFile.close();
+            }
+
             Logger::Log("Successfully created world: " + m_config.GetWorldName());
             m_shouldCreate = true;
-            SaveWorldConfiguration();
         }
         else {
             Logger::Log("ERROR: Failed to create world: " + m_config.GetWorldName());
         }
     }
     else {
-        Logger::Log("=== CREATING TEMPLATE ===");
-        Logger::Log("Using world name as template name: " + m_config.GetWorldName());
-
-        SaveWorldConfiguration();
-
-        if (CreateTemplate(m_config.GetWorldName())) {
-            Logger::Log("=== TEMPLATE '" + m_config.GetWorldName() + "' CREATED SUCCESSFULLY ===");
-            m_shouldCreate = true;
-        }
-        else {
-            Logger::Log("=== TEMPLATE CREATION FAILED ===");
-        }
+        // Создание шаблона
+        CreateTemplate(m_config.GetWorldName());
     }
 }
 

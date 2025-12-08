@@ -139,6 +139,7 @@ bool TemplateSystem::LoadTemplate(int slot, WorldConfig& config) {
     try {
         Logger::Log("Loading template from slot " + std::to_string(slot));
 
+        // Загружаем конфиги
         if (!LoadWorldConfig(slot, config)) {
             Logger::Log("WARNING: Failed to load world config from template, using defaults");
         }
@@ -159,12 +160,27 @@ bool TemplateSystem::LoadTemplate(int slot, WorldConfig& config) {
             Logger::Log("WARNING: Failed to load food config from template, using defaults");
         }
 
-        std::ofstream infoFile(templatePath + "/" + TEMPLATE_INFO_FILE);
-        if (infoFile.is_open()) {
-            infoFile << info.name << "\n";
-            infoFile << info.creationDate << "\n";
-            infoFile << GetCurrentDateTime() << "\n";
-            infoFile.close();
+        // Проверяем существование tiles.json
+        std::string tilesJsonPath = templatePath + "/tiles.json";
+        if (!fs::exists(tilesJsonPath)) {
+            Logger::Log("WARNING: tiles.json not found in template: " + tilesJsonPath);
+            // Создаем минимальный tiles.json
+            std::ofstream tilesFile(tilesJsonPath);
+            if (tilesFile.is_open()) {
+                tilesFile << "[\n";
+                tilesFile << "  {\n";
+                tilesFile << "    \"id\": 0,\n";
+                tilesFile << "    \"name\": \"air\",\n";
+                tilesFile << "    \"character\": \" \",\n";
+                tilesFile << "    \"color\": 0,\n";
+                tilesFile << "    \"isPassable\": true,\n";
+                tilesFile << "    \"isDestructible\": false,\n";
+                tilesFile << "    \"damage\": 0\n";
+                tilesFile << "  }\n";
+                tilesFile << "]";
+                tilesFile.close();
+                Logger::Log("Created minimal tiles.json for template");
+            }
         }
 
         Logger::Log("Successfully loaded template: " + info.name);
@@ -287,42 +303,14 @@ bool TemplateSystem::SavePlayerConfig(int slot, const WorldConfig& config) {
 }
 
 bool TemplateSystem::SaveTilesConfig(int slot, const WorldConfig& config) {
-    // Сохраняем правила спавна тайлов
     std::string templatePath = GetTemplateSlotPath(slot);
-    std::string spawnConfigPath = templatePath + "/world_spawn.cfg";
+    std::string tilesJsonPath = templatePath + "/tiles.json";
 
-    std::stringstream content;
-    const auto& tileProbabilities = config.GetTileProbabilities();
-    for (const auto& pair : tileProbabilities) {
-        char tileChar = pair.first;
-        const auto& probs = pair.second;
-
-        if (probs.size() >= 3) {
-            content << tileChar << "="
-                << probs[0] << ":" << probs[1] << ":" << probs[2] << "\n";
-        }
+    if (!config.IsLoadedFromSave()) {
+        return SaveConfigToFile(tilesJsonPath, "[{\"id\":0,\"name\":\"air\",\"character\":\" \",\"color\":0,\"isPassable\":true,\"isDestructible\":false,\"damage\":0}]");
     }
 
-    bool spawnSaved = SaveConfigToFile(spawnConfigPath, content.str());
-
-    // Также создаем минимальный tiles.json для TileTypeManager
-    std::string tilesJsonPath = templatePath + "/tiles.json";
-    std::stringstream jsonContent;
-    jsonContent << "[\n";
-    jsonContent << "  {\n";
-    jsonContent << "    \"id\": 0,\n";
-    jsonContent << "    \"name\": \"air\",\n";
-    jsonContent << "    \"character\": \" \",\n";
-    jsonContent << "    \"color\": 0,\n";
-    jsonContent << "    \"isPassable\": true,\n";
-    jsonContent << "    \"isDestructible\": false,\n";
-    jsonContent << "    \"damage\": 0\n";
-    jsonContent << "  }\n";
-    jsonContent << "]";
-
-    bool jsonSaved = SaveConfigToFile(tilesJsonPath, jsonContent.str());
-
-    return spawnSaved && jsonSaved;
+    return true;
 }
 
 bool TemplateSystem::SaveAutomatonConfig(int slot, const WorldConfig& config) {

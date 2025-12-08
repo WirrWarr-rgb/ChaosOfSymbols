@@ -41,10 +41,12 @@ public:
 
     int GetSelectedSlot() const { return m_selectedSlot; }
     void SetSelectedSlot(int slot) { m_selectedSlot = slot; }
+    std::string GetCurrentDateTime() const;
+    bool CopyTemplateTilesToSave(int templateSlot, int saveSlot, GameMode mode);
+    bool CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mode);
 
 private:
     void InitializeSaveDirectories();
-    std::string GetCurrentDateTime() const;
     bool CopyDefaultConfigs(const std::string& sourceDir, const std::string& targetDir);
     bool SaveConfigToFile(const std::string& filePath, const std::string& content);
     bool LoadConfigFromFile(const std::string& filePath, std::function<void(const std::string&, const std::string&)> parser);

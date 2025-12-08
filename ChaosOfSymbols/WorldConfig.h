@@ -4,6 +4,7 @@
 #include <vector>
 #include "ConfigParser.h"
 #include "SpawnRule.h"
+#include "TileTypeManager.h"
 
 // Режимы генерации мира
 enum class WorldGenerationMode {
@@ -65,7 +66,6 @@ public:
     void SetSeed(int seed) { m_seed = seed; }
     void SetNoiseFrequency(float frequency) { m_noiseFrequency = frequency; }
     void SetWorldConfigPath(const std::string& path) { m_worldConfigPath = path; }
-    void SetSpawnConfigPath(const std::string& path) { m_spawnConfigPath = path; }
     void SetNeighborRadius(int radius) { m_neighborRadius = radius; }
     void SetGenerationMode(WorldGenerationMode mode) { m_generationMode = mode; }
     void SetMapFilePath(const std::string& path) { m_mapFilePath = path; }
@@ -92,12 +92,10 @@ public:
 
     void MarkAsLoadedFromSave() { m_parametersLoadedFromSave = true; }
     void ClearSaveMark() { m_parametersLoadedFromSave = false; }
-
-protected:
-    bool ParseKeyValue(const std::string& key, const std::string& value) override;
-    bool ParseSpawnConfig();
-
+    void CalculateSpawnRulesFromTiles(TileTypeManager* tileManager);
 private:
+    bool ParseKeyValue(const std::string& key, const std::string& value) override;
+
     // Основные параметры мира
     int m_width;
     int m_height;
@@ -125,7 +123,6 @@ private:
     std::unordered_map<char, SpawnRule> m_spawnRules;
 
     std::string m_worldConfigPath;
-    std::string m_spawnConfigPath;
 
     bool m_parametersLoadedFromSave = false;
 };

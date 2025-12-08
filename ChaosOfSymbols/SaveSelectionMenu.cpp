@@ -999,8 +999,18 @@ void SaveSelectionMenu::SelectTemplateForSave(int templateSlot) {
         return;
     }
 
+    // Важно: помечаем, что конфиг загружен из шаблона
+    templateConfig.MarkAsLoadedFromSave();
+
     std::string saveName = templateConfig.GetWorldName() + " (from template)";
+
+    // Сначала создаем базовый сейв с world_gen.cfg
     if (m_saveSystem->CreateNewSave(GameMode::PROCEDURAL_GENERATION, m_templateForSlot, saveName, templateConfig)) {
+        // Копируем ВСЕ файлы из шаблона
+        if (!m_saveSystem->CopyTemplateToSave(templateSlot, m_templateForSlot, GameMode::PROCEDURAL_GENERATION)) {
+            Logger::Log("WARNING: Failed to copy all files from template");
+        }
+
         Logger::Log("Created save from template " + std::to_string(templateSlot) +
             " in slot " + std::to_string(m_templateForSlot));
 

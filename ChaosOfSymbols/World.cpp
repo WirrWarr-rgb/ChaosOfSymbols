@@ -204,6 +204,12 @@ void World::GenerateBaseTerrain() {
         return;
     }
 
+    if (m_config.GetAllSpawnRules().empty()) {
+        Logger::Log("No spawn rules found, calculating from tiles...");
+        // Нужно иметь доступ к WorldConfig для вызова CalculateSpawnRulesFromTiles
+        // Или делаем это в WorldConfig перед генерацией
+    }
+
     const auto& spawnRules = m_config.GetAllSpawnRules();
 
     Logger::Log("Spawn rules count: " + std::to_string(spawnRules.size()));
@@ -352,18 +358,21 @@ char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>
         std::vector<std::pair<char, int>> tileProbabilities;
         const auto& allTiles = m_tileManager->GetAllTiles();
 
+        // Собираем все тайлы с вероятностями для данной зоны
         for (const auto& pair : allTiles) {
             const TileType& tile = pair.second;
-            int probability = 0;
+            char character = tile.GetCharacter();
 
-            switch (zone) {
-            case 0: probability = tile.GetLowlandProbability(); break;
-            case 1: probability = tile.GetPlainsProbability(); break;
-            case 2: probability = tile.GetMountainProbability(); break;
-            }
-
-            if (probability > 0) {
-                tileProbabilities.push_back({ tile.GetCharacter(), probability });
+            // Проверяем, есть ли правило спавна для этого тайла
+            auto ruleIt = spawnRules.find(character);
+            if (ruleIt != spawnRules.end()) {
+                const SpawnRule& rule = ruleIt->second;
+                if (rule.zoneProbabilities.size() > zone) {
+                    int probability = static_cast<int>(rule.zoneProbabilities[zone]);
+                    if (probability > 0) {
+                        tileProbabilities.push_back({ character, probability });
+                    }
+                }
             }
         }
 
@@ -383,7 +392,8 @@ char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>
                     if (randomValue < cumulativeProbability) {
                         Logger::Log("Selected tile '" + std::string(1, tp.first) +
                             "' from manager for zone " + std::to_string(zone) +
-                            " at " + std::to_string(x) + "," + std::to_string(y));
+                            " at " + std::to_string(x) + "," + std::to_string(y) +
+                            " (prob: " + std::to_string(tp.second) + "/" + std::to_string(totalProbability) + ")");
                         return tp.first;
                     }
                 }
@@ -391,11 +401,12 @@ char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>
         }
     }
 
+    // Fallback значения
     switch (zone) {
-    case 0: return '~';
-    case 1: return '.';
-    case 2: return '^';
-    default: return '.';
+    case 0: return '3'; // вода
+    case 1: return '1'; // трава  
+    case 2: return '^'; // горы
+    default: return '1';
     }
 }
 

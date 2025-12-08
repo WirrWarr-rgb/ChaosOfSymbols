@@ -15,7 +15,7 @@
     "id": 1,
     "name": "grass",
     "character": "1",
-    "color": 4,
+    "color": 10,
     "isPassable": true,
     "isDestructible": false,
     "damage": 0
@@ -27,7 +27,7 @@
     "id": 2,
     "name": "stone_wall",
     "character": "2",
-    "color": 11,
+    "color": 8,
     "isPassable": true,
     "isDestructible": false,
     "damage": 0
@@ -39,7 +39,7 @@
     "id": 3,
     "name": "water",
     "character": "3",
-    "color": 6,
+    "color": 9,
     "isPassable": true,
     "isDestructible": false,
     "damage": 0
@@ -50,9 +50,9 @@
   {
     "id": 4,
     "name": "mountain",
-    "character": "4",
-    "color": 2,
-    "isPassable": true,
+    "character": "^",
+    "color": 7,
+    "isPassable": false,
     "isDestructible": false,
     "damage": 0
     "lowlandProbability": 0,
