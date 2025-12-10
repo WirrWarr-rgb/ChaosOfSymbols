@@ -501,7 +501,7 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot) {
 
                         std::ofstream saveInfoFile(savePath + "/save_info.txt");
                         if (saveInfoFile.is_open()) {
-                            saveInfoFile << templateName << " (from template)\n";
+                            saveInfoFile << templateName << "\n";
                             saveInfoFile << GetCurrentDateTime() << "\n";
                             saveInfoFile << GetCurrentDateTime() << "\n";
                             saveInfoFile.close();

@@ -24,7 +24,7 @@ struct SaveInfo {
             return "Empty";
         }
 
-        std::string display = std::to_string(slotNumber) + ". " + name + ": ";
+        std::string display = name + ": ";
 
         if (!creationDate.empty()) {
             display += creationDate;

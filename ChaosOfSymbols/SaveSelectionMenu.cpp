@@ -88,9 +88,9 @@ SaveSelectionMenu::SaveSelectionMenu()
     };
 
     m_usedSaveActions = {
-        "Play",
-        "Delete",
-        "Cancel"
+        " - Play",
+        " - Delete",
+        " - Cancel"
     };
 
     Logger::Log("Constructor completed. Total slots: " + std::to_string(m_saves.size()));
@@ -765,17 +765,17 @@ void SaveSelectionMenu::ConfirmSelection() {
         Logger::Log("SaveSelectionMenu Action selected: " + selectedAction + " for slot " +
             std::to_string(m_actionSlot));
 
-        if (selectedAction == "Cancel" || selectedAction == "Back") {
+        if (selectedAction == " - Cancel" || selectedAction == " - Back") {
             m_showActionsForSlot = false;
             m_actionSlot = -1;
             m_selectedActionIndex = 0;
             m_needFullRedraw = true;
             Logger::Log("Cancelled actions for slot " + std::to_string(m_actionSlot));
         }
-        else if (selectedAction == "Create from template") {
+        else if (selectedAction == " - Create from template") {
             ShowTemplatesForSlot(m_actionSlot);
         }
-        else if (selectedAction == "Play") {
+        else if (selectedAction == " - Play") {
             Logger::Log("SaveSelectionMenu Playing save slot " + std::to_string(m_actionSlot));
 
             m_saveSystem->SetSelectedSlot(m_actionSlot);
@@ -792,7 +792,7 @@ void SaveSelectionMenu::ConfirmSelection() {
                 Logger::Log("ERROR: Failed to load save slot " + std::to_string(m_actionSlot));
             }
         }
-        else if (selectedAction == "Delete") {
+        else if (selectedAction == " - Delete") {
             Logger::Log("SaveSelectionMenu Deleting save slot " + std::to_string(m_actionSlot));
 
             if (selectedSave.isEmpty) {
@@ -907,6 +907,7 @@ void SaveSelectionMenu::ShowTemplatesForSlot(int slot) {
     m_needFullRedraw = true;
 
     Logger::Log("Showing templates for slot " + std::to_string(slot));
+    Logger::Log("Template count: " + std::to_string(m_templates.size()));
 }
 
 
@@ -924,7 +925,7 @@ void SaveSelectionMenu::SelectTemplateForSave(int templateSlot) {
 
     templateConfig.MarkAsLoadedFromSave();
 
-    std::string saveName = templateConfig.GetWorldName() + " (from template)";
+    std::string saveName = templateConfig.GetWorldName();
 
     if (m_saveSystem->CreateNewSave(m_templateForSlot, saveName, templateConfig)) {
         if (!m_saveSystem->CopyTemplateToSave(templateSlot, m_templateForSlot)) {
