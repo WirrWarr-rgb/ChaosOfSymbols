@@ -72,9 +72,9 @@ void World::GenerateRandomWorld() {
         Logger::Log("Creating minimal essential tiles...");
 
         if (m_tileManager) {
-            m_tileManager->RegisterTileType(TileType(0, "air", ' ', 0, true, false, 0, 0, 0, 0));
-            m_tileManager->RegisterTileType(TileType(1, "grass", '.', 10, true, false, 0, 0, 100, 0));
-            m_tileManager->RegisterTileType(TileType(2, "border", '#', 8, false, true, 0, 0, 0, 0));
+            m_tileManager->RegisterTileType(TileType(0, "air", ' ', 0, true, 0, 0, 0));
+            m_tileManager->RegisterTileType(TileType(1, "grass", '.', 10, true, 0, 100, 0));
+            m_tileManager->RegisterTileType(TileType(2, "border", '#', 8, false, 0, 0, 0));
 
             Logger::Log("Created minimal tile set for world generation");
         }

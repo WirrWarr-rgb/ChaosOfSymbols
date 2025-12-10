@@ -1,0 +1,91 @@
+﻿  CellularAutomatonRules.cpp
+  ConfigManager.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "ConfigManager.cpp")
+  
+  FileWatcher.cpp
+  Food.cpp
+  FoodManager.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "FoodManager.cpp")
+  
+  Game.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "Game.cpp")
+  
+  HelpPanel.cpp
+  HelpSystem.cpp
+  InputManager.cpp
+  Logger.cpp
+  main.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "main.cpp")
+  
+  MainMenu.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "MainMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(163,45): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(170,24): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(296,81): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\MainMenu.cpp(299,84): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+  PauseMenu.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(85,20): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(105,68): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\PauseMenu.cpp(153,68): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+  PlayerConfig.cpp
+  RenderSystem.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "RenderSystem.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\RenderSystem.cpp(362,34): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  SaveSelectionMenu.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "SaveSelectionMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.cpp(288,50): warning C4267: аргумент: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.cpp(291,40): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSelectionMenu.cpp(715,78): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+  SaveSystem.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\SaveSystem.cpp(352,46): warning C4101: e: неиспользованная локальная переменная
+  TemplateSystem.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\TemplateSystem.cpp(424,46): warning C4101: e: неиспользованная локальная переменная
+  TileType.cpp
+  TileTypeManager.cpp
+  Компиляция...
+  World.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "World.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\World.cpp(159,35): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\World.cpp(169,33): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\World.cpp(849,26): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\World.cpp(908,19): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+  WorldConfig.cpp
+  WorldEditor.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "WorldEditor.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(427,24): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(430,43): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(784,22): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(1444,38): warning C4101: e: неиспользованная локальная переменная
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(1489,34): warning C4101: e: неиспользованная локальная переменная
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(1777,30): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(2756,34): warning C4101: e: неиспользованная локальная переменная
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(4469,34): warning C4101: e: неиспользованная локальная переменная
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(4620,56): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(4679,38): warning C4101: e: неиспользованная локальная переменная
+  WorldTemplateMenu.cpp
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
+  (компиляция исходного файла "WorldTemplateMenu.cpp")
+  
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldTemplateMenu.cpp(444,82): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldTemplateMenu.cpp(550,78): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+  Создание кода
+  Previous IPDB not found, fall back to full compilation.
+  All 5833 functions were compiled because no usable IPDB/IOBJ from previous compilation was found.
+  Создание кода завершено
+  ChaosOfSymbols.vcxproj -> C:\Users\user\source\repos\ChaosOfSymbols\x64\Release\ChaosOfSymbols.exe
+  "pwsh.exe" не является внутренней или внешней
+  командой, исполняемой программой или пакетным файлом.

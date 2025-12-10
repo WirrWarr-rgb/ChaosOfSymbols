@@ -163,8 +163,8 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
 
         m_tileTypes.clear();
 
-        RegisterTileType(TileType(-1, "air", ' ', 0, true, false, 0, 0, 0, 0));
-        RegisterTileType(TileType(-2, "border", '#', 8, false, true, 0, 0, 0, 0));
+        RegisterTileType(TileType(-1, "air", ' ', 0, true, 0, 0, 0));
+        RegisterTileType(TileType(-2, "border", '#', 8, false, 0, 0, 0));
 
         Logger::Log("Created system tiles (air and border) - hidden from user");
         return true;
@@ -213,8 +213,6 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
         char character = characterStr.empty() ? '?' : characterStr[0];
         int color = SimpleJsonParser::GetIntValue(tileJson, "color");
         bool passable = SimpleJsonParser::GetBoolValue(tileJson, "isPassable");
-        bool destructible = SimpleJsonParser::GetBoolValue(tileJson, "isDestructible");
-        int damage = SimpleJsonParser::GetIntValue(tileJson, "damage");
 
         int lowlandProb = SimpleJsonParser::GetIntValue(tileJson, "lowlandProbability");
         int plainsProb = SimpleJsonParser::GetIntValue(tileJson, "plainsProbability");
@@ -233,13 +231,12 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
 
         if (id >= 0 && !name.empty()) {
             RegisterTileType(TileType(id, name, character, color,
-                passable, destructible, damage,
-                lowlandProb, plainsProb, mountainProb));
+                passable, lowlandProb, plainsProb, mountainProb));
         }
     }
 
     if (m_tileTypes.find(0) == m_tileTypes.end()) {
-        RegisterTileType(TileType(-2, "air", ' ', 0, true, false, 0, 0, 0, 0));
+        RegisterTileType(TileType(-2, "air", ' ', 0, true, 0, 0, 0));
     }
 
     bool hasBorder = false;
@@ -252,8 +249,8 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
     }
 
     if (!hasBorder) {
-        RegisterTileType(TileType(-1, "border", '#', 8, false, true, 0, 0, 0, 0));
-        RegisterTileType(TileType(-2, "air", ' ', 0, true, false, 0, 0, 0, 0));
+        RegisterTileType(TileType(-1, "border", '#', 8, false, 0, 0, 0));
+        RegisterTileType(TileType(-2, "air", ' ', 0, true, 0, 0, 0));
     }
 
     Logger::Log("\n=== END LOADED TILES SUMMARY ===\n");
@@ -301,8 +298,6 @@ bool TileTypeManager::SaveToFile(const std::string& filePath) {
         file << "    \"character\": \"" << tile.GetCharacter() << "\",\n";
         file << "    \"color\": " << tile.GetColor() << ",\n";
         file << "    \"isPassable\": " << (tile.IsPassable() ? "true" : "false") << ",\n";
-        file << "    \"isDestructible\": " << (tile.IsDestructible() ? "true" : "false") << ",\n";
-        file << "    \"damage\": " << tile.GetDamage() << ",\n"; // Добавлена запятая
         file << "    \"lowlandProbability\": " << tile.GetLowlandProbability() << ",\n";
         file << "    \"plainsProbability\": " << tile.GetPlainsProbability() << ",\n";
         file << "    \"mountainProbability\": " << tile.GetMountainProbability() << "\n";

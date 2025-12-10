@@ -335,9 +335,8 @@ bool TemplateSystem::SaveFoodConfig(int slot, const WorldConfig& config) {
 
     std::stringstream content;
     content << "# ID Name Symbol Color HungerRestore HpRestore SpawnWeight Experience\n";
-    content << "1   Apple   a   2      10           5         30          5\n";
-    content << "2   Bread   b   6      20           0         20          10\n";
-    content << "3   Meat    m   4      30           20        10          20\n";
+    content << "# Add food items in format: ID Name Symbol Color HungerRestore HpRestore SpawnWeight Experience\n";
+    content << "# Example: 1 Apple a 2 10 5 30 5\n";
 
     return SaveConfigToFile(configPath, content.str());
 }

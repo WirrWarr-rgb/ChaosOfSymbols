@@ -116,9 +116,6 @@ void HelpSystem::RegisterCommonElementsHelp() {
     AddHelpEntry("tab_tiles", "Tiles: Create and edit tile types for world generation.");
     AddHelpEntry("tab_cellular", "Cellular Automaton: Configure cellular automaton rules.");
     AddHelpEntry("tab_food", "Food: Configure food spawn settings.");
-    AddHelpEntry("tab_enemies", "Enemies: Configure enemy spawn settings.");
-    AddHelpEntry("tab_win", "Win: Configure win conditions.");
-    AddHelpEntry("tab_lose", "Lose: Configure lose conditions.");
 
     m_itemHelpMap["CREATE"] = "button_create";
     m_itemHelpMap["SAVE TEMPLATE"] = "button_save_template";
@@ -132,9 +129,6 @@ void HelpSystem::RegisterCommonElementsHelp() {
     m_itemHelpMap["Tiles"] = "tab_tiles";
     m_itemHelpMap["Cellular Automaton"] = "tab_cellular";
     m_itemHelpMap["Food"] = "tab_food";
-    m_itemHelpMap["Enemies"] = "tab_enemies";
-    m_itemHelpMap["Win"] = "tab_win";
-    m_itemHelpMap["Lose"] = "tab_lose";
 }
 
 void HelpSystem::RegisterButtonHelp(const std::string& buttonName, const std::string& helpId) {
@@ -164,22 +158,14 @@ std::string HelpSystem::GetHelpForItem(const std::string& itemName) const {
 void HelpSystem::RegisterEditorTabHelp() {
     AddHelpEntry("tab_cellular", "Cellular Automaton: Configure cellular automaton rules for terrain generation.");
     AddHelpEntry("tab_food", "Food: Configure food spawning settings and nutrition values.");
-    AddHelpEntry("tab_enemies", "Enemies: Configure enemy spawn rates, stats, and behavior.");
-    AddHelpEntry("tab_win", "Win: Set victory conditions for the level.");
-    AddHelpEntry("tab_lose", "Lose: Set defeat conditions for the level.");
 
     AddHelpEntry("survival_rules", "Survival Rules: Determines which cells survive (e.g., '23' means cells with 2 or 3 neighbors survive).");
     AddHelpEntry("birth_rules", "Birth Rules: Determines where new cells are born (e.g., '3' means a dead cell with exactly 3 live neighbors becomes alive).");
     AddHelpEntry("death_rules", "Death Rules: Determines when cells die from over/underpopulation.");
 
-    AddHelpEntry("enable_enemies", "Enable Enemies: Toggle enemy spawning in the world.");
-    AddHelpEntry("enemy_spawn_rate", "Enemy Spawn Rate: How frequently enemies spawn (lower = more frequent).");
-
     m_itemHelpMap["Survival Rules: "] = "survival_rules";
     m_itemHelpMap["Birth Rules: "] = "birth_rules";
     m_itemHelpMap["Death Rules: "] = "death_rules";
-    m_itemHelpMap["Enable Enemies: "] = "enable_enemies";
-    m_itemHelpMap["Enemy Spawn Rate: "] = "enemy_spawn_rate";
 }
 
 void HelpSystem::RegisterEditorButtonsHelp() {

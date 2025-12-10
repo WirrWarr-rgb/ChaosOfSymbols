@@ -16,10 +16,7 @@ enum class EditorTab {
     PLAYER,
     TILES,
     CELLULAR_AUTOMATON,
-    FOOD,
-    ENEMIES,
-    WIN,
-    LOSE
+    FOOD
 };
 
 enum class EditorMode {
@@ -88,9 +85,6 @@ private:
     void RenderTilesTab();
     void RenderCellularAutomatonTab();
     void RenderFoodTab();
-    void RenderEnemiesTab();
-    void RenderWinTab();
-    void RenderLoseTab();
     void RenderBottomButtons();
 
     // Обработка ввода
@@ -184,6 +178,7 @@ private:
     void HandleFoodSymbolInput();
     void ResetTemplateData();
     void ClearTemplateFiles();
+    void ClearTemplate();
     bool IsNewTemplate() const;
     void RenderCellularMainList(int startLine);
     void RenderCellularTileSelection(int startLine);

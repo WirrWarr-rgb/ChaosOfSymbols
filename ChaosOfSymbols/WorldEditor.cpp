@@ -124,8 +124,15 @@ WorldEditor::WorldEditor(EditorMode editorMode, int slot, GameMode gameMode)
                 }
             }
             else {
-                Logger::Log("No existing template found for slot " + std::to_string(slot) +
-                    ", starting with default configuration");
+                Logger::Log("No existing template found for slot " + std::to_string(slot));
+
+                ResetTemplateData();
+
+                std::string templateDir = "templates/template" + std::to_string(slot);
+                if (fs::exists(templateDir)) {
+                    Logger::Log("Template directory exists but template is invalid, cleaning...");
+                    ClearTemplate();
+                }
             }
         }
     }
@@ -202,11 +209,11 @@ WorldEditor::WorldEditor(EditorMode editorMode, int slot, GameMode gameMode)
 void WorldEditor::CreateDefaultTiles() {
     if (!m_tileManager) return;
 
-    m_tileManager->RegisterTileType(TileType(0, "air", ' ', 0, true, false, 0, 0, 0, 0));
-    m_tileManager->RegisterTileType(TileType(1, "grass", '.', 10, true, false, 0, 10, 80, 10));
-    m_tileManager->RegisterTileType(TileType(2, "stone_wall", '#', 8, false, true, 0, 0, 0, 0));
-    m_tileManager->RegisterTileType(TileType(3, "water", '~', 9, false, false, 0, 80, 20, 0));
-    m_tileManager->RegisterTileType(TileType(4, "mountain", '^', 7, false, false, 0, 0, 10, 80));
+    m_tileManager->RegisterTileType(TileType(0, "air", ' ', 0, true, 0, 0, 0));
+    m_tileManager->RegisterTileType(TileType(1, "grass", '.', 10, true, 10, 80, 10));
+    m_tileManager->RegisterTileType(TileType(2, "stone_wall", '#', 8, false, 0, 0, 0));
+    m_tileManager->RegisterTileType(TileType(3, "water", '~', 9, false, 80, 20, 0));
+    m_tileManager->RegisterTileType(TileType(4, "mountain", '^', 7, false, 0, 10, 80));
 
     m_tileManager->SaveToFile();
 
@@ -328,9 +335,6 @@ void WorldEditor::RenderOnlyChanges() {
     case EditorTab::TILES: RenderTilesTab(); break;
     case EditorTab::CELLULAR_AUTOMATON: RenderCellularAutomatonTab(); break;
     case EditorTab::FOOD: RenderFoodTab(); break;
-    case EditorTab::ENEMIES: RenderEnemiesTab(); break;
-    case EditorTab::WIN: RenderWinTab(); break;
-    case EditorTab::LOSE: RenderLoseTab(); break;
     }
 
     RenderBottomButtons();
@@ -343,7 +347,7 @@ void WorldEditor::RenderTabHeader() {
     rlutil::locate(2, 3);
 
     std::vector<std::string> tabNames = {
-        "World", "Player", "Tiles", "Cellular Automaton", "Food", "Enemies", "Win", "Lose"
+        "World", "Player", "Tiles", "Cellular Automaton", "Food"
     };
 
     for (int i = 0; i < tabNames.size(); ++i) {
@@ -826,12 +830,6 @@ void WorldEditor::RenderTileDetails() {
     rlutil::locate(detailColumn, detailLine + 7);
     std::cout << "Passable: " << (tile->IsPassable() ? "Yes" : "No");
 
-    rlutil::locate(detailColumn, detailLine + 8);
-    std::cout << "Destructible: " << (tile->IsDestructible() ? "Yes" : "No");
-
-    rlutil::locate(detailColumn, detailLine + 9);
-    std::cout << "Damage: " << tile->GetDamage();
-
     rlutil::locate(detailColumn, detailLine + 11);
     SetConsoleTextAttribute(hConsole, 8);
     std::cout << "A/D - Change color";
@@ -1008,22 +1006,22 @@ void WorldEditor::StartEditingTileField() {
         if (tile) {
             switch (m_editingTileFieldIndex) {
             case 0: // Symbol
-                m_tempTileStringInput = std::string(1, tile->GetCharacter());
+                m_tempTileStringInput = std::string(1, m_editedTileSymbol);
                 break;
             case 1: // Color
-                m_tempTileStringInput = std::to_string(tile->GetColor());
+                m_tempTileStringInput = std::to_string(m_editedTileColor);
                 break;
             case 2: // Name
-                m_tempTileStringInput = tile->GetName();
+                m_tempTileStringInput = m_editedTileName;
                 break;
             case 3: // Lowland Probability
-                m_tempTileStringInput = std::to_string(tile->GetLowlandProbability());
+                m_tempTileStringInput = std::to_string(m_editedTileLowlandProb);
                 break;
             case 4: // Plains Probability
-                m_tempTileStringInput = std::to_string(tile->GetPlainsProbability());
+                m_tempTileStringInput = std::to_string(m_editedTilePlainsProb);
                 break;
             case 5: // Mountain Probability
-                m_tempTileStringInput = std::to_string(tile->GetMountainProbability());
+                m_tempTileStringInput = std::to_string(m_editedTileMountainProb);
                 break;
             }
         }
@@ -1127,15 +1125,136 @@ void WorldEditor::HandleProbabilityInput() {
 }
 
 void WorldEditor::HandleSymbolInput() {
-    for (char c = 32; c <= 126; c++) {
+    // Маппинг для цифр с Shift
+    static std::unordered_map<char, char> shiftDigits = {
+        {'0', ')'}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'},
+        {'5', '%'}, {'6', '^'}, {'7', '&'}, {'8', '*'}, {'9', '('}
+    };
+
+    // Маппинг для специальных символов
+    static std::unordered_map<int, char> normalSymbols = {
+        {VK_OEM_MINUS, '-'}, {VK_OEM_PLUS, '='}, {VK_OEM_4, '['},
+        {VK_OEM_6, ']'}, {VK_OEM_5, '\\'}, {VK_OEM_1, ';'},
+        {VK_OEM_7, '\''}, {VK_OEM_COMMA, ','}, {VK_OEM_PERIOD, '.'},
+        {VK_OEM_2, '/'}, {VK_OEM_3, '`'}, {VK_SPACE, ' '}
+    };
+
+    static std::unordered_map<int, char> shiftSymbols = {
+        {VK_OEM_MINUS, '_'}, {VK_OEM_PLUS, '+'}, {VK_OEM_4, '{'},
+        {VK_OEM_6, '}'}, {VK_OEM_5, '|'}, {VK_OEM_1, ':'},
+        {VK_OEM_7, '"'}, {VK_OEM_COMMA, '<'}, {VK_OEM_PERIOD, '>'},
+        {VK_OEM_2, '?'}, {VK_OEM_3, '~'}, {VK_SPACE, ' '}
+    };
+
+    // Проверяем состояние Shift
+    bool shiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+
+    // 1. Обрабатываем цифры с Shift
+    for (char c = '0'; c <= '9'; c++) {
         if (m_inputManager->IsKeyPressed(c)) {
-            m_tempTileStringInput = std::string(1, c);
+            if (shiftPressed) {
+                // Цифра с Shift
+                auto it = shiftDigits.find(c);
+                if (it != shiftDigits.end()) {
+                    m_tempTileStringInput = std::string(1, it->second);
+                    m_needFullRedraw = true;
+                    return;
+                }
+            }
+            else {
+                // Просто цифра
+                m_tempTileStringInput = std::string(1, c);
+                m_needFullRedraw = true;
+                return;
+            }
+        }
+    }
+
+    // 2. Обрабатываем буквы (учитываем CapsLock)
+    bool capsLockOn = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
+
+    for (char c = 'A'; c <= 'Z'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            if (shiftPressed ^ capsLockOn) { // XOR: заглавные если Shift или CapsLock, но не оба
+                m_tempTileStringInput = std::string(1, c); // Заглавная
+            }
+            else {
+                m_tempTileStringInput = std::string(1, c + 32); // Строчная
+            }
             m_needFullRedraw = true;
             return;
         }
     }
 
+    // 3. Обрабатываем специальные символы
+    std::vector<int> specialKeys = {
+        VK_OEM_MINUS, VK_OEM_PLUS, VK_OEM_4, VK_OEM_6, VK_OEM_5,
+        VK_OEM_1, VK_OEM_7, VK_OEM_COMMA, VK_OEM_PERIOD, VK_OEM_2,
+        VK_OEM_3, VK_SPACE
+    };
+
+    for (int vkCode : specialKeys) {
+        if (m_inputManager->IsKeyPressed(vkCode)) {
+            char symbol = ' ';
+
+            if (shiftPressed) {
+                auto it = shiftSymbols.find(vkCode);
+                if (it != shiftSymbols.end()) {
+                    symbol = it->second;
+                }
+            }
+            else {
+                auto it = normalSymbols.find(vkCode);
+                if (it != normalSymbols.end()) {
+                    symbol = it->second;
+                }
+            }
+
+            if (symbol != ' ') {
+                m_tempTileStringInput = std::string(1, symbol);
+                m_needFullRedraw = true;
+                return;
+            }
+        }
+    }
+
+    // 4. Обрабатываем остальные печатные символы (резервный вариант)
+    for (int i = 32; i <= 126; i++) {
+        // Пропускаем уже обработанные
+        if ((i >= '0' && i <= '9') || (i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z')) {
+            continue;
+        }
+
+        bool isSpecial = false;
+        for (const auto& pair : normalSymbols) {
+            if (pair.second == i) {
+                isSpecial = true;
+                break;
+            }
+        }
+        for (const auto& pair : shiftSymbols) {
+            if (pair.second == i) {
+                isSpecial = true;
+                break;
+            }
+        }
+
+        if (!isSpecial && m_inputManager->IsKeyPressed(i)) {
+            m_tempTileStringInput = std::string(1, static_cast<char>(i));
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    // 5. Обработка Backspace
     if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
+        m_tempTileStringInput.clear();
+        m_needFullRedraw = true;
+        return;
+    }
+
+    // 6. Обработка Delete
+    if (m_inputManager->IsKeyPressed(VK_DELETE)) {
         m_tempTileStringInput.clear();
         m_needFullRedraw = true;
         return;
@@ -1381,8 +1500,7 @@ void WorldEditor::ApplyTileEdit() {
 
         try {
             TileType newTile(tileId, m_editedTileName, m_editedTileSymbol, m_editedTileColor,
-                true, false, 0,
-                m_editedTileLowlandProb, m_editedTilePlainsProb, m_editedTileMountainProb);
+                true, m_editedTileLowlandProb, m_editedTilePlainsProb, m_editedTileMountainProb);
 
             m_tileManager->RegisterTileType(newTile);
 
@@ -1437,8 +1555,7 @@ void WorldEditor::AddNewTile() {
             " M=" + std::to_string(m_newTileMountainProb));
 
         TileType newTile(newId, m_newTileName, m_newTileSymbol, m_newTileColor,
-            true, false, 0,
-            m_newTileLowlandProb, m_newTilePlainsProb, m_newTileMountainProb);
+            true, m_newTileLowlandProb, m_newTilePlainsProb, m_newTileMountainProb);
 
         bool symbolExists = false;
         const auto& allTiles = m_tileManager->GetAllTiles();
@@ -2232,42 +2349,6 @@ void WorldEditor::RenderFoodEditing(int startLine, bool isNewFood) {
     SetConsoleTextAttribute(hConsole, 7);
 }
 
-void WorldEditor::RenderEnemiesTab() {
-    int line = 6;
-
-    std::vector<std::string> fields = {
-        "Enable Enemies: " + std::string(m_config.GetEnableEnemies() ? "Yes" : "No"),
-        "Enemy Spawn Rate: " + std::to_string(m_config.GetEnemySpawnRate())
-    };
-
-    for (int i = 0; i < fields.size(); ++i) {
-        bool isSelected = (i == m_selectedField && m_selectedButton == 0);
-        bool wasSelected = (i == m_prevSelectedField && m_prevSelectedButton == 0);
-
-        if (m_needFullRedraw || isSelected != wasSelected) {
-            RenderMenuItem(line + i, fields[i], isSelected);
-        }
-    }
-}
-
-void WorldEditor::RenderWinTab() {
-    if (m_needFullRedraw) {
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        int line = 6;
-        rlutil::locate(4, line);
-        std::cout << "Win Conditions (to be implemented)";
-    }
-}
-
-void WorldEditor::RenderLoseTab() {
-    if (m_needFullRedraw) {
-        HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-        int line = 6;
-        rlutil::locate(4, line);
-        std::cout << "Lose Conditions (to be implemented)";
-    }
-}
-
 void WorldEditor::RenderMenuItem(int line, const std::string& text, bool selected) {
     rlutil::locate(4, line);
 
@@ -2435,9 +2516,6 @@ void WorldEditor::ProcessInput() {
     case EditorTab::WORLD:
     case EditorTab::PLAYER:
     case EditorTab::CELLULAR_AUTOMATON:
-    case EditorTab::ENEMIES:
-    case EditorTab::WIN:
-    case EditorTab::LOSE:
         HandleStandardInput();
         break;
     }
@@ -2731,12 +2809,6 @@ int WorldEditor::GetMaxFields() {
 
         return tileCount * 3;
     }
-    case EditorTab::ENEMIES:
-        return 2;
-    case EditorTab::WIN:
-        return 0;
-    case EditorTab::LOSE:
-        return 0;
     default:
         return 0;
     }
@@ -2748,7 +2820,7 @@ void WorldEditor::ClearDefaultTiles() {
 
 void WorldEditor::SelectNextTab() {
     int current = static_cast<int>(m_currentTab);
-    current = (current + 1) % 8;
+    current = (current + 1) % 5;
     m_currentTab = static_cast<EditorTab>(current);
 
     if (m_currentTab == EditorTab::CELLULAR_AUTOMATON) {
@@ -2796,11 +2868,6 @@ void WorldEditor::ChangeFieldValue(int delta) {
         }
         else if (m_selectedField == 5) {
             m_config.SetEnableHunger(!m_config.GetEnableHunger());
-        }
-        break;
-    case EditorTab::ENEMIES:
-        if (m_selectedField == 0) {
-            m_config.SetEnableEnemies(!m_config.GetEnableEnemies());
         }
         break;
     }
@@ -3224,8 +3291,6 @@ bool WorldEditor::SaveAllConfigurations(const std::string& directory) {
     }
 
     success = SaveFoodConfig(directory) && success;
-    success = SaveEnemiesConfig(directory) && success;
-
 
     if (m_tileManager) {
         std::string tilesJsonPath = directory + "/tiles.json";
@@ -3420,10 +3485,7 @@ bool WorldEditor::SaveFoodConfig(const std::string& directory) {
     destFile << "# Format: ID Name Symbol Color HungerRestore HpRestore SpawnWeight Experience\n";
 
     if (allFoods.empty()) {
-        Logger::Log("No food items found, creating default food config");
-        destFile << "0 apple @ 12 20 10 5 10\n";
-        destFile << "1 bread % 14 30 5 3 8\n";
-        destFile << "2 meat & 4 50 30 2 20\n";
+        Logger::Log("No food items found, saving empty config");
     }
     else {
         Logger::Log("Saving " + std::to_string(allFoods.size()) + " food items");
@@ -3576,16 +3638,6 @@ std::string WorldEditor::GetCurrentFieldName() const {
         }
         break;
     }
-    case EditorTab::ENEMIES: {
-        std::vector<std::string> fieldNames = {
-            "Enable Enemies: ",
-            "Enemy Spawn Rate: "
-        };
-        if (m_selectedField < fieldNames.size()) {
-            return fieldNames[m_selectedField];
-        }
-        break;
-    }
     default:
         break;
     }
@@ -3625,9 +3677,6 @@ std::string WorldEditor::GetCurrentTabName() const {
     case EditorTab::TILES: return "Tiles";
     case EditorTab::CELLULAR_AUTOMATON: return "Cellular Automaton";
     case EditorTab::FOOD: return "Food";
-    case EditorTab::ENEMIES: return "Enemies";
-    case EditorTab::WIN: return "Win";
-    case EditorTab::LOSE: return "Lose";
     default: return "";
     }
 }
@@ -4256,7 +4305,7 @@ void WorldEditor::HandleFoodSymbolInput() {
         {VK_OEM_2, '/'}, {VK_OEM_3, '`'}, {VK_SPACE, ' '}
     };
 
-    // Маппинг символов с Shift
+    // Маппинг символов с Shift - добавляем недостающие
     static std::unordered_map<int, char> shiftMap = {
         {'0', ')'}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'},
         {'5', '%'}, {'6', '^'}, {'7', '&'}, {'8', '*'}, {'9', '('},
@@ -4298,34 +4347,69 @@ void WorldEditor::HandleFoodSymbolInput() {
                 m_tempTileStringInput = std::string(1, c); // Заглавная
             }
             else {
-                m_tempTileStringInput = std::string(1, c + 32); // Строчная (c + 32 = строчная буква)
+                m_tempTileStringInput = std::string(1, c + 32); // Строчная
             }
             m_needFullRedraw = true;
             return;
         }
     }
 
-    // Проверяем специальные символы (используем Windows VK коды)
-    std::vector<std::pair<int, char>> specialKeys = {
-        {VK_SPACE, ' '},
-        {VK_OEM_MINUS, shiftPressed ? '_' : '-'},
-        {VK_OEM_PLUS, shiftPressed ? '+' : '='},
-        {VK_OEM_4, shiftPressed ? '{' : '['},
-        {VK_OEM_6, shiftPressed ? '}' : ']'},
-        {VK_OEM_5, shiftPressed ? '|' : '\\'},
-        {VK_OEM_1, shiftPressed ? ':' : ';'},
-        {VK_OEM_7, shiftPressed ? '"' : '\''},
-        {VK_OEM_COMMA, shiftPressed ? '<' : ','},
-        {VK_OEM_PERIOD, shiftPressed ? '>' : '.'},
-        {VK_OEM_2, shiftPressed ? '?' : '/'},
-        {VK_OEM_3, shiftPressed ? '~' : '`'}
+    // Проверяем специальные символы - исправляем обработку
+    // Добавляем маппинг для русской раскладки, если нужно
+    static std::unordered_map<int, char> ruNormalMap = {
+        {192, '`'}, {189, '-'}, {187, '='}, {219, '['}, {221, ']'},
+        {220, '\\'}, {186, ';'}, {222, '\''}, {188, ','}, {190, '.'},
+        {191, '/'}, {223, '`'}
     };
 
-    for (const auto& keyPair : specialKeys) {
-        if (m_inputManager->IsKeyPressed(keyPair.first)) {
-            m_tempTileStringInput = std::string(1, keyPair.second);
-            m_needFullRedraw = true;
-            return;
+    static std::unordered_map<int, char> ruShiftMap = {
+        {192, '~'}, {189, '_'}, {187, '+'}, {219, '{'}, {221, '}'},
+        {220, '|'}, {186, ':'}, {222, '"'}, {188, '<'}, {190, '>'},
+        {191, '?'}, {223, '~'}
+    };
+
+    // Проверяем стандартные VK коды для специальных символов
+    std::vector<int> specialKeys = {
+        VK_OEM_MINUS, VK_OEM_PLUS, VK_OEM_4, VK_OEM_6, VK_OEM_5,
+        VK_OEM_1, VK_OEM_7, VK_OEM_COMMA, VK_OEM_PERIOD, VK_OEM_2,
+        VK_OEM_3, VK_SPACE, 192, 189, 187, 219, 221, 220, 186, 222, 188, 190, 191, 223
+    };
+
+    for (int vkCode : specialKeys) {
+        if (m_inputManager->IsKeyPressed(vkCode)) {
+            char symbol = ' ';
+
+            // Пробуем найти символ в соответствующем мапе
+            if (shiftPressed) {
+                auto it = shiftMap.find(vkCode);
+                if (it != shiftMap.end()) {
+                    symbol = it->second;
+                }
+                else {
+                    auto itRu = ruShiftMap.find(vkCode);
+                    if (itRu != ruShiftMap.end()) {
+                        symbol = itRu->second;
+                    }
+                }
+            }
+            else {
+                auto it = normalMap.find(vkCode);
+                if (it != normalMap.end()) {
+                    symbol = it->second;
+                }
+                else {
+                    auto itRu = ruNormalMap.find(vkCode);
+                    if (itRu != ruNormalMap.end()) {
+                        symbol = itRu->second;
+                    }
+                }
+            }
+
+            if (symbol != ' ') {
+                m_tempTileStringInput = std::string(1, symbol);
+                m_needFullRedraw = true;
+                return;
+            }
         }
     }
 
@@ -4334,29 +4418,6 @@ void WorldEditor::HandleFoodSymbolInput() {
         m_tempTileStringInput.clear();
         m_needFullRedraw = true;
         return;
-    }
-
-    // Также проверяем стандартные символы от 32 до 126 (печатные символы)
-    // Это запасной вариант
-    for (int i = 32; i <= 126; i++) {
-        if (m_inputManager->IsKeyPressed(i)) {
-            // Пропускаем уже обработанные символы
-            if (i >= '0' && i <= '9') continue;
-            if (i >= 'A' && i <= 'Z') continue;
-            if (i >= 'a' && i <= 'z') continue;
-
-            bool isSpecial = false;
-            for (const auto& keyPair : specialKeys) {
-                if (keyPair.first == VK_SPACE && i == ' ') isSpecial = true;
-                if (keyPair.second == i) isSpecial = true;
-            }
-
-            if (!isSpecial) {
-                m_tempTileStringInput = std::string(1, static_cast<char>(i));
-                m_needFullRedraw = true;
-                return;
-            }
-        }
     }
 }
 
@@ -4622,6 +4683,27 @@ void WorldEditor::SaveEditedFoodField() {
 }
 
 void WorldEditor::ResetTemplateData() {
+    Logger::Log("=== RESETTING TEMPLATE DATA ===");
+
+    // Сброс конфигурации мира (основные настройки)
+    m_config.SetWorldName("New_World");
+    m_config.SetWidth(50);
+    m_config.SetHeight(25);
+    m_config.SetSeed(12345);
+    m_config.SetRandomGeneration(true);
+    m_config.SetNoiseFrequency(0.5f);
+    m_config.SetNeighborRadius(1);
+
+    // Сброс настроек игрока
+    m_config.SetPlayerStartX(25);
+    m_config.SetPlayerStartY(12);
+    m_config.SetPlayerMaxHP(100);
+    m_config.SetPlayerMaxHunger(100);
+    m_config.SetEnableHP(true);
+    m_config.SetEnableHunger(true);
+    m_config.SetEnableEnemies(false);
+    m_config.SetEnemySpawnRate(5);
+
     // Сброс данных тайлов
     m_availableTileIds.clear();
     m_selectedTileIndex = 0;
@@ -4667,21 +4749,49 @@ void WorldEditor::ResetTemplateData() {
     m_editedSpawnWeight = 1;
     m_editedExperience = 0;
 
+    // Сброс данных клеточного автомата
+    m_survivalRules.clear();
+    m_birthRules.clear();
+    m_deathRules.clear();
+
     // Сброс временных строк
     m_tempStringInput = "";
     m_tempTileStringInput = "";
+    m_tempRuleInput = "";
 
     // Сброс состояния редактирования
     m_isEditingText = false;
     m_editingField = -1;
     m_editingTileField = false;
     m_editingTileFieldIndex = 0;
+    m_editingRule = false;
 
-    // Сброс выбранных полей
+    // Сброс выбранных полей и вкладок
     m_selectedField = 0;
     m_selectedButton = 0;
+    m_currentTab = EditorTab::WORLD;
+    m_prevTab = EditorTab::WORLD;
 
     Logger::Log("Template data has been reset");
+}
+
+void WorldEditor::ClearTemplate() {
+    Logger::Log("=== CLEARING TEMPLATE ===");
+
+    ResetTemplateData();
+
+    ClearTemplateFiles();
+
+    //if (m_tileManager) {
+    //    m_tileManager->GetAllTiles().clear();
+    //    LoadAvailableTiles();
+    //}
+
+    //if (m_foodManager) {
+    //    // Очищаем еду
+    //    m_foodManager->ClearAll();
+    //    LoadAvailableFood();
+    //}
 }
 
 void WorldEditor::ClearTemplateFiles() {
@@ -4691,13 +4801,7 @@ void WorldEditor::ClearTemplateFiles() {
 
     Logger::Log("=== CLEANING UP TEMPLATE FILES FOR SLOT " + std::to_string(m_slot) + " ===");
 
-    std::string templateDir;
-    if (m_editorMode == EditorMode::CREATE_TEMPLATE) {
-        templateDir = "templates/template" + std::to_string(m_slot);
-    }
-    else {
-        return;
-    }
+    std::string templateDir = "templates/template" + std::to_string(m_slot);
 
     try {
         if (!fs::exists(templateDir)) {
@@ -4705,45 +4809,46 @@ void WorldEditor::ClearTemplateFiles() {
             return;
         }
 
-        std::vector<std::string> filesToDelete = {
-            templateDir + "/world_gen.cfg",
-            templateDir + "/player.cfg",
-            templateDir + "/tiles.json",
-            templateDir + "/world_spawn.cfg",
-            templateDir + "/cellular_automaton.cfg",
-            templateDir + "/food.cfg"
-        };
-
-        for (const auto& filePath : filesToDelete) {
-            if (fs::exists(filePath)) {
-                if (fs::remove(filePath)) {
-                    Logger::Log("Deleted: " + filePath);
-                }
-                else {
-                    Logger::Log("ERROR: Failed to delete: " + filePath);
-                }
-            }
-        }
-
-        bool isEmpty = true;
         for (const auto& entry : fs::directory_iterator(templateDir)) {
-            std::string filename = entry.path().filename().string();
-            if (filename != "template_info.txt") {
-                isEmpty = false;
-                break;
+            try {
+                if (fs::is_regular_file(entry.path())) {
+                    if (fs::remove(entry.path())) {
+                        Logger::Log("Deleted: " + entry.path().filename().string());
+                    }
+                    else {
+                        Logger::Log("WARNING: Could not delete: " + entry.path().filename().string());
+                    }
+                }
+            }
+            catch (const std::exception& e) {
+                Logger::Log("ERROR deleting " + entry.path().string() + ": " + e.what());
             }
         }
 
-        if (isEmpty) {
-            std::string infoFile = templateDir + "/template_info.txt";
-            if (fs::exists(infoFile)) {
-                fs::remove(infoFile);
-                Logger::Log("Deleted leftover template_info.txt");
+        try {
+            for (const auto& entry : fs::directory_iterator(templateDir)) {
+                if (fs::is_directory(entry.path())) {
+                    fs::remove_all(entry.path());
+                    Logger::Log("Removed subdirectory: " + entry.path().filename().string());
+                }
             }
 
             if (fs::remove(templateDir)) {
-                Logger::Log("Removed empty template directory: " + templateDir);
+                Logger::Log("Removed template directory: " + templateDir);
             }
+            else {
+                Logger::Log("WARNING: Could not remove template directory (might not be empty)");
+
+                int remainingFiles = 0;
+                for (const auto& entry : fs::directory_iterator(templateDir)) {
+                    remainingFiles++;
+                    Logger::Log("File still exists: " + entry.path().string());
+                }
+                Logger::Log("Remaining files in directory: " + std::to_string(remainingFiles));
+            }
+        }
+        catch (const std::exception& e) {
+            Logger::Log("ERROR removing template directory: " + std::string(e.what()));
         }
 
         Logger::Log("=== TEMPLATE FILES CLEANED UP ===");
@@ -5298,7 +5403,7 @@ void WorldEditor::ApplyRuleEdit() {
 
 void WorldEditor::SelectPreviousTab() {
     int current = static_cast<int>(m_currentTab);
-    current = (current - 1 + 8) % 8;
+    current = (current - 1 + 5) % 5;
     m_currentTab = static_cast<EditorTab>(current);
 
     if (m_currentTab == EditorTab::CELLULAR_AUTOMATON) {
@@ -5390,6 +5495,23 @@ void WorldEditor::HandleRuleEditInput() {
         return;
     }
 
+    // Обработка стрелок для перемещения курсора (упрощённая версия)
+    // Для полной реализации потребуется хранить позицию курсора в строке
+    if (m_inputManager->IsKeyPressed(VK_LEFT)) {
+        // В будущем можно реализовать перемещение курсора внутри строки
+        // Пока просто выходим из режима редактирования
+        m_editingRule = false;
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_RIGHT)) {
+        // Аналогично
+        m_editingRule = false;
+        m_needFullRedraw = true;
+        return;
+    }
+
     if (IsCtrlPressed() && m_inputManager->IsKeyPressed('C')) {
         if (!m_tempRuleInput.empty()) {
             CopyToClipboard(m_tempRuleInput);
@@ -5410,30 +5532,75 @@ void WorldEditor::HandleRuleEditInput() {
         return;
     }
 
-    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('A')) {
-        if (!m_tempRuleInput.empty()) {
-            CopyToClipboard(m_tempRuleInput);
-            Logger::Log("Copied all text to clipboard");
-        }
-        return;
-    }
+    // Разрешаем все символы, необходимые для правил клеточного автомата
+    // Маппинг специальных символов для правил
+    static std::unordered_map<int, char> ruleSymbols = {
+        {'(', '('}, {')', ')'}, {'[', '['}, {']', ']'},
+        {'=', '='}, {'>', '>'}, {'<', '<'}, {'\'', '\''},
+        {'"', '"'}, {'!', '!'}, {'&', '&'}, {'|', '|'},
+        {'~', '~'}, {'^', '^'}, {'*', '*'}, {'+', '+'},
+        {'-', '-'}, {'/', '/'}, {'\\', '\\'}, {'`', '`'},
+        {'@', '@'}, {'#', '#'}, {'$', '$'}, {'%', '%'},
+        {'0', '0'}, {'1', '1'}, {'2', '2'}, {'3', '3'}, {'4', '4'},
+        {'5', '5'}, {'6', '6'}, {'7', '7'}, {'8', '8'}, {'9', '9'},
+        {'a', 'a'}, {'b', 'b'}, {'c', 'c'}, {'d', 'd'}, {'e', 'e'},
+        {'f', 'f'}, {'g', 'g'}, {'h', 'h'}, {'i', 'i'}, {'j', 'j'},
+        {'k', 'k'}, {'l', 'l'}, {'m', 'm'}, {'n', 'n'}, {'o', 'o'},
+        {'p', 'p'}, {'q', 'q'}, {'r', 'r'}, {'s', 's'}, {'t', 't'},
+        {'u', 'u'}, {'v', 'v'}, {'w', 'w'}, {'x', 'x'}, {'y', 'y'},
+        {'z', 'z'}, {'A', 'A'}, {'B', 'B'}, {'C', 'C'}, {'D', 'D'},
+        {'E', 'E'}, {'F', 'F'}, {'G', 'G'}, {'H', 'H'}, {'I', 'I'},
+        {'J', 'J'}, {'K', 'K'}, {'L', 'L'}, {'M', 'M'}, {'N', 'N'},
+        {'O', 'O'}, {'P', 'P'}, {'Q', 'Q'}, {'R', 'R'}, {'S', 'S'},
+        {'T', 'T'}, {'U', 'U'}, {'V', 'V'}, {'W', 'W'}, {'X', 'X'},
+        {'Y', 'Y'}, {'Z', 'Z'}, {' ', ' '}, {',', ','}, {'.', '.'},
+        {';', ';'}, {':', ':'}, {'?', '?'}, {'_', '_'}
+    };
 
-    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('X')) {
-        if (!m_tempRuleInput.empty()) {
-            CopyToClipboard(m_tempRuleInput);
-            m_tempRuleInput.clear();
-            Logger::Log("Cut to clipboard");
-            m_needFullRedraw = true;
-        }
-        return;
-    }
+    // Также проверяем VK коды для специальных символов
+    std::vector<std::pair<int, char>> specialVKCodes = {
+        {VK_OEM_1, ';'}, {VK_OEM_PLUS, '='}, {VK_OEM_COMMA, ','},
+        {VK_OEM_MINUS, '-'}, {VK_OEM_PERIOD, '.'}, {VK_OEM_2, '/'},
+        {VK_OEM_3, '`'}, {VK_OEM_4, '['}, {VK_OEM_5, '\\'},
+        {VK_OEM_6, ']'}, {VK_OEM_7, '\''}, {VK_SPACE, ' '}
+    };
 
+    // Проверяем все символы от 32 до 126 (печатные символы)
     for (int i = 32; i <= 126; i++) {
         if (m_inputManager->IsKeyPressed(i)) {
             if (!IsCtrlPressed()) {
                 m_tempRuleInput += static_cast<char>(i);
                 m_needFullRedraw = true;
             }
+            return;
+        }
+    }
+
+    // Проверяем специальные VK коды
+    for (const auto& vkPair : specialVKCodes) {
+        if (m_inputManager->IsKeyPressed(vkPair.first)) {
+            bool shiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+            char symbol = vkPair.second;
+
+            // Корректируем символ если нажат Shift
+            if (shiftPressed) {
+                switch (vkPair.first) {
+                case VK_OEM_1: symbol = ':'; break;
+                case VK_OEM_PLUS: symbol = '+'; break;
+                case VK_OEM_COMMA: symbol = '<'; break;
+                case VK_OEM_MINUS: symbol = '_'; break;
+                case VK_OEM_PERIOD: symbol = '>'; break;
+                case VK_OEM_2: symbol = '?'; break;
+                case VK_OEM_3: symbol = '~'; break;
+                case VK_OEM_4: symbol = '{'; break;
+                case VK_OEM_5: symbol = '|'; break;
+                case VK_OEM_6: symbol = '}'; break;
+                case VK_OEM_7: symbol = '"'; break;
+                }
+            }
+
+            m_tempRuleInput += symbol;
+            m_needFullRedraw = true;
             return;
         }
     }
