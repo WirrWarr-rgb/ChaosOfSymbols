@@ -440,12 +440,18 @@ void Game::ProcessInput() {
 /// Система голода и здоровья
 /// </summary>
 void Game::ConsumeEnergy() {
+    // Если голод отключен, ничего не делаем
+    if (!m_playerConfig->IsHungerEnabled()) {
+        return;
+    }
+
     if (m_playerHunger > 0) {
         m_playerHunger--;
         Logger::Log("Hunger decreased: " + std::to_string(m_playerHunger) + "/" +
             std::to_string(m_playerConfig->GetMaxHunger()));
     }
 
+    // Теперь проверяем ОБА условия: голод <= 0 И HP включено
     if (m_playerHunger <= 0 && m_playerConfig->IsHPEnabled()) {
         m_playerHP -= 2;
         Logger::Log("Starving! HP decreased: " + std::to_string(m_playerHP) + "/" +
@@ -504,28 +510,32 @@ void Game::CollectFood() {
 
         m_foodEaten[foodId]++;
 
-        int oldHP = m_playerHP;
-        int oldHunger = m_playerHunger;
+        // Восстанавливаем голод только если он включен
+        if (m_playerConfig->IsHungerEnabled()) {
+            m_playerHunger = min(m_playerConfig->GetMaxHunger(), m_playerHunger + food->GetHungerRestore());
+        }
 
-        m_playerHunger = min(m_playerConfig->GetMaxHunger(), m_playerHunger + food->GetHungerRestore());
-        m_playerHP = min(m_playerConfig->GetMaxHP(), m_playerHP + food->GetHpRestore());
+        // Восстанавливаем HP только если оно включено
+        if (m_playerConfig->IsHPEnabled()) {
+            m_playerHP = min(m_playerConfig->GetMaxHP(), m_playerHP + food->GetHpRestore());
+        }
 
         int xpGained = food->GetExperience();
         GainXP(xpGained);
 
         m_currentWorld->RemoveFoodAt(m_playerX, m_playerY);
 
-        Logger::Log("Collected " + food->GetName() +
-            " - Hunger: +" + std::to_string(food->GetHungerRestore()) +
-            ", HP: +" + std::to_string(food->GetHpRestore()) +
-            ", XP: +" + std::to_string(xpGained) +
-            " | Now: HP=" + std::to_string(m_playerHP) +
-            "/" + std::to_string(m_playerConfig->GetMaxHP()) +
-            ", Hunger=" + std::to_string(m_playerHunger) +
-            "/" + std::to_string(m_playerConfig->GetMaxHunger()) +
-            ", XP=" + std::to_string(m_playerXP) +
-            "/" + std::to_string(m_xpToNextLevel) +
-            ", Level=" + std::to_string(m_playerLevel));
+        // Обновите логирование с учетом включенных систем
+        std::string logMsg = "Collected " + food->GetName();
+        if (m_playerConfig->IsHungerEnabled()) {
+            logMsg += " - Hunger: +" + std::to_string(food->GetHungerRestore());
+        }
+        if (m_playerConfig->IsHPEnabled()) {
+            logMsg += ", HP: +" + std::to_string(food->GetHpRestore());
+        }
+        logMsg += ", XP: +" + std::to_string(xpGained);
+
+        Logger::Log(logMsg);
     }
 }
 
@@ -558,7 +568,9 @@ void Game::Render() {
         m_renderSystem->DrawUI(*m_currentWorld, m_playerX, m_playerY, m_playerSteps,
             m_playerHP, m_playerConfig->GetMaxHP(),
             m_playerHunger, m_playerConfig->GetMaxHunger(),
-            m_playerXP, m_playerLevel, m_xpToNextLevel);
+            m_playerXP, m_playerLevel, m_xpToNextLevel,
+            m_playerConfig->IsHPEnabled(),
+            m_playerConfig->IsHungerEnabled());
         uiCounter = 0;
     }
 
@@ -806,9 +818,12 @@ void Game::CheckLevelUp() {
 
         m_xpToNextLevel = static_cast<int>(m_xpToNextLevel * m_playerConfig->GetXPMultiplier());
 
+        // Восстанавливаем HP только если оно включено
         if (m_playerConfig->IsHPEnabled()) {
             m_playerHP = m_playerConfig->GetMaxHP();
         }
+
+        // Восстанавливаем голод только если он включен
         if (m_playerConfig->IsHungerEnabled()) {
             m_playerHunger = m_playerConfig->GetMaxHunger();
         }

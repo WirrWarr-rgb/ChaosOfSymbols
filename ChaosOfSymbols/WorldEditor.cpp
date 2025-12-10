@@ -240,6 +240,21 @@ void WorldEditor::CreateDirectoryForSlot(int slot) {
 #else
         mkdir(tempDir.c_str(), 0777);
 #endif
+
+        std::string templateDir = tempDir + "/template" + std::to_string(slot);
+#ifdef _WIN32
+        CreateDirectoryA(templateDir.c_str(), NULL);
+#else
+        mkdir(templateDir.c_str(), 0777);
+#endif
+        std::string infoFile = templateDir + "/template_info.txt";
+        if (!fs::exists(infoFile)) {
+            Logger::Log("New template detected, resetting data");
+            ResetTemplateData();
+        }
+        else {
+            Logger::Log("Existing template detected, keeping data");
+        }
     }
 }
 
@@ -618,7 +633,7 @@ void WorldEditor::RenderTileActions(int startLine) {
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
     int line = startLine;
 
-    if (m_selectedTileIndex < static_cast<int>(m_availableTileIds.size())) {
+    if (m_selectedTileIndex >= 0 && m_selectedTileIndex < static_cast<int>(m_availableTileIds.size())) {
         int tileId = m_availableTileIds[m_selectedTileIndex];
         TileType* tile = m_tileManager->GetTileType(tileId);
 
@@ -633,15 +648,45 @@ void WorldEditor::RenderTileActions(int startLine) {
     }
 
     bool editSelected = (m_tileActionIndex == 0);
-    RenderMenuItem(line, "- Edit", editSelected);
-    line++;
-
     bool deleteSelected = (m_tileActionIndex == 1);
-    RenderMenuItem(line, "- Delete", deleteSelected);
+    bool backSelected = (m_tileActionIndex == 2);
+
+    rlutil::locate(6, line);
+    if (editSelected) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "> ";
+    }
+    else {
+        SetConsoleTextAttribute(hConsole, 7);
+        std::cout << "  ";
+    }
+    std::cout << "- Edit";
     line++;
 
-    bool backSelected = (m_tileActionIndex == 2);
-    RenderMenuItem(line, "- Back", backSelected);
+    rlutil::locate(6, line);
+    if (deleteSelected) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "> ";
+    }
+    else {
+        SetConsoleTextAttribute(hConsole, 7);
+        std::cout << "  ";
+    }
+    std::cout << "- Delete";
+    line++;
+
+    rlutil::locate(6, line);
+    if (backSelected) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "> ";
+    }
+    else {
+        SetConsoleTextAttribute(hConsole, 7);
+        std::cout << "  ";
+    }
+    std::cout << "- Back";
+
+    SetConsoleTextAttribute(hConsole, 7);
 }
 
 void WorldEditor::RenderTileEditing(int startLine, bool isNewTile) {
@@ -815,19 +860,23 @@ void WorldEditor::HandleTileInput() {
 void WorldEditor::HandleTileActionsNavigation() {
     if (m_inputManager->IsMenuUp()) {
         m_tileActionIndex = (m_tileActionIndex - 1 + 3) % 3;
+        m_needFullRedraw = true;
     }
     else if (m_inputManager->IsMenuDown()) {
         m_tileActionIndex = (m_tileActionIndex + 1) % 3;
+        m_needFullRedraw = true;
     }
     else if (m_inputManager->IsMenuSelect()) {
         switch (m_tileActionIndex) {
         case 0: // Edit
-            StartEditingTile();
+            if (m_selectedTileIndex >= 0 && m_selectedTileIndex < static_cast<int>(m_availableTileIds.size())) {
+                StartEditingTile();
+            }
             break;
         case 1: // Delete
             DeleteSelectedTile();
             m_tilesState = TilesState::MAIN_LIST;
-            m_selectedField = min(m_selectedField, static_cast<int>(m_availableTileIds.size()) - 1);
+            m_selectedField = min(m_selectedField, static_cast<int>(m_availableTileIds.size() - 1));
             if (m_selectedField < 0) m_selectedField = 0;
             m_needFullRedraw = true;
             break;
@@ -896,6 +945,15 @@ void WorldEditor::HandleTileEditNavigation() {
             m_needFullRedraw = true;
         }
         else if (m_selectedField == fieldCount + 1) {
+            // Отмена - сброс временных значений
+            if (m_tilesState == TilesState::ADDING_TILE) {
+                m_newTileName = "new_tile";
+                m_newTileSymbol = 'A';
+                m_newTileColor = 7;
+                m_newTileLowlandProb = 10;
+                m_newTilePlainsProb = 10;
+                m_newTileMountainProb = 10;
+            }
             m_tilesState = TilesState::MAIN_LIST;
             m_selectedField = (m_tilesState == TilesState::MAIN_LIST && m_availableTileIds.empty()) ? 0 :
                 (m_selectedTileIndex < static_cast<int>(m_availableTileIds.size()) ? m_selectedTileIndex : 0);
@@ -904,6 +962,15 @@ void WorldEditor::HandleTileEditNavigation() {
         }
     }
     else if (m_inputManager->IsMenuBack()) {
+        // Отмена по кнопке Back - сброс временных значений
+        if (m_tilesState == TilesState::ADDING_TILE) {
+            m_newTileName = "new_tile";
+            m_newTileSymbol = 'A';
+            m_newTileColor = 7;
+            m_newTileLowlandProb = 10;
+            m_newTilePlainsProb = 10;
+            m_newTileMountainProb = 10;
+        }
         m_tilesState = TilesState::MAIN_LIST;
         m_selectedField = (m_tilesState == TilesState::MAIN_LIST && m_availableTileIds.empty()) ? 0 :
             (m_selectedTileIndex < static_cast<int>(m_availableTileIds.size()) ? m_selectedTileIndex : 0);
@@ -1596,7 +1663,7 @@ void WorldEditor::RenderFoodList(int startLine) {
     std::cout << "  Available Food:";
     line++;
 
-    const auto& allFoods = m_foodManager->GetAllFood(); // Получаем все еды
+    const auto& allFoods = m_foodManager->GetAllFood();
 
     if (allFoods.empty()) {
         rlutil::locate(4, line);
@@ -1633,7 +1700,8 @@ void WorldEditor::RenderFoodList(int startLine) {
         }
     }
 
-    bool addSelected = (m_selectedField == GetMaxFields() - 1 && m_selectedButton == 0);
+    // Кнопка добавления новой еды
+    bool addSelected = (m_selectedField == static_cast<int>(allFoods.size()) && m_selectedButton == 0);
     rlutil::locate(4, line);
 
     if (addSelected) {
@@ -1666,16 +1734,47 @@ void WorldEditor::RenderFoodActions(int startLine) {
         }
     }
 
+    // Рендерим кнопки с правильным выделением
     bool editSelected = (m_foodActionIndex == 0);
-    RenderMenuItem(line, "- Edit", editSelected);
-    line++;
-
     bool deleteSelected = (m_foodActionIndex == 1);
-    RenderMenuItem(line, "- Delete", deleteSelected);
+    bool backSelected = (m_foodActionIndex == 2);
+
+    rlutil::locate(6, line);
+    if (editSelected) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "> ";
+    }
+    else {
+        SetConsoleTextAttribute(hConsole, 7);
+        std::cout << "  ";
+    }
+    std::cout << "- Edit";
     line++;
 
-    bool backSelected = (m_foodActionIndex == 2);
-    RenderMenuItem(line, "- Back", backSelected);
+    rlutil::locate(6, line);
+    if (deleteSelected) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "> ";
+    }
+    else {
+        SetConsoleTextAttribute(hConsole, 7);
+        std::cout << "  ";
+    }
+    std::cout << "- Delete";
+    line++;
+
+    rlutil::locate(6, line);
+    if (backSelected) {
+        SetConsoleTextAttribute(hConsole, 10);
+        std::cout << "> ";
+    }
+    else {
+        SetConsoleTextAttribute(hConsole, 7);
+        std::cout << "  ";
+    }
+    std::cout << "- Back";
+
+    SetConsoleTextAttribute(hConsole, 7);
 }
 
 void WorldEditor::RenderFoodEditing(int startLine, bool isNewFood) {
@@ -1683,21 +1782,18 @@ void WorldEditor::RenderFoodEditing(int startLine, bool isNewFood) {
     int line = startLine;
 
     // Заголовок
-    rlutil::locate(4, line);
-    SetConsoleTextAttribute(hConsole, 14);
-    if (isNewFood) {
-        std::cout << "Add New Food";
+    if (m_needFullRedraw) {
+        rlutil::locate(4, line);
+        SetConsoleTextAttribute(hConsole, 14);
+        if (isNewFood) {
+            std::cout << "Add New Food";
+        }
+        else {
+            std::cout << "Edit Food";
+        }
+        SetConsoleTextAttribute(hConsole, 7);
     }
-    else {
-        std::cout << "Edit Food";
-    }
-    SetConsoleTextAttribute(hConsole, 7);
     line += 2;
-
-    // Очистка области
-    for (int i = line; i < line + 7; ++i) {
-        ClearLine(i);
-    }
 
     // Рендерим левый столбец (поля 0-4)
     std::vector<std::string> leftFields = {
@@ -1772,13 +1868,13 @@ void WorldEditor::RenderFoodEditing(int startLine, bool isNewFood) {
         }
     }
 
-    // Рендерим правый столбец (начинаем с 3 строки, чтобы выровнять с Hunger Restore и HP Restore)
+    // Рендерим правый столбец
     for (int i = 0; i < rightFields.size(); ++i) {
-        int fieldIndex = i + 5; // поля 5 и 6
+        int fieldIndex = i + 5;
         bool isSelected = (fieldIndex == m_selectedField);
         bool isEditing = (m_isEditingText && m_editingTileFieldIndex == fieldIndex);
 
-        rlutil::locate(40, line + 3 + i); // Начинаем с 3 строки
+        rlutil::locate(40, line + 3 + i);
 
         if (isSelected) {
             SetConsoleTextAttribute(hConsole, 10);
@@ -1815,13 +1911,16 @@ void WorldEditor::RenderFoodEditing(int startLine, bool isNewFood) {
 
     // Кнопки Save и Cancel
     int buttonsStart = line + 6;
-    ClearLine(buttonsStart);
-    ClearLine(buttonsStart + 1);
 
-    bool saveSelected = (m_selectedField == 7); // Поле 7 - Save
+    if (m_needFullRedraw) {
+        ClearLine(buttonsStart);
+        ClearLine(buttonsStart + 1);
+    }
+
+    bool saveSelected = (m_selectedField == 7);
     RenderMenuItem(buttonsStart, "Save", saveSelected);
 
-    bool cancelSelected = (m_selectedField == 8); // Поле 8 - Cancel
+    bool cancelSelected = (m_selectedField == 8);
     RenderMenuItem(buttonsStart + 1, "Cancel", cancelSelected);
 
     SetConsoleTextAttribute(hConsole, 7);
@@ -1907,24 +2006,112 @@ void WorldEditor::ProcessInput() {
 
     if (m_inputManager->IsMenuBack()) {
         if (m_currentTab == EditorTab::FOOD && m_foodState == FoodState::MAIN_LIST && m_selectedButton == 0) {
+            // Выход из вкладки еды
+            if (m_editorMode == EditorMode::CREATE_TEMPLATE && !m_shouldCreate) {
+                Logger::Log("Canceling template editing - checking if we should clean up...");
+
+                // Проверяем, был ли это новый шаблон или редактирование
+                if (IsNewTemplate()) {
+                    Logger::Log("Cleaning up new template files...");
+                    ClearTemplateFiles(); // Очистка только для новых шаблонов
+                }
+                else {
+                    Logger::Log("Editing existing template, no cleanup needed");
+                }
+                ResetTemplateData(); // Сброс данных
+            }
             m_shouldReturn = true;
         }
         else if (m_currentTab == EditorTab::FOOD && m_foodState != FoodState::MAIN_LIST) {
+            // Возврат из редактирования/добавления еды
+            if (m_foodState == FoodState::ADDING_FOOD || m_foodState == FoodState::EDITING_FOOD) {
+                // Сброс временных значений
+                m_newFoodName = "new_food";
+                m_newFoodSymbol = '*';
+                m_newFoodColor = 10;
+                m_newHungerRestore = 10;
+                m_newHpRestore = 5;
+                m_newSpawnWeight = 1;
+                m_newExperience = 5;
+
+                m_editedFoodName = "";
+                m_editedFoodSymbol = ' ';
+                m_editedFoodColor = 10;
+                m_editedHungerRestore = 0;
+                m_editedHpRestore = 0;
+                m_editedSpawnWeight = 1;
+                m_editedExperience = 0;
+            }
             m_foodState = FoodState::MAIN_LIST;
             m_selectedField = 0;
             m_selectedButton = 0;
             m_needFullRedraw = true;
         }
         else if (m_currentTab == EditorTab::TILES && m_tilesState == TilesState::MAIN_LIST && m_selectedButton == 0) {
+            // Выход из вкладки тайлов
+            if (m_editorMode == EditorMode::CREATE_TEMPLATE && !m_shouldCreate) {
+                Logger::Log("Canceling template editing - checking if we should clean up...");
+
+                // Проверяем, был ли это новый шаблон или редактирование
+                if (IsNewTemplate()) {
+                    Logger::Log("Cleaning up new template files...");
+                    ClearTemplateFiles(); // Очистка только для новых шаблонов
+                }
+                else {
+                    Logger::Log("Editing existing template, no cleanup needed");
+                }
+                ResetTemplateData(); // Сброс данных
+            }
             m_shouldReturn = true;
         }
         else if (m_currentTab == EditorTab::TILES && m_tilesState != TilesState::MAIN_LIST) {
+            // Возврат из редактирования/добавления тайлов
+            if (m_tilesState == TilesState::ADDING_TILE || m_tilesState == TilesState::EDITING_TILE) {
+                // Сброс временных значений
+                m_newTileName = "new_tile";
+                m_newTileSymbol = 'A';
+                m_newTileColor = 7;
+                m_newTileLowlandProb = 10;
+                m_newTilePlainsProb = 10;
+                m_newTileMountainProb = 10;
+
+                m_editedTileName = "";
+                m_editedTileSymbol = ' ';
+                m_editedTileColor = 7;
+                m_editedTileLowlandProb = 0;
+                m_editedTilePlainsProb = 0;
+                m_editedTileMountainProb = 0;
+            }
             m_tilesState = TilesState::MAIN_LIST;
             m_selectedField = 0;
             m_selectedButton = 0;
             m_needFullRedraw = true;
         }
+        else if (m_currentTab == EditorTab::FOOD && m_foodState == FoodState::FOOD_ACTIONS) {
+            // Возврат из действий еды
+            m_foodState = FoodState::MAIN_LIST;
+            m_needFullRedraw = true;
+        }
+        else if (m_currentTab == EditorTab::TILES && m_tilesState == TilesState::TILE_ACTIONS) {
+            // Возврат из действий тайлов
+            m_tilesState = TilesState::MAIN_LIST;
+            m_needFullRedraw = true;
+        }
         else {
+            // Выход из редактора в целом
+            if (m_editorMode == EditorMode::CREATE_TEMPLATE && !m_shouldCreate) {
+                Logger::Log("Canceling template editing - checking if we should clean up...");
+
+                // Проверяем, был ли это новый шаблон или редактирование
+                if (IsNewTemplate()) {
+                    Logger::Log("Cleaning up new template files...");
+                    ClearTemplateFiles(); // Очистка только для новых шаблонов
+                }
+                else {
+                    Logger::Log("Editing existing template, no cleanup needed");
+                }
+                ResetTemplateData(); // Сброс данных
+            }
             m_shouldReturn = true;
         }
         return;
@@ -2307,23 +2494,22 @@ void WorldEditor::ChangeFieldValue(int delta) {
 void WorldEditor::ConfirmSelection() {
     if (m_currentTab == EditorTab::TILES && m_tilesState == TilesState::MAIN_LIST) {
         if (m_selectedButton == 0) {
-            // Должно работать с тайлами, а не с едой!
             if (m_availableTileIds.empty()) {
                 if (m_selectedField == 0) {
                     Logger::Log("Starting to add new tile...");
-                    StartAddingTile(); // <-- Должно быть StartAddingTile()
+                    StartAddingTile();
                 }
             }
             else {
                 if (m_selectedField < static_cast<int>(m_availableTileIds.size())) {
-                    m_selectedTileIndex = m_selectedField; // Выбор существующего тайла
+                    m_selectedTileIndex = m_selectedField;
                     m_tileActionIndex = 0;
                     m_tilesState = TilesState::TILE_ACTIONS;
                     m_needFullRedraw = true;
                 }
                 else if (m_selectedField == static_cast<int>(m_availableTileIds.size())) {
                     Logger::Log("Starting to add new tile...");
-                    StartAddingTile(); // <-- Должно быть StartAddingTile()
+                    StartAddingTile();
                 }
             }
         }
@@ -2337,21 +2523,22 @@ void WorldEditor::ConfirmSelection() {
     }
     else if (m_currentTab == EditorTab::FOOD && m_foodState == FoodState::MAIN_LIST) {
         if (m_selectedButton == 0) {
-            if (m_availableFoodIds.empty()) {
+            const auto& allFoods = m_foodManager->GetAllFood();
+            if (allFoods.empty()) {
                 if (m_selectedField == 0) {
                     Logger::Log("Starting to add new food...");
                     StartAddingFood();
                 }
             }
             else {
-                if (m_selectedField < static_cast<int>(m_availableFoodIds.size())) {
-                    m_selectedFoodIndex = m_availableFoodIds[m_selectedField];
+                if (m_selectedField < static_cast<int>(allFoods.size())) {
+                    m_selectedFoodIndex = m_selectedField;
                     m_foodActionIndex = 0;
                     m_foodState = FoodState::FOOD_ACTIONS;
                     m_needFullRedraw = true;
                     Logger::Log("Selected food at index " + std::to_string(m_selectedField));
                 }
-                else if (m_selectedField == static_cast<int>(m_availableFoodIds.size())) {
+                else if (m_selectedField == static_cast<int>(allFoods.size())) {
                     Logger::Log("Starting to add new food (from list)...");
                     StartAddingFood();
                 }
@@ -2366,17 +2553,25 @@ void WorldEditor::ConfirmSelection() {
         }
     }
     else if (m_currentTab == EditorTab::FOOD && m_foodState == FoodState::FOOD_ACTIONS) {
+        const auto& allFoods = m_foodManager->GetAllFood();
         switch (m_foodActionIndex) {
         case 0: // Edit
-            StartEditingFood();
+            if (m_selectedFoodIndex >= 0 && m_selectedFoodIndex < static_cast<int>(allFoods.size())) {
+                StartEditingFood();
+            }
             break;
         case 1: // Delete
-            DeleteSelectedFood();
-            m_foodState = FoodState::MAIN_LIST;
-            m_selectedField = min(m_selectedField, static_cast<int>(m_availableFoodIds.size()) - 1);
-            if (m_selectedField < 0) m_selectedField = 0;
-            m_needFullRedraw = true;
+        {
+            if (m_selectedFoodIndex >= 0 && m_selectedFoodIndex < static_cast<int>(allFoods.size())) {
+                DeleteSelectedFood();
+                m_foodState = FoodState::MAIN_LIST;
+                const auto& newFoods = m_foodManager->GetAllFood();
+                m_selectedField = min(m_selectedField, static_cast<int>(newFoods.size() - 1));
+                if (m_selectedField < 0) m_selectedField = 0;
+                m_needFullRedraw = true;
+            }
             break;
+        }
         case 2: // Back
             m_foodState = FoodState::MAIN_LIST;
             m_needFullRedraw = true;
@@ -2453,7 +2648,14 @@ void WorldEditor::CreateNewWorld() {
         }
     }
     else {
-        CreateTemplate(m_config.GetWorldName());
+        if (CreateTemplate(m_config.GetWorldName())) {
+            Logger::Log("=== TEMPLATE CREATED SUCCESSFULLY ===");
+            m_shouldCreate = true;
+        }
+        else {
+            Logger::Log("=== TEMPLATE CREATION FAILED - CLEANING UP ===");
+            ClearTemplateFiles();
+        }
     }
 }
 
@@ -3189,21 +3391,28 @@ void WorldEditor::HandleFoodInput() {
 void WorldEditor::HandleFoodActionsNavigation() {
     if (m_inputManager->IsMenuUp()) {
         m_foodActionIndex = (m_foodActionIndex - 1 + 3) % 3;
+        m_needFullRedraw = true;
     }
     else if (m_inputManager->IsMenuDown()) {
         m_foodActionIndex = (m_foodActionIndex + 1) % 3;
+        m_needFullRedraw = true;
     }
     else if (m_inputManager->IsMenuSelect()) {
+        const auto& allFoods = m_foodManager->GetAllFood();
         switch (m_foodActionIndex) {
         case 0: // Edit
-            StartEditingFood();
+            if (m_selectedFoodIndex >= 0 && m_selectedFoodIndex < static_cast<int>(allFoods.size())) {
+                StartEditingFood();
+            }
             break;
         case 1: // Delete
-            DeleteSelectedFood();
-            m_foodState = FoodState::MAIN_LIST;
-            m_selectedField = min(m_selectedField, static_cast<int>(m_availableFoodIds.size()) - 1);
-            if (m_selectedField < 0) m_selectedField = 0;
-            m_needFullRedraw = true;
+            if (m_selectedFoodIndex >= 0 && m_selectedFoodIndex < static_cast<int>(allFoods.size())) {
+                DeleteSelectedFood();
+                m_foodState = FoodState::MAIN_LIST;
+                m_selectedField = min(m_selectedField, static_cast<int>(allFoods.size() - 1));
+                if (m_selectedField < 0) m_selectedField = 0;
+                m_needFullRedraw = true;
+            }
             break;
         case 2: // Back
             m_foodState = FoodState::MAIN_LIST;
@@ -3219,11 +3428,20 @@ void WorldEditor::HandleFoodActionsNavigation() {
 
 void WorldEditor::StartEditingFood() {
     const auto& allFoods = m_foodManager->GetAllFood();
-    if (m_availableFoodIds.empty() || m_selectedFoodIndex >= static_cast<int>(allFoods.size())) return;
+    if (m_selectedFoodIndex < 0 || m_selectedFoodIndex >= static_cast<int>(allFoods.size())) {
+        // Если индекс невалидный, возвращаемся в список
+        m_foodState = FoodState::MAIN_LIST;
+        m_needFullRedraw = true;
+        return;
+    }
 
     const Food* food = allFoods[m_selectedFoodIndex];
 
-    if (!food) return;
+    if (!food) {
+        m_foodState = FoodState::MAIN_LIST;
+        m_needFullRedraw = true;
+        return;
+    }
 
     m_editedFoodName = food->GetName();
     m_editedFoodSymbol = food->GetSymbol();
@@ -3366,6 +3584,16 @@ void WorldEditor::HandleFoodEditNavigation() {
             m_needFullRedraw = true;
         }
         else if (m_selectedField == fieldCount + 1) { // Cancel
+            // Отмена - сброс временных значений
+            if (m_foodState == FoodState::ADDING_FOOD) {
+                m_newFoodName = "new_food";
+                m_newFoodSymbol = '*';
+                m_newFoodColor = 10;
+                m_newHungerRestore = 10;
+                m_newHpRestore = 5;
+                m_newSpawnWeight = 1;
+                m_newExperience = 5;
+            }
             m_foodState = FoodState::MAIN_LIST;
             m_selectedField = (m_foodState == FoodState::MAIN_LIST && m_availableFoodIds.empty()) ? 0 :
                 (m_selectedFoodIndex < static_cast<int>(m_availableFoodIds.size()) ? m_selectedFoodIndex : 0);
@@ -3374,6 +3602,16 @@ void WorldEditor::HandleFoodEditNavigation() {
         }
     }
     else if (m_inputManager->IsMenuBack()) {
+        // Отмена по кнопке Back - сброс временных значений
+        if (m_foodState == FoodState::ADDING_FOOD) {
+            m_newFoodName = "new_food";
+            m_newFoodSymbol = '*';
+            m_newFoodColor = 10;
+            m_newHungerRestore = 10;
+            m_newHpRestore = 5;
+            m_newSpawnWeight = 1;
+            m_newExperience = 5;
+        }
         m_foodState = FoodState::MAIN_LIST;
         m_selectedField = (m_foodState == FoodState::MAIN_LIST && m_availableFoodIds.empty()) ? 0 :
             (m_selectedFoodIndex < static_cast<int>(m_availableFoodIds.size()) ? m_selectedFoodIndex : 0);
@@ -3502,72 +3740,278 @@ void WorldEditor::HandleFoodEditInput() {
         return;
     }
 
-    if (m_editingTileFieldIndex >= 2 && m_editingTileFieldIndex <= 6) {
-        HandleNumericInput();
-    }
-    else {
-        switch (m_editingTileFieldIndex) {
-        case 0:
-            HandleTileNameInput();
-            break;
-        case 1:
-            HandleSymbolInput();
-            break;
-        case 2:
-            HandleColorInput();
-            break;
-        }
+    // Обработка специальных полей
+    switch (m_editingTileFieldIndex) {
+    case 2: // Color
+        HandleFoodColorInput();
+        break;
+    case 3: // Hunger Restore
+    case 4: // HP Restore
+    case 5: // Spawn Weight
+    case 6: // Experience
+        HandleFoodNumericInput();
+        break;
+    case 0: // Name
+        HandleFoodNameInput();
+        break;
+    case 1: // Symbol
+        HandleFoodSymbolInput();
+        break;
     }
 }
 
-void WorldEditor::SaveEditedFoodField() {
-    if (m_tempTileStringInput.empty()) return;
-
-    if (m_foodState == FoodState::EDITING_FOOD) {
-        try {
-            switch (m_editingTileFieldIndex) {
-            case 0:
-                m_editedFoodName = m_tempTileStringInput;
-                break;
-            case 1:
-                if (!m_tempTileStringInput.empty()) {
-                    m_editedFoodSymbol = m_tempTileStringInput[0];
-                }
-                break;
-            case 2:
-            {
-                int newColor = std::stoi(m_tempTileStringInput);
-                m_editedFoodColor = std::clamp(newColor, 0, 15);
+void WorldEditor::HandleFoodColorInput() {
+    if (m_inputManager->IsKeyPressed(VK_LEFT) || m_inputManager->IsKeyPressed('A')) {
+        if (m_tempTileStringInput.empty()) {
+            m_tempTileStringInput = "10";
+        }
+        else {
+            try {
+                int currentColor = std::stoi(m_tempTileStringInput);
+                currentColor = max(0, currentColor - 1);
+                m_tempTileStringInput = std::to_string(currentColor);
             }
-            break;
-            case 3:
-            {
-                int value = std::stoi(m_tempTileStringInput);
-                m_editedHungerRestore = std::clamp(value, 0, 100);
-            }
-            break;
-            case 4:
-            {
-                int value = std::stoi(m_tempTileStringInput);
-                m_editedHpRestore = std::clamp(value, 0, 100);
-            }
-            break;
-            case 5:
-            {
-                int value = std::stoi(m_tempTileStringInput);
-                m_editedSpawnWeight = std::clamp(value, 1, 100);
-            }
-            break;
-            case 6:
-            {
-                int value = std::stoi(m_tempTileStringInput);
-                m_editedExperience = std::clamp(value, 0, 1000);
-            }
-            break;
+            catch (...) {
+                m_tempTileStringInput = "0";
             }
         }
-        catch (const std::exception& e) {
-            Logger::Log("ERROR: Invalid food input: " + m_tempTileStringInput);
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_RIGHT) || m_inputManager->IsKeyPressed('D')) {
+        if (m_tempTileStringInput.empty()) {
+            m_tempTileStringInput = "10";
+        }
+        else {
+            try {
+                int currentColor = std::stoi(m_tempTileStringInput);
+                currentColor = min(15, currentColor + 1);
+                m_tempTileStringInput = std::to_string(currentColor);
+            }
+            catch (...) {
+                m_tempTileStringInput = "15";
+            }
+        }
+        m_needFullRedraw = true;
+        return;
+    }
+
+    for (char c = '0'; c <= '9'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            if (m_tempTileStringInput.empty() || m_tempTileStringInput == "0") {
+                m_tempTileStringInput = std::string(1, c);
+            }
+            else {
+                std::string newValue = m_tempTileStringInput + c;
+                try {
+                    int color = std::stoi(newValue);
+                    if (color <= 15) {
+                        m_tempTileStringInput = newValue;
+                    }
+                    else {
+                        m_tempTileStringInput = std::string(1, c);
+                    }
+                }
+                catch (...) {
+                    m_tempTileStringInput = std::string(1, c);
+                }
+            }
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
+        m_tempTileStringInput.pop_back();
+        m_needFullRedraw = true;
+        return;
+    }
+}
+
+void WorldEditor::HandleFoodNumericInput() {
+    // Обработка цифр, минуса и Backspace
+    for (char c = '0'; c <= '9'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            if (m_tempTileStringInput == "0" && c == '0') {
+                return;
+            }
+            else if (m_tempTileStringInput == "0" && c != '0') {
+                // Заменяем начальный ноль
+                m_tempTileStringInput = std::string(1, c);
+            }
+            else {
+                m_tempTileStringInput += c;
+            }
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    // Обработка минуса (только в начале строки)
+    if (m_inputManager->IsKeyPressed('-') && m_tempTileStringInput.empty()) {
+        m_tempTileStringInput += '-';
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
+        m_tempTileStringInput.pop_back();
+        m_needFullRedraw = true;
+        return;
+    }
+}
+
+void WorldEditor::HandleFoodNameInput() {
+    for (char c = '0'; c <= '9'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            m_tempTileStringInput += c;
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    for (char c = 'A'; c <= 'Z'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            m_tempTileStringInput += c;
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    for (char c = 'a'; c <= 'z'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            m_tempTileStringInput += c;
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    if (m_inputManager->IsKeyPressed('_') || m_inputManager->IsKeyPressed('-')) {
+        m_tempTileStringInput += '_';
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
+        m_tempTileStringInput.pop_back();
+        m_needFullRedraw = true;
+        return;
+    }
+}
+
+void WorldEditor::HandleFoodSymbolInput() {
+    // Маппинг символов без Shift
+    static std::unordered_map<int, char> normalMap = {
+        {'0', '0'}, {'1', '1'}, {'2', '2'}, {'3', '3'}, {'4', '4'},
+        {'5', '5'}, {'6', '6'}, {'7', '7'}, {'8', '8'}, {'9', '9'},
+        {VK_OEM_MINUS, '-'}, {VK_OEM_PLUS, '='}, {VK_OEM_4, '['},
+        {VK_OEM_6, ']'}, {VK_OEM_5, '\\'}, {VK_OEM_1, ';'},
+        {VK_OEM_7, '\''}, {VK_OEM_COMMA, ','}, {VK_OEM_PERIOD, '.'},
+        {VK_OEM_2, '/'}, {VK_OEM_3, '`'}, {VK_SPACE, ' '}
+    };
+
+    // Маппинг символов с Shift
+    static std::unordered_map<int, char> shiftMap = {
+        {'0', ')'}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'},
+        {'5', '%'}, {'6', '^'}, {'7', '&'}, {'8', '*'}, {'9', '('},
+        {VK_OEM_MINUS, '_'}, {VK_OEM_PLUS, '+'}, {VK_OEM_4, '{'},
+        {VK_OEM_6, '}'}, {VK_OEM_5, '|'}, {VK_OEM_1, ':'},
+        {VK_OEM_7, '"'}, {VK_OEM_COMMA, '<'}, {VK_OEM_PERIOD, '>'},
+        {VK_OEM_2, '?'}, {VK_OEM_3, '~'}, {VK_SPACE, ' '}
+    };
+
+    // Проверяем состояние Shift и CapsLock
+    bool shiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+    bool capsLockOn = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
+
+    // Сначала проверяем цифры (0-9)
+    for (char c = '0'; c <= '9'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            if (shiftPressed) {
+                // Shift + цифра
+                auto it = shiftMap.find(c);
+                if (it != shiftMap.end()) {
+                    m_tempTileStringInput = std::string(1, it->second);
+                    m_needFullRedraw = true;
+                    return;
+                }
+            }
+            else {
+                // Просто цифра
+                m_tempTileStringInput = std::string(1, c);
+                m_needFullRedraw = true;
+                return;
+            }
+        }
+    }
+
+    // Проверяем буквы (A-Z)
+    for (char c = 'A'; c <= 'Z'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            if (shiftPressed ^ capsLockOn) { // XOR: заглавные если Shift или CapsLock, но не оба
+                m_tempTileStringInput = std::string(1, c); // Заглавная
+            }
+            else {
+                m_tempTileStringInput = std::string(1, c + 32); // Строчная (c + 32 = строчная буква)
+            }
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    // Проверяем специальные символы (используем Windows VK коды)
+    std::vector<std::pair<int, char>> specialKeys = {
+        {VK_SPACE, ' '},
+        {VK_OEM_MINUS, shiftPressed ? '_' : '-'},
+        {VK_OEM_PLUS, shiftPressed ? '+' : '='},
+        {VK_OEM_4, shiftPressed ? '{' : '['},
+        {VK_OEM_6, shiftPressed ? '}' : ']'},
+        {VK_OEM_5, shiftPressed ? '|' : '\\'},
+        {VK_OEM_1, shiftPressed ? ':' : ';'},
+        {VK_OEM_7, shiftPressed ? '"' : '\''},
+        {VK_OEM_COMMA, shiftPressed ? '<' : ','},
+        {VK_OEM_PERIOD, shiftPressed ? '>' : '.'},
+        {VK_OEM_2, shiftPressed ? '?' : '/'},
+        {VK_OEM_3, shiftPressed ? '~' : '`'}
+    };
+
+    for (const auto& keyPair : specialKeys) {
+        if (m_inputManager->IsKeyPressed(keyPair.first)) {
+            m_tempTileStringInput = std::string(1, keyPair.second);
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    // Проверяем Backspace для удаления
+    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
+        m_tempTileStringInput.clear();
+        m_needFullRedraw = true;
+        return;
+    }
+
+    // Также проверяем стандартные символы от 32 до 126 (печатные символы)
+    // Это запасной вариант
+    for (int i = 32; i <= 126; i++) {
+        if (m_inputManager->IsKeyPressed(i)) {
+            // Пропускаем уже обработанные символы
+            if (i >= '0' && i <= '9') continue;
+            if (i >= 'A' && i <= 'Z') continue;
+            if (i >= 'a' && i <= 'z') continue;
+
+            // Проверяем, не обработан ли уже этот символ через специальные коды
+            bool isSpecial = false;
+            for (const auto& keyPair : specialKeys) {
+                if (keyPair.first == VK_SPACE && i == ' ') isSpecial = true;
+                if (keyPair.second == i) isSpecial = true;
+            }
+
+            if (!isSpecial) {
+                m_tempTileStringInput = std::string(1, static_cast<char>(i));
+                m_needFullRedraw = true;
+                return;
+            }
         }
     }
 }
@@ -3594,13 +4038,13 @@ void WorldEditor::SaveNewFoodField() {
         case 3:
         {
             int value = std::stoi(m_tempTileStringInput);
-            m_newHungerRestore = std::clamp(value, 0, 100);
+            m_newHungerRestore = value; // Убираем clamp
         }
         break;
         case 4:
         {
             int value = std::stoi(m_tempTileStringInput);
-            m_newHpRestore = std::clamp(value, 0, 100);
+            m_newHpRestore = value; // Убираем clamp
         }
         break;
         case 5:
@@ -3612,7 +4056,7 @@ void WorldEditor::SaveNewFoodField() {
         case 6:
         {
             int value = std::stoi(m_tempTileStringInput);
-            m_newExperience = std::clamp(value, 0, 1000);
+            m_newExperience = value; // Убираем clamp
         }
         break;
         }
@@ -3738,7 +4182,10 @@ void WorldEditor::ApplyFoodEdit() {
 
 void WorldEditor::DeleteSelectedFood() {
     const auto& allFoods = m_foodManager->GetAllFood();
-    if (allFoods.empty() || m_selectedFoodIndex >= static_cast<int>(allFoods.size())) return;
+    if (allFoods.empty() || m_selectedFoodIndex < 0 || m_selectedFoodIndex >= static_cast<int>(allFoods.size())) {
+        Logger::Log("ERROR: Cannot delete - invalid food index");
+        return;
+    }
 
     try {
         Logger::Log("=== DELETING FOOD ===");
@@ -3771,17 +4218,230 @@ void WorldEditor::DeleteSelectedFood() {
         foodFile.close();
 
         // Перезагружаем менеджер еды
-        m_foodManager->LoadFromFile(m_foodConfigPath);
+        if (m_foodManager->LoadFromFile(m_foodConfigPath)) {
+            Logger::Log("Food deleted successfully");
 
-        // Сбрасываем выбранный индекс
-        if (m_selectedFoodIndex >= static_cast<int>(m_foodManager->GetAllFood().size())) {
-            m_selectedFoodIndex = m_foodManager->GetAllFood().size() - 1;
+            // Сбрасываем индекс после удаления
+            const auto& newFoods = m_foodManager->GetAllFood();
+            if (m_selectedFoodIndex >= static_cast<int>(newFoods.size())) {
+                m_selectedFoodIndex = newFoods.empty() ? -1 : newFoods.size() - 1;
+            }
         }
-
-        Logger::Log("Food deleted successfully");
+        else {
+            Logger::Log("ERROR: Failed to reload food after deletion");
+        }
 
     }
     catch (const std::exception& e) {
         Logger::Log("ERROR: Failed to delete food: " + std::string(e.what()));
     }
+}
+
+void WorldEditor::SaveEditedFoodField() {
+    if (m_tempTileStringInput.empty()) return;
+
+    if (m_foodState == FoodState::EDITING_FOOD) {
+        try {
+            switch (m_editingTileFieldIndex) {
+            case 0:
+                m_editedFoodName = m_tempTileStringInput;
+                break;
+            case 1:
+                if (!m_tempTileStringInput.empty()) {
+                    m_editedFoodSymbol = m_tempTileStringInput[0];
+                }
+                break;
+            case 2:
+            {
+                int newColor = std::stoi(m_tempTileStringInput);
+                m_editedFoodColor = std::clamp(newColor, 0, 15);
+            }
+            break;
+            case 3:
+            {
+                int value = std::stoi(m_tempTileStringInput);
+                m_editedHungerRestore = value; // Убираем clamp
+            }
+            break;
+            case 4:
+            {
+                int value = std::stoi(m_tempTileStringInput);
+                m_editedHpRestore = value; // Убираем clamp
+            }
+            break;
+            case 5:
+            {
+                int value = std::stoi(m_tempTileStringInput);
+                m_editedSpawnWeight = std::clamp(value, 1, 100);
+            }
+            break;
+            case 6:
+            {
+                int value = std::stoi(m_tempTileStringInput);
+                m_editedExperience = value; // Убираем clamp
+            }
+            break;
+            }
+        }
+        catch (const std::exception& e) {
+            Logger::Log("ERROR: Invalid food input: " + m_tempTileStringInput);
+        }
+    }
+}
+
+void WorldEditor::ResetTemplateData() {
+    // Сброс данных тайлов
+    m_availableTileIds.clear();
+    m_selectedTileIndex = 0;
+    m_tileActionIndex = 0;
+    m_tilesState = TilesState::MAIN_LIST;
+
+    // Сброс значений нового тайла
+    m_newTileName = "new_tile";
+    m_newTileSymbol = 'A';
+    m_newTileColor = 7;
+    m_newTileLowlandProb = 10;
+    m_newTilePlainsProb = 10;
+    m_newTileMountainProb = 10;
+
+    // Сброс значений редактируемого тайла
+    m_editedTileName = "";
+    m_editedTileSymbol = ' ';
+    m_editedTileColor = 7;
+    m_editedTileLowlandProb = 0;
+    m_editedTilePlainsProb = 0;
+    m_editedTileMountainProb = 0;
+
+    // Сброс данных еды
+    m_selectedFoodIndex = 0;
+    m_foodActionIndex = 0;
+    m_foodState = FoodState::MAIN_LIST;
+
+    // Сброс значений новой еды
+    m_newFoodName = "new_food";
+    m_newFoodSymbol = '*';
+    m_newFoodColor = 10; // Зеленый
+    m_newHungerRestore = 10;
+    m_newHpRestore = 5;
+    m_newSpawnWeight = 1;
+    m_newExperience = 5;
+
+    // Сброс значений редактируемой еды
+    m_editedFoodName = "";
+    m_editedFoodSymbol = ' ';
+    m_editedFoodColor = 10;
+    m_editedHungerRestore = 0;
+    m_editedHpRestore = 0;
+    m_editedSpawnWeight = 1;
+    m_editedExperience = 0;
+
+    // Сброс временных строк
+    m_tempStringInput = "";
+    m_tempTileStringInput = "";
+
+    // Сброс состояния редактирования
+    m_isEditingText = false;
+    m_editingField = -1;
+    m_editingTileField = false;
+    m_editingTileFieldIndex = 0;
+
+    // Сброс выбранных полей
+    m_selectedField = 0;
+    m_selectedButton = 0;
+
+    Logger::Log("Template data has been reset");
+}
+
+void WorldEditor::ClearTemplateFiles() {
+    if (m_editorMode != EditorMode::CREATE_TEMPLATE) {
+        return; // Только для шаблонов
+    }
+
+    Logger::Log("=== CLEANING UP TEMPLATE FILES FOR SLOT " + std::to_string(m_slot) + " ===");
+
+    std::string templateDir;
+    if (m_editorMode == EditorMode::CREATE_TEMPLATE) {
+        templateDir = "templates/template" + std::to_string(m_slot);
+    }
+    else {
+        return;
+    }
+
+    try {
+        if (!fs::exists(templateDir)) {
+            Logger::Log("Template directory doesn't exist: " + templateDir);
+            return;
+        }
+
+        // Список файлов для удаления
+        std::vector<std::string> filesToDelete = {
+            templateDir + "/world_gen.cfg",
+            templateDir + "/player.cfg",
+            templateDir + "/tiles.json",
+            templateDir + "/world_spawn.cfg",
+            templateDir + "/cellular_automaton.cfg",
+            templateDir + "/food.cfg"
+        };
+
+        // НЕ удаляем template_info.txt если он существует (он должен существовать только для существующих шаблонов)
+        // template_info.txt удаляется только в TemplateSystem::DeleteTemplate()
+
+        for (const auto& filePath : filesToDelete) {
+            if (fs::exists(filePath)) {
+                if (fs::remove(filePath)) {
+                    Logger::Log("Deleted: " + filePath);
+                }
+                else {
+                    Logger::Log("ERROR: Failed to delete: " + filePath);
+                }
+            }
+        }
+
+        // Также удаляем директорию если она пустая
+        bool isEmpty = true;
+        for (const auto& entry : fs::directory_iterator(templateDir)) {
+            // Проверяем, не является ли файлом template_info.txt
+            std::string filename = entry.path().filename().string();
+            if (filename != "template_info.txt") {
+                isEmpty = false;
+                break;
+            }
+        }
+
+        if (isEmpty) {
+            // Удаляем template_info.txt если он остался один
+            std::string infoFile = templateDir + "/template_info.txt";
+            if (fs::exists(infoFile)) {
+                fs::remove(infoFile);
+                Logger::Log("Deleted leftover template_info.txt");
+            }
+
+            // Теперь удаляем пустую директорию
+            if (fs::remove(templateDir)) {
+                Logger::Log("Removed empty template directory: " + templateDir);
+            }
+        }
+
+        Logger::Log("=== TEMPLATE FILES CLEANED UP ===");
+    }
+    catch (const std::exception& e) {
+        Logger::Log("ERROR clearing template files: " + std::string(e.what()));
+    }
+}
+
+bool WorldEditor::IsNewTemplate() const {
+    if (m_editorMode != EditorMode::CREATE_TEMPLATE) {
+        return false;
+    }
+
+    // Проверяем, существует ли уже шаблон
+    std::string templateDir;
+    if (m_editorMode == EditorMode::CREATE_TEMPLATE) {
+        templateDir = "templates/template" + std::to_string(m_slot);
+    }
+
+    std::string infoFile = templateDir + "/template_info.txt";
+
+    // Если файл информации о шаблоне не существует, значит это новый шаблон
+    return !fs::exists(infoFile);
 }

@@ -22,8 +22,10 @@ public:
     // Публичные методы
     void ClearScreen();
     void DrawWorld(const World& world);
-    void DrawUI(const World& world, int posX, int posY, int playerSteps, int playerHP, int playerMaxHP, int playerHunger, int playerMaxHunger,
-        int playerXP, int playerLevel, int xpToNextLevel);
+    void DrawUI(const World& world, int posX, int posY, int playerSteps,
+        int playerHP, int playerMaxHP, int playerHunger, int playerMaxHunger,
+        int playerXP, int playerLevel, int xpToNextLevel,
+        bool hpEnabled, bool hungerEnabled);
     void DrawPlayer(int x, int y, int previousX, int previousY, const World& world);
     void SetScreenSize(int width, int height);
     void StartFrame();

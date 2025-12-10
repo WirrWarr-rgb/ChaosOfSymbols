@@ -34,13 +34,29 @@ void InputManager::Update() {
 }
 
 bool InputManager::IsKeyPressed(int virtualKey) {
+    // ¬сегда провер€ем текущее состо€ние клавиши
+    bool currentState = (GetAsyncKeyState(virtualKey) & 0x8000) != 0;
+
     auto it = m_keyStates.find(virtualKey);
     if (it == m_keyStates.end()) {
-        m_keyStates[virtualKey] = KeyState();
+        // ≈сли клавиша еще не отслеживалась, добавл€ем ее
+        KeyState newState;
+        newState.currentState = currentState;
+        newState.previousState = false;
+        newState.lastPressTime = m_lastUpdateTime;
+        m_keyStates[virtualKey] = newState;
         return false;
     }
 
     KeyState& state = it->second;
+    state.previousState = state.currentState;
+    state.currentState = currentState;
+
+    // ќбновл€ем врем€ нажати€
+    if (state.currentState && !state.previousState) {
+        state.lastPressTime = m_lastUpdateTime;
+    }
+
     return state.currentState && !state.previousState;
 }
 

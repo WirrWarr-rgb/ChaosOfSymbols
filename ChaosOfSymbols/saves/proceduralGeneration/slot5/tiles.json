@@ -2,8 +2,8 @@
   {
     "id": 0,
     "name": "new_tile",
-    "character": "Q",
-    "color": 6,
+    "character": "A",
+    "color": 7,
     "isPassable": true,
     "isDestructible": false,
     "damage": 0,

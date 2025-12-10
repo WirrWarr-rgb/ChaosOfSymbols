@@ -305,7 +305,8 @@ void RenderSystem::DrawPlayer(int x, int y, int previousX, int previousY, const 
 /// </summary>
 void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerSteps,
     int playerHP, int playerMaxHP, int playerHunger, int playerMaxHunger,
-    int playerXP, int playerLevel, int xpToNextLevel) {
+    int playerXP, int playerLevel, int xpToNextLevel,
+    bool hpEnabled, bool hungerEnabled) {  // Добавьте эти параметры
 
     int worldHeight = world.GetTotalHeight();
     int uiStartLine = worldHeight;
@@ -320,19 +321,33 @@ void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerStep
     uiStream << "Steps: " << playerSteps;
     uiStream << " | Lvl: " << playerLevel;
     uiStream << " | XP: " << playerXP << "/" << xpToNextLevel;
-    uiStream << " | Health: " << playerHP << "/" << playerMaxHP;
-    uiStream << " | Hunger: " << playerHunger << "/" << playerMaxHunger;
+
+    // Показываем HP только если оно включено
+    if (hpEnabled) {
+        uiStream << " | Health: " << playerHP << "/" << playerMaxHP;
+    }
+
+    // Показываем голод только если он включен
+    if (hungerEnabled) {
+        uiStream << " | Hunger: " << playerHunger << "/" << playerMaxHunger;
+    }
 
     newUILines[0] = uiStream.str();
-
 
     std::stringstream infoStream;
     infoStream << "Pos: " << posX << "," << posY;
     infoStream << " | Seed: " << world.GetCurrentSeed();
     infoStream << " | FPS: " << static_cast<int>(m_stats.currentFps);
 
+    // Добавляем информацию о включенных системах
+    infoStream << " | Systems: ";
+    if (hpEnabled) infoStream << "HP ";
+    if (hungerEnabled) infoStream << "Hunger ";
+    if (!hpEnabled && !hungerEnabled) infoStream << "None";
+
     newUILines[1] = infoStream.str();
 
+    // Остальной код остается без изменений...
     bool uiChanged = false;
     for (int i = 0; i < UI_LINES; i++) {
         if (m_previousUILines[i] != newUILines[i]) {
@@ -358,10 +373,6 @@ void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerStep
 
         m_previousUILines = newUILines;
         m_uiNeedsRedraw = false;
-
-        Logger::Log("UI redrawn - Steps: " + std::to_string(playerSteps) +
-            ", HP: " + std::to_string(playerHP) +
-            ", FPS: " + std::to_string(static_cast<int>(m_stats.currentFps)));
     }
 }
 

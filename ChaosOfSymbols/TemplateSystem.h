@@ -45,6 +45,7 @@ public:
 
     // Проверки
     bool IsTemplateSlotEmpty(int slot) const;
+    bool ClearTemplateDirectory(int slot);
 
 private:
     // Пути

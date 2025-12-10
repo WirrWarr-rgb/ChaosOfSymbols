@@ -539,3 +539,57 @@ std::vector<TemplateInfo> TemplateSystem::GetTemplates() {
 
     return templates;
 }
+
+bool TemplateSystem::ClearTemplateDirectory(int slot) {
+    if (slot < 1 || slot > MAX_TEMPLATES) {
+        Logger::Log("ERROR: Invalid template slot: " + std::to_string(slot));
+        return false;
+    }
+
+    std::string templatePath = GetTemplateSlotPath(slot);
+
+    try {
+        if (!fs::exists(templatePath)) {
+            Logger::Log("Template directory doesn't exist: " + templatePath);
+            return true;
+        }
+
+        Logger::Log("Clearing template directory: " + templatePath);
+
+        std::vector<std::string> filesToDelete = {
+            templatePath + "/" + TEMPLATE_INFO_FILE,
+            templatePath + "/world_gen.cfg",
+            templatePath + "/player.cfg",
+            templatePath + "/tiles.json",
+            templatePath + "/world_spawn.cfg",
+            templatePath + "/cellular_automaton.cfg",
+            templatePath + "/food.cfg"
+        };
+
+        bool allDeleted = true;
+        for (const auto& filePath : filesToDelete) {
+            if (fs::exists(filePath)) {
+                if (fs::remove(filePath)) {
+                    Logger::Log("Deleted: " + filePath);
+                }
+                else {
+                    Logger::Log("ERROR: Failed to delete: " + filePath);
+                    allDeleted = false;
+                }
+            }
+        }
+
+        if (allDeleted) {
+            Logger::Log("Template directory cleared successfully for slot " + std::to_string(slot));
+        }
+        else {
+            Logger::Log("WARNING: Some files could not be deleted for slot " + std::to_string(slot));
+        }
+
+        return allDeleted;
+    }
+    catch (const std::exception& e) {
+        Logger::Log("ERROR clearing template directory: " + std::string(e.what()));
+        return false;
+    }
+}

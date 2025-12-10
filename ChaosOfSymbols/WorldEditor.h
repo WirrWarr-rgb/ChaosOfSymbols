@@ -169,6 +169,14 @@ private:
     void StartEditingFoodField();
     void DeleteSelectedFood();
 
+    void HandleFoodColorInput();
+    void HandleFoodNumericInput();
+    void HandleFoodNameInput();
+    void HandleFoodSymbolInput();
+    void ResetTemplateData();
+    void ClearTemplateFiles();
+    bool IsNewTemplate() const;
+
     std::string GetCurrentFieldName() const;
     std::string GetCurrentButtonName() const;
     std::string GetCurrentTabName() const;
