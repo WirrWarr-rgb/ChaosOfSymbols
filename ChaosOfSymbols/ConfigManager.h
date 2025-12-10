@@ -29,7 +29,12 @@ public:
     std::function<void()> OnFoodChanged;
     std::function<void()> OnAutomatonRulesChanged;
 
+    const std::vector<Food*>& GetAllFood() const { return m_foods; }
+    int GetFoodCount() const { return static_cast<int>(m_foods.size()); }
+
 private:
+    std::vector<Food*> m_foods;
+    std::unordered_map<int, Food*> m_foodMap;
     // Приватные методы
     void ReloadTiles();
     void ReloadFood();

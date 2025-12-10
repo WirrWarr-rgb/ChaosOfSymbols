@@ -36,12 +36,15 @@ bool ConfigManager::Initialize() {
         m_previousTileIds.insert(pair.first);
     }
 
+    // Загружаем еду из дефолтного пути
     if (!m_foodManager->LoadFromFile()) {
         Logger::Log("WARNING: Failed to load initial food config");
     }
     else {
-        for (int i = 0; i < m_foodManager->GetFoodCount(); i++) {
-            if (const Food* food = m_foodManager->GetFood(i)) {
+        // Получаем все еды через GetAllFood() вместо GetFoodCount()
+        const auto& allFoods = m_foodManager->GetAllFood();
+        for (const Food* food : allFoods) {
+            if (food) {
                 m_previousFoodIds.insert(food->GetId());
             }
         }
@@ -126,6 +129,7 @@ void ConfigManager::ReloadTiles() {
 void ConfigManager::ReloadFood() {
     Logger::Log("Reloading food configurations...");
 
+    // Загружаем из дефолтного пути
     if (m_foodManager->LoadFromFile()) {
         Logger::Log("Food configurations reloaded successfully");
         if (OnFoodChanged) {

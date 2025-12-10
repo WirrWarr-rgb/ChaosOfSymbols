@@ -742,7 +742,20 @@ void World::SpawnRandomFood(int count) {
         return;
     }
 
-    Logger::Log("Attempting to spawn " + std::to_string(count) + " food items");
+    Logger::Log("Attempting to spawn " + std::to_string(count) +
+        " food items using current food manager");
+
+    // Проверяем, сколько еды доступно в менеджере
+    const auto& allFoods = m_foodManager->GetAllFood();
+    Logger::Log("Food manager has " + std::to_string(allFoods.size()) + " food types");
+
+    for (const auto& food : allFoods) {
+        if (food) {
+            Logger::Log("  - " + food->GetName() +
+                " (weight: " + std::to_string(food->GetSpawnWeight()) +
+                ", XP: " + std::to_string(food->GetExperience()) + ")");
+        }
+    }
 
     int spawned = 0;
     int attempts = 0;
@@ -764,10 +777,13 @@ void World::SpawnRandomFood(int count) {
                 m_foodSpawns[key] = { x, y, food->GetId() };
                 spawned++;
 
-                if (spawned <= 5) {
-                    Logger::Log("Spawned " + food->GetName() + " at " +
-                        std::to_string(x) + "," + std::to_string(y));
-                }
+                Logger::Log("Spawned " + food->GetName() + " at " +
+                    std::to_string(x) + "," + std::to_string(y) +
+                    " (ID: " + std::to_string(food->GetId()) +
+                    ", XP: " + std::to_string(food->GetExperience()) + ")");
+            }
+            else {
+                Logger::Log("ERROR: GetRandomFood returned nullptr!");
             }
         }
         attempts++;

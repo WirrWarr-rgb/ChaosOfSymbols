@@ -20,13 +20,20 @@ FoodManager::~FoodManager() {
 /// <param name="filename"></param>
 /// <returns></returns>
 bool FoodManager::LoadFromFile(const std::string& filename) {
+    for (auto food : m_foods) {
+        delete food;
+    }
+    m_foods.clear();
+    m_foodMap.clear();
+    m_totalSpawnWeight = 0;
+
     std::ifstream file(filename);
     if (!file.is_open()) {
         Logger::Log("ERROR: Failed to open food config: " + filename);
         return false;
     }
 
-    Logger::Log("=== LOADED FOOD SUMMARY ===\n");
+    Logger::Log("=== LOADED FOOD SUMMARY FROM: " + filename + " ===\n");
     std::string line;
     while (std::getline(file, line)) {
         if (line.empty() || line[0] == '#') continue;
@@ -58,9 +65,14 @@ bool FoodManager::LoadFromFile(const std::string& filename) {
     }
 
     CalculateSpawnWeights();
-    Logger::Log("\nFood manager loaded " + std::to_string(m_foods.size()) + " food types");
+    Logger::Log("\nFood manager loaded " + std::to_string(m_foods.size()) +
+        " food types from: " + filename);
     Logger::Log("\n=== END LOADED FOOD SUMMARY ===\n");
     return true;
+}
+
+bool FoodManager::LoadFromFile() {
+    return LoadFromFile(m_defaultConfigPath);
 }
 
 /// <summary>
@@ -76,8 +88,10 @@ const Food* FoodManager::GetFood(int id) const {
 /// </summary>
 /// <returns></returns>
 const Food* FoodManager::GetRandomFood() const {
-    if (m_foods.empty() || m_totalSpawnWeight == 0)
+    if (m_foods.empty() || m_totalSpawnWeight == 0) {
+        Logger::Log("WARNING: No food available or total spawn weight is zero!");
         return nullptr;
+    }
 
     static std::random_device rd;
     static std::mt19937 gen(rd());
@@ -89,11 +103,15 @@ const Food* FoodManager::GetRandomFood() const {
     for (const auto& food : m_foods) {
         cumulativeWeight += food->GetSpawnWeight();
         if (randomWeight <= cumulativeWeight) {
+            Logger::Log("Selected random food: " + food->GetName() +
+                " (weight: " + std::to_string(food->GetSpawnWeight()) +
+                "/" + std::to_string(m_totalSpawnWeight) + ")");
             return food;
         }
     }
 
-    return m_foods.back();
+    Logger::Log("WARNING: Fallback to last food item");
+    return m_foods.empty() ? nullptr : m_foods.back();
 }
 
 /// <summary>

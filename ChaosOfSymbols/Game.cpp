@@ -174,21 +174,26 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
 
     std::string saveSlot = std::to_string(m_mainMenu->GetSelectedSaveSlot());
     std::string tilesPath = "saves/proceduralGeneration/slot" + saveSlot + "/tiles.json";
-    std::string foodPath = "saves/proceduralGeneration/slot" + saveSlot + "/food.cfg";  // ВАЖНО!
+    std::string foodPath = "saves/proceduralGeneration/slot" + saveSlot + "/food.cfg";
+
 
     TileTypeManager* tileManager = m_configManager->GetTileManager();
-    FoodManager* foodManager = m_configManager->GetFoodManager();  // Получаем менеджер еды
+    FoodManager* foodManager = m_configManager->GetFoodManager();
 
     tileManager->SetFilePath(tilesPath);
-
     if (!tileManager->LoadFromFile()) {
-        Logger::Log("WARNING: Could not load tiles from slot");
+        Logger::Log("WARNING: Could not load tiles from save slot");
+        // Пробуем загрузить дефолтный
+        tileManager->SetFilePath("config/tiles.json");
+        if (!tileManager->LoadFromFile()) {
+            Logger::Log("ERROR: Failed to load default tiles config");
+        }
     }
 
-    // ЗАГРУЖАЕМ КОНФИГУРАЦИЮ ЕДЫ ИЗ СЕЙВА
+    // ВАЖНО: Загружаем конфигурацию еды из сейва
     if (!foodManager->LoadFromFile(foodPath)) {
-        Logger::Log("WARNING: Could not load food config from save slot");
-        // Можно загрузить дефолтную конфигурацию
+        Logger::Log("ERROR: Could not load food config from save slot!");
+        // Попробуем загрузить дефолтную конфигурацию
         if (!foodManager->LoadFromFile("config/default_food.cfg")) {
             Logger::Log("ERROR: Failed to load default food config");
         }

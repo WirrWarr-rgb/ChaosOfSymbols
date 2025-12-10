@@ -562,8 +562,10 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
     // Создаем директорию сейва
     fs::create_directories(savePath);
 
-    // Копируем ВСЕ файлы из шаблона, включая food.cfg
+    // Копируем ВСЕ файлы из шаблона, включая food.cfg и tiles.json
     bool allCopied = true;
+    bool foodCopied = false;
+    bool tilesCopied = false;
 
     try {
         for (const auto& entry : fs::directory_iterator(templatePath)) {
@@ -597,13 +599,47 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
                 else if (filename == "food.cfg") {
                     // Копируем food.cfg напрямую
                     fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
+                    foodCopied = true;
                     Logger::Log("Copied: " + filename + " (food configuration)");
+                }
+                else if (filename == "tiles.json") {
+                    // Копируем tiles.json напрямую
+                    fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
+                    tilesCopied = true;
+                    Logger::Log("Copied: " + filename + " (tiles configuration)");
                 }
                 else {
                     // Копируем все остальные файлы
                     fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
                     Logger::Log("Copied: " + filename);
                 }
+            }
+        }
+
+        if (!foodCopied) {
+            Logger::Log("WARNING: food.cfg not found in template!");
+        }
+
+        if (!tilesCopied) {
+            Logger::Log("WARNING: tiles.json not found in template!");
+            // Если tiles.json нет, создаем минимальный
+            std::string tilesJsonPath = savePath + "/tiles.json";
+            std::ofstream tilesFile(tilesJsonPath);
+            if (tilesFile.is_open()) {
+                tilesFile << "[\n";
+                tilesFile << "  {\n";
+                tilesFile << "    \"id\": 0,\n";
+                tilesFile << "    \"name\": \"air\",\n";
+                tilesFile << "    \"character\": \" \",\n";
+                tilesFile << "    \"color\": 0,\n";
+                tilesFile << "    \"isPassable\": true,\n";
+                tilesFile << "    \"isDestructible\": false,\n";
+                tilesFile << "    \"damage\": 0\n";
+                tilesFile << "  }\n";
+                tilesFile << "]";
+                tilesFile.close();
+                Logger::Log("Created minimal tiles.json for save");
+                tilesCopied = true;
             }
         }
 
@@ -621,7 +657,7 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
         allCopied = false;
     }
 
-    return allCopied;
+    return allCopied && foodCopied && tilesCopied;
 }
 
 bool SaveSystem::CopyTemplateTilesToSave(int templateSlot, int saveSlot, GameMode mode) {
