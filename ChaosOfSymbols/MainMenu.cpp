@@ -434,6 +434,15 @@ void MainMenu::ProcessInput() {
         return;
     }
 
+    if (m_currentState == MenuState::ABOUT_SCREEN) {
+        if (m_inputManager->IsMenuSelect() || m_inputManager->IsMenuBack()) {
+            m_currentState = MenuState::MAIN_MENU;
+            m_inPlaySubmenu = false;
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
     if (m_inputManager->IsMenuUp()) {
         SelectPreviousOption();
     }

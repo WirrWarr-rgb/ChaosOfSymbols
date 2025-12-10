@@ -112,7 +112,6 @@ void RenderSystem::SetScreenSize(int width, int height) {
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    // Простая установка через системную команду
     std::string command = "mode con: cols=" +
         std::to_string(m_screenWidth) + " lines=" +
         std::to_string(m_screenHeight);
@@ -322,12 +321,10 @@ void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerStep
     uiStream << " | Lvl: " << playerLevel;
     uiStream << " | XP: " << playerXP << "/" << xpToNextLevel;
 
-    // Показываем HP только если оно включено
     if (hpEnabled) {
         uiStream << " | Health: " << playerHP << "/" << playerMaxHP;
     }
 
-    // Показываем голод только если он включен
     if (hungerEnabled) {
         uiStream << " | Hunger: " << playerHunger << "/" << playerMaxHunger;
     }
@@ -339,7 +336,6 @@ void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerStep
     infoStream << " | Seed: " << world.GetCurrentSeed();
     infoStream << " | FPS: " << static_cast<int>(m_stats.currentFps);
 
-    // Добавляем информацию о включенных системах
     infoStream << " | Systems: ";
     if (hpEnabled) infoStream << "HP ";
     if (hungerEnabled) infoStream << "Hunger ";
@@ -347,7 +343,6 @@ void RenderSystem::DrawUI(const World& world, int posX, int posY, int playerStep
 
     newUILines[1] = infoStream.str();
 
-    // Остальной код остается без изменений...
     bool uiChanged = false;
     for (int i = 0; i < UI_LINES; i++) {
         if (m_previousUILines[i] != newUILines[i]) {

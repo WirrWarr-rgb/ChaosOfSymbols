@@ -74,7 +74,7 @@ private:
     static constexpr int PlayerTileId = -9999; // Уникальный ID для игрока
     static constexpr int FoodIdOffset = 1000;
    
-    // Ппиватные поля
+    // Приватные поля
     const int BORDER_TILE_ID = -2;
     const int PLAYER_TILE_ID = -1;
     const int FOOD_TILE_ID_BASE = 1000;

@@ -23,7 +23,6 @@ void Logger::Initialize(const std::string& filename) {
 /// <summary>
 /// Вывод сообщения в дебаг.лог
 /// </summary>
-/// <param name="message"></param>
 void Logger::Log(const std::string& message) {
     if (!isInitialized) {
         Initialize();

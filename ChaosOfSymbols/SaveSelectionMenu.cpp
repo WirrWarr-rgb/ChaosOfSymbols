@@ -42,7 +42,7 @@ SaveSelectionMenu::SaveSelectionMenu()
 
     std::vector<SaveInfo> existingSaves = m_saveSystem->GetAllSaves();
 
-    const int TOTAL_SLOTS = 5;
+    const int TOTAL_SLOTS = 10; // ИЗМЕНЕНО с 5 на 10
     m_saves.clear();
 
     for (int slot = 1; slot <= TOTAL_SLOTS; slot++) {
@@ -83,8 +83,8 @@ SaveSelectionMenu::SaveSelectionMenu()
     m_inputManager = std::make_unique<InputManager>();
 
     m_emptySaveActions = {
-        "Create",
-        "Cancel"
+        " - Create from template",
+        " - Cancel"
     };
 
     m_usedSaveActions = {
@@ -251,7 +251,7 @@ void SaveSelectionMenu::RenderSavesList() {
         }
     }
 
-    const int TOTAL_SLOTS = 5;
+    const int TOTAL_SLOTS = 10;
 
     for (int slot = 1; slot <= TOTAL_SLOTS; slot++) {
         SaveInfo saveForSlot;
@@ -690,7 +690,7 @@ void SaveSelectionMenu::SelectNextOption() {
         m_selectedActionIndex = (m_selectedActionIndex + 1) % actions.size();
     }
     else {
-        const int TOTAL_SLOTS = 5;
+        const int TOTAL_SLOTS = 10;
         int oldSlot = m_selectedSlot;
         m_selectedSlot = (m_selectedSlot % (TOTAL_SLOTS + 1)) + 1;
         Logger::Log("SaveSelectionMenu SelectNext - Slot: " + std::to_string(oldSlot) +
@@ -715,7 +715,7 @@ void SaveSelectionMenu::SelectPreviousOption() {
         m_selectedActionIndex = (m_selectedActionIndex - 1 + actions.size()) % actions.size();
     }
     else {
-        const int TOTAL_SLOTS = 5;
+        const int TOTAL_SLOTS = 10;
         int oldSlot = m_selectedSlot;
 
         if (m_selectedSlot == 1) {
@@ -772,8 +772,8 @@ void SaveSelectionMenu::ConfirmSelection() {
             m_needFullRedraw = true;
             Logger::Log("Cancelled actions for slot " + std::to_string(m_actionSlot));
         }
-        else if (selectedAction == "Create") {
-            ShowCreateOptionsForSlot(m_actionSlot);
+        else if (selectedAction == "Create from template") {
+            ShowTemplatesForSlot(m_actionSlot);
         }
         else if (selectedAction == "Play") {
             Logger::Log("SaveSelectionMenu Playing save slot " + std::to_string(m_actionSlot));
@@ -783,7 +783,7 @@ void SaveSelectionMenu::ConfirmSelection() {
             if (selectedSave.isEmpty) {
                 Logger::Log("ERROR: Cannot play empty save slot " + std::to_string(m_actionSlot));
             }
-            else if (m_saveSystem->LoadSave(selectedSave.gameMode, m_actionSlot)) {
+            else if (m_saveSystem->LoadSave(m_actionSlot)) {
                 m_shouldStartGame = true;
                 m_gameMode = selectedSave.gameMode;
                 Logger::Log("Save loaded successfully, starting game...");
@@ -791,23 +791,6 @@ void SaveSelectionMenu::ConfirmSelection() {
             else {
                 Logger::Log("ERROR: Failed to load save slot " + std::to_string(m_actionSlot));
             }
-        }
-        else if (selectedAction == "Create from template") {
-            ShowTemplatesForSlot(m_actionSlot);
-        }
-        else if (selectedAction == "Create custom world") {
-            m_worldEditor = std::make_unique<WorldEditor>(
-                EditorMode::CREATE_WORLD,
-                m_actionSlot,
-                GameMode::PROCEDURAL_GENERATION
-            );
-            m_worldEditor->Initialize();
-            m_currentState = SaveActionState::WORLD_EDITOR;
-            rlutil::cls();
-            m_needFullRedraw = true;
-            m_showActionsForSlot = false;
-            m_actionSlot = -1;
-            Logger::Log("Opening World Editor for slot " + std::to_string(m_actionSlot));
         }
         else if (selectedAction == "Delete") {
             Logger::Log("SaveSelectionMenu Deleting save slot " + std::to_string(m_actionSlot));
@@ -817,12 +800,13 @@ void SaveSelectionMenu::ConfirmSelection() {
                 return;
             }
 
-            if (m_saveSystem->DeleteSave(selectedSave.gameMode, m_actionSlot)) {
+            if (m_saveSystem->DeleteSave(m_actionSlot)) {
                 Logger::Log("Successfully deleted save slot " + std::to_string(m_actionSlot));
+
                 std::vector<SaveInfo> existingSaves = m_saveSystem->GetAllSaves();
                 m_saves.clear();
 
-                const int TOTAL_SLOTS = 5;
+                const int TOTAL_SLOTS = 10;
                 for (int slot = 1; slot <= TOTAL_SLOTS; slot++) {
                     bool slotExists = false;
                     SaveInfo slotSave;
@@ -866,7 +850,7 @@ void SaveSelectionMenu::ConfirmSelection() {
         }
     }
     else {
-        const int TOTAL_SLOTS = 5;
+        const int TOTAL_SLOTS = 10;
 
         if (m_selectedSlot == TOTAL_SLOTS + 1) {
             Logger::Log("SaveSelectionMenu Back selected - returning to main menu");
@@ -911,67 +895,6 @@ void SaveSelectionMenu::ShowCreateOptionsForSlot(int slot) {
     m_actionSlot = slot;
     m_selectedActionIndex = 0;
     m_needFullRedraw = true;
-
-    std::vector<std::string> tempEmptyActions = m_emptySaveActions;
-    m_emptySaveActions = createOptions;
-
-    Render();
-
-    bool choiceMade = false;
-    while (!choiceMade) {
-        ProcessInput();
-
-        if (!m_showActionsForSlot || m_actionSlot == -1) {
-            choiceMade = true;
-        }
-        else if (m_inputManager->IsMenuSelect()) {
-            if (m_selectedActionIndex == 0) { // Create from template
-                ShowTemplatesForSlot(slot);
-                choiceMade = true;
-            }
-            else if (m_selectedActionIndex == 1) { // Create custom world
-                m_worldEditor = std::make_unique<WorldEditor>(
-                    EditorMode::CREATE_WORLD,
-                    slot,
-                    GameMode::PROCEDURAL_GENERATION
-                );
-                m_worldEditor->Initialize();
-                m_currentState = SaveActionState::WORLD_EDITOR;
-                rlutil::cls();
-                m_needFullRedraw = true;
-                m_showActionsForSlot = false;
-                m_actionSlot = -1;
-                Logger::Log("Opening World Editor for slot " + std::to_string(slot));
-                choiceMade = true;
-            }
-            else if (m_selectedActionIndex == 2) { // Cancel
-                m_showActionsForSlot = false;
-                m_actionSlot = -1;
-                m_selectedActionIndex = 0;
-                m_needFullRedraw = true;
-                choiceMade = true;
-            }
-        }
-        else if (m_inputManager->IsMenuBack()) {
-            m_showActionsForSlot = false;
-            m_actionSlot = -1;
-            m_selectedActionIndex = 0;
-            m_needFullRedraw = true;
-            choiceMade = true;
-        }
-
-        std::this_thread::sleep_for(std::chrono::milliseconds(16));
-    }
-
-    m_emptySaveActions = tempEmptyActions;
-
-    if (!choiceMade) {
-        m_showActionsForSlot = prevShowActions;
-        m_actionSlot = prevActionSlot;
-        m_selectedActionIndex = prevActionIndex;
-    }
-
-    m_needFullRedraw = true;
 }
 
 void SaveSelectionMenu::ShowTemplatesForSlot(int slot) {
@@ -999,34 +922,26 @@ void SaveSelectionMenu::SelectTemplateForSave(int templateSlot) {
         return;
     }
 
-    // Важно: помечаем, что конфиг загружен из шаблона
     templateConfig.MarkAsLoadedFromSave();
 
     std::string saveName = templateConfig.GetWorldName() + " (from template)";
 
-    // Сначала создаем базовый сейв с world_gen.cfg
-    if (m_saveSystem->CreateNewSave(GameMode::PROCEDURAL_GENERATION, m_templateForSlot, saveName, templateConfig)) {
-        // Копируем ВСЕ файлы из шаблона
-        if (!m_saveSystem->CopyTemplateToSave(templateSlot, m_templateForSlot, GameMode::PROCEDURAL_GENERATION)) {
+    if (m_saveSystem->CreateNewSave(m_templateForSlot, saveName, templateConfig)) {
+        if (!m_saveSystem->CopyTemplateToSave(templateSlot, m_templateForSlot)) {
             Logger::Log("WARNING: Failed to copy all files from template");
         }
 
-        // ТЕПЕРЬ СОЗДАЕМ WORLD EDITOR С КОНФИГОМ ШАБЛОНА
-        // Это важно для инициализации правильных путей к еде
         m_worldEditor = std::make_unique<WorldEditor>(
             EditorMode::CREATE_WORLD,
             m_templateForSlot,
             GameMode::PROCEDURAL_GENERATION
         );
 
-        // Загружаем конфигурацию из шаблона в редактор
         m_worldEditor->LoadTemplateConfig(templateConfig);
 
-        // Теперь сохраняем конфигурацию через редактор
         m_worldEditor->SaveWorldConfiguration();
 
-        // Сохраняем все конфигурации (включая food.cfg)
-        std::string savePath = m_saveSystem->GetSaveSlotPath(GameMode::PROCEDURAL_GENERATION, m_templateForSlot);
+        std::string savePath = m_saveSystem->GetSaveSlotPath(m_templateForSlot);
         m_worldEditor->SaveAllConfigurations(savePath);
 
         Logger::Log("Created save from template " + std::to_string(templateSlot) +
@@ -1077,7 +992,7 @@ void SaveSelectionMenu::Reset() {
     std::vector<SaveInfo> existingSaves = m_saveSystem->GetAllSaves();
     m_saves.clear();
 
-    const int TOTAL_SLOTS = 5;
+    const int TOTAL_SLOTS = 10;
     for (int slot = 1; slot <= TOTAL_SLOTS; slot++) {
         bool slotExists = false;
         SaveInfo slotSave;
@@ -1140,7 +1055,7 @@ void SaveSelectionMenu::UpdateHelpForCurrentSelection() {
         }
     }
     else {
-        const int TOTAL_SLOTS = 5;
+        const int TOTAL_SLOTS = 10;
         if (m_selectedSlot <= TOTAL_SLOTS) {
             currentItemId = "save_slot_" + std::to_string(m_selectedSlot);
         }

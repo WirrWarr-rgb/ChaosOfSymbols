@@ -36,12 +36,10 @@ bool ConfigManager::Initialize() {
         m_previousTileIds.insert(pair.first);
     }
 
-    // Загружаем еду из дефолтного пути
     if (!m_foodManager->LoadFromFile()) {
         Logger::Log("WARNING: Failed to load initial food config");
     }
     else {
-        // Получаем все еды через GetAllFood() вместо GetFoodCount()
         const auto& allFoods = m_foodManager->GetAllFood();
         for (const Food* food : allFoods) {
             if (food) {
@@ -83,7 +81,6 @@ void ConfigManager::Update() {
 void ConfigManager::ReloadTiles() {
     Logger::Log("Reloading tile configurations...");
 
-    // Сохраняем текущие ID перед перезагрузкой
     std::unordered_set<int> currentTileIds;
     const auto& currentTiles = m_tileManager->GetAllTiles();
     for (const auto& pair : currentTiles) {
@@ -91,7 +88,6 @@ void ConfigManager::ReloadTiles() {
     }
 
     if (m_tileManager->LoadFromFile()) {
-        // Определяем, какие тайлы были удалены
         std::unordered_set<int> newTileIds;
         const auto& newTiles = m_tileManager->GetAllTiles();
         for (const auto& pair : newTiles) {
@@ -129,7 +125,6 @@ void ConfigManager::ReloadTiles() {
 void ConfigManager::ReloadFood() {
     Logger::Log("Reloading food configurations...");
 
-    // Загружаем из дефолтного пути
     if (m_foodManager->LoadFromFile()) {
         Logger::Log("Food configurations reloaded successfully");
         if (OnFoodChanged) {

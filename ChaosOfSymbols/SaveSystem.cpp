@@ -13,60 +13,35 @@ SaveSystem::SaveSystem() {
 }
 
 void SaveSystem::InitializeSaveDirectories() {
-    fs::create_directories(GetSavesDirectory(GameMode::PROCEDURAL_GENERATION));
-    fs::create_directories(GetSavesDirectory(GameMode::PRELOADED_MAPS));
+    fs::create_directories(BASE_SAVES_DIR);
 
-    for (int i = 1; i <= 5; i++) {
-        fs::create_directories(GetSaveSlotPath(GameMode::PROCEDURAL_GENERATION, i));
-        fs::create_directories(GetSaveSlotPath(GameMode::PRELOADED_MAPS, i));
+    for (int i = 1; i <= 10; i++) {
+        fs::create_directories(BASE_SAVES_DIR + "/slot" + std::to_string(i));
     }
 }
 
 std::vector<SaveInfo> SaveSystem::GetAllSaves() {
     std::vector<SaveInfo> allSaves;
 
-    auto proceduralSaves = GetSaves(GameMode::PROCEDURAL_GENERATION);
-    for (auto& save : proceduralSaves) {
-        if (!save.isEmpty) {
-            save.gameMode = GameMode::PROCEDURAL_GENERATION;
-            allSaves.push_back(save);
-        }
+    for (int slot = 1; slot <= 10; slot++) {
+        SaveInfo info = GetSaveInfo(slot);
+        info.gameMode = GameMode::PROCEDURAL_GENERATION;
+        allSaves.push_back(info);
     }
-
-    auto preloadedSaves = GetSaves(GameMode::PRELOADED_MAPS);
-    for (auto& save : preloadedSaves) {
-        if (!save.isEmpty) {
-            save.gameMode = GameMode::PRELOADED_MAPS;
-            allSaves.push_back(save);
-        }
-    }
-
-    std::sort(allSaves.begin(), allSaves.end(),
-        [](const SaveInfo& a, const SaveInfo& b) {
-            return a.slotNumber < b.slotNumber;
-        });
 
     Logger::Log("GetAllSaves: Found " + std::to_string(allSaves.size()) + " saves total");
     return allSaves;
 }
 
-std::vector<SaveInfo> SaveSystem::GetSaves(GameMode mode) {
-    std::vector<SaveInfo> saves;
-
-    for (int slot = 1; slot <= 5; slot++) {
-        SaveInfo info = GetSaveInfo(mode, slot);
-        info.gameMode = mode;
-        saves.push_back(info);
-    }
-
-    return saves;
+SaveInfo SaveSystem::GetSaveInfo(GameMode mode, int slot) const {
+    return GetSaveInfo(slot);
 }
 
-SaveInfo SaveSystem::GetSaveInfo(GameMode mode, int slot) const {
+SaveInfo SaveSystem::GetSaveInfo(int slot) const {
     SaveInfo info;
     info.slotNumber = slot;
-    info.savePath = GetSaveSlotPath(mode, slot);
-    info.gameMode = mode;
+    info.savePath = BASE_SAVES_DIR + "/slot" + std::to_string(slot);
+    info.gameMode = GameMode::PROCEDURAL_GENERATION;
 
     std::string infoFile = info.savePath + "/save_info.txt";
 
@@ -81,7 +56,7 @@ SaveInfo SaveSystem::GetSaveInfo(GameMode mode, int slot) const {
         }
     }
     else {
-        info.name = "Empty";
+        info.name = "";
         info.creationDate = "";
         info.lastPlayedDate = "";
         info.isEmpty = true;
@@ -91,32 +66,16 @@ SaveInfo SaveSystem::GetSaveInfo(GameMode mode, int slot) const {
 }
 
 SaveInfo SaveSystem::GetSaveInfoUnified(int slot) const {
-    SaveInfo proceduralInfo = GetSaveInfo(GameMode::PROCEDURAL_GENERATION, slot);
-    if (!proceduralInfo.isEmpty) {
-        return proceduralInfo;
-    }
-
-    SaveInfo preloadedInfo = GetSaveInfo(GameMode::PRELOADED_MAPS, slot);
-    if (!preloadedInfo.isEmpty) {
-        return preloadedInfo;
-    }
-
-    proceduralInfo.name = "Empty";
-    return proceduralInfo;
+    return GetSaveInfo(slot);
 }
 
 bool SaveSystem::SaveExistsAnywhere(int slot) const {
-    SaveInfo proceduralInfo = GetSaveInfo(GameMode::PROCEDURAL_GENERATION, slot);
-    if (!proceduralInfo.isEmpty) {
-        return true;
-    }
-
-    SaveInfo preloadedInfo = GetSaveInfo(GameMode::PRELOADED_MAPS, slot);
-    return !preloadedInfo.isEmpty;
+    SaveInfo info = GetSaveInfo(slot);
+    return !info.isEmpty;
 }
 
-bool SaveSystem::CreateNewSave(GameMode mode, int slot, const std::string& name, const WorldConfig& config) {
-    std::string savePath = GetSaveSlotPath(mode, slot);
+bool SaveSystem::CreateNewSave(int slot, const std::string& name, const WorldConfig& config) {
+    std::string savePath = BASE_SAVES_DIR + "/slot" + std::to_string(slot);
 
     fs::create_directories(savePath);
 
@@ -132,22 +91,17 @@ bool SaveSystem::CreateNewSave(GameMode mode, int slot, const std::string& name,
     infoFile << currentTime << "\n";
     infoFile.close();
 
-    // Сохраняем только world_gen.cfg, остальные файлы будут скопированы из шаблона
-    if (!SaveWorldConfig(mode, slot, config)) {
+    if (!SaveWorldConfig(slot, config)) {
         Logger::Log("ERROR: Failed to save world config for slot " + std::to_string(slot));
         return false;
     }
 
-    // НЕ сохраняем player.cfg, tiles.json и другие - они будут скопированы из шаблона
-    // при вызове CopyTemplateToSave()
-
-    Logger::Log("Successfully created new save: " + name + " in slot " + std::to_string(slot) +
-        " (mode: " + std::to_string(static_cast<int>(mode)) + ")");
+    Logger::Log("Successfully created new save: " + name + " in slot " + std::to_string(slot));
     return true;
 }
 
-bool SaveSystem::SaveWorldConfig(GameMode mode, int slot, const WorldConfig& config) {
-    std::string savePath = GetSaveSlotPath(mode, slot);
+bool SaveSystem::SaveWorldConfig(int slot, const WorldConfig& config) {
+    std::string savePath = BASE_SAVES_DIR + "/slot" + std::to_string(slot);
     std::string configPath = savePath + "/world_gen.cfg";
 
     std::stringstream content;
@@ -180,8 +134,8 @@ bool SaveSystem::SaveWorldConfig(GameMode mode, int slot, const WorldConfig& con
     return SaveConfigToFile(configPath, content.str());
 }
 
-bool SaveSystem::SavePlayerConfig(GameMode mode, int slot, const WorldConfig& config) {
-    std::string savePath = GetSaveSlotPath(mode, slot);
+bool SaveSystem::SavePlayerConfig(int slot, const WorldConfig& config) {
+    std::string savePath = GetSaveSlotPath(slot);
     std::string configPath = savePath + "/player.cfg";
 
     std::stringstream content;
@@ -198,11 +152,10 @@ bool SaveSystem::SavePlayerConfig(GameMode mode, int slot, const WorldConfig& co
     return SaveConfigToFile(configPath, content.str());
 }
 
-bool SaveSystem::SaveTilesConfig(GameMode mode, int slot, const WorldConfig& config) {
-    std::string savePath = GetSaveSlotPath(mode, slot);
+bool SaveSystem::SaveTilesConfig(int slot, const WorldConfig& config) {
+    std::string savePath = GetSaveSlotPath(slot);
     std::string configPath = savePath + "/world_spawn.cfg";
 
-    // Сохраняем правила спавна
     std::stringstream content;
     const auto& tileProbabilities = config.GetTileProbabilities();
     for (const auto& pair : tileProbabilities) {
@@ -215,16 +168,11 @@ bool SaveSystem::SaveTilesConfig(GameMode mode, int slot, const WorldConfig& con
         }
     }
 
-    bool saved = SaveConfigToFile(configPath, content.str());
-
-    // НЕ создаем tiles.json здесь - он должен быть скопирован из шаблона
-    // или создан в WorldEditor при редактировании
-
-    return saved;
+    return SaveConfigToFile(configPath, content.str());
 }
 
-bool SaveSystem::SaveAutomatonConfig(GameMode mode, int slot, const WorldConfig& config) {
-    std::string savePath = GetSaveSlotPath(mode, slot);
+bool SaveSystem::SaveAutomatonConfig(int slot, const WorldConfig& config) {
+    std::string savePath = GetSaveSlotPath(slot);
     std::string configPath = savePath + "/cellular_automaton.cfg";
 
     std::stringstream content;
@@ -242,9 +190,9 @@ bool SaveSystem::SaveAutomatonConfig(GameMode mode, int slot, const WorldConfig&
     return SaveConfigToFile(configPath, content.str());
 }
 
-WorldConfig SaveSystem::LoadWorldConfig(GameMode mode, int slot) {
+WorldConfig SaveSystem::LoadWorldConfig(int slot) {
     WorldConfig config;
-    std::string savePath = GetSaveSlotPath(mode, slot);
+    std::string savePath = GetSaveSlotPath(slot);
 
     std::ifstream worldFile(savePath + "/world_gen.cfg");
     if (worldFile.is_open()) {
@@ -293,14 +241,13 @@ bool SaveSystem::SaveConfigToFile(const std::string& filePath, const std::string
     return true;
 }
 
-bool SaveSystem::DeleteSave(GameMode mode, int slot) {
-    std::string savePath = GetSaveSlotPath(mode, slot);
+bool SaveSystem::DeleteSave(int slot) {
+    std::string savePath = GetSaveSlotPath(slot);
 
     try {
         if (fs::exists(savePath)) {
             uintmax_t removedCount = fs::remove_all(savePath);
             Logger::Log("Deleted save slot " + std::to_string(slot) +
-                " in mode " + std::to_string(static_cast<int>(mode)) +
                 ", removed " + std::to_string(removedCount) + " items");
             return true;
         }
@@ -315,27 +262,26 @@ bool SaveSystem::DeleteSave(GameMode mode, int slot) {
     return false;
 }
 
-bool SaveSystem::LoadSave(GameMode mode, int slot) {
-    SaveInfo info = GetSaveInfo(mode, slot);
+bool SaveSystem::LoadSave(int slot) {
+    SaveInfo info = GetSaveInfo(slot);
     if (info.isEmpty) {
         Logger::Log("ERROR: Cannot load empty save slot " + std::to_string(slot));
         return false;
     }
 
-    Logger::Log("Loading save from slot " + std::to_string(slot) +
-        " (mode: " + std::to_string(static_cast<int>(mode)) + ")");
+    Logger::Log("Loading save from slot " + std::to_string(slot));
 
-    m_loadedConfig = LoadWorldConfig(mode, slot);
+    m_loadedConfig = LoadWorldConfig(slot);
 
-    if (!LoadPlayerConfig(mode, slot)) {
+    if (!LoadPlayerConfig(slot)) {
         Logger::Log("WARNING: Failed to load player config, using defaults");
     }
 
-    if (!LoadTilesConfig(mode, slot)) {
+    if (!LoadTilesConfig(slot)) {
         Logger::Log("WARNING: Failed to load tiles config, using defaults");
     }
 
-    if (!LoadAutomatonConfig(mode, slot)) {
+    if (!LoadAutomatonConfig(slot)) {
         Logger::Log("WARNING: Failed to load automaton config, using defaults");
     }
 
@@ -352,22 +298,17 @@ bool SaveSystem::LoadSave(GameMode mode, int slot) {
 }
 
 bool SaveSystem::LoadSaveUnified(int slot) {
-    SaveInfo proceduralInfo = GetSaveInfo(GameMode::PROCEDURAL_GENERATION, slot);
-    if (!proceduralInfo.isEmpty) {
-        return LoadSave(GameMode::PROCEDURAL_GENERATION, slot);
-    }
-
-    SaveInfo preloadedInfo = GetSaveInfo(GameMode::PRELOADED_MAPS, slot);
-    if (!preloadedInfo.isEmpty) {
-        return LoadSave(GameMode::PRELOADED_MAPS, slot);
+    SaveInfo info = GetSaveInfo(slot);
+    if (!info.isEmpty) {
+        return LoadSave(slot);
     }
 
     Logger::Log("ERROR: Cannot load empty save slot " + std::to_string(slot));
     return false;
 }
 
-bool SaveSystem::LoadPlayerConfig(GameMode mode, int slot) {
-    std::string savePath = GetSaveSlotPath(mode, slot);
+bool SaveSystem::LoadPlayerConfig(int slot) {
+    std::string savePath = GetSaveSlotPath(slot);
     std::string configPath = savePath + "/player.cfg";
 
     return LoadConfigFromFile(configPath, [this](const std::string& key, const std::string& value) {
@@ -380,8 +321,8 @@ bool SaveSystem::LoadPlayerConfig(GameMode mode, int slot) {
         });
 }
 
-bool SaveSystem::LoadTilesConfig(GameMode mode, int slot) {
-    std::string savePath = GetSaveSlotPath(mode, slot);
+bool SaveSystem::LoadTilesConfig(int slot) {
+    std::string savePath = GetSaveSlotPath(slot);
     std::string configPath = savePath + "/world_spawn.cfg";
 
     std::ifstream file(configPath);
@@ -425,8 +366,8 @@ bool SaveSystem::LoadTilesConfig(GameMode mode, int slot) {
     return true;
 }
 
-bool SaveSystem::LoadAutomatonConfig(GameMode mode, int slot) {
-    std::string savePath = GetSaveSlotPath(mode, slot);
+bool SaveSystem::LoadAutomatonConfig(int slot) {
+    std::string savePath = GetSaveSlotPath(slot);
     std::string configPath = savePath + "/cellular_automaton.cfg";
 
     std::ifstream file(configPath);
@@ -488,12 +429,12 @@ bool SaveSystem::LoadConfigFromFile(const std::string& filePath, std::function<v
     return true;
 }
 
-bool SaveSystem::SaveGame(GameMode mode, int slot, const std::string& name) {
-    std::string savePath = GetSaveSlotPath(mode, slot);
+bool SaveSystem::SaveGame(int slot, const std::string& name) {
+    std::string savePath = GetSaveSlotPath(slot);
     std::ofstream infoFile(savePath + "/save_info.txt");
 
     if (infoFile.is_open()) {
-        SaveInfo existingInfo = GetSaveInfo(mode, slot);
+        SaveInfo existingInfo = GetSaveInfo(slot);
         std::string saveName = name.empty() ? existingInfo.name : name;
 
         infoFile << saveName << "\n";
@@ -506,17 +447,12 @@ bool SaveSystem::SaveGame(GameMode mode, int slot, const std::string& name) {
     return false;
 }
 
-std::string SaveSystem::GetSavesDirectory(GameMode mode) const {
-    std::string modeDir = (mode == GameMode::PROCEDURAL_GENERATION) ? PROCEDURAL_DIR : PRELOADED_DIR;
-    return BASE_SAVES_DIR + "/" + modeDir;
+std::string SaveSystem::GetSaveSlotPath(int slot) const {
+    return BASE_SAVES_DIR + "/slot" + std::to_string(slot);
 }
 
-std::string SaveSystem::GetSaveSlotPath(GameMode mode, int slot) const {
-    return GetSavesDirectory(mode) + "/slot" + std::to_string(slot);
-}
-
-bool SaveSystem::IsSaveSlotEmpty(GameMode mode, int slot) const {
-    return GetSaveInfo(mode, slot).isEmpty;
+bool SaveSystem::IsSaveSlotEmpty(int slot) const {
+    return GetSaveInfo(slot).isEmpty;
 }
 
 std::string SaveSystem::GetCurrentDateTime() const {
@@ -530,25 +466,9 @@ std::string SaveSystem::GetCurrentDateTime() const {
     return std::string(buffer);
 }
 
-bool SaveSystem::CopyDefaultConfigs(const std::string& sourceDir, const std::string& targetDir) {
-    try {
-        for (const auto& entry : fs::directory_iterator(sourceDir)) {
-            if (entry.is_regular_file()) {
-                fs::copy_file(entry.path(), targetDir + "/" + entry.path().filename().string(),
-                    fs::copy_options::overwrite_existing);
-            }
-        }
-        return true;
-    }
-    catch (const std::exception& e) {
-        std::cout << "Error copying configs: " << e.what() << std::endl;
-        return false;
-    }
-}
-
-bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mode) {
+bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot) {
     std::string templatePath = "templates/template" + std::to_string(templateSlot);
-    std::string savePath = GetSaveSlotPath(mode, saveSlot);
+    std::string savePath = BASE_SAVES_DIR + "/slot" + std::to_string(saveSlot);
 
     Logger::Log("=== COPYING TEMPLATE " + std::to_string(templateSlot) + " TO SAVE " + std::to_string(saveSlot) + " ===");
     Logger::Log("From: " + templatePath);
@@ -559,13 +479,9 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
         return false;
     }
 
-    // Создаем директорию сейва
     fs::create_directories(savePath);
 
-    // Копируем ВСЕ файлы из шаблона, включая food.cfg и tiles.json
     bool allCopied = true;
-    bool foodCopied = false;
-    bool tilesCopied = false;
 
     try {
         for (const auto& entry : fs::directory_iterator(templatePath)) {
@@ -574,9 +490,7 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
                 std::string sourceFile = templatePath + "/" + filename;
                 std::string destFile = savePath + "/" + filename;
 
-                // Обработка специальных файлов
                 if (filename == "template_info.txt") {
-                    // Читаем template_info.txt и создаем на его основе save_info.txt
                     std::ifstream templateInfoFile(sourceFile);
                     if (templateInfoFile.is_open()) {
                         std::string templateName, creationDate, modifiedDate;
@@ -585,7 +499,6 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
                         std::getline(templateInfoFile, modifiedDate);
                         templateInfoFile.close();
 
-                        // Создаем save_info.txt с правильными данными
                         std::ofstream saveInfoFile(savePath + "/save_info.txt");
                         if (saveInfoFile.is_open()) {
                             saveInfoFile << templateName << " (from template)\n";
@@ -596,50 +509,10 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
                         }
                     }
                 }
-                else if (filename == "food.cfg") {
-                    // Копируем food.cfg напрямую
-                    fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
-                    foodCopied = true;
-                    Logger::Log("Copied: " + filename + " (food configuration)");
-                }
-                else if (filename == "tiles.json") {
-                    // Копируем tiles.json напрямую
-                    fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
-                    tilesCopied = true;
-                    Logger::Log("Copied: " + filename + " (tiles configuration)");
-                }
                 else {
-                    // Копируем все остальные файлы
                     fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
                     Logger::Log("Copied: " + filename);
                 }
-            }
-        }
-
-        if (!foodCopied) {
-            Logger::Log("WARNING: food.cfg not found in template!");
-        }
-
-        if (!tilesCopied) {
-            Logger::Log("WARNING: tiles.json not found in template!");
-            // Если tiles.json нет, создаем минимальный
-            std::string tilesJsonPath = savePath + "/tiles.json";
-            std::ofstream tilesFile(tilesJsonPath);
-            if (tilesFile.is_open()) {
-                tilesFile << "[\n";
-                tilesFile << "  {\n";
-                tilesFile << "    \"id\": 0,\n";
-                tilesFile << "    \"name\": \"air\",\n";
-                tilesFile << "    \"character\": \" \",\n";
-                tilesFile << "    \"color\": 0,\n";
-                tilesFile << "    \"isPassable\": true,\n";
-                tilesFile << "    \"isDestructible\": false,\n";
-                tilesFile << "    \"damage\": 0\n";
-                tilesFile << "  }\n";
-                tilesFile << "]";
-                tilesFile.close();
-                Logger::Log("Created minimal tiles.json for save");
-                tilesCopied = true;
             }
         }
 
@@ -657,28 +530,5 @@ bool SaveSystem::CopyTemplateToSave(int templateSlot, int saveSlot, GameMode mod
         allCopied = false;
     }
 
-    return allCopied && foodCopied && tilesCopied;
-}
-
-bool SaveSystem::CopyTemplateTilesToSave(int templateSlot, int saveSlot, GameMode mode) {
-    std::string templatePath = "templates/template" + std::to_string(templateSlot);
-    std::string savePath = GetSaveSlotPath(mode, saveSlot);
-
-    std::string sourceFile = templatePath + "/tiles.json";
-    std::string destFile = savePath + "/tiles.json";
-
-    if (!fs::exists(sourceFile)) {
-        Logger::Log("WARNING: Template tiles.json not found: " + sourceFile);
-        return false;
-    }
-
-    try {
-        fs::copy_file(sourceFile, destFile, fs::copy_options::overwrite_existing);
-        Logger::Log("Copied tiles.json from template to save");
-        return true;
-    }
-    catch (const std::exception& e) {
-        Logger::Log("ERROR copying tiles.json: " + std::string(e.what()));
-        return false;
-    }
+    return allCopied;
 }

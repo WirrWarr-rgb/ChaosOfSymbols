@@ -146,7 +146,7 @@ void Game::StartGameFromSave(GameMode mode, int slot) {
         m_saveSystem = std::make_unique<SaveSystem>();
     }
 
-    if (!m_saveSystem->LoadSave(mode, slot)) {
+    if (!m_saveSystem->LoadSave(slot)) {
         Logger::Log("ERROR: Failed to load save slot " + std::to_string(slot));
         StartGameFromMenu();
         return;
@@ -173,8 +173,8 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
     }
 
     std::string saveSlot = std::to_string(m_mainMenu->GetSelectedSaveSlot());
-    std::string tilesPath = "saves/proceduralGeneration/slot" + saveSlot + "/tiles.json";
-    std::string foodPath = "saves/proceduralGeneration/slot" + saveSlot + "/food.cfg";
+    std::string tilesPath = "saves/slot" + saveSlot + "/tiles.json";
+    std::string foodPath = "saves/slot" + saveSlot + "/food.cfg";
 
 
     TileTypeManager* tileManager = m_configManager->GetTileManager();
@@ -183,17 +183,14 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
     tileManager->SetFilePath(tilesPath);
     if (!tileManager->LoadFromFile()) {
         Logger::Log("WARNING: Could not load tiles from save slot");
-        // Пробуем загрузить дефолтный
         tileManager->SetFilePath("config/tiles.json");
         if (!tileManager->LoadFromFile()) {
             Logger::Log("ERROR: Failed to load default tiles config");
         }
     }
 
-    // ВАЖНО: Загружаем конфигурацию еды из сейва
     if (!foodManager->LoadFromFile(foodPath)) {
         Logger::Log("ERROR: Could not load food config from save slot!");
-        // Попробуем загрузить дефолтную конфигурацию
         if (!foodManager->LoadFromFile("config/default_food.cfg")) {
             Logger::Log("ERROR: Failed to load default food config");
         }
@@ -225,13 +222,10 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
     m_playerHunger = config.GetPlayerMaxHunger();
     m_xpToNextLevel = 100;
 
-    // УДАЛИТЬ ЭТУ СТРОКУ - foodManager уже объявлен выше!
-    // FoodManager* foodManager = m_configManager->GetFoodManager();  // <-- ЭТО ДУБЛИРОВАНИЕ
-
     m_currentWorld = new World();
 
     m_currentWorld->SetTileManager(tileManager);
-    m_currentWorld->SetFoodManager(foodManager);  // Используем уже объявленный foodManager
+    m_currentWorld->SetFoodManager(foodManager);
     m_currentWorld->SetAutomatonEnabled(true);
     m_currentWorld->SetAutomatonConfig(m_configManager->GetAutomatonConfig());
 
@@ -440,7 +434,6 @@ void Game::ProcessInput() {
 /// Система голода и здоровья
 /// </summary>
 void Game::ConsumeEnergy() {
-    // Если голод отключен, ничего не делаем
     if (!m_playerConfig->IsHungerEnabled()) {
         return;
     }
@@ -451,7 +444,6 @@ void Game::ConsumeEnergy() {
             std::to_string(m_playerConfig->GetMaxHunger()));
     }
 
-    // Теперь проверяем ОБА условия: голод <= 0 И HP включено
     if (m_playerHunger <= 0 && m_playerConfig->IsHPEnabled()) {
         m_playerHP -= 2;
         Logger::Log("Starving! HP decreased: " + std::to_string(m_playerHP) + "/" +
@@ -510,12 +502,10 @@ void Game::CollectFood() {
 
         m_foodEaten[foodId]++;
 
-        // Восстанавливаем голод только если он включен
         if (m_playerConfig->IsHungerEnabled()) {
             m_playerHunger = min(m_playerConfig->GetMaxHunger(), m_playerHunger + food->GetHungerRestore());
         }
 
-        // Восстанавливаем HP только если оно включено
         if (m_playerConfig->IsHPEnabled()) {
             m_playerHP = min(m_playerConfig->GetMaxHP(), m_playerHP + food->GetHpRestore());
         }
@@ -525,7 +515,6 @@ void Game::CollectFood() {
 
         m_currentWorld->RemoveFoodAt(m_playerX, m_playerY);
 
-        // Обновите логирование с учетом включенных систем
         std::string logMsg = "Collected " + food->GetName();
         if (m_playerConfig->IsHungerEnabled()) {
             logMsg += " - Hunger: +" + std::to_string(food->GetHungerRestore());
@@ -818,12 +807,10 @@ void Game::CheckLevelUp() {
 
         m_xpToNextLevel = static_cast<int>(m_xpToNextLevel * m_playerConfig->GetXPMultiplier());
 
-        // Восстанавливаем HP только если оно включено
         if (m_playerConfig->IsHPEnabled()) {
             m_playerHP = m_playerConfig->GetMaxHP();
         }
 
-        // Восстанавливаем голод только если он включен
         if (m_playerConfig->IsHungerEnabled()) {
             m_playerHunger = m_playerConfig->GetMaxHunger();
         }

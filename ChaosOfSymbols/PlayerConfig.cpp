@@ -36,16 +36,13 @@ bool PlayerConfig::LoadConfig() {
     int linesProcessed = 0;
 
     while (std::getline(file, line)) {
-        // Пропускаем пустые строки и комментарии
         if (line.empty() || line[0] == ';' || line[0] == '#') {
             continue;
         }
 
-        // Убираем пробелы в начале и конце
         line.erase(0, line.find_first_not_of(" \t"));
         line.erase(line.find_last_not_of(" \t") + 1);
 
-        // Ищем разделитель '='
         size_t delimiterPos = line.find('=');
         if (delimiterPos == std::string::npos) {
             continue;
@@ -54,7 +51,6 @@ bool PlayerConfig::LoadConfig() {
         std::string key = line.substr(0, delimiterPos);
         std::string value = line.substr(delimiterPos + 1);
 
-        // Убираем пробелы вокруг ключа и значения
         key.erase(0, key.find_first_not_of(" \t"));
         key.erase(key.find_last_not_of(" \t") + 1);
         value.erase(0, value.find_first_not_of(" \t"));

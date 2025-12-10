@@ -163,8 +163,6 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
 
         m_tileTypes.clear();
 
-        // Создаем только системные тайлы, но с отрицательным ID для границы
-        // чтобы их можно было легко фильтровать
         RegisterTileType(TileType(-1, "air", ' ', 0, true, false, 0, 0, 0, 0));
         RegisterTileType(TileType(-2, "border", '#', 8, false, true, 0, 0, 0, 0));
 
@@ -244,7 +242,6 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
         RegisterTileType(TileType(0, "air", ' ', 0, true, false, 0, 0, 0, 0));
     }
 
-    // Ищем или создаем границу
     bool hasBorder = false;
     for (const auto& pair : m_tileTypes) {
         const TileType& tile = pair.second;
@@ -255,7 +252,6 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
     }
 
     if (!hasBorder) {
-        // Используем отрицательный ID для системной границы
         RegisterTileType(TileType(-1, "border", '#', 8, false, true, 0, 0, 0, 0));
     }
 
@@ -350,7 +346,6 @@ void TileTypeManager::RegisterTileType(const TileType& tileType) {
 bool TileTypeManager::RemoveTileType(int id) {
     auto it = m_tileTypes.find(id);
     if (it != m_tileTypes.end()) {
-        // Не позволяем удалять системные тайлы
         if (id == 0 || id == -1 || id == 2) {
             Logger::Log("ERROR: Cannot delete system tile with ID " + std::to_string(id));
             return false;

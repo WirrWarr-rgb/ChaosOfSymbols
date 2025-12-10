@@ -792,7 +792,6 @@ void WorldTemplateMenu::CreateNewTemplate() {
 
     int slotToUse = m_actionSlot;
 
-    // Проверяем, есть ли уже шаблон в этом слоте
     TemplateInfo existingTemplate = m_templateSystem->GetTemplateInfo(slotToUse);
 
     if (!existingTemplate.isEmpty) {
@@ -830,9 +829,6 @@ void WorldTemplateMenu::CreateNewTemplate() {
 void WorldTemplateMenu::EditTemplate(int slot) {
     Logger::Log("Editing template in slot " + std::to_string(slot));
 
-    // НЕ очищаем директорию при редактировании существующего шаблона!
-    // m_templateSystem->ClearTemplateDirectory(slot); // УБЕРИТЕ ЭТУ СТРОКУ
-
     m_worldEditor = std::make_unique<WorldEditor>(
         EditorMode::CREATE_TEMPLATE,
         slot
@@ -841,7 +837,7 @@ void WorldTemplateMenu::EditTemplate(int slot) {
     WorldConfig templateConfig;
     if (m_templateSystem->LoadTemplate(slot, templateConfig)) {
         Logger::Log("Loaded template configuration");
-        m_worldEditor->LoadTemplateConfig(templateConfig); // Передаем загруженную конфигурацию
+        m_worldEditor->LoadTemplateConfig(templateConfig);
     }
     else {
         Logger::Log("WARNING: Could not load existing template config, starting fresh");

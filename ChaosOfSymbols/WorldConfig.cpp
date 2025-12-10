@@ -49,15 +49,6 @@ bool WorldConfig::LoadConfig(bool forceReload) {
         return true;
     }
 
-    // УБИРАЕМ эту часть - она не нужна, так как GetEffectiveSeed() сам решит
-    // if (m_generationMode == WorldGenerationMode::RANDOM) {
-    //     m_seed = static_cast<int>(time(nullptr));
-    //     Logger::Log("Using random seed: " + std::to_string(m_seed));
-    // }
-    // else if (m_generationMode == WorldGenerationMode::SEEDED) {
-    //     Logger::Log("Using configured seed: " + std::to_string(m_seed));
-    // }
-
     Logger::Log("World config loaded successfully: " +
         std::to_string(m_width) + "x" + std::to_string(m_height) +
         ", seed: " + std::to_string(m_seed) +
@@ -159,7 +150,6 @@ bool WorldConfig::SaveToDirectory(const std::string& directory) const {
         Logger::Log("Created directory: " + directory);
     }
 
-    // Сохраняем основной конфиг
     std::string worldConfigPath = directory + "/world_gen.cfg";
     std::ofstream worldFile(worldConfigPath);
 
@@ -235,7 +225,6 @@ void WorldConfig::FromEditorConfig(const WorldConfig& editorConfig) {
     m_enableEnemies = editorConfig.m_enableEnemies;
     m_enemySpawnRate = editorConfig.m_enemySpawnRate;
 
-    // Обновляем spawnRules из tileProbabilities
     m_spawnRules.clear();
     for (const auto& pair : m_tileProbabilities) {
         SpawnRule rule;
@@ -267,7 +256,6 @@ WorldConfig WorldConfig::ToEditorConfig() const {
     editorConfig.m_enableEnemies = m_enableEnemies;
     editorConfig.m_enemySpawnRate = m_enemySpawnRate;
 
-    // Копируем spawnRules в tileProbabilities
     for (const auto& pair : m_spawnRules) {
         editorConfig.m_tileProbabilities[pair.first] = pair.second.zoneProbabilities;
     }
@@ -303,14 +291,13 @@ void WorldConfig::CalculateSpawnRulesFromTiles(TileTypeManager* tileManager) {
 
     const auto& allTiles = tileManager->GetAllTiles();
 
-    // Рассчитываем суммарные вероятности для каждой зоны
     std::unordered_map<char, std::vector<int>> zoneProbabilities;
 
     for (const auto& pair : allTiles) {
         const TileType& tile = pair.second;
         char character = tile.GetCharacter();
 
-        if (character == ' ') continue; // Пропускаем воздух
+        if (character == ' ') continue;
 
         std::vector<int> probs = {
             tile.GetLowlandProbability(),
@@ -326,16 +313,13 @@ void WorldConfig::CalculateSpawnRulesFromTiles(TileTypeManager* tileManager) {
             "%, M:" + std::to_string(probs[2]) + "%");
     }
 
-    // Преобразуем в SpawnRule и сохраняем
     for (const auto& pair : zoneProbabilities) {
         char character = pair.first;
         const std::vector<int>& probs = pair.second;
 
-        // Создаем SpawnRule
         SpawnRule rule;
         rule.character = character;
 
-        // Конвертируем int в float
         std::vector<float> floatProbs;
         for (int prob : probs) {
             floatProbs.push_back(static_cast<float>(prob));

@@ -45,13 +45,11 @@ bool RuleParser::parseCondition(const std::string& condition, const std::unorder
     size_t bracketEnd = trimmed.find("']", bracketStart);
     if (bracketEnd == std::string::npos) return false;
 
-    char tileChar = trimmed[bracketStart + 7]; // после "count['"
+    char tileChar = trimmed[bracketStart + 7];
     std::string rest = trimmed.substr(bracketEnd + 2);
 
-    // Убираем пробелы
     rest.erase(std::remove(rest.begin(), rest.end(), ' '), rest.end());
 
-    // Парсим оператор и значение
     std::string op;
     std::string valueStr;
 
@@ -86,8 +84,6 @@ bool RuleParser::parseCondition(const std::string& condition, const std::unorder
 /// <summary>
 /// Загружает правила клеточного автомата из конфигурационного файла
 /// </summary>
-/// <param name="filename"></param>
-/// <returns></returns>
 bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
     std::ifstream file(filename);
     if (!file.is_open()) {
@@ -118,9 +114,7 @@ bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
 
         line.erase(line.find_last_not_of(" \t") + 1);
 
-        // Если строка состоит из одного символа - это новый тайл
         if (line.length() == 1) {
-            // Сохраняем предыдущее правило, если оно было
             if (currentTile != '\0' && hasTileDefinition) {
                 m_rules[currentTile] = currentRule;
                 Logger::Log("DEBUG: Saved rule for tile '" + std::string(1, currentTile) + "'");
@@ -165,7 +159,6 @@ bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
         }
     }
 
-    // Сохраняем последнее правило после окончания файла
     if (currentTile != '\0' && hasTileDefinition) {
         m_rules[currentTile] = currentRule;
         Logger::Log("DEBUG: Saved final rule for tile '" + std::string(1, currentTile) + "'");
@@ -174,7 +167,6 @@ bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
     file.close();
     LogRulesSummary();
 
-    // Дополнительная отладочная информация
     Logger::Log("DEBUG: Total rules loaded: " + std::to_string(m_rules.size()));
     for (const auto& pair : m_rules) {
         Logger::Log("DEBUG: Rule for '" + std::string(1, pair.first) + "' is in map");

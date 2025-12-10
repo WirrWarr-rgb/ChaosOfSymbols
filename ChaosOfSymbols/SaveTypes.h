@@ -24,14 +24,16 @@ struct SaveInfo {
             return "Empty";
         }
 
-        std::string modePrefix = "";
-        switch (gameMode) {
-        case GameMode::PROCEDURAL_GENERATION: modePrefix = "[Procedural] "; break;
-        case GameMode::PRELOADED_MAPS: modePrefix = "[Preloaded] "; break;
-        case GameMode::FROM_TEMPLATE: modePrefix = "[Template] "; break;
+        std::string display = std::to_string(slotNumber) + ". " + name + ": ";
+
+        if (!creationDate.empty()) {
+            display += creationDate;
         }
 
-        return modePrefix + name + " (" + creationDate +
-            (lastPlayedDate.empty() ? "" : " - " + lastPlayedDate) + ")";
+        if (!lastPlayedDate.empty() && lastPlayedDate != creationDate) {
+            display += " - " + lastPlayedDate;
+        }
+
+        return display;
     }
 };

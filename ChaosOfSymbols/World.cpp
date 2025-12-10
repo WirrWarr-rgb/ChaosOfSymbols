@@ -87,7 +87,6 @@ void World::GenerateRandomWorld() {
 
     m_map.resize(m_height, std::vector<int>(m_width, 0));
 
-    // ВАЖНО: Используем GetEffectiveSeed(), который сам решит, какой seed использовать
     int currentSeed = m_config.GetEffectiveSeed();
 
     m_noiseGenerator.SetSeed(currentSeed);
@@ -216,8 +215,6 @@ void World::GenerateBaseTerrain() {
 
     if (m_config.GetAllSpawnRules().empty()) {
         Logger::Log("No spawn rules found, calculating from tiles...");
-        // Нужно иметь доступ к WorldConfig для вызова CalculateSpawnRulesFromTiles
-        // Или делаем это в WorldConfig перед генерацией
     }
 
     const auto& spawnRules = m_config.GetAllSpawnRules();
@@ -268,7 +265,6 @@ void World::GenerateBaseTerrain() {
                 zone = 2; // Высокая зона
             }
 
-            // Выбираем тайл на основе зоны
             char selectedTile = SelectTileByZone(zone, spawnRules, x, y);
             int selectedTileId = FindTileIdByCharacter(selectedTile);
 
@@ -368,12 +364,10 @@ char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>
         std::vector<std::pair<char, int>> tileProbabilities;
         const auto& allTiles = m_tileManager->GetAllTiles();
 
-        // Собираем все тайлы с вероятностями для данной зоны
         for (const auto& pair : allTiles) {
             const TileType& tile = pair.second;
             char character = tile.GetCharacter();
 
-            // Проверяем, есть ли правило спавна для этого тайла
             auto ruleIt = spawnRules.find(character);
             if (ruleIt != spawnRules.end()) {
                 const SpawnRule& rule = ruleIt->second;
@@ -393,7 +387,6 @@ char World::SelectTileByZone(int zone, const std::unordered_map<char, SpawnRule>
             }
 
             if (totalProbability > 0) {
-                // ИСПРАВЛЕНО: используем GetEffectiveSeed() вместо GetSeed()
                 unsigned int hash = (x * 73856093) ^ (y * 19349663) ^ m_config.GetEffectiveSeed();
                 int randomValue = hash % totalProbability;
 
@@ -745,7 +738,6 @@ void World::SpawnRandomFood(int count) {
     Logger::Log("Attempting to spawn " + std::to_string(count) +
         " food items using current food manager");
 
-    // Проверяем, сколько еды доступно в менеджере
     const auto& allFoods = m_foodManager->GetAllFood();
     Logger::Log("Food manager has " + std::to_string(allFoods.size()) + " food types");
 

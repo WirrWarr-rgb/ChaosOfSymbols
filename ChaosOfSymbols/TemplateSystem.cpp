@@ -139,7 +139,6 @@ bool TemplateSystem::LoadTemplate(int slot, WorldConfig& config) {
     try {
         Logger::Log("Loading template from slot " + std::to_string(slot));
 
-        // Загружаем конфиги
         if (!LoadWorldConfig(slot, config)) {
             Logger::Log("WARNING: Failed to load world config from template, using defaults");
         }
@@ -160,11 +159,9 @@ bool TemplateSystem::LoadTemplate(int slot, WorldConfig& config) {
             Logger::Log("WARNING: Failed to load food config from template, using defaults");
         }
 
-        // Проверяем существование tiles.json
         std::string tilesJsonPath = templatePath + "/tiles.json";
         if (!fs::exists(tilesJsonPath)) {
             Logger::Log("WARNING: tiles.json not found in template: " + tilesJsonPath);
-            // Создаем минимальный tiles.json
             std::ofstream tilesFile(tilesJsonPath);
             if (tilesFile.is_open()) {
                 tilesFile << "[\n";
