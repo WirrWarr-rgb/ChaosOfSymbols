@@ -42,6 +42,12 @@ struct CellRule {
 
 class CellularAutomatonConfig {
 public:
+    // Конструктор
+    CellularAutomatonConfig() = default;
+    explicit CellularAutomatonConfig(const std::string& configPath) {
+        LoadFromFile(configPath);
+    }
+
     // Публичные методы
     bool LoadFromFile(const std::string& filename);
     void LogRulesSummary() const;

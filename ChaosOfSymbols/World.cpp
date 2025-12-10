@@ -501,7 +501,6 @@ char World::FindTileByTerrainType(const std::string& terrainType, const std::uno
         }
     }
 
-    // Fallback: возвращаем первый символ из правил
     return spawnRules.empty() ? '?' : spawnRules.begin()->first;
 }
 
@@ -509,13 +508,13 @@ char World::FindTileByTerrainType(const std::string& terrainType, const std::uno
 /// Применение правил клеточного автомата для изменения мира
 /// </summary>
 void World::UpdateCellularAutomaton() {
-    if (!m_automatonEnabled || !m_tileManager || !m_automatonConfig) {
-        Logger::Log("Cellular automaton disabled or no config");
+    if (!m_automatonEnabled || !m_tileManager) {
+        Logger::Log("Cellular automaton disabled or no tile manager");
         return;
     }
 
-    if (m_automatonConfig->GetAllRules().empty()) {
-        Logger::Log("ERROR: No cellular automaton rules available!");
+    if (!m_automatonConfig) {
+        Logger::Log("No cellular automaton config available - skipping");
         return;
     }
 
@@ -524,6 +523,11 @@ void World::UpdateCellularAutomaton() {
     int deaths = 0;
     int births = 0;
     int naturalDeaths = 0;
+    int skipped = 0;
+
+    int emptyTileId = FindTileIdByCharacter(' ');
+    Logger::Log("Empty tile ID: " + std::to_string(emptyTileId));
+    Logger::Log("Empty tile char: '" + std::string(1, GetTileCharacter(emptyTileId)) + "'");
 
     for (int y = 1; y < m_height - 1; y++) {
         for (int x = 1; x < m_width - 1; x++) {
@@ -531,30 +535,31 @@ void World::UpdateCellularAutomaton() {
                 continue;
             }
 
+            bool isEmpty = (m_map[y][x] == emptyTileId);
             char currentChar = GetTileCharacter(m_map[y][x]);
             const CellRule* rule = m_automatonConfig->GetRule(currentChar);
             auto neighborCounts = CountNeighbors(x, y, m_map);
 
-            if (m_map[y][x] != 0 && rule && rule->deathRule) {
-                bool shouldDie = rule->deathRule->evaluate(neighborCounts);
-                if (shouldDie) {
-                    newMap[y][x] = 0;
-                    changed = true;
-                    deaths++;
-                    naturalDeaths++;
-                    if (naturalDeaths <= 3) {
-                        Logger::Log("NATURAL DEATH at " + std::to_string(x) + "," + std::to_string(y) +
-                            " - '" + std::string(1, currentChar) + "'");
+            if (!isEmpty) {
+                if (rule && rule->deathRule && !rule->deathRule->getRuleString().empty()) {
+                    bool shouldDie = rule->deathRule->evaluate(neighborCounts);
+                    if (shouldDie) {
+                        newMap[y][x] = emptyTileId;
+                        changed = true;
+                        deaths++;
+                        naturalDeaths++;
+                        if (naturalDeaths <= 3) {
+                            Logger::Log("NATURAL DEATH at " + std::to_string(x) + "," + std::to_string(y) +
+                                " - '" + std::string(1, currentChar) + "'");
+                        }
+                        continue;
                     }
-                    continue;
                 }
-            }
 
-            if (m_map[y][x] != 0) {
-                if (rule && rule->survivalRule) {
+                if (rule && rule->survivalRule && !rule->survivalRule->getRuleString().empty()) {
                     bool shouldSurvive = rule->survivalRule->evaluate(neighborCounts);
                     if (!shouldSurvive) {
-                        newMap[y][x] = 0;
+                        newMap[y][x] = emptyTileId;
                         changed = true;
                         deaths++;
                     }
@@ -562,19 +567,28 @@ void World::UpdateCellularAutomaton() {
             }
             else {
                 const auto& allRules = m_automatonConfig->GetAllRules();
+                bool born = false;
+
                 for (auto it = allRules.begin(); it != allRules.end(); ++it) {
                     char tileChar = it->first;
                     const CellRule& birthRule = it->second;
 
-                    if (birthRule.birthRule && birthRule.birthRule->evaluate(neighborCounts)) {
-                        int newTileId = FindTileIdByCharacter(tileChar);
-                        if (newTileId != -1) {
-                            newMap[y][x] = newTileId;
-                            changed = true;
-                            births++;
-                            break;
+                    if (birthRule.birthRule && !birthRule.birthRule->getRuleString().empty()) {
+                        if (birthRule.birthRule->evaluate(neighborCounts)) {
+                            int newTileId = FindTileIdByCharacter(tileChar);
+                            if (newTileId != -1) {
+                                newMap[y][x] = newTileId;
+                                changed = true;
+                                births++;
+                                born = true;
+                                break;
+                            }
                         }
                     }
+                }
+
+                if (!born) {
+                    skipped++;
                 }
             }
         }
@@ -583,7 +597,11 @@ void World::UpdateCellularAutomaton() {
     if (changed) {
         m_map = newMap;
         Logger::Log("Cellular automaton: " + std::to_string(births) + " births, " +
-            std::to_string(deaths) + " deaths (" + std::to_string(naturalDeaths) + " natural)");
+            std::to_string(deaths) + " deaths (" + std::to_string(naturalDeaths) + " natural)" +
+            ", skipped: " + std::to_string(skipped));
+    }
+    else {
+        Logger::Log("Cellular automaton: no changes");
     }
 
     Logger::Log("=== CELLULAR AUTOMATON UPDATE COMPLETE ===");

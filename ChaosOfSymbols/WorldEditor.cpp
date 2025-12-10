@@ -1502,7 +1502,7 @@ void WorldEditor::DeleteSelectedTile() {
 
     int tileId = m_availableTileIds[m_selectedTileIndex];
 
-    if (tileId == 0 || tileId == -1 || tileId == 2) {
+    if (tileId == 0 || tileId == -1 || tileId == -2) {
         Logger::Log("Cannot delete system tiles (air/border)");
         return;
     }
@@ -4345,7 +4345,6 @@ void WorldEditor::HandleFoodSymbolInput() {
             if (i >= 'A' && i <= 'Z') continue;
             if (i >= 'a' && i <= 'z') continue;
 
-            // Проверяем, не обработан ли уже этот символ через специальные коды
             bool isSpecial = false;
             for (const auto& keyPair : specialKeys) {
                 if (keyPair.first == VK_SPACE && i == ' ') isSpecial = true;

@@ -174,6 +174,30 @@ bool WorldConfig::SaveToDirectory(const std::string& directory) const {
     worldFile << "EnableEnemies=" << (m_enableEnemies ? "true" : "false") << "\n";
     worldFile << "EnemySpawnRate=" << m_enemySpawnRate << "\n";
 
+    std::string srcAutomatonPath = "config/cellular_automaton.cfg";
+    std::string dstAutomatonPath = directory + "/cellular_automaton.cfg";
+
+    if (fs::exists(srcAutomatonPath)) {
+        std::ifstream src(srcAutomatonPath, std::ios::binary);
+        std::ofstream dst(dstAutomatonPath, std::ios::binary);
+        if (src && dst) {
+            dst << src.rdbuf();
+            Logger::Log("Copied cellular automaton config to save directory");
+        }
+    }
+
+    std::string srcTilesPath = "config/tiles.json";
+    std::string dstTilesPath = directory + "/tiles.json";
+
+    if (fs::exists(srcTilesPath)) {
+        std::ifstream src(srcTilesPath, std::ios::binary);
+        std::ofstream dst(dstTilesPath, std::ios::binary);
+        if (src && dst) {
+            dst << src.rdbuf();
+            Logger::Log("Copied tiles.json to save directory");
+        }
+    }
+
     if (!m_survivalRules.empty()) {
         worldFile << "SurvivalRules=" << m_survivalRules << "\n";
     }

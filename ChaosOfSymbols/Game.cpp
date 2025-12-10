@@ -125,7 +125,6 @@ void Game::RunMainMenu() {
         }
         else {
             Logger::Log("Starting NEW game from menu selection...");
-            StartGameFromMenu();
         }
         m_mainMenu->ResetStartFlags();
     }
@@ -148,7 +147,6 @@ void Game::StartGameFromSave(GameMode mode, int slot) {
 
     if (!m_saveSystem->LoadSave(slot)) {
         Logger::Log("ERROR: Failed to load save slot " + std::to_string(slot));
-        StartGameFromMenu();
         return;
     }
 
@@ -164,48 +162,26 @@ void Game::StartGameFromSave(GameMode mode, int slot) {
 
 void Game::LoadWorldFromSave(const WorldConfig& config) {
     Logger::Log("Loading world from save configuration...");
-    Logger::Log("Starting game from save at: " + Logger::GetTickCount());
 
-    m_configManager = std::make_unique<ConfigManager>();
+    std::string saveSlot = std::to_string(m_mainMenu->GetSelectedSaveSlot());
+    std::string savePath = "saves/slot" + saveSlot + "/";
+
+    if (!fs::exists(savePath)) {
+        Logger::Log("ERROR: Save directory doesn't exist: " + savePath);
+        savePath = "config/";
+    }
+
+    Logger::Log("Using save path: " + savePath);
+
+    m_configManager = std::make_unique<ConfigManager>(savePath);
     if (!m_configManager->Initialize()) {
-        Logger::Log("ERROR: Failed to initialize config manager!");
+        Logger::Log("ERROR: Failed to initialize config manager from save!");
         return;
     }
 
-    std::string saveSlot = std::to_string(m_mainMenu->GetSelectedSaveSlot());
-    std::string tilesPath = "saves/slot" + saveSlot + "/tiles.json";
-    std::string foodPath = "saves/slot" + saveSlot + "/food.cfg";
-
-
     TileTypeManager* tileManager = m_configManager->GetTileManager();
     FoodManager* foodManager = m_configManager->GetFoodManager();
-
-    tileManager->SetFilePath(tilesPath);
-    if (!tileManager->LoadFromFile()) {
-        Logger::Log("WARNING: Could not load tiles from save slot");
-        tileManager->SetFilePath("config/tiles.json");
-        if (!tileManager->LoadFromFile()) {
-            Logger::Log("ERROR: Failed to load default tiles config");
-        }
-    }
-
-    if (!foodManager->LoadFromFile(foodPath)) {
-        Logger::Log("ERROR: Could not load food config from save slot!");
-        if (!foodManager->LoadFromFile("config/default_food.cfg")) {
-            Logger::Log("ERROR: Failed to load default food config");
-        }
-    }
-
-    Logger::Log("Loaded " + std::to_string(tileManager->GetAllTiles().size()) +
-        " tiles and " + std::to_string(foodManager->GetAllFood().size()) +
-        " food items from slot " + saveSlot);
-
     m_playerConfig = m_configManager->GetPlayerConfig();
-
-    m_playerConfig->SetMaxHP(config.GetPlayerMaxHP());
-    m_playerConfig->SetMaxHunger(config.GetPlayerMaxHunger());
-    m_playerConfig->SetHPEnabled(config.GetEnableHP());
-    m_playerConfig->SetHungerEnabled(config.GetEnableHunger());
 
     m_playerX = config.GetPlayerStartX();
     m_playerY = config.GetPlayerStartY();
@@ -218,12 +194,11 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
     if (m_playerX < 0) m_playerX = 1;
     if (m_playerY < 0) m_playerY = 1;
 
-    m_playerHP = config.GetPlayerMaxHP();
-    m_playerHunger = config.GetPlayerMaxHunger();
+    m_playerHP = m_playerConfig->GetMaxHP();
+    m_playerHunger = m_playerConfig->GetMaxHunger();
     m_xpToNextLevel = 100;
 
     m_currentWorld = new World();
-
     m_currentWorld->SetTileManager(tileManager);
     m_currentWorld->SetFoodManager(foodManager);
     m_currentWorld->SetAutomatonEnabled(true);
@@ -246,8 +221,6 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
 
         worldConfig->SetMapFilePath("");
 
-        worldConfig->MarkAsLoadedFromSave();
-
         auto& spawnRules = const_cast<std::unordered_map<char, SpawnRule>&>(worldConfig->GetAllSpawnRules());
         spawnRules.clear();
 
@@ -257,21 +230,13 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
             rule.zoneProbabilities = pair.second;
             spawnRules[pair.first] = rule;
         }
-
-        Logger::Log("World config set from save: " +
-            std::to_string(worldWidth) + "x" + std::to_string(worldHeight) +
-            ", seed: " + std::to_string(config.GetSeed()) +
-            ", mode: " + (config.GetRandomGeneration() ? "RANDOM" : "SEEDED"));
     }
 
     Logger::Log("Generating world from save configuration...");
     m_currentWorld->GenerateFromConfig();
 
     m_renderSystem = new RenderSystem(tileManager);
-
-    int totalWorldWidth = m_currentWorld->GetTotalWidth();
-    int totalWorldHeight = m_currentWorld->GetTotalHeight();
-    m_renderSystem->SetScreenSize(totalWorldWidth, totalWorldHeight);
+    m_renderSystem->SetScreenSize(m_currentWorld->GetTotalWidth(), m_currentWorld->GetTotalHeight());
 
     EnsureValidPlayerPosition();
 
@@ -280,66 +245,6 @@ void Game::LoadWorldFromSave(const WorldConfig& config) {
     m_configManager->OnAutomatonRulesChanged = [this]() { this->OnAutomatonRulesChanged(); };
 
     Logger::Log("World loaded successfully from save");
-    Logger::Log("World size: " + std::to_string(worldWidth) + "x" + std::to_string(worldHeight));
-    Logger::Log("Render system size: " + std::to_string(totalWorldWidth) + "x" + std::to_string(totalWorldHeight));
-    Logger::Log("Player position: " + std::to_string(m_playerX) + "," + std::to_string(m_playerY));
-}
-
-void Game::StartGameFromMenu() {
-    Logger::Log("Starting game from main menu...");
-
-    SetDefaultConsoleSize();
-
-    m_configManager = std::make_unique<ConfigManager>();
-    if (!m_configManager->Initialize()) {
-        Logger::Log("ERROR: Failed to initialize config manager!");
-        return;
-    }
-
-    m_playerConfig = m_configManager->GetPlayerConfig();
-    m_playerX = m_playerConfig->GetDefaultPlayerX();
-    m_playerY = m_playerConfig->GetDefaultPlayerY();
-    m_playerHP = m_playerConfig->GetMaxHP();
-    m_playerHunger = m_playerConfig->GetMaxHunger();
-    m_xpToNextLevel = m_playerConfig->GetBaseXP();
-
-    m_configManager->OnTilesChanged = [this]() { this->OnTilesChanged(); };
-    m_configManager->OnFoodChanged = [this]() { this->OnFoodChanged(); };
-    m_configManager->OnAutomatonRulesChanged = [this]() { this->OnAutomatonRulesChanged(); };
-
-    TileTypeManager* tileManager = m_configManager->GetTileManager();
-    FoodManager* foodManager = m_configManager->GetFoodManager();
-
-    m_currentWorld = new World();
-    m_currentWorld->SetTileManager(tileManager);
-    m_currentWorld->SetFoodManager(foodManager);
-    m_currentWorld->SetAutomatonEnabled(true);
-    m_currentWorld->SetAutomatonConfig(m_configManager->GetAutomatonConfig());
-
-    m_renderSystem = new RenderSystem(tileManager);
-
-    auto gameMode = m_mainMenu->GetSelectedGameMode();
-    if (gameMode == MainMenuOption::PLAY_PROCEDURAL) {
-        m_currentWorld->GenerateFromConfig();
-        Logger::Log("Started game with procedural generation");
-    }
-    else {
-        m_currentWorld->GenerateFromConfig();
-        Logger::Log("Started game with preloaded map (placeholder)");
-    }
-
-    m_renderSystem->SetScreenSize(m_currentWorld->GetTotalWidth(), m_currentWorld->GetTotalHeight());
-
-    if (m_playerX >= m_currentWorld->GetWidth() || m_playerY >= m_currentWorld->GetHeight()) {
-        m_playerX = (m_currentWorld->GetWidth() / 2 > 1) ? m_currentWorld->GetWidth() / 2 : 1;
-        m_playerY = (m_currentWorld->GetHeight() / 2 > 1) ? m_currentWorld->GetHeight() / 2 : 1;
-    }
-    EnsureValidPlayerPosition();
-
-    m_inMainMenu = false;
-    m_renderSystem->ClearScreen();
-
-    Logger::Log("=== GAME STARTED FROM MAIN MENU ===");
 }
 
 /// <summary>

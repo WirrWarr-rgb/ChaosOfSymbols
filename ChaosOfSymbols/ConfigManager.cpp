@@ -1,7 +1,11 @@
 #include "ConfigManager.h"
 #include "Logger.h"
+#include <filesystem>
 
-ConfigManager::ConfigManager() : m_initialized(false) {
+namespace fs = std::filesystem;
+
+ConfigManager::ConfigManager(const std::string& saveSlotPath)
+    : m_initialized(false), m_saveSlotPath(saveSlotPath) {
     m_fileWatcher = std::make_unique<FileWatcher>();
 }
 
@@ -15,54 +19,62 @@ ConfigManager::~ConfigManager() {
 /// Инициализирует все подсистемы конфигураций и запускает наблюдение за файлами
 /// </summary>
 bool ConfigManager::Initialize() {
-    Logger::Log("Initializing ConfigManager\n");
+    Logger::Log("Initializing ConfigManager from save slot: " + m_saveSlotPath);
 
-    m_playerConfig = std::make_unique<PlayerConfig>();
-    if (!m_playerConfig->LoadConfig()) {
-        Logger::Log("WARNING: Using default player configuration");
+    std::string playerConfigPath = m_saveSlotPath + "player.cfg";
+    std::string tilesPath = m_saveSlotPath + "tiles.json";
+    std::string foodPath = m_saveSlotPath + "food.cfg";
+    std::string automatonPath = m_saveSlotPath + "cellular_automaton.cfg";
+
+    Logger::Log("Config paths:");
+    Logger::Log("  Tiles: " + tilesPath);
+    Logger::Log("  Food: " + foodPath);
+    Logger::Log("  Automaton: " + automatonPath);
+
+    if (!fs::exists(tilesPath)) {
+        Logger::Log("ERROR: Tiles file not found: " + tilesPath);
+        return false;
     }
-
-    m_tileManager = std::make_unique<TileTypeManager>();
-    m_foodManager = std::make_unique<FoodManager>();
-    m_automatonConfig = std::make_unique<CellularAutomatonConfig>();
-
-    if (!m_tileManager->LoadFromFile()) {
-        Logger::Log("ERROR: Failed to load initial tile config");
+    if (!fs::exists(automatonPath)) {
+        Logger::Log("ERROR: Automaton file not found: " + automatonPath);
         return false;
     }
 
-    const auto& initialTiles = m_tileManager->GetAllTiles();
-    for (const auto& pair : initialTiles) {
-        m_previousTileIds.insert(pair.first);
+    m_playerConfig = std::make_unique<PlayerConfig>(playerConfigPath);
+    if (!m_playerConfig->LoadConfig()) {
+        Logger::Log("ERROR: Failed to load player config from save");
+        return false;
+    }
+
+    m_tileManager = std::make_unique<TileTypeManager>(tilesPath);
+    m_foodManager = std::make_unique<FoodManager>(foodPath);
+    m_automatonConfig = std::make_unique<CellularAutomatonConfig>();
+
+    if (!m_tileManager->LoadFromFile()) {
+        Logger::Log("ERROR: Failed to load tiles from save");
+        return false;
     }
 
     if (!m_foodManager->LoadFromFile()) {
-        Logger::Log("WARNING: Failed to load initial food config");
-    }
-    else {
-        const auto& allFoods = m_foodManager->GetAllFood();
-        for (const Food* food : allFoods) {
-            if (food) {
-                m_previousFoodIds.insert(food->GetId());
-            }
-        }
+        Logger::Log("ERROR: Failed to load food config from save " + foodPath);
+        return false;
     }
 
-    if (!m_automatonConfig->LoadFromFile("config/cellular_automaton.cfg")) {
-        Logger::Log("WARNING: Failed to load initial automaton config");
+    if (!m_automatonConfig->LoadFromFile(automatonPath)) {
+        Logger::Log("WARNING: Failed to load automaton config from save");
     }
 
-    m_fileWatcher->WatchFile("config/tiles.json",
+    m_fileWatcher->WatchFile(tilesPath,
         [this]() { this->ReloadTiles(); });
 
-    m_fileWatcher->WatchFile("config/food.cfg",
+    m_fileWatcher->WatchFile(foodPath,
         [this]() { this->ReloadFood(); });
 
-    m_fileWatcher->WatchFile("config/cellular_automaton.cfg",
+    m_fileWatcher->WatchFile(automatonPath,
         [this]() { this->ReloadAutomatonRules(); });
 
     m_initialized = true;
-    Logger::Log("\nConfigManager initialized successfully");
+    Logger::Log("ConfigManager initialized successfully from save slot");
     return true;
 }
 
@@ -142,13 +154,15 @@ void ConfigManager::ReloadFood() {
 void ConfigManager::ReloadAutomatonRules() {
     Logger::Log("Reloading cellular automaton rules...");
 
-    if (m_automatonConfig->LoadFromFile("config/cellular_automaton.cfg")) {
-        Logger::Log("Cellular automaton rules reloaded successfully");
+    std::string automatonPath = m_saveSlotPath + "cellular_automaton.cfg";
+
+    if (m_automatonConfig->LoadFromFile(automatonPath)) {
+        Logger::Log("Cellular automaton rules reloaded successfully from save");
         if (OnAutomatonRulesChanged) {
             OnAutomatonRulesChanged();
         }
     }
     else {
-        Logger::Log("ERROR: Failed to reload cellular automaton rules");
+        Logger::Log("ERROR: Failed to reload cellular automaton rules from save");
     }
 }

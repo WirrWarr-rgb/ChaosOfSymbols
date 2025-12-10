@@ -3,9 +3,9 @@
 #include "FoodManager.h"
 #include "Logger.h"
 
-FoodManager::FoodManager() : m_totalSpawnWeight(0) {
+FoodManager::FoodManager(const std::string& configPath)
+    : m_totalSpawnWeight(0), m_configPath(configPath) {
 }
-
 FoodManager::~FoodManager() {
     for (auto food : m_foods) {
         delete food;
@@ -72,7 +72,11 @@ bool FoodManager::LoadFromFile(const std::string& filename) {
 }
 
 bool FoodManager::LoadFromFile() {
-    return LoadFromFile(m_defaultConfigPath);
+    if (m_configPath.empty()) {
+        Logger::Log("ERROR: No config path specified for FoodManager");
+        return false;
+    }
+    return LoadFromFile(m_configPath);
 }
 
 /// <summary>

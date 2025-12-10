@@ -20,12 +20,10 @@ public:
     bool SaveWorldConfig(int slot, const WorldConfig& config);
     WorldConfig LoadWorldConfig(int slot);
 
-    // Добавляем недостающие методы:
     bool SavePlayerConfig(int slot, const WorldConfig& config);
     bool SaveTilesConfig(int slot, const WorldConfig& config);
     bool SaveAutomatonConfig(int slot, const WorldConfig& config);
 
-    // Эти методы нужны для загрузки
     bool LoadPlayerConfig(int slot);
     bool LoadTilesConfig(int slot);
     bool LoadAutomatonConfig(int slot);

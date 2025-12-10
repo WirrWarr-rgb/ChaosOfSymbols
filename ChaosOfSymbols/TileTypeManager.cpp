@@ -239,7 +239,7 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
     }
 
     if (m_tileTypes.find(0) == m_tileTypes.end()) {
-        RegisterTileType(TileType(0, "air", ' ', 0, true, false, 0, 0, 0, 0));
+        RegisterTileType(TileType(-2, "air", ' ', 0, true, false, 0, 0, 0, 0));
     }
 
     bool hasBorder = false;
@@ -253,6 +253,7 @@ bool TileTypeManager::LoadFromFile(const std::string& filePath) {
 
     if (!hasBorder) {
         RegisterTileType(TileType(-1, "border", '#', 8, false, true, 0, 0, 0, 0));
+        RegisterTileType(TileType(-2, "air", ' ', 0, true, false, 0, 0, 0, 0));
     }
 
     Logger::Log("\n=== END LOADED TILES SUMMARY ===\n");
@@ -346,7 +347,7 @@ void TileTypeManager::RegisterTileType(const TileType& tileType) {
 bool TileTypeManager::RemoveTileType(int id) {
     auto it = m_tileTypes.find(id);
     if (it != m_tileTypes.end()) {
-        if (id == 0 || id == -1 || id == 2) {
+        if (id == 0 || id == -1 || id == -2) {
             Logger::Log("ERROR: Cannot delete system tile with ID " + std::to_string(id));
             return false;
         }

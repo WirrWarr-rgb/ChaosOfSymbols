@@ -6,7 +6,7 @@
 
 class FoodManager {
 public:
-    FoodManager();
+    FoodManager(const std::string& configPath = "");
     ~FoodManager();
 
     const Food* GetFood(int id) const;
@@ -20,9 +20,10 @@ public:
 private:
     void CalculateSpawnWeights();
 
+    std::string m_configPath;
+
     std::vector<Food*> m_foods;
     std::unordered_map<int, Food*> m_foodMap;
     std::vector<int> m_spawnWeights;
     int m_totalSpawnWeight;
-    std::string m_defaultConfigPath = "config/food.cfg";
 };

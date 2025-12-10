@@ -56,7 +56,6 @@ private:
 
     void InitializeMainMenu();
     void RunMainMenu();
-    void StartGameFromMenu();
     void InitializeSaveSelection(GameMode mode);
     void RunSaveSelection();
     void StartGameFromSave(GameMode mode, int slot);

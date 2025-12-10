@@ -12,7 +12,6 @@ bool RuleParser::evaluate(const std::unordered_map<char, int>& neighborCounts) c
     if (m_ruleString.empty() || m_ruleString == "true") return true;
     if (m_ruleString == "false") return false;
 
-    // Простой парсер для условий типа "count['#'] >= 2 && count['~'] == 1"
     size_t andPos = m_ruleString.find("&&");
     size_t orPos = m_ruleString.find("||");
 
@@ -145,17 +144,19 @@ bool CellularAutomatonConfig::LoadFromFile(const std::string& filename) {
             continue;
         }
 
-        if (key == "survival") {
-            currentRule.survivalRule = RuleParser::create(value);
-        }
-        else if (key == "birth") {
-            currentRule.birthRule = RuleParser::create(value);
-        }
-        else if (key == "death") {
-            currentRule.deathRule = RuleParser::create(value);
-        }
-        else {
-            Logger::Log("WARNING: Unknown key: " + key);
+        if (!value.empty()) {
+            if (key == "survival") {
+                currentRule.survivalRule = RuleParser::create(value);
+            }
+            else if (key == "birth") {
+                currentRule.birthRule = RuleParser::create(value);
+            }
+            else if (key == "death") {
+                currentRule.deathRule = RuleParser::create(value);
+            }
+            else {
+                Logger::Log("WARNING: Unknown key: " + key);
+            }
         }
     }
 
@@ -195,34 +196,35 @@ void CellularAutomatonConfig::LogRulesSummary() const {
     for (const auto& pair : m_rules) {
         char tileChar = pair.first;
         const CellRule& rule = pair.second;
+        int ruleCount = 0;
 
-        std::string ruleInfo = "Tile '" + std::string(1, tileChar) + "': ";
-        bool hasRules = false;
+        std::string ruleInfo = "Tile '" + std::string(1, tileChar) + "':";
 
-        if (rule.survivalRule) {
-            ruleInfo += "\nSurvival=" + rule.survivalRule->getRuleString();
-            hasRules = true;
+        if (rule.survivalRule && !rule.survivalRule->getRuleString().empty()) {
+            ruleInfo += "\n  Survival: " + rule.survivalRule->getRuleString();
+            ruleCount++;
         }
         else {
-            ruleInfo += "\nSurvival=ERROR";
-        }
-        if (rule.birthRule) {
-            if (hasRules) ruleInfo += ", ";
-            ruleInfo += "\nBirth=" + rule.birthRule->getRuleString();
-            hasRules = true;
-        }
-        else {
-            ruleInfo += "\nBirth=ERROR";
-        }
-        if (rule.deathRule) {
-            if (hasRules) ruleInfo += ", ";
-            ruleInfo += "\nDeath=" + rule.deathRule->getRuleString();
-            hasRules = true;
-        }
-        else {
-            ruleInfo += "\nDeath=ERROR";
+            ruleInfo += "\n  Survival: (none)";
         }
 
+        if (rule.birthRule && !rule.birthRule->getRuleString().empty()) {
+            ruleInfo += "\n  Birth: " + rule.birthRule->getRuleString();
+            ruleCount++;
+        }
+        else {
+            ruleInfo += "\n  Birth: (none)";
+        }
+
+        if (rule.deathRule && !rule.deathRule->getRuleString().empty()) {
+            ruleInfo += "\n  Death: " + rule.deathRule->getRuleString();
+            ruleCount++;
+        }
+        else {
+            ruleInfo += "\n  Death: (none)";
+        }
+
+        ruleInfo += "\n  Total active rules: " + std::to_string(ruleCount);
         Logger::Log(ruleInfo);
     }
 
