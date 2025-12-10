@@ -27,12 +27,17 @@ enum class EditorMode {
     CREATE_TEMPLATE    // Создать только шаблон (для меню шаблонов)
 };
 
-// Состояния для вкладки Tiles
 enum class TilesState {
     MAIN_LIST,        // Основной список тайлов
     TILE_ACTIONS,     // Меню действий (Изменить/Удалить)
     EDITING_TILE,     // Редактирование тайла
     ADDING_TILE       // Добавление нового тайла
+};
+
+enum class CellularAutomatonState {
+    MAIN_LIST,
+    TILE_SELECTION,
+    EDITING_RULES
 };
 
 enum class FoodState {
@@ -62,6 +67,10 @@ public:
     bool LoadTemplateConfig(const WorldConfig& config);
     void SaveWorldConfiguration();
     bool SaveAllConfigurations(const std::string& directory);
+
+    void LoadCellularAutomatonRules();
+    void SaveCellularAutomatonRules();
+    void UpdateCellularRulesFromTiles();
 private:
     // Основные методы
     void CreateNewWorld();
@@ -176,10 +185,43 @@ private:
     void ResetTemplateData();
     void ClearTemplateFiles();
     bool IsNewTemplate() const;
-
+    void RenderCellularMainList(int startLine);
+    void RenderCellularTileSelection(int startLine);
+    void RenderCellularEditing(int startLine);
+    void HandleCellularInput();
+    void HandleCellularMainInput();
+    void HandleCellularTileSelectionInput();
+    void HandleCellularEditingInput();
+    void HandleRuleEditInput();
+    void ApplyRuleEdit();
     std::string GetCurrentFieldName() const;
+    void StartEditingRule();
+    void SelectPreviousTab();
+    void StartEditingRuleForSelectedTile();
+    void StartEditingSelectedRule();
+    bool SaveCellularAutomatonConfigPreserve(const std::string& directory);
+
     std::string GetCurrentButtonName() const;
     std::string GetCurrentTabName() const;
+
+    bool IsCtrlPressed() const;
+    void CopyToClipboard(const std::string& text);
+    std::string PasteFromClipboard();
+
+    int m_cellularScrollOffset = 0;
+    int m_visibleRulesCount = 7;
+
+    CellularAutomatonState m_cellularState;
+    CellularAutomatonState m_prevCellularState;
+    int m_selectedRuleType; // 0 - Survival, 1 - Birth, 2 - Death
+    std::unordered_map<char, std::string> m_tileRules; // символ -> правила
+    std::unordered_map<char, std::string> m_survivalRules;
+    std::unordered_map<char, std::string> m_birthRules;
+    std::unordered_map<char, std::string> m_deathRules;
+    std::string m_tempRuleInput;
+    int m_editingRuleIndex;
+    bool m_editingRule;
+    char m_selectedTileForRules;
 
     EditorMode m_editorMode;
 
@@ -253,6 +295,10 @@ private:
     int m_editedHpRestore;
     int m_editedSpawnWeight;
     int m_editedExperience;
+
+    std::string m_prevRuleInput;
+    int m_prevCellularSelectedTileIndex;
+    char m_prevSelectedTileChar;
 
     // Данные для добавления новой еды
     std::string m_newFoodName;

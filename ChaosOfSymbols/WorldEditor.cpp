@@ -1,5 +1,6 @@
 ﻿#include "WorldEditor.h"
 #include <windows.h>
+#include <set>
 #include <iostream>
 #include <chrono>
 #include <thread>
@@ -63,6 +64,14 @@ WorldEditor::WorldEditor(EditorMode editorMode, int slot, GameMode gameMode)
     , m_newHpRestore(5)
     , m_newSpawnWeight(1)
     , m_newExperience(5)
+    , m_cellularState(CellularAutomatonState::MAIN_LIST)
+    , m_prevCellularState(CellularAutomatonState::MAIN_LIST)
+    , m_selectedRuleType(0)
+    , m_editingRuleIndex(0)
+    , m_editingRule(false)
+    , m_selectedTileForRules('\0')
+    , m_cellularScrollOffset(0)
+    , m_visibleRulesCount(7)
 {
     HelpPanel::Initialize();
     RegisterHelpSystemEntries();
@@ -156,6 +165,7 @@ WorldEditor::WorldEditor(EditorMode editorMode, int slot, GameMode gameMode)
     }
 
     LoadAvailableTiles();
+    LoadCellularAutomatonRules();
 
     m_newTileName = "new_tile";
     m_newTileSymbol = 'A';
@@ -254,13 +264,17 @@ void WorldEditor::Update() {
 
 void WorldEditor::Render() {
     UpdateHelpForCurrentSelection();
+
+    Logger::Log("Render() - needFullRedraw: " + std::to_string(m_needFullRedraw) +
+        ", prevTab: " + std::to_string(static_cast<int>(m_prevTab)) +
+        ", currentTab: " + std::to_string(static_cast<int>(m_currentTab)));
+
     if (m_currentTab != m_prevTab) {
         rlutil::cls();
         m_needFullRedraw = true;
         m_prevTab = m_currentTab;
         m_prevFieldCount = 0;
     }
-
 
     if (m_needFullRedraw || NeedsRedraw()) {
         RenderOnlyChanges();
@@ -272,14 +286,25 @@ void WorldEditor::Render() {
 
     m_prevSelectedField = m_selectedField;
     m_prevSelectedButton = m_selectedButton;
+
     m_needFullRedraw = false;
+
+    Logger::Log("Render() - после отрисовки, needFullRedraw установлен в: " + std::to_string(m_needFullRedraw));
 }
 
 bool WorldEditor::NeedsRedraw() const {
-    return m_prevSelectedField != m_selectedField ||
+    bool needs = m_prevSelectedField != m_selectedField ||
         m_prevSelectedButton != m_selectedButton ||
         m_isEditingText ||
         m_currentTab != m_prevTab;
+
+    Logger::Log("NeedsRedraw() возвращает: " + std::to_string(needs) +
+        " (prevField: " + std::to_string(m_prevSelectedField) +
+        ", currField: " + std::to_string(m_selectedField) +
+        ", prevButton: " + std::to_string(m_prevSelectedButton) +
+        ", currButton: " + std::to_string(m_selectedButton) + ")");
+
+    return needs;
 }
 
 void WorldEditor::RenderOnlyChanges() {
@@ -1050,22 +1075,6 @@ void WorldEditor::HandleTileEditInput() {
         return;
     }
 
-    if (m_inputManager->IsKeyPressed(VK_TAB)) {
-        if (m_tilesState == TilesState::ADDING_TILE) {
-            SaveNewTileField();
-        }
-        else {
-            SaveEditedTileField();
-        }
-
-        m_editingTileFieldIndex = (m_editingTileFieldIndex + 1) % 6;
-        m_tempTileStringInput = "";
-
-        StartEditingTileField();
-        m_needFullRedraw = true;
-        return;
-    }
-
     if (m_editingTileFieldIndex >= 3 && m_editingTileFieldIndex <= 5) {
         HandleProbabilityInput();
     }
@@ -1203,8 +1212,29 @@ void WorldEditor::HandleColorInput() {
 }
 
 void WorldEditor::HandleTileNameInput() {
+    // Ctrl+C - копирование в буфер обмена
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('C')) {
+        if (!m_tempTileStringInput.empty()) {
+            CopyToClipboard(m_tempTileStringInput);
+            Logger::Log("Copied tile name to clipboard: " + m_tempTileStringInput);
+        }
+        return;
+    }
+
+    // Ctrl+V - вставка из буфера обмена
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('V')) {
+        std::string clipboardText = PasteFromClipboard();
+        if (!clipboardText.empty()) {
+            m_tempTileStringInput += clipboardText;
+            Logger::Log("Pasted tile name from clipboard: " + clipboardText);
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
+    // Обычные символы (только если не нажат Ctrl)
     for (char c = '0'; c <= '9'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
+        if (m_inputManager->IsKeyPressed(c) && !IsCtrlPressed()) {
             m_tempTileStringInput += c;
             m_needFullRedraw = true;
             return;
@@ -1212,7 +1242,7 @@ void WorldEditor::HandleTileNameInput() {
     }
 
     for (char c = 'A'; c <= 'Z'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
+        if (m_inputManager->IsKeyPressed(c) && !IsCtrlPressed()) {
             m_tempTileStringInput += c;
             m_needFullRedraw = true;
             return;
@@ -1220,7 +1250,7 @@ void WorldEditor::HandleTileNameInput() {
     }
 
     for (char c = 'a'; c <= 'z'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
+        if (m_inputManager->IsKeyPressed(c) && !IsCtrlPressed()) {
             m_tempTileStringInput += c;
             m_needFullRedraw = true;
             return;
@@ -1241,6 +1271,12 @@ void WorldEditor::HandleTileNameInput() {
 
     if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
         m_tempTileStringInput.pop_back();
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_DELETE)) {
+        m_tempTileStringInput.clear();
         m_needFullRedraw = true;
         return;
     }
@@ -1454,7 +1490,7 @@ void WorldEditor::AddNewTile() {
         m_needFullRedraw = true;
 
         Logger::Log("=== NEW TILE ADDED ===");
-
+        UpdateCellularRulesFromTiles();
     }
     catch (const std::exception& e) {
         Logger::Log("ERROR: Failed to add new tile: " + std::string(e.what()));
@@ -1490,6 +1526,8 @@ void WorldEditor::DeleteSelectedTile() {
     if (m_selectedTileIndex >= static_cast<int>(m_availableTileIds.size())) {
         m_selectedTileIndex = max(0, static_cast<int>(m_availableTileIds.size()) - 1);
     }
+
+    UpdateCellularRulesFromTiles();
 
     Logger::Log("Deleted user tile with ID: " + std::to_string(tileId));
 }
@@ -1551,26 +1589,339 @@ void WorldEditor::LoadAvailableTiles() {
     }
     Logger::Log(availableIds);
 
+    UpdateCellularRulesFromTiles();
+    LoadCellularAutomatonRules();
+
     Logger::Log("=== LOADING COMPLETE ===");
 }
 
 void WorldEditor::RenderCellularAutomatonTab() {
-    int line = 6;
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
 
-    std::vector<std::string> fields = {
-        "Survival Rules: " + m_config.GetSurvivalRules(),
-        "Birth Rules: " + m_config.GetBirthRules(),
-        "Death Rules: " + m_config.GetDeathRules()
-    };
+    std::vector<char> tileChars;
+    std::vector<TileType*> tileTypes;
 
-    for (int i = 0; i < fields.size(); ++i) {
-        bool isSelected = (i == m_selectedField && m_selectedButton == 0);
-        bool wasSelected = (i == m_prevSelectedField && m_prevSelectedButton == 0);
-
-        if (m_needFullRedraw || isSelected != wasSelected) {
-            RenderMenuItem(line + i, fields[i], isSelected);
+    for (int tileId : m_availableTileIds) {
+        TileType* tile = m_tileManager->GetTileType(tileId);
+        if (tile && tile->GetCharacter() != ' ') {
+            tileChars.push_back(tile->GetCharacter());
+            tileTypes.push_back(tile);
         }
     }
+
+    int startLine = 8;
+    int currentLine = startLine;
+
+    if (m_needFullRedraw) {
+        for (int i = 5; i < 7; i++) {
+            ClearLine(i);
+        }
+
+        rlutil::locate(2, 5);
+        SetConsoleTextAttribute(hConsole, 14);
+        std::cout << "Cellular Automaton Rules";
+        SetConsoleTextAttribute(hConsole, 7);
+
+        rlutil::locate(2, 6);
+        std::cout << "------------------------------------------------------------";
+    }
+
+    if (tileChars.empty()) {
+        if (m_needFullRedraw || m_selectedField != m_prevSelectedField ||
+            m_selectedButton != m_prevSelectedButton) {
+            ClearLine(currentLine);
+            rlutil::locate(4, currentLine);
+            std::cout << "No user tiles available. Add tiles in the Tiles tab first.";
+        }
+        currentLine++;
+    }
+    else {
+        int selectedTileIndex = m_selectedField / 3;
+        selectedTileIndex = std::clamp(selectedTileIndex, 0, (int)tileChars.size() - 1);
+        char tileChar = tileChars[selectedTileIndex];
+        TileType* tile = tileTypes[selectedTileIndex];
+
+        if (tile) {
+            bool tileInfoNeedsUpdate = m_needFullRedraw ||
+                (selectedTileIndex != (m_prevSelectedField / 3));
+
+            if (tileInfoNeedsUpdate) {
+                ClearLine(currentLine);
+                rlutil::locate(4, currentLine);
+
+                SetConsoleTextAttribute(hConsole, tile->GetColor());
+                std::cout << tileChar;
+
+                SetConsoleTextAttribute(hConsole, 14);
+                std::cout << " - " << tile->GetName();
+
+                SetConsoleTextAttribute(hConsole, 7);
+
+                int counterX = 78 - std::to_string(selectedTileIndex + 1).length() -
+                    std::to_string(tileChars.size()).length() - 3;
+                rlutil::locate(counterX, currentLine);
+                SetConsoleTextAttribute(hConsole, 8);
+                std::cout << "[" << (selectedTileIndex + 1) << "/" << tileChars.size() << "]";
+                SetConsoleTextAttribute(hConsole, 7);
+            }
+            currentLine++;
+
+            auto survivalIt = m_survivalRules.find(tileChar);
+            auto birthIt = m_birthRules.find(tileChar);
+            auto deathIt = m_deathRules.find(tileChar);
+
+            std::string survivalRule = (survivalIt != m_survivalRules.end()) ? survivalIt->second : "";
+            std::string birthRule = (birthIt != m_birthRules.end()) ? birthIt->second : "";
+            std::string deathRule = (deathIt != m_deathRules.end()) ? deathIt->second : "";
+
+            std::string rules[3] = { survivalRule, birthRule, deathRule };
+            std::string ruleNames[3] = { "Survival Rules: ", "Birth Rules: ", "Death Rules: " };
+
+            for (int ruleType = 0; ruleType < 3; ruleType++) {
+                int absoluteRuleIndex = selectedTileIndex * 3 + ruleType;
+                bool isSelected = (absoluteRuleIndex == m_selectedField);
+                bool isEditing = (isSelected && m_editingRule);
+                bool wasSelected = (absoluteRuleIndex == m_prevSelectedField);
+
+                bool needsUpdate = m_needFullRedraw ||
+                    (isSelected != wasSelected) ||
+                    (selectedTileIndex != (m_prevSelectedField / 3)) ||
+                    (isEditing && (m_tempRuleInput != m_prevRuleInput));
+
+                if (needsUpdate) {
+                    ClearLine(currentLine);
+                    rlutil::locate(8, currentLine);
+
+                    if (isSelected) {
+                        if (isEditing) {
+                            SetConsoleTextAttribute(hConsole, 11);
+                            std::cout << "> ";
+                        }
+                        else {
+                            SetConsoleTextAttribute(hConsole, 10);
+                            std::cout << "> ";
+                        }
+                    }
+                    else {
+                        SetConsoleTextAttribute(hConsole, 7);
+                        std::cout << "  ";
+                    }
+
+                    std::cout << ruleNames[ruleType];
+
+                    if (isEditing) {
+                        SetConsoleTextAttribute(hConsole, 11);
+                        std::cout << m_tempRuleInput << "_";
+                    }
+                    else {
+                        if (!rules[ruleType].empty()) {
+                            std::cout << rules[ruleType];
+                        }
+                    }
+
+                    SetConsoleTextAttribute(hConsole, 7);
+                }
+                currentLine++;
+            }
+        }
+    }
+
+    if (m_needFullRedraw) {
+        for (int i = currentLine; i < 15; i++) {
+            ClearLine(i);
+        }
+    }
+
+    RenderBottomButtons();
+
+    SetConsoleTextAttribute(hConsole, 7);
+}
+
+void WorldEditor::RenderCellularMainList(int startLine) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int line = startLine;
+
+    std::vector<char> tileChars;
+    for (int tileId : m_availableTileIds) {
+        TileType* tile = m_tileManager->GetTileType(tileId);
+        if (tile && tile->GetCharacter() != ' ') {
+            tileChars.push_back(tile->GetCharacter());
+        }
+    }
+
+    if (tileChars.empty()) {
+        rlutil::locate(4, line);
+        std::cout << "No user tiles available. Add tiles in the Tiles tab first.";
+        line += 2;
+    }
+    else {
+        for (size_t i = 0; i < tileChars.size(); ++i) {
+            char tileChar = tileChars[i];
+            TileType* tile = nullptr;
+
+            for (int tileId : m_availableTileIds) {
+                TileType* t = m_tileManager->GetTileType(tileId);
+                if (t && t->GetCharacter() == tileChar) {
+                    tile = t;
+                    break;
+                }
+            }
+
+            if (!tile) continue;
+
+            bool isSelected = (i == m_selectedField && m_selectedButton == 0);
+
+            rlutil::locate(4, line);
+
+            if (isSelected) {
+                SetConsoleTextAttribute(hConsole, 10);
+                std::cout << "> ";
+            }
+            else {
+                SetConsoleTextAttribute(hConsole, 7);
+                std::cout << "  ";
+            }
+
+            SetConsoleTextAttribute(hConsole, tile->GetColor());
+            std::cout << tileChar;
+
+            SetConsoleTextAttribute(hConsole, isSelected ? 10 : 7);
+            std::cout << " - " << tile->GetName();
+
+            line++;
+
+            rlutil::locate(8, line);
+            std::cout << "Survival Rules: ";
+            auto survivalIt = m_survivalRules.find(tileChar);
+            if (survivalIt != m_survivalRules.end() && !survivalIt->second.empty()) {
+                std::cout << survivalIt->second;
+            }
+            else {
+                std::cout << "(not set)";
+            }
+
+            line++;
+            rlutil::locate(8, line);
+            std::cout << "Birth Rules: ";
+            auto birthIt = m_birthRules.find(tileChar);
+            if (birthIt != m_birthRules.end() && !birthIt->second.empty()) {
+                std::cout << birthIt->second;
+            }
+            else {
+                std::cout << "(not set)";
+            }
+
+            line++;
+            rlutil::locate(8, line);
+            std::cout << "Death Rules: ";
+            auto deathIt = m_deathRules.find(tileChar);
+            if (deathIt != m_deathRules.end() && !deathIt->second.empty()) {
+                std::cout << deathIt->second;
+            }
+            else {
+                std::cout << "(not set)";
+            }
+
+            line += 2;
+        }
+    }
+}
+
+void WorldEditor::RenderCellularTileSelection(int startLine) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int line = startLine;
+
+    std::vector<std::string> ruleTypes = {
+        "Survival Rules",
+        "Birth Rules",
+        "Death Rules"
+    };
+
+    for (int i = 0; i < ruleTypes.size(); ++i) {
+        bool isSelected = (i == m_selectedField);
+
+        rlutil::locate(6, line + i);
+
+        if (isSelected) {
+            SetConsoleTextAttribute(hConsole, 10);
+            std::cout << "> ";
+        }
+        else {
+            SetConsoleTextAttribute(hConsole, 7);
+            std::cout << "  ";
+        }
+
+        std::cout << ruleTypes[i];
+    }
+}
+
+void WorldEditor::RenderCellularEditing(int startLine) {
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    int line = startLine;
+
+    rlutil::locate(4, line);
+    std::cout << "Editing ";
+
+    std::string ruleTypeName;
+    std::string* currentRule = nullptr;
+
+    switch (m_selectedRuleType) {
+    case 0:
+        std::cout << "Survival Rules";
+        ruleTypeName = "Survival Rules";
+        currentRule = &m_survivalRules[m_selectedTileForRules];
+        break;
+    case 1:
+        std::cout << "Birth Rules";
+        ruleTypeName = "Birth Rules";
+        currentRule = &m_birthRules[m_selectedTileForRules];
+        break;
+    case 2:
+        std::cout << "Death Rules";
+        ruleTypeName = "Death Rules";
+        currentRule = &m_deathRules[m_selectedTileForRules];
+        break;
+    }
+
+    line += 2;
+
+    TileType* tile = nullptr;
+    for (int tileId : m_availableTileIds) {
+        TileType* t = m_tileManager->GetTileType(tileId);
+        if (t && t->GetCharacter() == m_selectedTileForRules) {
+            tile = t;
+            break;
+        }
+    }
+
+    if (tile) {
+        rlutil::locate(6, line);
+        std::cout << "For tile: ";
+        SetConsoleTextAttribute(hConsole, tile->GetColor());
+        std::cout << m_selectedTileForRules;
+        SetConsoleTextAttribute(hConsole, 7);
+        std::cout << " - " << tile->GetName();
+    }
+
+    line += 2;
+
+    rlutil::locate(6, line);
+    std::cout << ruleTypeName << ": ";
+
+    if (m_editingRule) {
+        SetConsoleTextAttribute(hConsole, 11);
+        std::cout << m_tempRuleInput << "_";
+    }
+    else {
+        if (currentRule && !currentRule->empty()) {
+            std::cout << *currentRule;
+        }
+        else {
+            std::cout << "(press ENTER to edit)";
+        }
+    }
+
+    SetConsoleTextAttribute(hConsole, 7);
 }
 
 void WorldEditor::RenderFoodTab() {
@@ -1941,7 +2292,21 @@ void WorldEditor::ProcessInput() {
     if (!m_inputManager) return;
 
     if (m_inputManager->IsKeyPressed(VK_TAB)) {
-        SelectNextTab();
+        bool shiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+
+        if (shiftPressed) {
+            SelectPreviousTab();
+        }
+        else {
+            SelectNextTab();
+        }
+        m_needFullRedraw = true;
+        Logger::Log("Tab pressed, needFullRedraw установлен в: " + std::to_string(m_needFullRedraw));
+        return;
+    }
+
+    if (m_currentTab == EditorTab::CELLULAR_AUTOMATON) {
+        HandleCellularInput();
         return;
     }
 
@@ -2245,38 +2610,6 @@ void WorldEditor::HandleTextInput() {
     }
 }
 
-void WorldEditor::HandleTextInputGeneral() {
-    for (char c = '0'; c <= '9'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
-            m_tempStringInput += c;
-            m_needFullRedraw = true;
-            return;
-        }
-    }
-
-    for (char c = 'A'; c <= 'Z'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
-            m_tempStringInput += c;
-            m_needFullRedraw = true;
-            return;
-        }
-    }
-
-    for (char c = 'a'; c <= 'z'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
-            m_tempStringInput += c;
-            m_needFullRedraw = true;
-            return;
-        }
-    }
-
-    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempStringInput.empty()) {
-        m_tempStringInput.pop_back();
-        m_needFullRedraw = true;
-        return;
-    }
-}
-
 void WorldEditor::ApplyEditedValue() {
     try {
         switch (m_currentTab) {
@@ -2383,7 +2716,21 @@ int WorldEditor::GetMaxFields() {
         }
         return 0;
     case EditorTab::CELLULAR_AUTOMATON:
-        return 3;
+    {
+        int tileCount = 0;
+        for (int tileId : m_availableTileIds) {
+            TileType* tile = m_tileManager->GetTileType(tileId);
+            if (tile && tile->GetCharacter() != ' ') {
+                tileCount++;
+            }
+        }
+
+        if (tileCount == 0) {
+            return 1;
+        }
+
+        return tileCount * 3;
+    }
     case EditorTab::ENEMIES:
         return 2;
     case EditorTab::WIN:
@@ -2403,8 +2750,34 @@ void WorldEditor::SelectNextTab() {
     int current = static_cast<int>(m_currentTab);
     current = (current + 1) % 8;
     m_currentTab = static_cast<EditorTab>(current);
+
+    if (m_currentTab == EditorTab::CELLULAR_AUTOMATON) {
+        m_cellularState = CellularAutomatonState::MAIN_LIST;
+        m_selectedRuleType = 0;
+        m_editingRule = false;
+        m_selectedTileForRules = '\0';
+        m_tempRuleInput = "";
+        m_selectedField = 0;
+        m_cellularScrollOffset = 0;
+    }
+
+    if (m_currentTab == EditorTab::TILES) {
+        m_tilesState = TilesState::MAIN_LIST;
+        m_selectedTileIndex = 0;
+        m_tileActionIndex = 0;
+    }
+
+    if (m_currentTab == EditorTab::FOOD) {
+        m_foodState = FoodState::MAIN_LIST;
+        m_selectedFoodIndex = 0;
+        m_foodActionIndex = 0;
+    }
+
     m_selectedField = 0;
     m_selectedButton = 0;
+    m_isEditingText = false;
+    m_editingField = -1;
+    m_editingTileField = false;
     m_needFullRedraw = true;
 }
 
@@ -2562,6 +2935,7 @@ void WorldEditor::CreateNewWorld() {
     }
 
     SaveWorldConfiguration();
+    SaveCellularAutomatonRules();
 
     if (m_editorMode == EditorMode::CREATE_WORLD) {
         if (!m_saveSystem) {
@@ -2629,9 +3003,14 @@ void WorldEditor::SaveWorldConfiguration() {
 
 void WorldEditor::ClearLine(int line) {
     rlutil::locate(0, line);
-    for (int i = 0; i < 80; i++) {
-        std::cout << ' ';
-    }
+    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+    int width = csbi.dwSize.X;
+
+    std::string spaces(width, ' ');
+    std::cout << spaces;
+    rlutil::locate(0, line);
 }
 
 bool WorldEditor::ShouldShowSeedField() const {
@@ -2803,7 +3182,9 @@ bool WorldEditor::CreateTemplate(const std::string& templateName) {
         SaveWorldConfig(templateDir);
         SavePlayerConfig(templateDir);
         SaveTilesConfig(templateDir);
-        SaveCellularAutomatonConfig(templateDir);
+
+        SaveCellularAutomatonRules();
+
         SaveFoodConfig(templateDir);
         SaveEnemiesConfig(templateDir);
 
@@ -2823,7 +3204,6 @@ bool WorldEditor::CreateTemplate(const std::string& templateName) {
 
 bool WorldEditor::SaveAllConfigurations(const std::string& directory) {
     Logger::Log("=== SAVING ALL CONFIGURATIONS TO: " + directory + " ===");
-    Logger::Log("Current food config path: " + m_foodConfigPath);
 
     if (!fs::exists(directory)) {
         if (!fs::create_directories(directory)) {
@@ -2838,9 +3218,14 @@ bool WorldEditor::SaveAllConfigurations(const std::string& directory) {
     success = SaveWorldConfig(directory) && success;
     success = SavePlayerConfig(directory) && success;
     success = SaveTilesConfig(directory) && success;
-    success = SaveCellularAutomatonConfig(directory) && success;
+
+    if (!SaveCellularAutomatonConfigPreserve(directory)) {
+        Logger::Log("WARNING: Failed to save cellular automaton config (may preserve existing)");
+    }
+
     success = SaveFoodConfig(directory) && success;
     success = SaveEnemiesConfig(directory) && success;
+
 
     if (m_tileManager) {
         std::string tilesJsonPath = directory + "/tiles.json";
@@ -2962,28 +3347,61 @@ bool WorldEditor::SaveTilesConfig(const std::string& directory) {
 
 bool WorldEditor::SaveCellularAutomatonConfig(const std::string& directory) {
     std::string automatonConfigPath = directory + "/cellular_automaton.cfg";
-    std::ofstream file(automatonConfigPath);
 
+    Logger::Log("=== SAVING CELLULAR AUTOMATON RULES ===");
+    Logger::Log("Saving to: " + automatonConfigPath);
+
+    if (fs::exists(automatonConfigPath)) {
+        Logger::Log("Loading existing cellular automaton config to preserve rules...");
+        return true;
+    }
+
+    std::ofstream file(automatonConfigPath);
     if (!file.is_open()) {
-        Logger::Log("ERROR: Cannot open automaton config file: " + automatonConfigPath);
+        Logger::Log("ERROR: Cannot open cellular automaton config for writing: " + automatonConfigPath);
         return false;
     }
+    std::set<char> allTiles;
+    for (const auto& pair : m_survivalRules) allTiles.insert(pair.first);
+    for (const auto& pair : m_birthRules) allTiles.insert(pair.first);
+    for (const auto& pair : m_deathRules) allTiles.insert(pair.first);
 
-    if (!m_config.GetSurvivalRules().empty()) {
-        file << ".\n";
-        file << "survival=" << m_config.GetSurvivalRules() << "\n";
-    }
+    Logger::Log("Saving rules for " + std::to_string(allTiles.size()) + " tiles");
 
-    if (!m_config.GetBirthRules().empty()) {
-        file << "birth=" << m_config.GetBirthRules() << "\n";
-    }
+    for (char tileChar : allTiles) {
+        file << tileChar << "\n";
 
-    if (!m_config.GetDeathRules().empty()) {
-        file << "death=" << m_config.GetDeathRules() << "\n";
+        auto survivalIt = m_survivalRules.find(tileChar);
+        auto birthIt = m_birthRules.find(tileChar);
+        auto deathIt = m_deathRules.find(tileChar);
+
+        bool hasAnyRule = false;
+
+        if (survivalIt != m_survivalRules.end() && !survivalIt->second.empty()) {
+            file << "survival=" << survivalIt->second << "\n";
+            hasAnyRule = true;
+            Logger::Log("  Tile '" + std::string(1, tileChar) + "' survival: " + survivalIt->second);
+        }
+
+        if (birthIt != m_birthRules.end() && !birthIt->second.empty()) {
+            file << "birth=" << birthIt->second << "\n";
+            hasAnyRule = true;
+            Logger::Log("  Tile '" + std::string(1, tileChar) + "' birth: " + birthIt->second);
+        }
+
+        if (deathIt != m_deathRules.end() && !deathIt->second.empty()) {
+            file << "death=" << deathIt->second << "\n";
+            hasAnyRule = true;
+            Logger::Log("  Tile '" + std::string(1, tileChar) + "' death: " + deathIt->second);
+        }
+
+        if (hasAnyRule) {
+            file << "\n";
+        }
     }
 
     file.close();
-    Logger::Log("Saved cellular automaton config to: " + automatonConfigPath);
+    Logger::Log("Saved cellular automaton rules to: " + automatonConfigPath);
     return true;
 }
 
@@ -3647,23 +4065,6 @@ void WorldEditor::HandleFoodEditInput() {
         return;
     }
 
-    if (m_inputManager->IsKeyPressed(VK_TAB)) {
-        if (m_foodState == FoodState::ADDING_FOOD) {
-            SaveNewFoodField();
-        }
-        else {
-            SaveEditedFoodField();
-        }
-
-        m_editingTileFieldIndex = (m_editingTileFieldIndex + 1) % 7;
-        m_tempTileStringInput = "";
-
-        StartEditingFoodField();
-        m_needFullRedraw = true;
-        return;
-    }
-
-    // Обработка специальных полей
     switch (m_editingTileFieldIndex) {
     case 2: // Color
         HandleFoodColorInput();
@@ -3783,8 +4184,26 @@ void WorldEditor::HandleFoodNumericInput() {
 }
 
 void WorldEditor::HandleFoodNameInput() {
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('C')) {
+        if (!m_tempTileStringInput.empty()) {
+            CopyToClipboard(m_tempTileStringInput);
+            Logger::Log("Copied food name to clipboard: " + m_tempTileStringInput);
+        }
+        return;
+    }
+
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('V')) {
+        std::string clipboardText = PasteFromClipboard();
+        if (!clipboardText.empty()) {
+            m_tempTileStringInput += clipboardText;
+            Logger::Log("Pasted food name from clipboard: " + clipboardText);
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
     for (char c = '0'; c <= '9'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
+        if (m_inputManager->IsKeyPressed(c) && !IsCtrlPressed()) {
             m_tempTileStringInput += c;
             m_needFullRedraw = true;
             return;
@@ -3792,7 +4211,7 @@ void WorldEditor::HandleFoodNameInput() {
     }
 
     for (char c = 'A'; c <= 'Z'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
+        if (m_inputManager->IsKeyPressed(c) && !IsCtrlPressed()) {
             m_tempTileStringInput += c;
             m_needFullRedraw = true;
             return;
@@ -3800,7 +4219,7 @@ void WorldEditor::HandleFoodNameInput() {
     }
 
     for (char c = 'a'; c <= 'z'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
+        if (m_inputManager->IsKeyPressed(c) && !IsCtrlPressed()) {
             m_tempTileStringInput += c;
             m_needFullRedraw = true;
             return;
@@ -3815,6 +4234,12 @@ void WorldEditor::HandleFoodNameInput() {
 
     if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
         m_tempTileStringInput.pop_back();
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_DELETE)) {
+        m_tempTileStringInput.clear();
         m_needFullRedraw = true;
         return;
     }
@@ -4262,7 +4687,7 @@ void WorldEditor::ResetTemplateData() {
 
 void WorldEditor::ClearTemplateFiles() {
     if (m_editorMode != EditorMode::CREATE_TEMPLATE) {
-        return; // Только для шаблонов
+        return;
     }
 
     Logger::Log("=== CLEANING UP TEMPLATE FILES FOR SLOT " + std::to_string(m_slot) + " ===");
@@ -4342,4 +4767,716 @@ bool WorldEditor::IsNewTemplate() const {
     std::string infoFile = templateDir + "/template_info.txt";
 
     return !fs::exists(infoFile);
+}
+
+void WorldEditor::LoadCellularAutomatonRules() {
+    Logger::Log("Loading cellular automaton rules...");
+
+    m_survivalRules.clear();
+    m_birthRules.clear();
+    m_deathRules.clear();
+
+    std::string automatonPath;
+    if (m_editorMode == EditorMode::CREATE_TEMPLATE) {
+        automatonPath = "templates/template" + std::to_string(m_slot) + "/cellular_automaton.cfg";
+    }
+    else {
+        automatonPath = "saves/slot" + std::to_string(m_slot) + "/cellular_automaton.cfg";
+    }
+
+    std::ifstream file(automatonPath);
+    if (!file.is_open()) {
+        Logger::Log("No cellular automaton config found, creating default");
+        UpdateCellularRulesFromTiles();
+        return;
+    }
+
+    std::string line;
+    char currentTile = '\0';
+
+    while (std::getline(file, line)) {
+        size_t commentPos = line.find("//");
+        if (commentPos != std::string::npos) {
+            line = line.substr(0, commentPos);
+        }
+
+        line.erase(0, line.find_first_not_of(" \t"));
+        line.erase(line.find_last_not_of(" \t") + 1);
+
+        if (line.empty()) {
+            continue;
+        }
+
+        if (line.length() == 1) {
+            currentTile = line[0];
+            Logger::Log("Loading rules for tile: '" + std::string(1, currentTile) + "'");
+            continue;
+        }
+
+        size_t eqPos = line.find('=');
+        if (eqPos != std::string::npos) {
+            std::string key = line.substr(0, eqPos);
+            std::string value = line.substr(eqPos + 1);
+
+            key.erase(0, key.find_first_not_of(" \t"));
+            key.erase(key.find_last_not_of(" \t") + 1);
+            value.erase(0, value.find_first_not_of(" \t"));
+            value.erase(value.find_last_not_of(" \t") + 1);
+
+            if (currentTile == '\0') {
+                Logger::Log("WARNING: Rule found without tile definition: " + line);
+                continue;
+            }
+
+            if (key == "survival") {
+                m_survivalRules[currentTile] = value;
+                Logger::Log("  Survival rule: " + value);
+            }
+            else if (key == "birth") {
+                m_birthRules[currentTile] = value;
+                Logger::Log("  Birth rule: " + value);
+            }
+            else if (key == "death") {
+                m_deathRules[currentTile] = value;
+                Logger::Log("  Death rule: " + value);
+            }
+            else {
+                Logger::Log("WARNING: Unknown rule type: " + key);
+            }
+        }
+    }
+
+    file.close();
+    Logger::Log("Cellular automaton rules loaded: " +
+        std::to_string(m_survivalRules.size()) + " survival rules, " +
+        std::to_string(m_birthRules.size()) + " birth rules, " +
+        std::to_string(m_deathRules.size()) + " death rules");
+}
+
+void WorldEditor::UpdateCellularRulesFromTiles() {
+    Logger::Log("Updating cellular automaton rules from tiles...");
+
+    m_survivalRules.clear();
+    m_birthRules.clear();
+    m_deathRules.clear();
+
+    if (!m_tileManager) return;
+
+    const auto& allTiles = m_tileManager->GetAllTiles();
+
+    for (const auto& pair : allTiles) {
+        const TileType& tile = pair.second;
+        char character = tile.GetCharacter();
+
+        if (character == ' ' || character == 0 ||
+            tile.GetName() == "air" || tile.GetName() == "border") {
+            continue;
+        }
+
+        m_survivalRules[character] = "";
+        m_birthRules[character] = "";
+        m_deathRules[character] = "";
+    }
+
+    Logger::Log("Cellular automaton rules updated for " +
+        std::to_string(m_survivalRules.size()) + " tiles");
+}
+
+void WorldEditor::SaveCellularAutomatonRules() {
+    std::string automatonPath;
+    if (m_editorMode == EditorMode::CREATE_TEMPLATE) {
+        automatonPath = "templates/template" + std::to_string(m_slot) + "/cellular_automaton.cfg";
+    }
+    else {
+        automatonPath = "saves/slot" + std::to_string(m_slot) + "/cellular_automaton.cfg";
+    }
+
+    std::ofstream file(automatonPath);
+    if (!file.is_open()) {
+        Logger::Log("ERROR: Cannot open cellular automaton config for writing: " + automatonPath);
+        return;
+    }
+
+    std::set<char> allTiles;
+    for (const auto& pair : m_survivalRules) allTiles.insert(pair.first);
+    for (const auto& pair : m_birthRules) allTiles.insert(pair.first);
+    for (const auto& pair : m_deathRules) allTiles.insert(pair.first);
+
+    for (char tileChar : allTiles) {
+        file << tileChar << "\n";
+
+        auto survivalIt = m_survivalRules.find(tileChar);
+        auto birthIt = m_birthRules.find(tileChar);
+        auto deathIt = m_deathRules.find(tileChar);
+
+        bool hasAnyRule = false;
+
+        if (survivalIt != m_survivalRules.end() && !survivalIt->second.empty()) {
+            file << "survival=" << survivalIt->second << "\n";
+            hasAnyRule = true;
+        }
+
+        if (birthIt != m_birthRules.end() && !birthIt->second.empty()) {
+            file << "birth=" << birthIt->second << "\n";
+            hasAnyRule = true;
+        }
+
+        if (deathIt != m_deathRules.end() && !deathIt->second.empty()) {
+            file << "death=" << deathIt->second << "\n";
+            hasAnyRule = true;
+        }
+
+        if (hasAnyRule) {
+            file << "\n";
+        }
+    }
+
+    file.close();
+    Logger::Log("Saved cellular automaton rules to: " + automatonPath);
+
+    std::ifstream checkFile(automatonPath);
+    if (checkFile.is_open()) {
+        std::string line;
+        Logger::Log("=== Cellular Automaton Config Content ===");
+        while (std::getline(checkFile, line)) {
+            Logger::Log(line);
+        }
+        Logger::Log("=== End of Config ===");
+        checkFile.close();
+    }
+}
+
+void WorldEditor::HandleCellularInput() {
+    if (!m_inputManager) return;
+
+    m_prevRuleInput = m_tempRuleInput;
+    m_prevCellularSelectedTileIndex = m_selectedField / 3;
+
+    if (m_editingRule) {
+        HandleRuleEditInput();
+        return;
+    }
+
+    int tileCount = 0;
+    for (int tileId : m_availableTileIds) {
+        TileType* tile = m_tileManager->GetTileType(tileId);
+        if (tile && tile->GetCharacter() != ' ') {
+            tileCount++;
+        }
+    }
+
+    if (tileCount == 0) {
+        if (m_inputManager->IsMenuSelect()) {
+            m_currentTab = EditorTab::TILES;
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
+    int totalRules = tileCount * 3;
+
+    int prevSelectedField = m_selectedField;
+    int prevSelectedTileIndex = m_selectedField / 3;
+    int prevRuleType = prevSelectedField % 3;
+
+    if (m_inputManager->IsMenuUp() || m_inputManager->IsKeyPressed('W')) {
+        if (m_selectedField > 0) {
+            m_selectedField--;
+            m_needFullRedraw = true;
+        }
+    }
+    else if (m_inputManager->IsMenuDown() || m_inputManager->IsKeyPressed('S')) {
+        if (m_selectedField < totalRules - 1) {
+            m_selectedField++;
+            m_needFullRedraw = true;
+        }
+    }
+    else if (m_inputManager->IsMenuSelect()) {
+        StartEditingSelectedRule();
+        m_needFullRedraw = true;
+    }
+    else if (m_inputManager->IsMenuBack()) {
+        m_shouldReturn = true;
+    }
+
+    int currentTileIndex = m_selectedField / 3;
+    int currentRuleType = m_selectedField % 3;
+
+    if ((m_inputManager->IsMenuDown() || m_inputManager->IsKeyPressed('S')) &&
+        currentRuleType == 2 &&
+        prevRuleType == 2 && 
+        currentTileIndex < tileCount - 1) {
+        m_selectedField = (currentTileIndex + 1) * 3;
+        m_needFullRedraw = true;
+    }
+    else if ((m_inputManager->IsMenuUp() || m_inputManager->IsKeyPressed('W')) &&
+        currentRuleType == 0 &&
+        prevRuleType == 0 &&
+        currentTileIndex > 0) {
+        m_selectedField = (currentTileIndex - 1) * 3 + 2;
+        m_needFullRedraw = true;
+    }
+
+    if (prevSelectedField != m_selectedField) {
+        if ((m_selectedField / 3) != prevSelectedTileIndex) {
+            m_needFullRedraw = true;
+        }
+    }
+}
+
+void WorldEditor::StartEditingSelectedRule() {
+    std::vector<char> tileChars;
+    for (int tileId : m_availableTileIds) {
+        TileType* tile = m_tileManager->GetTileType(tileId);
+        if (tile && tile->GetCharacter() != ' ') {
+            tileChars.push_back(tile->GetCharacter());
+        }
+    }
+
+    if (tileChars.empty()) return;
+
+    int tileIndex = m_selectedField / 3;
+    int ruleType = m_selectedField % 3;
+
+    if (tileIndex >= static_cast<int>(tileChars.size())) {
+        return;
+    }
+
+    m_selectedTileIndex = tileIndex;
+    m_selectedTileForRules = tileChars[tileIndex];
+    m_selectedRuleType = ruleType;
+
+    std::string* currentRule = nullptr;
+    switch (m_selectedRuleType) {
+    case 0:
+        currentRule = &m_survivalRules[m_selectedTileForRules];
+        break;
+    case 1:
+        currentRule = &m_birthRules[m_selectedTileForRules];
+        break;
+    case 2:
+        currentRule = &m_deathRules[m_selectedTileForRules];
+        break;
+    }
+
+    m_tempRuleInput = currentRule ? *currentRule : "";
+    m_editingRule = true;
+    m_needFullRedraw = true;
+
+    Logger::Log("Editing rule for tile '" + std::string(1, m_selectedTileForRules) +
+        "', rule type: " + std::to_string(m_selectedRuleType) +
+        ", current value: '" + m_tempRuleInput + "'");
+}
+
+void WorldEditor::StartEditingRuleForSelectedTile() {
+    std::vector<char> tileChars;
+    for (int tileId : m_availableTileIds) {
+        TileType* tile = m_tileManager->GetTileType(tileId);
+        if (tile && tile->GetCharacter() != ' ') {
+            tileChars.push_back(tile->GetCharacter());
+        }
+    }
+
+    if (m_selectedField < 0 || m_selectedField >= static_cast<int>(tileChars.size())) {
+        return;
+    }
+
+    m_selectedTileForRules = tileChars[m_selectedField];
+    m_selectedRuleType = 0;
+    m_cellularState = CellularAutomatonState::EDITING_RULES;
+
+    std::string* currentRule = nullptr;
+    switch (m_selectedRuleType) {
+    case 0: currentRule = &m_survivalRules[m_selectedTileForRules]; break;
+    case 1: currentRule = &m_birthRules[m_selectedTileForRules]; break;
+    case 2: currentRule = &m_deathRules[m_selectedTileForRules]; break;
+    }
+
+    m_tempRuleInput = currentRule ? *currentRule : "";
+    m_editingRule = true;
+    m_needFullRedraw = true;
+}
+
+void WorldEditor::HandleCellularMainInput() {
+    if (m_inputManager->IsMenuUp()) {
+        SelectPreviousOption();
+    }
+    else if (m_inputManager->IsMenuDown()) {
+        SelectNextOption();
+    }
+    else if (m_inputManager->IsMenuSelect()) {
+        if (m_selectedButton == 0) {
+            std::vector<char> tileChars;
+            for (int tileId : m_availableTileIds) {
+                TileType* tile = m_tileManager->GetTileType(tileId);
+                if (tile && tile->GetCharacter() != ' ') {
+                    tileChars.push_back(tile->GetCharacter());
+                }
+            }
+
+            if (m_selectedField < tileChars.size()) {
+                m_selectedTileForRules = tileChars[m_selectedField];
+                m_cellularState = CellularAutomatonState::TILE_SELECTION;
+                m_selectedField = 0;
+                m_needFullRedraw = true;
+            }
+        }
+        else if (m_selectedButton == 1) {
+            // Save/Apply
+            SaveCellularAutomatonRules();
+        }
+        else if (m_selectedButton == 2) {
+            m_shouldReturn = true;
+        }
+    }
+    else if (m_inputManager->IsMenuBack()) {
+        m_shouldReturn = true;
+    }
+}
+
+void WorldEditor::HandleCellularTileSelectionInput() {
+    if (m_inputManager->IsMenuUp()) {
+        m_selectedField = (m_selectedField - 1 + 3) % 3;
+        m_needFullRedraw = true;
+    }
+    else if (m_inputManager->IsMenuDown()) {
+        m_selectedField = (m_selectedField + 1) % 3;
+        m_needFullRedraw = true;
+    }
+    else if (m_inputManager->IsMenuSelect()) {
+        m_selectedRuleType = m_selectedField;
+        m_cellularState = CellularAutomatonState::EDITING_RULES;
+        m_tempRuleInput = "";
+        m_editingRule = false;
+        m_needFullRedraw = true;
+    }
+    else if (m_inputManager->IsMenuBack()) {
+        m_cellularState = CellularAutomatonState::MAIN_LIST;
+        m_needFullRedraw = true;
+    }
+}
+
+void WorldEditor::HandleCellularEditingInput() {
+    if (m_inputManager->IsMenuSelect() || m_inputManager->IsKeyPressed(VK_SPACE)) {
+        StartEditingRule();
+    }
+    else if (m_inputManager->IsMenuBack()) {
+        m_cellularState = CellularAutomatonState::TILE_SELECTION;
+        m_needFullRedraw = true;
+    }
+}
+
+void WorldEditor::StartEditingRule() {
+    m_editingRule = true;
+
+    std::string* currentRule = nullptr;
+    switch (m_selectedRuleType) {
+    case 0: currentRule = &m_survivalRules[m_selectedTileForRules]; break;
+    case 1: currentRule = &m_birthRules[m_selectedTileForRules]; break;
+    case 2: currentRule = &m_deathRules[m_selectedTileForRules]; break;
+    }
+
+    if (currentRule) {
+        m_tempRuleInput = *currentRule;
+    }
+
+    m_needFullRedraw = true;
+}
+
+void WorldEditor::HandleTextInputGeneral() {
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('C')) {
+        if (!m_tempStringInput.empty()) {
+            CopyToClipboard(m_tempStringInput);
+            Logger::Log("Copied to clipboard: " + m_tempStringInput);
+        }
+        return;
+    }
+
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('V')) {
+        std::string clipboardText = PasteFromClipboard();
+        if (!clipboardText.empty()) {
+            m_tempStringInput += clipboardText;
+            Logger::Log("Pasted from clipboard: " + clipboardText);
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('X')) {
+        if (!m_tempStringInput.empty()) {
+            CopyToClipboard(m_tempStringInput);
+            m_tempStringInput.clear();
+            Logger::Log("Cut to clipboard");
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
+    for (char c = '0'; c <= '9'; c++) {
+        if (m_inputManager->IsKeyPressed(c) && !IsCtrlPressed()) {
+            m_tempStringInput += c;
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    for (char c = 'A'; c <= 'Z'; c++) {
+        if (m_inputManager->IsKeyPressed(c) && !IsCtrlPressed()) {
+            m_tempStringInput += c;
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    for (char c = 'a'; c <= 'z'; c++) {
+        if (m_inputManager->IsKeyPressed(c) && !IsCtrlPressed()) {
+            m_tempStringInput += c;
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempStringInput.empty()) {
+        m_tempStringInput.pop_back();
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_DELETE)) {
+        m_tempStringInput.clear();
+        m_needFullRedraw = true;
+        return;
+    }
+}
+
+void WorldEditor::ApplyRuleEdit() {
+    if (m_selectedTileForRules == '\0') return;
+
+    switch (m_selectedRuleType) {
+    case 0:
+        if (!m_tempRuleInput.empty()) {
+            m_survivalRules[m_selectedTileForRules] = m_tempRuleInput;
+            Logger::Log("Saved survival rule for tile '" +
+                std::string(1, m_selectedTileForRules) +
+                "': " + m_tempRuleInput);
+        }
+        else {
+            m_survivalRules.erase(m_selectedTileForRules);
+            Logger::Log("Cleared survival rule for tile '" +
+                std::string(1, m_selectedTileForRules) + "'");
+        }
+        break;
+    case 1:
+        if (!m_tempRuleInput.empty()) {
+            m_birthRules[m_selectedTileForRules] = m_tempRuleInput;
+            Logger::Log("Saved birth rule for tile '" +
+                std::string(1, m_selectedTileForRules) +
+                "': " + m_tempRuleInput);
+        }
+        else {
+            m_birthRules.erase(m_selectedTileForRules);
+            Logger::Log("Cleared birth rule for tile '" +
+                std::string(1, m_selectedTileForRules) + "'");
+        }
+        break;
+    case 2:
+        if (!m_tempRuleInput.empty()) {
+            m_deathRules[m_selectedTileForRules] = m_tempRuleInput;
+            Logger::Log("Saved death rule for tile '" +
+                std::string(1, m_selectedTileForRules) +
+                "': " + m_tempRuleInput);
+        }
+        else {
+            m_deathRules.erase(m_selectedTileForRules);
+            Logger::Log("Cleared death rule for tile '" +
+                std::string(1, m_selectedTileForRules) + "'");
+        }
+        break;
+    }
+
+    SaveCellularAutomatonRules();
+}
+
+void WorldEditor::SelectPreviousTab() {
+    int current = static_cast<int>(m_currentTab);
+    current = (current - 1 + 8) % 8;
+    m_currentTab = static_cast<EditorTab>(current);
+
+    if (m_currentTab == EditorTab::CELLULAR_AUTOMATON) {
+        m_cellularState = CellularAutomatonState::MAIN_LIST;
+        m_selectedRuleType = 0;
+        m_editingRule = false;
+        m_selectedTileForRules = '\0';
+        m_tempRuleInput = "";
+        m_selectedField = 0;
+        m_cellularScrollOffset = 0;
+    }
+
+    if (m_currentTab == EditorTab::TILES) {
+        m_tilesState = TilesState::MAIN_LIST;
+        m_selectedTileIndex = 0;
+        m_tileActionIndex = 0;
+    }
+
+    if (m_currentTab == EditorTab::FOOD) {
+        m_foodState = FoodState::MAIN_LIST;
+        m_selectedFoodIndex = 0;
+        m_foodActionIndex = 0;
+    }
+
+    m_selectedField = 0;
+    m_selectedButton = 0;
+    m_isEditingText = false;
+    m_editingField = -1;
+    m_editingTileField = false;
+    m_needFullRedraw = true;
+}
+
+bool WorldEditor::IsCtrlPressed() const {
+    return (GetAsyncKeyState(VK_CONTROL) & 0x8000) != 0;
+}
+
+void WorldEditor::CopyToClipboard(const std::string& text) {
+    if (text.empty()) return;
+
+    if (OpenClipboard(nullptr)) {
+        EmptyClipboard();
+
+        HGLOBAL hMem = GlobalAlloc(GMEM_MOVEABLE, text.size() + 1);
+        if (hMem) {
+            char* pMem = static_cast<char*>(GlobalLock(hMem));
+            if (pMem) {
+                strcpy_s(pMem, text.size() + 1, text.c_str());
+                GlobalUnlock(hMem);
+
+                SetClipboardData(CF_TEXT, hMem);
+            }
+            GlobalFree(hMem);
+        }
+        CloseClipboard();
+    }
+}
+
+std::string WorldEditor::PasteFromClipboard() {
+    std::string result;
+
+    if (OpenClipboard(nullptr)) {
+        HANDLE hData = GetClipboardData(CF_TEXT);
+        if (hData) {
+            char* pszText = static_cast<char*>(GlobalLock(hData));
+            if (pszText) {
+                result = pszText;
+                GlobalUnlock(hData);
+            }
+        }
+        CloseClipboard();
+    }
+
+    return result;
+}
+
+void WorldEditor::HandleRuleEditInput() {
+    if (m_inputManager->IsKeyPressed(VK_RETURN) || m_inputManager->IsKeyPressed(VK_SPACE)) {
+        ApplyRuleEdit();
+        m_editingRule = false;
+        m_cellularState = CellularAutomatonState::MAIN_LIST;
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_ESCAPE)) {
+        m_editingRule = false;
+        m_cellularState = CellularAutomatonState::MAIN_LIST;
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('C')) {
+        if (!m_tempRuleInput.empty()) {
+            CopyToClipboard(m_tempRuleInput);
+            Logger::Log("Copied to clipboard: " + m_tempRuleInput.substr(0, 50) +
+                (m_tempRuleInput.length() > 50 ? "..." : ""));
+        }
+        return;
+    }
+
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('V')) {
+        std::string clipboardText = PasteFromClipboard();
+        if (!clipboardText.empty()) {
+            m_tempRuleInput += clipboardText;
+            Logger::Log("Pasted from clipboard: " + clipboardText.substr(0, 50) +
+                (clipboardText.length() > 50 ? "..." : ""));
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('A')) {
+        if (!m_tempRuleInput.empty()) {
+            CopyToClipboard(m_tempRuleInput);
+            Logger::Log("Copied all text to clipboard");
+        }
+        return;
+    }
+
+    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('X')) {
+        if (!m_tempRuleInput.empty()) {
+            CopyToClipboard(m_tempRuleInput);
+            m_tempRuleInput.clear();
+            Logger::Log("Cut to clipboard");
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
+    for (int i = 32; i <= 126; i++) {
+        if (m_inputManager->IsKeyPressed(i)) {
+            if (!IsCtrlPressed()) {
+                m_tempRuleInput += static_cast<char>(i);
+                m_needFullRedraw = true;
+            }
+            return;
+        }
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempRuleInput.empty()) {
+        m_tempRuleInput.pop_back();
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_DELETE)) {
+        m_tempRuleInput.clear();
+        m_needFullRedraw = true;
+        return;
+    }
+}
+
+bool WorldEditor::SaveCellularAutomatonConfigPreserve(const std::string& directory) {
+    std::string automatonConfigPath = directory + "/cellular_automaton.cfg";
+
+    if (fs::exists(automatonConfigPath)) {
+        Logger::Log("Cellular automaton config already exists at: " + automatonConfigPath);
+
+        std::ifstream checkFile(automatonConfigPath);
+        std::string line;
+        bool hasContent = false;
+        while (std::getline(checkFile, line)) {
+            if (!line.empty() && line[0] != '#') {
+                hasContent = true;
+                break;
+            }
+        }
+        checkFile.close();
+
+        if (hasContent) {
+            Logger::Log("Config has content, preserving it");
+            return true;
+        }
+        else {
+            Logger::Log("Config is empty, will create new");
+        }
+    }
+
+    return SaveCellularAutomatonConfig(directory);
 }

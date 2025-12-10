@@ -314,19 +314,25 @@ bool TemplateSystem::SaveAutomatonConfig(int slot, const WorldConfig& config) {
     std::string templatePath = GetTemplateSlotPath(slot);
     std::string configPath = templatePath + "/cellular_automaton.cfg";
 
-    std::stringstream content;
-    if (!config.GetSurvivalRules().empty()) {
-        content << ".\n";
-        content << "survival=" << config.GetSurvivalRules() << "\n";
-    }
-    if (!config.GetBirthRules().empty()) {
-        content << "birth=" << config.GetBirthRules() << "\n";
-    }
-    if (!config.GetDeathRules().empty()) {
-        content << "death=" << config.GetDeathRules() << "\n";
+    // НЕ перезаписываем файл, если он уже существует
+    if (fs::exists(configPath)) {
+        Logger::Log("Cellular automaton config already exists, preserving it");
+        return true;
     }
 
-    return SaveConfigToFile(configPath, content.str());
+    // Создаем только если файла нет
+    std::ofstream file(configPath);
+    if (!file.is_open()) {
+        Logger::Log("ERROR: Cannot create cellular automaton config");
+        return false;
+    }
+
+    // Создаем минимальный конфиг
+    file << "# Cellular Automaton Rules\n";
+    file << "# Rules will be saved from the editor\n";
+
+    file.close();
+    return true;
 }
 
 bool TemplateSystem::SaveFoodConfig(int slot, const WorldConfig& config) {
