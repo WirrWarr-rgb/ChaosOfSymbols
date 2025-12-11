@@ -26,8 +26,9 @@ A C++ console game with flexible gameplay options, a procedurally generated worl
 1. Editor
 2. Gameplay
 
-1. **Editor:** You can edit templates and world data, load them into saves, and play.
-2. **Gameplay:** You can move around the world itself, eat food, and gain experience and level.
+**Editor:** You can edit templates and world data, load them into saves, and play.
+
+**Gameplay:** You can move around the world itself, eat food, and gain experience and level.
 
 ### Game Overview
 
