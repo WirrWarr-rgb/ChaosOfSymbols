@@ -50,7 +50,7 @@ void HelpSystem::RegisterWorldTabHelp() {
     AddHelpEntry("random_generation", "Random Generation: When enabled, world will be randomly generated. When disabled, you can specify a seed.");
     AddHelpEntry("seed", "Seed: A number that determines the random generation. Same seed = same world.");
     AddHelpEntry("noise_frequency", "Noise Frequency: Controls the 'roughness' of terrain. Higher values = more detailed terrain.");
-    AddHelpEntry("neighbor_radius", "Neighbor Radius: How far the cellular automaton looks when smoothing terrain.");
+    AddHelpEntry("neighbor_radius", "Neighbor Radius: The radius of the neighborhood check (e.g. 0 - 4 neighbors, 1 - 8 neighbors, 2 - 24 neighbors, 3 - 48 neighbors, etc).");
 
     m_itemHelpMap["World Name: "] = "world_name";
     m_itemHelpMap["Width: "] = "world_width";
@@ -159,9 +159,9 @@ void HelpSystem::RegisterEditorTabHelp() {
     AddHelpEntry("tab_cellular", "Cellular Automaton: Configure cellular automaton rules for terrain generation.");
     AddHelpEntry("tab_food", "Food: Configure food spawning settings and nutrition values.");
 
-    AddHelpEntry("survival_rules", "Survival Rules: Determines which cells survive (e.g., '23' means cells with 2 or 3 neighbors survive).");
-    AddHelpEntry("birth_rules", "Birth Rules: Determines where new cells are born (e.g., '3' means a dead cell with exactly 3 live neighbors becomes alive).");
-    AddHelpEntry("death_rules", "Death Rules: Determines when cells die from over/underpopulation.");
+    AddHelpEntry("survival_rules", "Survival Rules: Determine which cells survive (e.g. (count['.'] >= 2 && count['.'] <= 5) || (count['.'] == 1 && count['+'] >= 6)).");
+    AddHelpEntry("birth_rules", "Birth Rules: Determines where new cells are born (e.g. (count['.'] >= 2 && count['#'] <= 1)).");
+    AddHelpEntry("death_rules", "Death Rules: Determines when cells die (e.g. (count['#'] >= 5) || (count['+'] <= 2)).");
 
     m_itemHelpMap["Survival Rules: "] = "survival_rules";
     m_itemHelpMap["Birth Rules: "] = "birth_rules";

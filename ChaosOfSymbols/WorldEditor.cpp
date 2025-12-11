@@ -383,7 +383,7 @@ void WorldEditor::RenderWorldTab() {
                 case 2: RenderEditField(line + visibleFieldIndex, "Height: ", m_tempStringInput, true); break;
                 case 3: RenderMenuItem(line + visibleFieldIndex, "Random Generation: " + std::string(m_config.GetRandomGeneration() ? "Yes" : "No"), false); break;
                 case 4: RenderEditField(line + visibleFieldIndex, "Seed: ", m_tempStringInput, true); break;
-                case 5: RenderMenuItem(line + visibleFieldIndex, "Noise Frequency: " + std::to_string(m_config.GetNoiseFrequency()), false); break;
+                case 5: RenderEditField(line + visibleFieldIndex, "Noise Frequency: ", m_tempStringInput, true); break;
                 case 6: RenderEditField(line + visibleFieldIndex, "Neighbor Radius: ", m_tempStringInput, true); break;
                 }
             }
@@ -399,11 +399,6 @@ void WorldEditor::RenderWorldTab() {
                 }
             }
             visibleFieldIndex++;
-        }
-
-        int currentFieldsCount = GetVisibleWorldFieldsCount();
-        for (int i = currentFieldsCount; i < 7; ++i) {
-            ClearLine(line + i);
         }
     }
     else {
@@ -425,9 +420,6 @@ void WorldEditor::RenderWorldTab() {
                 bool isSelected = (i == m_selectedField && m_selectedButton == 0);
                 RenderMenuItem(line + i, fields[i], isSelected);
             }
-            for (int i = fields.size(); i < m_prevFieldCount; ++i) {
-                ClearLine(line + i);
-            }
             m_prevFieldCount = fields.size();
         }
         else {
@@ -441,16 +433,14 @@ void WorldEditor::RenderWorldTab() {
             }
         }
     }
-
-    int fieldsEndLine = 6 + GetVisibleWorldFieldsCount();
-    int buttonsStartLine = 6 + GetMaxFields() + 2;
-
-    for (int i = fieldsEndLine; i < buttonsStartLine; ++i) {
-        ClearLine(i);
-    }
 }
 
 void WorldEditor::RenderBottomButtons() {
+
+    if (m_currentTab == EditorTab::CELLULAR_AUTOMATON) {
+        return;
+    }
+
     if ((m_currentTab == EditorTab::TILES &&
         (m_tilesState == TilesState::EDITING_TILE ||
             m_tilesState == TilesState::ADDING_TILE ||
@@ -482,6 +472,7 @@ void WorldEditor::RenderPlayerTab() {
     int line = 6;
 
     if (m_isEditingText && m_editingField >= 0) {
+        // Отрисовка при редактировании (оставляем как есть)
         for (int i = 0; i < 6; ++i) {
             bool isSelected = (i == m_editingField);
             if (isSelected) {
@@ -741,45 +732,50 @@ void WorldEditor::RenderTileEditing(int startLine, bool isNewTile) {
         if (isEditing) {
             SetConsoleTextAttribute(hConsole, 11);
             std::cout << m_tempTileStringInput << "_";
+            SetConsoleTextAttribute(hConsole, 7);
         }
         else {
-            SetConsoleTextAttribute(hConsole, 7);
+            int currentColor;
+            char currentSymbol;
 
             if (isNewTile) {
-                switch (i) {
-                case 0:
-                    std::cout << "'";
-                    SetConsoleTextAttribute(hConsole, m_newTileColor);
-                    std::cout << m_newTileSymbol;
-                    SetConsoleTextAttribute(hConsole, 7);
-                    std::cout << "'";
-                    break;
-                case 1: std::cout << m_newTileColor; break;
-                case 2: std::cout << m_newTileName; break;
-                case 3: std::cout << m_newTileLowlandProb; break;
-                case 4: std::cout << m_newTilePlainsProb; break;
-                case 5: std::cout << m_newTileMountainProb; break;
-                }
+                currentColor = m_newTileColor;
+                currentSymbol = m_newTileSymbol;
             }
             else {
-                switch (i) {
-                case 0:
-                    std::cout << "'";
-                    SetConsoleTextAttribute(hConsole, m_editedTileColor);
-                    std::cout << m_editedTileSymbol;
-                    SetConsoleTextAttribute(hConsole, 7);
-                    std::cout << "'";
-                    break;
-                case 1: std::cout << m_editedTileColor; break;
-                case 2: std::cout << m_editedTileName; break;
-                case 3: std::cout << m_editedTileLowlandProb; break;
-                case 4: std::cout << m_editedTilePlainsProb; break;
-                case 5: std::cout << m_editedTileMountainProb; break;
-                }
+                currentColor = m_editedTileColor;
+                currentSymbol = m_editedTileSymbol;
+            }
+
+            switch (i) {
+            case 0: // Symbol
+                std::cout << "'";
+                SetConsoleTextAttribute(hConsole, currentColor);
+                std::cout << currentSymbol;
+                SetConsoleTextAttribute(hConsole, 7);
+                std::cout << "'";
+                break;
+            case 1: // Color - показываем числовое значение цвета
+                std::cout << currentColor;
+                break;
+            case 2: // Name
+                if (isNewTile) std::cout << m_newTileName;
+                else std::cout << m_editedTileName;
+                break;
+            case 3: // Lowland Probability
+                if (isNewTile) std::cout << m_newTileLowlandProb;
+                else std::cout << m_editedTileLowlandProb;
+                break;
+            case 4: // Plains Probability
+                if (isNewTile) std::cout << m_newTilePlainsProb;
+                else std::cout << m_editedTilePlainsProb;
+                break;
+            case 5: // Mountain Probability
+                if (isNewTile) std::cout << m_newTileMountainProb;
+                else std::cout << m_editedTileMountainProb;
+                break;
             }
         }
-
-        SetConsoleTextAttribute(hConsole, 7);
     }
 
     int buttonsStart = line + fieldLabels.size() + 1;
@@ -791,6 +787,8 @@ void WorldEditor::RenderTileEditing(int startLine, bool isNewTile) {
 
     bool cancelSelected = (m_selectedField == static_cast<int>(fieldLabels.size()) + 1);
     RenderMenuItem(buttonsStart + 1, "Cancel", cancelSelected);
+
+    SetConsoleTextAttribute(hConsole, 7);
 }
 
 
@@ -1264,13 +1262,14 @@ void WorldEditor::HandleColorInput() {
                 m_tempTileStringInput = "0";
             }
         }
+        UpdateColorFromTempInput();
         m_needFullRedraw = true;
         return;
     }
 
     if (m_inputManager->IsKeyPressed(VK_RIGHT) || m_inputManager->IsKeyPressed('D')) {
         if (m_tempTileStringInput.empty()) {
-            m_tempTileStringInput = "7";
+            m_tempTileStringInput = "10";
         }
         else {
             try {
@@ -1282,6 +1281,7 @@ void WorldEditor::HandleColorInput() {
                 m_tempTileStringInput = "15";
             }
         }
+        UpdateColorFromTempInput();
         m_needFullRedraw = true;
         return;
     }
@@ -1306,6 +1306,7 @@ void WorldEditor::HandleColorInput() {
                     m_tempTileStringInput = std::string(1, c);
                 }
             }
+            UpdateColorFromTempInput();
             m_needFullRedraw = true;
             return;
         }
@@ -1313,8 +1314,32 @@ void WorldEditor::HandleColorInput() {
 
     if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
         m_tempTileStringInput.pop_back();
+        UpdateColorFromTempInput();
         m_needFullRedraw = true;
         return;
+    }
+}
+
+void WorldEditor::UpdateColorFromTempInput() {
+    if (m_tempTileStringInput.empty()) return;
+
+    try {
+        int newColor = std::clamp(std::stoi(m_tempTileStringInput), 0, 15);
+
+        if (m_tilesState == TilesState::ADDING_TILE) {
+            m_newTileColor = newColor;
+        }
+        else if (m_tilesState == TilesState::EDITING_TILE) {
+            m_editedTileColor = newColor;
+        }
+        else if (m_foodState == FoodState::ADDING_FOOD) {
+            m_newFoodColor = newColor;
+        }
+        else if (m_foodState == FoodState::EDITING_FOOD) {
+            m_editedFoodColor = newColor;
+        }
+    }
+    catch (...) {
     }
 }
 
@@ -2298,39 +2323,44 @@ void WorldEditor::RenderFoodEditing(int startLine, bool isNewFood) {
         if (isEditing) {
             SetConsoleTextAttribute(hConsole, 11);
             std::cout << m_tempTileStringInput << "_";
+            SetConsoleTextAttribute(hConsole, 7);
         }
         else {
-            SetConsoleTextAttribute(hConsole, 7);
+            int currentColor;
+            char currentSymbol;
 
             if (isNewFood) {
-                switch (i) {
-                case 0: std::cout << m_newFoodName; break;
-                case 1:
-                    std::cout << "'";
-                    SetConsoleTextAttribute(hConsole, m_newFoodColor);
-                    std::cout << m_newFoodSymbol;
-                    SetConsoleTextAttribute(hConsole, 7);
-                    std::cout << "'";
-                    break;
-                case 2: std::cout << m_newFoodColor; break;
-                case 3: std::cout << m_newHungerRestore; break;
-                case 4: std::cout << m_newHpRestore; break;
-                }
+                currentColor = m_newFoodColor;
+                currentSymbol = m_newFoodSymbol;
             }
             else {
-                switch (i) {
-                case 0: std::cout << m_editedFoodName; break;
-                case 1:
-                    std::cout << "'";
-                    SetConsoleTextAttribute(hConsole, m_editedFoodColor);
-                    std::cout << m_editedFoodSymbol;
-                    SetConsoleTextAttribute(hConsole, 7);
-                    std::cout << "'";
-                    break;
-                case 2: std::cout << m_editedFoodColor; break;
-                case 3: std::cout << m_editedHungerRestore; break;
-                case 4: std::cout << m_editedHpRestore; break;
-                }
+                currentColor = m_editedFoodColor;
+                currentSymbol = m_editedFoodSymbol;
+            }
+
+            switch (i) {
+            case 0: // Name
+                if (isNewFood) std::cout << m_newFoodName;
+                else std::cout << m_editedFoodName;
+                break;
+            case 1: // Symbol
+                std::cout << "'";
+                SetConsoleTextAttribute(hConsole, currentColor);
+                std::cout << currentSymbol;
+                SetConsoleTextAttribute(hConsole, 7);
+                std::cout << "'";
+                break;
+            case 2: // Color
+                std::cout << currentColor;
+                break;
+            case 3: // Hunger Restore
+                if (isNewFood) std::cout << m_newHungerRestore;
+                else std::cout << m_editedHungerRestore;
+                break;
+            case 4: // HP Restore
+                if (isNewFood) std::cout << m_newHpRestore;
+                else std::cout << m_editedHpRestore;
+                break;
             }
         }
     }
@@ -2356,10 +2386,9 @@ void WorldEditor::RenderFoodEditing(int startLine, bool isNewFood) {
         if (isEditing) {
             SetConsoleTextAttribute(hConsole, 11);
             std::cout << m_tempTileStringInput << "_";
+            SetConsoleTextAttribute(hConsole, 7);
         }
         else {
-            SetConsoleTextAttribute(hConsole, 7);
-
             if (isNewFood) {
                 switch (fieldIndex) {
                 case 5: std::cout << m_newSpawnWeight; break;
@@ -2392,14 +2421,24 @@ void WorldEditor::RenderFoodEditing(int startLine, bool isNewFood) {
 }
 
 void WorldEditor::RenderMenuItem(int line, const std::string& text, bool selected) {
-    rlutil::locate(4, line);
+    bool needsRedraw = true;
 
-    for (int i = 4; i < 80; i++) {
-        std::cout << ' ';
+    if (!needsRedraw && !m_needFullRedraw) {
+        return;
     }
+
     rlutil::locate(4, line);
 
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
+    CONSOLE_SCREEN_BUFFER_INFO csbi;
+    GetConsoleScreenBufferInfo(hConsole, &csbi);
+    int width = csbi.dwSize.X;
+
+    std::string spaces(width - 4, ' ');
+    std::cout << spaces;
+
+    rlutil::locate(4, line);
+
     if (selected) {
         SetConsoleTextAttribute(hConsole, 10);
         std::cout << "> " << text;
@@ -2410,7 +2449,6 @@ void WorldEditor::RenderMenuItem(int line, const std::string& text, bool selecte
     }
     SetConsoleTextAttribute(hConsole, 7);
 }
-
 void WorldEditor::ProcessInput() {
     if (!m_inputManager) return;
 
@@ -2767,7 +2805,14 @@ void WorldEditor::ApplyEditedValue() {
                 break;
                 case 4: m_config.SetSeed(std::stoi(m_tempStringInput)); break;
                 case 5: m_config.SetNoiseFrequency(std::clamp<float>(std::stof(m_tempStringInput), 0.1f, 1.0f)); break;
-                case 6: m_config.SetNeighborRadius(max(1, std::stoi(m_tempStringInput))); break;
+                case 6:
+                {
+                    int newRadius = std::stoi(m_tempStringInput);
+                    int clampedRadius = std::clamp(newRadius, MIN_NEIGHBOR_RADIUS, MAX_NEIGHBOR_RADIUS);
+                    m_config.SetNeighborRadius(clampedRadius);
+                    Logger::Log("Neighbor radius set to: " + std::to_string(m_config.GetNeighborRadius()));
+                }
+                break;
                 }
             }
             break;
@@ -3138,14 +3183,14 @@ void WorldEditor::HandleNumericInput() {
     for (char c = '0'; c <= '9'; c++) {
         if (m_inputManager->IsKeyPressed(c)) {
             m_tempStringInput += c;
-            m_needFullRedraw = true;
+            m_needFullRedraw = false;
             return;
         }
     }
 
     if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempStringInput.empty()) {
         m_tempStringInput.pop_back();
-        m_needFullRedraw = true;
+        m_needFullRedraw = false;
         return;
     }
 }
@@ -3154,7 +3199,7 @@ void WorldEditor::HandleBooleanInput() {
     if (m_inputManager->IsKeyPressed('A') || m_inputManager->IsKeyPressed('D') ||
         m_inputManager->IsKeyPressed(VK_LEFT) || m_inputManager->IsKeyPressed(VK_RIGHT)) {
         m_config.SetRandomGeneration(!m_config.GetRandomGeneration());
-        m_needFullRedraw = true;
+        m_needFullRedraw = false;
         return;
     }
 }
@@ -3164,21 +3209,21 @@ void WorldEditor::HandleFrequencyInput() {
         float newValue = max(0.0f, m_config.GetNoiseFrequency() - 0.01f);
         m_config.SetNoiseFrequency(newValue);
         m_tempStringInput = std::to_string(m_config.GetNoiseFrequency());
-        m_needFullRedraw = true;
+        m_needFullRedraw = false;
         return;
     }
     else if (m_inputManager->IsKeyPressed(VK_RIGHT) || m_inputManager->IsKeyPressed('D')) {
         float newValue = min(1.0f, m_config.GetNoiseFrequency() + 0.01f);
         m_config.SetNoiseFrequency(newValue);
         m_tempStringInput = std::to_string(m_config.GetNoiseFrequency());
-        m_needFullRedraw = true;
+        m_needFullRedraw = false;
         return;
     }
 
     for (char c = '0'; c <= '9'; c++) {
         if (m_inputManager->IsKeyPressed(c)) {
             m_tempStringInput += c;
-            m_needFullRedraw = true;
+            m_needFullRedraw = false;
             return;
         }
     }
@@ -3186,45 +3231,53 @@ void WorldEditor::HandleFrequencyInput() {
     if (m_inputManager->IsKeyPressed('.')) {
         if (m_tempStringInput.find('.') == std::string::npos) {
             m_tempStringInput += '.';
-            m_needFullRedraw = true;
+            m_needFullRedraw = false;
         }
         return;
     }
 
     if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempStringInput.empty()) {
         m_tempStringInput.pop_back();
-        m_needFullRedraw = true;
+        m_needFullRedraw = false;
         return;
     }
 }
 
 void WorldEditor::HandleNeighborRadiusInput() {
     if (m_inputManager->IsKeyPressed(VK_LEFT) || m_inputManager->IsKeyPressed('A')) {
-        int newValue = max(0, m_config.GetNeighborRadius() - 1);
+        int newValue = max(MIN_NEIGHBOR_RADIUS, m_config.GetNeighborRadius() - 1);
         m_config.SetNeighborRadius(newValue);
         m_tempStringInput = std::to_string(m_config.GetNeighborRadius());
-        m_needFullRedraw = true;
+        m_needFullRedraw = false;
         return;
     }
     else if (m_inputManager->IsKeyPressed(VK_RIGHT) || m_inputManager->IsKeyPressed('D')) {
-        int newValue = min(10, m_config.GetNeighborRadius() + 1);
+        int newValue = min(MAX_NEIGHBOR_RADIUS, m_config.GetNeighborRadius() + 1);
         m_config.SetNeighborRadius(newValue);
         m_tempStringInput = std::to_string(m_config.GetNeighborRadius());
-        m_needFullRedraw = true;
+        m_needFullRedraw = false;
         return;
     }
 
     for (char c = '0'; c <= '9'; c++) {
         if (m_inputManager->IsKeyPressed(c)) {
-            m_tempStringInput += c;
-            m_needFullRedraw = true;
+            std::string testValue = m_tempStringInput + c;
+            try {
+                int testNum = std::stoi(testValue);
+                if (testNum >= MIN_NEIGHBOR_RADIUS && testNum <= MAX_NEIGHBOR_RADIUS) {
+                    m_tempStringInput = testValue;
+                }
+            }
+            catch (...) {
+            }
+            m_needFullRedraw = false;
             return;
         }
     }
 
     if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempStringInput.empty()) {
         m_tempStringInput.pop_back();
-        m_needFullRedraw = true;
+        m_needFullRedraw = false;
         return;
     }
 }
@@ -3368,7 +3421,7 @@ bool WorldEditor::SaveWorldConfig(const std::string& directory) {
     file << "Height=" << m_config.GetHeight() << "\n";
     file << "Seed=" << m_config.GetSeed() << "\n";
     file << "NoiseFrequency=" << m_config.GetNoiseFrequency() << "\n";
-    file << "NeighborRadius=" << m_config.GetNeighborRadius() << "\n";
+    file << "NeighborRadius=" << std::clamp(m_config.GetNeighborRadius(), MIN_NEIGHBOR_RADIUS, MAX_NEIGHBOR_RADIUS) << "\n";
     file << "GenerationMode=" << (m_config.GetRandomGeneration() ? "1" : "2") << "\n";
     file << "WorldName=" << m_config.GetWorldName() << "\n";
     file << "PlayerStartX=" << m_config.GetPlayerStartX() << "\n";

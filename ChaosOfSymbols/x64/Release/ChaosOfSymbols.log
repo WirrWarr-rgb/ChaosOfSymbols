@@ -2,27 +2,26 @@
 C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\FoodManager.h(17,51): warning C4267: return: преобразование из "size_t" в "int"; возможна потеря данных
   (компиляция исходного файла "WorldEditor.cpp")
   
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(428,24): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(431,43): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(785,22): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(1432,38): warning C4101: e: неиспользованная локальная переменная
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(1477,34): warning C4101: e: неиспользованная локальная переменная
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(1807,30): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(2798,34): warning C4101: e: неиспользованная локальная переменная
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(4503,34): warning C4101: e: неиспользованная локальная переменная
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(4654,56): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(4713,38): warning C4101: e: неиспользованная локальная переменная
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5201,41): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5320,45): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5565,45): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5605,52): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5627,49): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5641,27): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
-C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5656,27): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(423,43): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(781,22): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(1457,38): warning C4101: e: неиспользованная локальная переменная
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(1502,34): warning C4101: e: неиспользованная локальная переменная
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(1832,30): warning C4267: инициализация: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(2843,34): warning C4101: e: неиспользованная локальная переменная
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(4556,34): warning C4101: e: неиспользованная локальная переменная
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(4707,56): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(4766,38): warning C4101: e: неиспользованная локальная переменная
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5254,41): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5373,45): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5618,45): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5658,52): warning C4267: +=: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5680,49): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5694,27): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
+C:\Users\user\source\repos\ChaosOfSymbols\ChaosOfSymbols\WorldEditor.cpp(5709,27): warning C4267: =: преобразование из "size_t" в "int"; возможна потеря данных
   Создание кода
-  5 of 5787 functions (<0.1%) were compiled, the rest were copied from previous compilation.
+  5 of 5788 functions (<0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    17 functions had inline decision re-evaluated but remain unchanged
+    16 functions had inline decision re-evaluated but remain unchanged
   Создание кода завершено
   ChaosOfSymbols.vcxproj -> C:\Users\user\source\repos\ChaosOfSymbols\x64\Release\ChaosOfSymbols.exe
   "pwsh.exe" не является внутренней или внешней

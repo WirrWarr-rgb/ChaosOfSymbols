@@ -3,28 +3,6 @@
 Default console size set to 80x25
 === GAME INITIALIZATION STARTED ===
 
-=== MainMenu::InitializeSaveSelection ===
-=== SaveSelectionMenu CONSTRUCTOR ===
-TemplateSystem initialized successfully
-GetAllSaves: Found 10 saves total
-Constructor completed. Total slots: 10
-Slot 1: Empty
-Slot 2: New_World
-Slot 3: New_World
-Slot 4: New_World
-Slot 5: New_World
-Slot 6: New_World
-Slot 7: New_World
-Slot 8: New_World
-Slot 9: New_World
-Slot 10: New_World
-=== END CONSTRUCTOR ===
-SaveSelectionMenu Initialize() - State reset to MAIN_LIST
-SaveSelectionMenu created and initialized
-SaveSelectionMenu MenuBack pressed
-SaveSelectionMenu Returning to main menu
-MainMenu::RunSaveSelection - Returning to main menu
-SaveSelectionMenu destroyed
 === MainMenu::InitializeWorldTemplateMenu ===
 === WorldTemplateMenu CONSTRUCTOR ===
 TemplateSystem initialized successfully
@@ -43,8 +21,7 @@ Template directory 1 exists
   File: world_spawn.cfg
   Total files: 8
 Template directory 2 exists
-  File: tiles.json
-  Total files: 1
+  Total files: 0
 Template directory 3 exists
   File: enemies.cfg
   Total files: 1
@@ -149,134 +126,57 @@ WorldTemplateMenu Initialize() - State reset to MAIN_LIST
 WorldTemplateMenu created and initialized
 MainMenu state changed to WORLD_TEMPLATE_MENU
 WorldTemplateMenu: Down -> Slot 2
-WorldTemplateMenu: Down -> Slot 3
-WorldTemplateMenu ConfirmSelection - State: 0, Slot: 3, ShowActions: 0
-Showing actions for empty template slot 3
-WorldTemplateMenu Back from actions to MAIN_LIST
-WorldTemplateMenu: Up -> Slot 2
-WorldTemplateMenu: Up -> Slot 1
-WorldTemplateMenu ConfirmSelection - State: 0, Slot: 1, ShowActions: 0
-Showing actions for template slot 1
-WorldTemplateMenu ConfirmSelection - State: 0, Slot: 1, ShowActions: 1
-WorldTemplateMenu Action selected: Edit for slot 1
-Editing template in slot 1
+WorldTemplateMenu ConfirmSelection - State: 0, Slot: 2, ShowActions: 0
+Showing actions for empty template slot 2
+WorldTemplateMenu ConfirmSelection - State: 0, Slot: 2, ShowActions: 1
+WorldTemplateMenu Action selected: Create for slot 2
+Creating new template in slot 2
+Template slot 2 is empty, creating new template
 TemplateSystem initialized successfully
-Loading template from slot 1
-Successfully loaded template: New_World
-Loaded existing template configuration for slot 1
-Existing template detected, keeping data
-Creating TileTypeManager with path: templates/template1/tiles.json
-Tile config exists: templates/template1/tiles.json
-=== LOADING TILE TYPES FROM: templates/template1/tiles.json ===
-File opened successfully, size: 780 bytes
-Cleaned JSON: [  {    "id": 0,    "name": "new_tile",    "character": "A",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  },  {    "id": 1,    "name": "new_tile",    "character": "2",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  },  {    "id": -1,    "name": "border",    "character": "#",    "color": 8,    "isPassable": false,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": -2,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }]
-
-Found JSON object: {    "id": 0,    "name": "new_tile",    "character": "A",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  }
-Found JSON object: {    "id": 1,    "name": "new_tile",    "character": "2",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  }
-Found JSON object: {    "id": -1,    "name": "border",    "character": "#",    "color": 8,    "isPassable": false,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
-Found JSON object: {    "id": -2,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
-
-Parsed 4 objects from JSON array
-Found 4 tile objects in JSON
-
-Parsed tile - id: 0, name: new_tile, character: 'A', color: 7, passable: true
-Parsed tile - id: 0, name: new_tile, lowland: 10, plains: 10, mountain: 10
-Parsed tile - id: 1, name: new_tile, character: '2', color: 7, passable: true
-Parsed tile - id: 1, name: new_tile, lowland: 10, plains: 10, mountain: 10
-Parsed tile - id: -1, name: border, character: '#', color: 8, passable: false
-Parsed tile - id: -1, name: border, lowland: 0, plains: 0, mountain: 0
-Parsed tile - id: -2, name: air, character: ' ', color: 0, passable: true
-Parsed tile - id: -2, name: air, lowland: 0, plains: 0, mountain: 0
-
-=== END LOADED TILES SUMMARY ===
-
-Successfully loaded tiles from: templates/template1/tiles.json
+ERROR: Cannot load empty template slot 2
+No existing template found for slot 2
+=== RESETTING TEMPLATE DATA ===
+Template data has been reset
+Template directory exists but template is invalid, cleaning...
+=== CLEARING TEMPLATE ===
+=== RESETTING TEMPLATE DATA ===
+Template data has been reset
+=== CLEANING UP TEMPLATE FILES FOR SLOT 2 ===
+Removed template directory: templates/template2
+=== TEMPLATE FILES CLEANED UP ===
+New template detected, resetting data
+=== RESETTING TEMPLATE DATA ===
+Template data has been reset
+Creating TileTypeManager with path: templates/template2/tiles.json
+Tile config not found: templates/template2/tiles.json
+Will create new config when tiles are added
 === LOADING AVAILABLE TILES ===
-=== LOADING TILE TYPES FROM: templates/template1/tiles.json ===
-File opened successfully, size: 780 bytes
-Cleaned JSON: [  {    "id": 0,    "name": "new_tile",    "character": "A",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  },  {    "id": 1,    "name": "new_tile",    "character": "2",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  },  {    "id": -1,    "name": "border",    "character": "#",    "color": 8,    "isPassable": false,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": -2,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }]
-
-Found JSON object: {    "id": 0,    "name": "new_tile",    "character": "A",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  }
-Found JSON object: {    "id": 1,    "name": "new_tile",    "character": "2",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  }
-Found JSON object: {    "id": -1,    "name": "border",    "character": "#",    "color": 8,    "isPassable": false,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
-Found JSON object: {    "id": -2,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
-
-Parsed 4 objects from JSON array
-Found 4 tile objects in JSON
-
-Parsed tile - id: 0, name: new_tile, character: 'A', color: 7, passable: true
-Parsed tile - id: 0, name: new_tile, lowland: 10, plains: 10, mountain: 10
-Parsed tile - id: 1, name: new_tile, character: '2', color: 7, passable: true
-Parsed tile - id: 1, name: new_tile, lowland: 10, plains: 10, mountain: 10
-Parsed tile - id: -1, name: border, character: '#', color: 8, passable: false
-Parsed tile - id: -1, name: border, lowland: 0, plains: 0, mountain: 0
-Parsed tile - id: -2, name: air, character: ' ', color: 0, passable: true
-Parsed tile - id: -2, name: air, lowland: 0, plains: 0, mountain: 0
-
-=== END LOADED TILES SUMMARY ===
-
-Tile manager has 4 tiles
-Found tile ID 0: 'A' - new_tile (color: 7)
-Found tile ID 1: '2' - new_tile (color: 7)
-Found tile ID -1: '#' - border (color: 8)
-Found tile ID -2: ' ' - air (color: 0)
-Skipping system tile ID -1: '#' - border
-Skipping system tile ID -2: ' ' - air
-Loaded 2 user-available tiles (system tiles filtered out)
-Available tile IDs: 0 1 
+=== LOADING TILE TYPES FROM: templates/template2/tiles.json ===
+Tile config not found: templates/template2/tiles.json
+Starting with empty tile list (no defaults)
+Created system tiles (air and border) - hidden from user
+Tile manager has 2 tiles
+Found tile ID -1: ' ' - air (color: 0)
+Found tile ID -2: '#' - border (color: 8)
+Skipping system tile ID -1: ' ' - air
+Skipping system tile ID -2: '#' - border
+Loaded 0 user-available tiles (system tiles filtered out)
+Available tile IDs: 
 Updating cellular automaton rules from tiles...
-Cellular automaton rules updated for 2 tiles
+Cellular automaton rules updated for 0 tiles
 Loading cellular automaton rules...
-Loading rules for tile: '2'
-  Survival rule: 4
-  Birth rule: 5
-  Death rule: 6
-Loading rules for tile: 'A'
-  Survival rule: dadad1
-  Birth rule: ddad2
-  Death rule: 3
-Cellular automaton rules loaded: 2 survival rules, 2 birth rules, 2 death rules
+No cellular automaton config found, creating default
+Updating cellular automaton rules from tiles...
+Cellular automaton rules updated for 0 tiles
 === LOADING COMPLETE ===
 Loading cellular automaton rules...
-Loading rules for tile: '2'
-  Survival rule: 4
-  Birth rule: 5
-  Death rule: 6
-Loading rules for tile: 'A'
-  Survival rule: dadad1
-  Birth rule: ddad2
-  Death rule: 3
-Cellular automaton rules loaded: 2 survival rules, 2 birth rules, 2 death rules
-=== LOADED FOOD SUMMARY FROM: templates/template1/food.cfg ===
-
-
-Food manager loaded 0 food types from: templates/template1/food.cfg
-
-=== END LOADED FOOD SUMMARY ===
-
-Successfully loaded food from: templates/template1/food.cfg
-=== LOADING AVAILABLE FOOD ===
-Food manager has 0 food items
-Loaded 0 food items
-WorldEditor initialized for slot 1 with mode: CREATE_TEMPLATE and 2 user tiles
-Loading template from slot 1
-Successfully loaded template: New_World
-Loaded template configuration
-Loaded template configuration: New_World, food config path: templates/template1/food.cfg
-Opening World Editor for template editing in slot 1
+No cellular automaton config found, creating default
+Updating cellular automaton rules from tiles...
+Cellular automaton rules updated for 0 tiles
+WorldEditor initialized for slot 2 with mode: CREATE_TEMPLATE and 0 user tiles
+Creating default tile config at: templates	emplate_tiles_2.json
+Opening World Editor for template creation in slot 2
 Render() - needFullRedraw: 1, prevTab: 0, currentTab: 0
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 0, currentTab: 0
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 0, currentTab: 0
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 0, currentTab: 0
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 0, currentTab: 0
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 0, currentTab: 0
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
@@ -302,9 +202,6 @@ Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 1, currentTab: 1
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 1, currentTab: 1
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
 Tab pressed, needFullRedraw установлен в: 1
 Render() - needFullRedraw: 1, prevTab: 1, currentTab: 2
 Render() - после отрисовки, needFullRedraw установлен в: 0
@@ -317,393 +214,14 @@ Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
+Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+Render() - после отрисовки, needFullRedraw установлен в: 0
+Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+Render() - после отрисовки, needFullRedraw установлен в: 0
 Tab pressed, needFullRedraw установлен в: 1
 Render() - needFullRedraw: 1, prevTab: 2, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Editing rule for tile 'A', rule type: 0, current value: 'dadad1', cursor position: 6
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Cleared survival rule for tile 'A'
-Saved cellular automaton rules to: templates/template1/cellular_automaton.cfg
-=== Cellular Automaton Config Content ===
-2
-survival=4
-birth=5
-death=6
-
-A
-birth=ddad2
-death=3
-
-=== End of Config ===
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
@@ -813,11 +331,11 @@ Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 4, currentTab: 4
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
+Render() - needFullRedraw: 0, prevTab: 4, currentTab: 4
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+Render() - после отрисовки, needFullRedraw установлен в: 0
 Tab pressed, needFullRedraw установлен в: 1
 Render() - needFullRedraw: 1, prevTab: 4, currentTab: 0
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 0, currentTab: 0
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 0, currentTab: 0
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
@@ -834,6 +352,18 @@ Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 1, currentTab: 1
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
+Render() - needFullRedraw: 0, prevTab: 1, currentTab: 1
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+Render() - после отрисовки, needFullRedraw установлен в: 0
+Render() - needFullRedraw: 0, prevTab: 1, currentTab: 1
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+Render() - после отрисовки, needFullRedraw установлен в: 0
+Render() - needFullRedraw: 0, prevTab: 1, currentTab: 1
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+Render() - после отрисовки, needFullRedraw установлен в: 0
+Render() - needFullRedraw: 0, prevTab: 1, currentTab: 1
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+Render() - после отрисовки, needFullRedraw установлен в: 0
 Tab pressed, needFullRedraw установлен в: 1
 Render() - needFullRedraw: 1, prevTab: 1, currentTab: 2
 Render() - после отрисовки, needFullRedraw установлен в: 0
@@ -843,8 +373,8 @@ Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+Starting to add new tile...
+Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
@@ -873,688 +403,51 @@ Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Tab pressed, needFullRedraw установлен в: 1
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Editing rule for tile 'A', rule type: 1, current value: 'ddad2', cursor position: 5
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Saved birth rule for tile 'A': 2
-Saved cellular automaton rules to: templates/template1/cellular_automaton.cfg
-=== Cellular Automaton Config Content ===
-2
-survival=4
-birth=5
-death=6
-
-A
-birth=2
-death=3
-
-=== End of Config ===
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Editing rule for tile 'A', rule type: 2, current value: '3', cursor position: 1
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Saved death rule for tile 'A': 2
-Saved cellular automaton rules to: templates/template1/cellular_automaton.cfg
-=== Cellular Automaton Config Content ===
-2
-survival=4
-birth=5
-death=6
-
-A
-birth=2
-death=2
-
-=== End of Config ===
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Tab pressed, needFullRedraw установлен в: 1
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 2
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
@@ -1589,462 +482,68 @@ Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
 NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 1, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 7, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 1, currField: 2, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 2, currField: 3, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 0, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 3, currField: 4, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 4, currField: 4, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 4, currField: 4, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 4, currField: 4, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 4, currField: 4, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 4, currField: 5, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 5, currField: 5, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 5, currField: 5, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 5, currField: 5, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 5, currField: 5, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 5, currField: 5, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 7, currField: 7, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 5, currField: 5, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 1 (prevField: 7, currField: 6, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 1 (prevField: 5, currField: 6, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
 NeedsRedraw() возвращает: 0 (prevField: 6, currField: 6, prevButton: 0, currButton: 0)
@@ -2064,125 +563,103 @@ Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
 NeedsRedraw() возвращает: 0 (prevField: 6, currField: 6, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 6, currField: 6, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 6, currField: 6, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 6, currField: 6, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 6, currField: 6, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 6, currField: 6, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Updating cellular automaton rules for symbol change: '2' -> '1'
-Moved survival rule: ''
-Moved birth rule: ''
-Moved death rule: ''
-Cellular automaton rules updated for symbol change
-=== SAVING TILES TO: templates/template1/tiles.json ===
-Saving 4 tiles
+=== ADDING NEW TILE ===
+New tile ID: 0
+Name: new_tile
+Symbol: 'A'
+Color: 7
+Probabilities: L=10 P=10 M=10
+Tile registered in manager
+=== SAVING TILES TO: templates/template2/tiles.json ===
+Saving 3 tiles
+  Tile -1: ' ' - air
+  Tile -2: '#' - border
   Tile 0: 'A' - new_tile
-  Tile 1: '1' - new_tile
-  Tile -1: '#' - border
-  Tile -2: ' ' - air
-Successfully saved 4 tile types to: templates/template1/tiles.json
+Successfully saved 3 tile types to: templates/template2/tiles.json
+Tile saved to file successfully
+Reloading available tiles...
 === LOADING AVAILABLE TILES ===
-=== LOADING TILE TYPES FROM: templates/template1/tiles.json ===
-File opened successfully, size: 780 bytes
-Cleaned JSON: [  {    "id": 0,    "name": "new_tile",    "character": "A",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  },  {    "id": 1,    "name": "new_tile",    "character": "1",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  },  {    "id": -1,    "name": "border",    "character": "#",    "color": 8,    "isPassable": false,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": -2,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }]
+=== LOADING TILE TYPES FROM: templates/template2/tiles.json ===
+File opened successfully, size: 583 bytes
+Cleaned JSON: [  {    "id": -1,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": -2,    "name": "border",    "character": "#",    "color": 8,    "isPassable": false,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  },  {    "id": 0,    "name": "new_tile",    "character": "A",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  }]
 
+Found JSON object: {    "id": -1,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
+Found JSON object: {    "id": -2,    "name": "border",    "character": "#",    "color": 8,    "isPassable": false,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
 Found JSON object: {    "id": 0,    "name": "new_tile",    "character": "A",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  }
-Found JSON object: {    "id": 1,    "name": "new_tile",    "character": "1",    "color": 7,    "isPassable": true,    "lowlandProbability": 10,    "plainsProbability": 10,    "mountainProbability": 10  }
-Found JSON object: {    "id": -1,    "name": "border",    "character": "#",    "color": 8,    "isPassable": false,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
-Found JSON object: {    "id": -2,    "name": "air",    "character": " ",    "color": 0,    "isPassable": true,    "lowlandProbability": 0,    "plainsProbability": 0,    "mountainProbability": 0  }
 
-Parsed 4 objects from JSON array
-Found 4 tile objects in JSON
+Parsed 3 objects from JSON array
+Found 3 tile objects in JSON
 
+Parsed tile - id: -1, name: air, character: ' ', color: 0, passable: true
+Parsed tile - id: -1, name: air, lowland: 0, plains: 0, mountain: 0
+Parsed tile - id: -2, name: border, character: '#', color: 8, passable: false
+Parsed tile - id: -2, name: border, lowland: 0, plains: 0, mountain: 0
 Parsed tile - id: 0, name: new_tile, character: 'A', color: 7, passable: true
 Parsed tile - id: 0, name: new_tile, lowland: 10, plains: 10, mountain: 10
-Parsed tile - id: 1, name: new_tile, character: '1', color: 7, passable: true
-Parsed tile - id: 1, name: new_tile, lowland: 10, plains: 10, mountain: 10
-Parsed tile - id: -1, name: border, character: '#', color: 8, passable: false
-Parsed tile - id: -1, name: border, lowland: 0, plains: 0, mountain: 0
-Parsed tile - id: -2, name: air, character: ' ', color: 0, passable: true
-Parsed tile - id: -2, name: air, lowland: 0, plains: 0, mountain: 0
 
 === END LOADED TILES SUMMARY ===
 
-Tile manager has 4 tiles
+Tile manager has 3 tiles
 Found tile ID 0: 'A' - new_tile (color: 7)
-Found tile ID 1: '1' - new_tile (color: 7)
 Found tile ID -1: '#' - border (color: 8)
 Found tile ID -2: ' ' - air (color: 0)
 Skipping system tile ID -1: '#' - border
 Skipping system tile ID -2: ' ' - air
-Loaded 2 user-available tiles (system tiles filtered out)
-Available tile IDs: 0 1 
+Loaded 1 user-available tiles (system tiles filtered out)
+Available tile IDs: 0 
 Updating cellular automaton rules from tiles...
-Cellular automaton rules updated for 2 tiles
+Cellular automaton rules updated for 1 tiles
 Loading cellular automaton rules...
-Loading rules for tile: '2'
-  Survival rule: 4
-  Birth rule: 5
-  Death rule: 6
-Loading rules for tile: 'A'
-  Birth rule: 2
-  Death rule: 2
-Cellular automaton rules loaded: 1 survival rules, 2 birth rules, 2 death rules
+No cellular automaton config found, creating default
+Updating cellular automaton rules from tiles...
+Cellular automaton rules updated for 1 tiles
 === LOADING COMPLETE ===
-Tile updated: new_tile (ID: 1) Symbol: '2' -> '1' L:10 P:10 M:10
+Added new tile: new_tile (ID: 0) Symbol: 'A' L:10 P:10 M:10
+Saved cellular automaton rules to: templates/template2/cellular_automaton.cfg
+=== Cellular Automaton Config Content ===
+A
+=== End of Config ===
+=== NEW TILE ADDED ===
 Render() - needFullRedraw: 1, prevTab: 2, currentTab: 2
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 2, currentTab: 2
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Tab pressed, needFullRedraw установлен в: 1
 Render() - needFullRedraw: 1, prevTab: 2, currentTab: 3
@@ -2247,470 +724,144 @@ Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
 NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 1, currField: 1, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 3, currField: 3, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 1, prevTab: 3, currentTab: 3
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
-Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
-Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0
 Render() - needFullRedraw: 0, prevTab: 3, currentTab: 3
-NeedsRedraw() возвращает: 0 (prevField: 2, currField: 2, prevButton: 0, currButton: 0)
+NeedsRedraw() возвращает: 0 (prevField: 0, currField: 0, prevButton: 0, currButton: 0)
 Render() - после отрисовки, needFullRedraw установлен в: 0

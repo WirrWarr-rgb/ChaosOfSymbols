@@ -200,6 +200,7 @@ private:
     void UpdateCellularRulesForTile(char oldSymbol, char newSymbol);
     void UpdateSymbolInAllRules(char oldSymbol, char newSymbol);
     void UpdateSymbolInRuleSet(std::unordered_map<char, std::string>& ruleSet, char oldSymbol, char newSymbol);
+    void UpdateColorFromTempInput();
 
     bool IsCtrlPressed() const;
     void CopyToClipboard(const std::string& text);
@@ -264,6 +265,8 @@ private:
     int m_prevFieldCount;
 
     // Константы
+    const int MIN_NEIGHBOR_RADIUS = 0;
+    const int MAX_NEIGHBOR_RADIUS = 10;
     static const int MAX_WORLD_WIDTH = 200;
     static const int MAX_WORLD_HEIGHT = 45;
     static const int MIN_WORLD_WIDTH = 1;
