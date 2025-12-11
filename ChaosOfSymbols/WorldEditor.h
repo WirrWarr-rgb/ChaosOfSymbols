@@ -195,9 +195,11 @@ private:
     void StartEditingRuleForSelectedTile();
     void StartEditingSelectedRule();
     bool SaveCellularAutomatonConfigPreserve(const std::string& directory);
-
     std::string GetCurrentButtonName() const;
     std::string GetCurrentTabName() const;
+    void UpdateCellularRulesForTile(char oldSymbol, char newSymbol);
+    void UpdateSymbolInAllRules(char oldSymbol, char newSymbol);
+    void UpdateSymbolInRuleSet(std::unordered_map<char, std::string>& ruleSet, char oldSymbol, char newSymbol);
 
     bool IsCtrlPressed() const;
     void CopyToClipboard(const std::string& text);
@@ -205,6 +207,8 @@ private:
 
     int m_cellularScrollOffset = 0;
     int m_visibleRulesCount = 7;
+
+    int m_cursorPos;
 
     CellularAutomatonState m_cellularState;
     CellularAutomatonState m_prevCellularState;

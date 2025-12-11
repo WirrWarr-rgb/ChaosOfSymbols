@@ -18,7 +18,7 @@ public:
 
     // Публичные методы
     bool Initialize();
-    void Run();
+    bool Run();
     void ProcessInput();
     void Update();
     void Render();

@@ -26,7 +26,8 @@ Game::Game()
     m_playerXP(0), m_playerLevel(1), m_xpToNextLevel(100),
     m_totalXP(0),
     m_inMainMenu(true),
-    m_isPaused(false)
+    m_isPaused(false),
+    m_shouldReturnToMainMenu(false)
 {
     SetDefaultConsoleSize();
 
@@ -79,7 +80,7 @@ void Game::Shutdown() {
 /// <summary>
 /// Игровой цикл с фикс. временем обновления
 /// </summary>
-void Game::Run() {
+bool Game::Run() {
     auto lastTime = chrono::steady_clock::now();
 
     while (m_isRunning) {
@@ -100,6 +101,10 @@ void Game::Run() {
 
         if (m_inMainMenu) {
             RunMainMenu();
+
+            if (!m_isRunning) {
+                return true;
+            }
         }
         else if (m_isPaused) {
             RunPauseMenu();
@@ -112,6 +117,8 @@ void Game::Run() {
             }
         }
     }
+
+    return false;
 }
 
 void Game::RunMainMenu() {
@@ -120,17 +127,21 @@ void Game::RunMainMenu() {
     m_mainMenu->Render();
 
     if (m_mainMenu->ShouldStartGame()) {
+        Logger::Log("Game::RunMainMenu: Starting game...");
+
         if (m_mainMenu->ShouldLoadSave()) {
             StartGameFromSave(m_mainMenu->GetSelectedSaveGameMode(), m_mainMenu->GetSelectedSaveSlot());
         }
-        else {
-            Logger::Log("Starting NEW game from menu selection...");
-        }
+
         m_mainMenu->ResetStartFlags();
+        m_inMainMenu = false;
+        system("cls");
     }
     else if (m_mainMenu->ShouldExitGame()) {
-        Logger::Log("Exit requested from main menu");
+        // Установить флаг выхода
         m_isRunning = false;
+        // Возвращаем true, чтобы основной цикл знал, что нужно выйти
+        return;
     }
 
     std::this_thread::sleep_for(std::chrono::milliseconds(16));
@@ -666,6 +677,7 @@ void Game::ShowDeathScreen() {
 
     ClearScreenCompletely();
 
+    m_shouldReturnToMainMenu = true;
     m_isRunning = false;
 }
 

@@ -18,5 +18,15 @@
     "lowlandProbability": 0,
     "plainsProbability": 0,
     "mountainProbability": 0
+  },
+  {
+    "id": 0,
+    "name": "new_tile",
+    "character": "A",
+    "color": 7,
+    "isPassable": true,
+    "lowlandProbability": 10,
+    "plainsProbability": 10,
+    "mountainProbability": 10
   }
 ]

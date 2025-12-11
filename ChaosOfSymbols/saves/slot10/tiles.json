@@ -2,11 +2,9 @@
   {
     "id": 0,
     "name": "new_tile",
-    "character": ".",
+    "character": "1",
     "color": 7,
     "isPassable": true,
-    "isDestructible": false,
-    "damage": 0,
     "lowlandProbability": 10,
     "plainsProbability": 10,
     "mountainProbability": 10
@@ -14,23 +12,9 @@
   {
     "id": 1,
     "name": "new_tile",
-    "character": "+",
-    "color": 7,
+    "character": "2",
+    "color": 4,
     "isPassable": true,
-    "isDestructible": false,
-    "damage": 0,
-    "lowlandProbability": 10,
-    "plainsProbability": 10,
-    "mountainProbability": 10
-  },
-  {
-    "id": 2,
-    "name": "new_tile",
-    "character": "!",
-    "color": 7,
-    "isPassable": true,
-    "isDestructible": false,
-    "damage": 0,
     "lowlandProbability": 10,
     "plainsProbability": 10,
     "mountainProbability": 10
@@ -41,8 +25,16 @@
     "character": "#",
     "color": 8,
     "isPassable": false,
-    "isDestructible": true,
-    "damage": 0,
+    "lowlandProbability": 0,
+    "plainsProbability": 0,
+    "mountainProbability": 0
+  },
+  {
+    "id": -2,
+    "name": "air",
+    "character": " ",
+    "color": 0,
+    "isPassable": true,
     "lowlandProbability": 0,
     "plainsProbability": 0,
     "mountainProbability": 0

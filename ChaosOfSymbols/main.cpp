@@ -14,13 +14,19 @@ int main() {
     SetConsoleCursorInfo(hConsole, &cursorInfo);
 
     bool restartGame = true;
+    bool forceExit = false;
 
-    while (restartGame) {
+    while (restartGame && !forceExit) {
         Game game;
 
         if (game.Initialize()) {
-            game.Run();
-            restartGame = true;
+            bool shouldExit = game.Run();
+            if (shouldExit) {
+                restartGame = false;
+            }
+            else {
+                restartGame = true;
+            }
         }
         else {
             restartGame = false;
@@ -28,5 +34,6 @@ int main() {
     }
 
     cout << "\n\nThanks for playing!" << '\n';
+
     return 0;
 }

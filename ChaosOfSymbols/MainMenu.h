@@ -40,6 +40,7 @@ public:
     GameMode GetSelectedSaveGameMode() const { return m_selectedSaveGameMode; }
     int GetSelectedSaveSlot() const { return m_selectedSaveSlot; }
     bool ShouldLoadSave() const { return m_shouldLoadSave; }
+    void ResetExitFlag() { m_shouldExit = false; }
 
     void Reset() {
         m_shouldStartGame = false;

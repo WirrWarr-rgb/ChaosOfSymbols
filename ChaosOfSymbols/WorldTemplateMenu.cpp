@@ -46,7 +46,6 @@ WorldTemplateMenu::WorldTemplateMenu()
     m_usedTemplateActions = {
         "Edit",
         "Delete",
-        "Load",
         "Back"
     };
 
@@ -749,9 +748,6 @@ void WorldTemplateMenu::ConfirmSelection() {
         else if (selectedAction == "Delete") {
             DeleteTemplate(m_actionSlot);
         }
-        else if (selectedAction == "Load") {
-            Logger::Log("Preview template " + std::to_string(m_actionSlot));
-        }
     }
     else {
         const int TOTAL_TEMPLATES = 30;
@@ -920,8 +916,7 @@ void WorldTemplateMenu::UpdateHelpForCurrentSelection() {
             switch (m_selectedActionIndex) {
             case 0: currentItemId = "Edit"; break;
             case 1: currentItemId = "Delete"; break;
-            case 2: currentItemId = "Load"; break;
-            case 3: currentItemId = "Back"; break;
+            case 2: currentItemId = "Back"; break;
             }
         }
     }

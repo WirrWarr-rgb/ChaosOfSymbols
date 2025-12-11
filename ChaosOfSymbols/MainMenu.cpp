@@ -457,7 +457,7 @@ void MainMenu::ProcessInput() {
             m_inPlaySubmenu = false;
             m_selectedSubIndex = 0;
         }
-        else {
+        else if (m_currentState == MenuState::MAIN_MENU) {
             m_shouldExit = true;
         }
     }

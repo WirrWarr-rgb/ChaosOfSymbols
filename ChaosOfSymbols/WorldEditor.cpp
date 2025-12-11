@@ -72,6 +72,7 @@ WorldEditor::WorldEditor(EditorMode editorMode, int slot, GameMode gameMode)
     , m_selectedTileForRules('\0')
     , m_cellularScrollOffset(0)
     , m_visibleRulesCount(7)
+    , m_cursorPos(0)
 {
     HelpPanel::Initialize();
     RegisterHelpSystemEntries();
@@ -1125,139 +1126,126 @@ void WorldEditor::HandleProbabilityInput() {
 }
 
 void WorldEditor::HandleSymbolInput() {
-    // Маппинг для цифр с Shift
-    static std::unordered_map<char, char> shiftDigits = {
-        {'0', ')'}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'},
-        {'5', '%'}, {'6', '^'}, {'7', '&'}, {'8', '*'}, {'9', '('}
-    };
-
-    // Маппинг для специальных символов
-    static std::unordered_map<int, char> normalSymbols = {
-        {VK_OEM_MINUS, '-'}, {VK_OEM_PLUS, '='}, {VK_OEM_4, '['},
-        {VK_OEM_6, ']'}, {VK_OEM_5, '\\'}, {VK_OEM_1, ';'},
-        {VK_OEM_7, '\''}, {VK_OEM_COMMA, ','}, {VK_OEM_PERIOD, '.'},
-        {VK_OEM_2, '/'}, {VK_OEM_3, '`'}, {VK_SPACE, ' '}
-    };
-
-    static std::unordered_map<int, char> shiftSymbols = {
-        {VK_OEM_MINUS, '_'}, {VK_OEM_PLUS, '+'}, {VK_OEM_4, '{'},
-        {VK_OEM_6, '}'}, {VK_OEM_5, '|'}, {VK_OEM_1, ':'},
-        {VK_OEM_7, '"'}, {VK_OEM_COMMA, '<'}, {VK_OEM_PERIOD, '>'},
-        {VK_OEM_2, '?'}, {VK_OEM_3, '~'}, {VK_SPACE, ' '}
-    };
-
-    // Проверяем состояние Shift
-    bool shiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
-
-    // 1. Обрабатываем цифры с Shift
-    for (char c = '0'; c <= '9'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
-            if (shiftPressed) {
-                // Цифра с Shift
-                auto it = shiftDigits.find(c);
-                if (it != shiftDigits.end()) {
-                    m_tempTileStringInput = std::string(1, it->second);
-                    m_needFullRedraw = true;
-                    return;
-                }
-            }
-            else {
-                // Просто цифра
-                m_tempTileStringInput = std::string(1, c);
-                m_needFullRedraw = true;
-                return;
-            }
+    // Используем ту же расширенную логику для символов тайлов
+    if (m_inputManager->IsKeyPressed(VK_RETURN) || m_inputManager->IsKeyPressed(VK_SPACE)) {
+        if (m_tilesState == TilesState::ADDING_TILE) {
+            SaveNewTileField();
         }
+        else {
+            SaveEditedTileField();
+        }
+        m_isEditingText = false;
+        m_editingTileField = false;
+        m_needFullRedraw = true;
+        return;
     }
 
-    // 2. Обрабатываем буквы (учитываем CapsLock)
-    bool capsLockOn = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
-
-    for (char c = 'A'; c <= 'Z'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
-            if (shiftPressed ^ capsLockOn) { // XOR: заглавные если Shift или CapsLock, но не оба
-                m_tempTileStringInput = std::string(1, c); // Заглавная
-            }
-            else {
-                m_tempTileStringInput = std::string(1, c + 32); // Строчная
-            }
-            m_needFullRedraw = true;
-            return;
-        }
+    if (m_inputManager->IsKeyPressed(VK_ESCAPE)) {
+        m_isEditingText = false;
+        m_editingTileField = false;
+        m_needFullRedraw = true;
+        return;
     }
 
-    // 3. Обрабатываем специальные символы
-    std::vector<int> specialKeys = {
-        VK_OEM_MINUS, VK_OEM_PLUS, VK_OEM_4, VK_OEM_6, VK_OEM_5,
-        VK_OEM_1, VK_OEM_7, VK_OEM_COMMA, VK_OEM_PERIOD, VK_OEM_2,
-        VK_OEM_3, VK_SPACE
-    };
-
-    for (int vkCode : specialKeys) {
-        if (m_inputManager->IsKeyPressed(vkCode)) {
-            char symbol = ' ';
-
-            if (shiftPressed) {
-                auto it = shiftSymbols.find(vkCode);
-                if (it != shiftSymbols.end()) {
-                    symbol = it->second;
-                }
-            }
-            else {
-                auto it = normalSymbols.find(vkCode);
-                if (it != normalSymbols.end()) {
-                    symbol = it->second;
-                }
-            }
-
-            if (symbol != ' ') {
-                m_tempTileStringInput = std::string(1, symbol);
-                m_needFullRedraw = true;
-                return;
-            }
-        }
-    }
-
-    // 4. Обрабатываем остальные печатные символы (резервный вариант)
-    for (int i = 32; i <= 126; i++) {
-        // Пропускаем уже обработанные
-        if ((i >= '0' && i <= '9') || (i >= 'A' && i <= 'Z') || (i >= 'a' && i <= 'z')) {
-            continue;
-        }
-
-        bool isSpecial = false;
-        for (const auto& pair : normalSymbols) {
-            if (pair.second == i) {
-                isSpecial = true;
-                break;
-            }
-        }
-        for (const auto& pair : shiftSymbols) {
-            if (pair.second == i) {
-                isSpecial = true;
-                break;
-            }
-        }
-
-        if (!isSpecial && m_inputManager->IsKeyPressed(i)) {
-            m_tempTileStringInput = std::string(1, static_cast<char>(i));
-            m_needFullRedraw = true;
-            return;
-        }
-    }
-
-    // 5. Обработка Backspace
     if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
         m_tempTileStringInput.clear();
         m_needFullRedraw = true;
         return;
     }
 
-    // 6. Обработка Delete
     if (m_inputManager->IsKeyPressed(VK_DELETE)) {
         m_tempTileStringInput.clear();
         m_needFullRedraw = true;
         return;
+    }
+
+    bool shiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+    bool capsLockOn = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
+
+    // 1. Цифры
+    for (char c = '0'; c <= '9'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            if (shiftPressed) {
+                static const std::unordered_map<char, char> shiftDigits = {
+                    {'0', ')'}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'},
+                    {'5', '%'}, {'6', '^'}, {'7', '&'}, {'8', '*'}, {'9', '('}
+                };
+                auto it = shiftDigits.find(c);
+                if (it != shiftDigits.end()) {
+                    m_tempTileStringInput = std::string(1, it->second);
+                    m_needFullRedraw = true;
+                }
+            }
+            else {
+                m_tempTileStringInput = std::string(1, c);
+                m_needFullRedraw = true;
+            }
+            return;
+        }
+    }
+
+    // 2. Буквы
+    for (int vkCode = 'A'; vkCode <= 'Z'; vkCode++) {
+        if (m_inputManager->IsKeyPressed(vkCode)) {
+            char c = static_cast<char>(vkCode);
+            if (shiftPressed ^ capsLockOn) {
+                m_tempTileStringInput = std::string(1, c);
+            }
+            else {
+                m_tempTileStringInput = std::string(1, c + 32);
+            }
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    // 3. Специальные символы
+    static const std::unordered_map<int, std::pair<char, char>> specialKeys = {
+        {VK_OEM_MINUS, {'-', '_'}},
+        {VK_OEM_PLUS, {'=', '+'}},
+        {VK_OEM_1, {';', ':'}},
+        {VK_OEM_2, {'/', '?'}},
+        {VK_OEM_3, {'`', '~'}},
+        {VK_OEM_4, {'[', '{'}},
+        {VK_OEM_5, {'\\', '|'}},
+        {VK_OEM_6, {']', '}'}},
+        {VK_OEM_7, {'\'', '"'}},
+        {VK_OEM_COMMA, {',', '<'}},
+        {VK_OEM_PERIOD, {'.', '>'}},
+        {VK_SPACE, {' ', ' '}},
+    };
+
+    for (const auto& [vkCode, chars] : specialKeys) {
+        if (m_inputManager->IsKeyPressed(vkCode)) {
+            char symbol = shiftPressed ? chars.second : chars.first;
+            m_tempTileStringInput = std::string(1, symbol);
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    // 4. Другие символы
+    for (int i = 32; i <= 255; i++) {
+        if (m_inputManager->IsKeyPressed(i)) {
+            if ((i >= '0' && i <= '9') || (i >= 'A' && i <= 'Z')) {
+                continue;
+            }
+
+            bool isSpecialVK = false;
+            for (const auto& [vkCode, _] : specialKeys) {
+                if (vkCode == i) {
+                    isSpecialVK = true;
+                    break;
+                }
+            }
+            if (isSpecialVK) {
+                continue;
+            }
+
+            m_tempTileStringInput = std::string(1, static_cast<char>(i));
+            m_needFullRedraw = true;
+            return;
+        }
     }
 }
 
@@ -1498,18 +1486,27 @@ void WorldEditor::ApplyTileEdit() {
 
         if (!tile) return;
 
+        // Сохраняем старый символ для обновления правил
+        char oldSymbol = tile->GetCharacter();
+        char newSymbol = m_editedTileSymbol;
+
         try {
             TileType newTile(tileId, m_editedTileName, m_editedTileSymbol, m_editedTileColor,
                 true, m_editedTileLowlandProb, m_editedTilePlainsProb, m_editedTileMountainProb);
 
             m_tileManager->RegisterTileType(newTile);
 
+            // Если символ изменился, обновляем правила клеточного автомата
+            if (oldSymbol != newSymbol) {
+                UpdateCellularRulesForTile(oldSymbol, newSymbol);
+            }
+
             m_tileManager->SaveToFile();
 
             LoadAvailableTiles();
 
             Logger::Log("Tile updated: " + m_editedTileName + " (ID: " + std::to_string(tileId) + ")" +
-                " Symbol: '" + std::string(1, m_editedTileSymbol) + "'" +
+                " Symbol: '" + std::string(1, oldSymbol) + "' -> '" + std::string(1, newSymbol) + "'" +
                 " L:" + std::to_string(m_editedTileLowlandProb) +
                 " P:" + std::to_string(m_editedTilePlainsProb) +
                 " M:" + std::to_string(m_editedTileMountainProb));
@@ -1554,22 +1551,44 @@ void WorldEditor::AddNewTile() {
             " P=" + std::to_string(m_newTilePlainsProb) +
             " M=" + std::to_string(m_newTileMountainProb));
 
-        TileType newTile(newId, m_newTileName, m_newTileSymbol, m_newTileColor,
-            true, m_newTileLowlandProb, m_newTilePlainsProb, m_newTileMountainProb);
-
+        // Проверяем уникальность символа
         bool symbolExists = false;
+        char existingSymbol = '\0';
         const auto& allTiles = m_tileManager->GetAllTiles();
         for (const auto& pair : allTiles) {
             if (pair.second.GetCharacter() == m_newTileSymbol) {
                 symbolExists = true;
+                existingSymbol = pair.second.GetCharacter();
                 Logger::Log("WARNING: Symbol '" + std::string(1, m_newTileSymbol) +
                     "' already exists in tile: " + pair.second.GetName());
+
+                // Не прерываем выполнение, пользователь может захотеть заменить символ
+                // Просто предупреждаем в логах
                 break;
             }
         }
 
+        TileType newTile(newId, m_newTileName, m_newTileSymbol, m_newTileColor,
+            true, m_newTileLowlandProb, m_newTilePlainsProb, m_newTileMountainProb);
+
         m_tileManager->RegisterTileType(newTile);
         Logger::Log("Tile registered in manager");
+
+        // Если символ уже существует, обновляем правила для этого символа
+        if (symbolExists) {
+            // Находим старый тайл с таким символом и обновляем его правила
+            // Но в данном случае, поскольку мы добавляем новый тайл, возможно,
+            // пользователь хочет заменить старый тайл новым с теми же правилами
+            // или создать конфликт. Лучше просто предупредить.
+            Logger::Log("NOTE: Symbol '" + std::string(1, m_newTileSymbol) +
+                "' already exists. Cellular automaton rules for this symbol will be preserved.");
+        }
+        else {
+            // Добавляем пустые правила для нового символа
+            m_survivalRules[m_newTileSymbol] = "";
+            m_birthRules[m_newTileSymbol] = "";
+            m_deathRules[m_newTileSymbol] = "";
+        }
 
         if (m_tileManager->SaveToFile()) {
             Logger::Log("Tile saved to file successfully");
@@ -1586,6 +1605,9 @@ void WorldEditor::AddNewTile() {
             " L:" + std::to_string(m_newTileLowlandProb) +
             " P:" + std::to_string(m_newTilePlainsProb) +
             " M:" + std::to_string(m_newTileMountainProb));
+
+        // Сохраняем правила клеточного автомата
+        SaveCellularAutomatonRules();
 
         m_newTileName = "new_tile_" + std::to_string(newId + 1);
         m_newTileSymbol = static_cast<char>('A' + ((newId + 1) % 26));
@@ -1607,7 +1629,6 @@ void WorldEditor::AddNewTile() {
         m_needFullRedraw = true;
 
         Logger::Log("=== NEW TILE ADDED ===");
-        UpdateCellularRulesFromTiles();
     }
     catch (const std::exception& e) {
         Logger::Log("ERROR: Failed to add new tile: " + std::string(e.what()));
@@ -1634,7 +1655,14 @@ void WorldEditor::DeleteSelectedTile() {
         return;
     }
 
+    char tileChar = tile->GetCharacter();
+
     m_tileManager->RemoveTileType(tileId);
+
+    // Удаляем правила для этого символа
+    m_survivalRules.erase(tileChar);
+    m_birthRules.erase(tileChar);
+    m_deathRules.erase(tileChar);
 
     m_tileManager->SaveToFile();
 
@@ -1644,9 +1672,11 @@ void WorldEditor::DeleteSelectedTile() {
         m_selectedTileIndex = max(0, static_cast<int>(m_availableTileIds.size()) - 1);
     }
 
-    UpdateCellularRulesFromTiles();
+    // Сохраняем обновленные правила
+    SaveCellularAutomatonRules();
 
-    Logger::Log("Deleted user tile with ID: " + std::to_string(tileId));
+    Logger::Log("Deleted user tile with ID: " + std::to_string(tileId) +
+        " and symbol: '" + std::string(1, tileChar) + "'");
 }
 
 void WorldEditor::LoadAvailableTiles() {
@@ -1828,7 +1858,19 @@ void WorldEditor::RenderCellularAutomatonTab() {
 
                     if (isEditing) {
                         SetConsoleTextAttribute(hConsole, 11);
-                        std::cout << m_tempRuleInput << "_";
+
+                        // Отображаем текст до курсора
+                        if (m_cursorPos > 0) {
+                            std::cout << m_tempRuleInput.substr(0, m_cursorPos);
+                        }
+
+                        // Отображаем курсор
+                        std::cout << "_";
+
+                        // Отображаем текст после курсора
+                        if (m_cursorPos < m_tempRuleInput.length()) {
+                            std::cout << m_tempRuleInput.substr(m_cursorPos);
+                        }
                     }
                     else {
                         if (!rules[ruleType].empty()) {
@@ -4295,129 +4337,121 @@ void WorldEditor::HandleFoodNameInput() {
 }
 
 void WorldEditor::HandleFoodSymbolInput() {
-    // Маппинг символов без Shift
-    static std::unordered_map<int, char> normalMap = {
-        {'0', '0'}, {'1', '1'}, {'2', '2'}, {'3', '3'}, {'4', '4'},
-        {'5', '5'}, {'6', '6'}, {'7', '7'}, {'8', '8'}, {'9', '9'},
-        {VK_OEM_MINUS, '-'}, {VK_OEM_PLUS, '='}, {VK_OEM_4, '['},
-        {VK_OEM_6, ']'}, {VK_OEM_5, '\\'}, {VK_OEM_1, ';'},
-        {VK_OEM_7, '\''}, {VK_OEM_COMMA, ','}, {VK_OEM_PERIOD, '.'},
-        {VK_OEM_2, '/'}, {VK_OEM_3, '`'}, {VK_SPACE, ' '}
-    };
+    if (m_inputManager->IsKeyPressed(VK_RETURN) || m_inputManager->IsKeyPressed(VK_SPACE)) {
+        if (m_foodState == FoodState::ADDING_FOOD) {
+            SaveNewFoodField();
+        }
+        else {
+            SaveEditedFoodField();
+        }
+        m_isEditingText = false;
+        m_editingTileField = false;
+        m_needFullRedraw = true;
+        return;
+    }
 
-    // Маппинг символов с Shift - добавляем недостающие
-    static std::unordered_map<int, char> shiftMap = {
-        {'0', ')'}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'},
-        {'5', '%'}, {'6', '^'}, {'7', '&'}, {'8', '*'}, {'9', '('},
-        {VK_OEM_MINUS, '_'}, {VK_OEM_PLUS, '+'}, {VK_OEM_4, '{'},
-        {VK_OEM_6, '}'}, {VK_OEM_5, '|'}, {VK_OEM_1, ':'},
-        {VK_OEM_7, '"'}, {VK_OEM_COMMA, '<'}, {VK_OEM_PERIOD, '>'},
-        {VK_OEM_2, '?'}, {VK_OEM_3, '~'}, {VK_SPACE, ' '}
-    };
+    if (m_inputManager->IsKeyPressed(VK_ESCAPE)) {
+        m_isEditingText = false;
+        m_editingTileField = false;
+        m_needFullRedraw = true;
+        return;
+    }
 
-    // Проверяем состояние Shift и CapsLock
+    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
+        m_tempTileStringInput.pop_back();
+        m_needFullRedraw = true;
+        return;
+    }
+
+    if (m_inputManager->IsKeyPressed(VK_DELETE)) {
+        m_tempTileStringInput.clear();
+        m_needFullRedraw = true;
+        return;
+    }
+
     bool shiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
     bool capsLockOn = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
 
-    // Сначала проверяем цифры (0-9)
     for (char c = '0'; c <= '9'; c++) {
         if (m_inputManager->IsKeyPressed(c)) {
             if (shiftPressed) {
-                // Shift + цифра
-                auto it = shiftMap.find(c);
-                if (it != shiftMap.end()) {
+                static const std::unordered_map<char, char> shiftDigits = {
+                    {'0', ')'}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'},
+                    {'5', '%'}, {'6', '^'}, {'7', '&'}, {'8', '*'}, {'9', '('}
+                };
+                auto it = shiftDigits.find(c);
+                if (it != shiftDigits.end()) {
                     m_tempTileStringInput = std::string(1, it->second);
                     m_needFullRedraw = true;
-                    return;
                 }
             }
             else {
-                // Просто цифра
                 m_tempTileStringInput = std::string(1, c);
                 m_needFullRedraw = true;
-                return;
             }
+            return;
         }
     }
 
-    // Проверяем буквы (A-Z)
-    for (char c = 'A'; c <= 'Z'; c++) {
-        if (m_inputManager->IsKeyPressed(c)) {
-            if (shiftPressed ^ capsLockOn) { // XOR: заглавные если Shift или CapsLock, но не оба
-                m_tempTileStringInput = std::string(1, c); // Заглавная
+    for (int vkCode = 'A'; vkCode <= 'Z'; vkCode++) {
+        if (m_inputManager->IsKeyPressed(vkCode)) {
+            char c = static_cast<char>(vkCode);
+            if (shiftPressed ^ capsLockOn) {
+                m_tempTileStringInput = std::string(1, c);
             }
             else {
-                m_tempTileStringInput = std::string(1, c + 32); // Строчная
+                m_tempTileStringInput = std::string(1, c + 32);
             }
             m_needFullRedraw = true;
             return;
         }
     }
 
-    // Проверяем специальные символы - исправляем обработку
-    // Добавляем маппинг для русской раскладки, если нужно
-    static std::unordered_map<int, char> ruNormalMap = {
-        {192, '`'}, {189, '-'}, {187, '='}, {219, '['}, {221, ']'},
-        {220, '\\'}, {186, ';'}, {222, '\''}, {188, ','}, {190, '.'},
-        {191, '/'}, {223, '`'}
+    static const std::unordered_map<int, std::pair<char, char>> specialKeys = {
+        {VK_OEM_MINUS, {'-', '_'}},
+        {VK_OEM_PLUS, {'=', '+'}},
+        {VK_OEM_1, {';', ':'}},
+        {VK_OEM_2, {'/', '?'}},
+        {VK_OEM_3, {'`', '~'}},
+        {VK_OEM_4, {'[', '{'}},
+        {VK_OEM_5, {'\\', '|'}},
+        {VK_OEM_6, {']', '}'}},
+        {VK_OEM_7, {'\'', '"'}},
+        {VK_OEM_COMMA, {',', '<'}},
+        {VK_OEM_PERIOD, {'.', '>'}},
+        {VK_SPACE, {' ', ' '}},
     };
 
-    static std::unordered_map<int, char> ruShiftMap = {
-        {192, '~'}, {189, '_'}, {187, '+'}, {219, '{'}, {221, '}'},
-        {220, '|'}, {186, ':'}, {222, '"'}, {188, '<'}, {190, '>'},
-        {191, '?'}, {223, '~'}
-    };
-
-    // Проверяем стандартные VK коды для специальных символов
-    std::vector<int> specialKeys = {
-        VK_OEM_MINUS, VK_OEM_PLUS, VK_OEM_4, VK_OEM_6, VK_OEM_5,
-        VK_OEM_1, VK_OEM_7, VK_OEM_COMMA, VK_OEM_PERIOD, VK_OEM_2,
-        VK_OEM_3, VK_SPACE, 192, 189, 187, 219, 221, 220, 186, 222, 188, 190, 191, 223
-    };
-
-    for (int vkCode : specialKeys) {
+    for (const auto& [vkCode, chars] : specialKeys) {
         if (m_inputManager->IsKeyPressed(vkCode)) {
-            char symbol = ' ';
-
-            // Пробуем найти символ в соответствующем мапе
-            if (shiftPressed) {
-                auto it = shiftMap.find(vkCode);
-                if (it != shiftMap.end()) {
-                    symbol = it->second;
-                }
-                else {
-                    auto itRu = ruShiftMap.find(vkCode);
-                    if (itRu != ruShiftMap.end()) {
-                        symbol = itRu->second;
-                    }
-                }
-            }
-            else {
-                auto it = normalMap.find(vkCode);
-                if (it != normalMap.end()) {
-                    symbol = it->second;
-                }
-                else {
-                    auto itRu = ruNormalMap.find(vkCode);
-                    if (itRu != ruNormalMap.end()) {
-                        symbol = itRu->second;
-                    }
-                }
-            }
-
-            if (symbol != ' ') {
-                m_tempTileStringInput = std::string(1, symbol);
-                m_needFullRedraw = true;
-                return;
-            }
+            char symbol = shiftPressed ? chars.second : chars.first;
+            m_tempTileStringInput = std::string(1, symbol);
+            m_needFullRedraw = true;
+            return;
         }
     }
 
-    // Проверяем Backspace для удаления
-    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempTileStringInput.empty()) {
-        m_tempTileStringInput.clear();
-        m_needFullRedraw = true;
-        return;
+    for (int i = 32; i <= 255; i++) {
+        if (m_inputManager->IsKeyPressed(i)) {
+            if ((i >= '0' && i <= '9') || (i >= 'A' && i <= 'Z')) {
+                continue;
+            }
+
+            bool isSpecialVK = false;
+            for (const auto& [vkCode, _] : specialKeys) {
+                if (vkCode == i) {
+                    isSpecialVK = true;
+                    break;
+                }
+            }
+            if (isSpecialVK) {
+                continue;
+            }
+
+            m_tempTileStringInput = std::string(1, static_cast<char>(i));
+            m_needFullRedraw = true;
+            return;
+        }
     }
 }
 
@@ -5164,12 +5198,14 @@ void WorldEditor::StartEditingSelectedRule() {
     }
 
     m_tempRuleInput = currentRule ? *currentRule : "";
+    m_cursorPos = m_tempRuleInput.length();
     m_editingRule = true;
     m_needFullRedraw = true;
 
     Logger::Log("Editing rule for tile '" + std::string(1, m_selectedTileForRules) +
         "', rule type: " + std::to_string(m_selectedRuleType) +
-        ", current value: '" + m_tempRuleInput + "'");
+        ", current value: '" + m_tempRuleInput + "'" +
+        ", cursor position: " + std::to_string(m_cursorPos));
 }
 
 void WorldEditor::StartEditingRuleForSelectedTile() {
@@ -5269,7 +5305,6 @@ void WorldEditor::HandleCellularEditingInput() {
         m_needFullRedraw = true;
     }
 }
-
 void WorldEditor::StartEditingRule() {
     m_editingRule = true;
 
@@ -5282,6 +5317,11 @@ void WorldEditor::StartEditingRule() {
 
     if (currentRule) {
         m_tempRuleInput = *currentRule;
+        m_cursorPos = m_tempRuleInput.length();
+    }
+    else {
+        m_tempRuleInput = "";
+        m_cursorPos = 0;
     }
 
     m_needFullRedraw = true;
@@ -5495,126 +5535,213 @@ void WorldEditor::HandleRuleEditInput() {
         return;
     }
 
-    // Обработка стрелок для перемещения курсора (упрощённая версия)
-    // Для полной реализации потребуется хранить позицию курсора в строке
+    // Стрелка влево - перемещение курсора влево
     if (m_inputManager->IsKeyPressed(VK_LEFT)) {
-        // В будущем можно реализовать перемещение курсора внутри строки
-        // Пока просто выходим из режима редактирования
-        m_editingRule = false;
-        m_needFullRedraw = true;
-        return;
-    }
-
-    if (m_inputManager->IsKeyPressed(VK_RIGHT)) {
-        // Аналогично
-        m_editingRule = false;
-        m_needFullRedraw = true;
-        return;
-    }
-
-    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('C')) {
-        if (!m_tempRuleInput.empty()) {
-            CopyToClipboard(m_tempRuleInput);
-            Logger::Log("Copied to clipboard: " + m_tempRuleInput.substr(0, 50) +
-                (m_tempRuleInput.length() > 50 ? "..." : ""));
-        }
-        return;
-    }
-
-    if (IsCtrlPressed() && m_inputManager->IsKeyPressed('V')) {
-        std::string clipboardText = PasteFromClipboard();
-        if (!clipboardText.empty()) {
-            m_tempRuleInput += clipboardText;
-            Logger::Log("Pasted from clipboard: " + clipboardText.substr(0, 50) +
-                (clipboardText.length() > 50 ? "..." : ""));
+        if (m_cursorPos > 0) {
+            m_cursorPos--;
             m_needFullRedraw = true;
         }
         return;
     }
 
-    // Разрешаем все символы, необходимые для правил клеточного автомата
-    // Маппинг специальных символов для правил
-    static std::unordered_map<int, char> ruleSymbols = {
-        {'(', '('}, {')', ')'}, {'[', '['}, {']', ']'},
-        {'=', '='}, {'>', '>'}, {'<', '<'}, {'\'', '\''},
-        {'"', '"'}, {'!', '!'}, {'&', '&'}, {'|', '|'},
-        {'~', '~'}, {'^', '^'}, {'*', '*'}, {'+', '+'},
-        {'-', '-'}, {'/', '/'}, {'\\', '\\'}, {'`', '`'},
-        {'@', '@'}, {'#', '#'}, {'$', '$'}, {'%', '%'},
-        {'0', '0'}, {'1', '1'}, {'2', '2'}, {'3', '3'}, {'4', '4'},
-        {'5', '5'}, {'6', '6'}, {'7', '7'}, {'8', '8'}, {'9', '9'},
-        {'a', 'a'}, {'b', 'b'}, {'c', 'c'}, {'d', 'd'}, {'e', 'e'},
-        {'f', 'f'}, {'g', 'g'}, {'h', 'h'}, {'i', 'i'}, {'j', 'j'},
-        {'k', 'k'}, {'l', 'l'}, {'m', 'm'}, {'n', 'n'}, {'o', 'o'},
-        {'p', 'p'}, {'q', 'q'}, {'r', 'r'}, {'s', 's'}, {'t', 't'},
-        {'u', 'u'}, {'v', 'v'}, {'w', 'w'}, {'x', 'x'}, {'y', 'y'},
-        {'z', 'z'}, {'A', 'A'}, {'B', 'B'}, {'C', 'C'}, {'D', 'D'},
-        {'E', 'E'}, {'F', 'F'}, {'G', 'G'}, {'H', 'H'}, {'I', 'I'},
-        {'J', 'J'}, {'K', 'K'}, {'L', 'L'}, {'M', 'M'}, {'N', 'N'},
-        {'O', 'O'}, {'P', 'P'}, {'Q', 'Q'}, {'R', 'R'}, {'S', 'S'},
-        {'T', 'T'}, {'U', 'U'}, {'V', 'V'}, {'W', 'W'}, {'X', 'X'},
-        {'Y', 'Y'}, {'Z', 'Z'}, {' ', ' '}, {',', ','}, {'.', '.'},
-        {';', ';'}, {':', ':'}, {'?', '?'}, {'_', '_'}
-    };
+    // Стрелка вправо - перемещение курсора вправо
+    if (m_inputManager->IsKeyPressed(VK_RIGHT)) {
+        if (m_cursorPos < m_tempRuleInput.length()) {
+            m_cursorPos++;
+            m_needFullRedraw = true;
+        }
+        return;
+    }
 
-    // Также проверяем VK коды для специальных символов
-    std::vector<std::pair<int, char>> specialVKCodes = {
-        {VK_OEM_1, ';'}, {VK_OEM_PLUS, '='}, {VK_OEM_COMMA, ','},
-        {VK_OEM_MINUS, '-'}, {VK_OEM_PERIOD, '.'}, {VK_OEM_2, '/'},
-        {VK_OEM_3, '`'}, {VK_OEM_4, '['}, {VK_OEM_5, '\\'},
-        {VK_OEM_6, ']'}, {VK_OEM_7, '\''}, {VK_SPACE, ' '}
-    };
+    // Home - в начало строки
+    if (m_inputManager->IsKeyPressed(VK_HOME)) {
+        m_cursorPos = 0;
+        m_needFullRedraw = true;
+        return;
+    }
 
-    // Проверяем все символы от 32 до 126 (печатные символы)
-    for (int i = 32; i <= 126; i++) {
-        if (m_inputManager->IsKeyPressed(i)) {
-            if (!IsCtrlPressed()) {
-                m_tempRuleInput += static_cast<char>(i);
+    // End - в конец строки
+    if (m_inputManager->IsKeyPressed(VK_END)) {
+        m_cursorPos = m_tempRuleInput.length();
+        m_needFullRedraw = true;
+        return;
+    }
+
+    // Backspace - удаление символа слева от курсора
+    if (m_inputManager->IsKeyPressed(VK_BACK)) {
+        if (m_cursorPos > 0) {
+            m_tempRuleInput.erase(m_cursorPos - 1, 1);
+            m_cursorPos--;
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
+    // Delete - удаление символа справа от курсора
+    if (m_inputManager->IsKeyPressed(VK_DELETE)) {
+        if (m_cursorPos < m_tempRuleInput.length()) {
+            m_tempRuleInput.erase(m_cursorPos, 1);
+            m_needFullRedraw = true;
+        }
+        return;
+    }
+
+    // Копирование и вставка
+    if (IsCtrlPressed()) {
+        if (m_inputManager->IsKeyPressed('C')) {
+            if (!m_tempRuleInput.empty()) {
+                CopyToClipboard(m_tempRuleInput);
+                Logger::Log("Copied to clipboard: " + m_tempRuleInput.substr(0, 50) +
+                    (m_tempRuleInput.length() > 50 ? "..." : ""));
+            }
+            return;
+        }
+
+        if (m_inputManager->IsKeyPressed('V')) {
+            std::string clipboardText = PasteFromClipboard();
+            if (!clipboardText.empty()) {
+                // Вставляем текст в позиции курсора
+                m_tempRuleInput.insert(m_cursorPos, clipboardText);
+                m_cursorPos += clipboardText.length();
+                Logger::Log("Pasted from clipboard at position " + std::to_string(m_cursorPos) +
+                    ": " + clipboardText.substr(0, 50) +
+                    (clipboardText.length() > 50 ? "..." : ""));
                 m_needFullRedraw = true;
             }
             return;
         }
-    }
 
-    // Проверяем специальные VK коды
-    for (const auto& vkPair : specialVKCodes) {
-        if (m_inputManager->IsKeyPressed(vkPair.first)) {
-            bool shiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
-            char symbol = vkPair.second;
-
-            // Корректируем символ если нажат Shift
-            if (shiftPressed) {
-                switch (vkPair.first) {
-                case VK_OEM_1: symbol = ':'; break;
-                case VK_OEM_PLUS: symbol = '+'; break;
-                case VK_OEM_COMMA: symbol = '<'; break;
-                case VK_OEM_MINUS: symbol = '_'; break;
-                case VK_OEM_PERIOD: symbol = '>'; break;
-                case VK_OEM_2: symbol = '?'; break;
-                case VK_OEM_3: symbol = '~'; break;
-                case VK_OEM_4: symbol = '{'; break;
-                case VK_OEM_5: symbol = '|'; break;
-                case VK_OEM_6: symbol = '}'; break;
-                case VK_OEM_7: symbol = '"'; break;
-                }
+        if (m_inputManager->IsKeyPressed('X')) {
+            if (!m_tempRuleInput.empty()) {
+                CopyToClipboard(m_tempRuleInput);
+                m_tempRuleInput.clear();
+                m_cursorPos = 0;
+                Logger::Log("Cut to clipboard");
+                m_needFullRedraw = true;
             }
+            return;
+        }
 
-            m_tempRuleInput += symbol;
+        if (m_inputManager->IsKeyPressed('A')) {
+            // Select all - устанавливаем курсор в конец
+            m_cursorPos = m_tempRuleInput.length();
+            m_needFullRedraw = true;
+            return;
+        }
+
+        // Ctrl+Left/Right - перемещение по словам
+        if (m_inputManager->IsKeyPressed(VK_LEFT)) {
+            size_t newPos = m_cursorPos;
+            while (newPos > 0 && isspace(m_tempRuleInput[newPos - 1])) {
+                newPos--;
+            }
+            while (newPos > 0 && !isspace(m_tempRuleInput[newPos - 1])) {
+                newPos--;
+            }
+            m_cursorPos = newPos;
+            m_needFullRedraw = true;
+            return;
+        }
+
+        if (m_inputManager->IsKeyPressed(VK_RIGHT)) {
+            size_t newPos = m_cursorPos;
+            size_t len = m_tempRuleInput.length();
+
+            while (newPos < len && !isspace(m_tempRuleInput[newPos])) {
+                newPos++;
+            }
+            while (newPos < len && isspace(m_tempRuleInput[newPos])) {
+                newPos++;
+            }
+            m_cursorPos = newPos;
             m_needFullRedraw = true;
             return;
         }
     }
 
-    if (m_inputManager->IsKeyPressed(VK_BACK) && !m_tempRuleInput.empty()) {
-        m_tempRuleInput.pop_back();
-        m_needFullRedraw = true;
-        return;
+    bool shiftPressed = (GetAsyncKeyState(VK_SHIFT) & 0x8000) != 0;
+    bool capsLockOn = (GetKeyState(VK_CAPITAL) & 0x0001) != 0;
+
+    for (char c = '0'; c <= '9'; c++) {
+        if (m_inputManager->IsKeyPressed(c)) {
+            char symbol = c;
+            if (shiftPressed) {
+                static const std::unordered_map<char, char> shiftDigits = {
+                    {'0', ')'}, {'1', '!'}, {'2', '@'}, {'3', '#'}, {'4', '$'},
+                    {'5', '%'}, {'6', '^'}, {'7', '&'}, {'8', '*'}, {'9', '('}
+                };
+                auto it = shiftDigits.find(c);
+                if (it != shiftDigits.end()) {
+                    symbol = it->second;
+                }
+            }
+            m_tempRuleInput.insert(m_cursorPos, 1, symbol);
+            m_cursorPos++;
+            m_needFullRedraw = true;
+            return;
+        }
     }
 
-    if (m_inputManager->IsKeyPressed(VK_DELETE)) {
-        m_tempRuleInput.clear();
-        m_needFullRedraw = true;
-        return;
+    for (int vkCode = 'A'; vkCode <= 'Z'; vkCode++) {
+        if (m_inputManager->IsKeyPressed(vkCode)) {
+            char symbol = static_cast<char>(vkCode);
+            if (!(shiftPressed ^ capsLockOn)) {
+                symbol = symbol + 32;
+            }
+            m_tempRuleInput.insert(m_cursorPos, 1, symbol);
+            m_cursorPos++;
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    static const std::unordered_map<int, std::pair<char, char>> specialKeys = {
+        {VK_OEM_MINUS, {'-', '_'}},
+        {VK_OEM_PLUS, {'=', '+'}},
+        {VK_OEM_1, {';', ':'}},
+        {VK_OEM_2, {'/', '?'}},
+        {VK_OEM_3, {'`', '~'}},
+        {VK_OEM_4, {'[', '{'}},
+        {VK_OEM_5, {'\\', '|'}},
+        {VK_OEM_6, {']', '}'}},
+        {VK_OEM_7, {'\'', '"'}},
+        {VK_OEM_COMMA, {',', '<'}},
+        {VK_OEM_PERIOD, {'.', '>'}},
+        {VK_SPACE, {' ', ' '}},
+    };
+
+    for (const auto& [vkCode, chars] : specialKeys) {
+        if (m_inputManager->IsKeyPressed(vkCode)) {
+            char symbol = shiftPressed ? chars.second : chars.first;
+            m_tempRuleInput.insert(m_cursorPos, 1, symbol);
+            m_cursorPos++;
+            m_needFullRedraw = true;
+            return;
+        }
+    }
+
+    for (int i = 32; i <= 255; i++) {
+        if (m_inputManager->IsKeyPressed(i)) {
+            if ((i >= '0' && i <= '9') || (i >= 'A' && i <= 'Z')) {
+                continue;
+            }
+
+            bool isSpecialVK = false;
+            for (const auto& [vkCode, _] : specialKeys) {
+                if (vkCode == i) {
+                    isSpecialVK = true;
+                    break;
+                }
+            }
+            if (isSpecialVK) {
+                continue;
+            }
+
+            m_tempRuleInput.insert(m_cursorPos, 1, static_cast<char>(i));
+            m_cursorPos++;
+            m_needFullRedraw = true;
+            return;
+        }
     }
 }
 
@@ -5645,4 +5772,61 @@ bool WorldEditor::SaveCellularAutomatonConfigPreserve(const std::string& directo
     }
 
     return SaveCellularAutomatonConfig(directory);
+}
+
+void WorldEditor::UpdateCellularRulesForTile(char oldSymbol, char newSymbol) {
+    Logger::Log("Updating cellular automaton rules for symbol change: '" +
+        std::string(1, oldSymbol) + "' -> '" + std::string(1, newSymbol) + "'");
+
+    auto survivalIt = m_survivalRules.find(oldSymbol);
+    auto birthIt = m_birthRules.find(oldSymbol);
+    auto deathIt = m_deathRules.find(oldSymbol);
+
+    bool hasRules = (survivalIt != m_survivalRules.end() && !survivalIt->second.empty()) ||
+        (birthIt != m_birthRules.end() && !birthIt->second.empty()) ||
+        (deathIt != m_deathRules.end() && !deathIt->second.empty());
+
+    if (!hasRules) {
+        Logger::Log("No rules found for old symbol '" + std::string(1, oldSymbol) + "', nothing to update");
+        return;
+    }
+
+    if (survivalIt != m_survivalRules.end()) {
+        m_survivalRules[newSymbol] = survivalIt->second;
+        m_survivalRules.erase(oldSymbol);
+        Logger::Log("Moved survival rule: '" + survivalIt->second + "'");
+    }
+
+    if (birthIt != m_birthRules.end()) {
+        m_birthRules[newSymbol] = birthIt->second;
+        m_birthRules.erase(oldSymbol);
+        Logger::Log("Moved birth rule: '" + birthIt->second + "'");
+    }
+
+    if (deathIt != m_deathRules.end()) {
+        m_deathRules[newSymbol] = deathIt->second;
+        m_deathRules.erase(oldSymbol);
+        Logger::Log("Moved death rule: '" + deathIt->second + "'");
+    }
+
+    UpdateSymbolInAllRules(oldSymbol, newSymbol);
+
+    Logger::Log("Cellular automaton rules updated for symbol change");
+}
+
+void WorldEditor::UpdateSymbolInAllRules(char oldSymbol, char newSymbol) {
+    UpdateSymbolInRuleSet(m_survivalRules, oldSymbol, newSymbol);
+    UpdateSymbolInRuleSet(m_birthRules, oldSymbol, newSymbol);
+    UpdateSymbolInRuleSet(m_deathRules, oldSymbol, newSymbol);
+}
+
+void WorldEditor::UpdateSymbolInRuleSet(std::unordered_map<char, std::string>& ruleSet, char oldSymbol, char newSymbol) {
+    for (auto& pair : ruleSet) {
+        std::string& rule = pair.second;
+        size_t pos = 0;
+        while ((pos = rule.find(oldSymbol, pos)) != std::string::npos) {
+            rule.replace(pos, 1, 1, newSymbol);
+            pos += 1;
+        }
+    }
 }
