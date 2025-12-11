@@ -35,12 +35,13 @@ C++ Compiler supporting at least C++17
 git clone https://github.com/WirrWarr-rgb/ChaosOfSymbols.git
 cd WirrWarr-rgb/ChaosOfSymbols
 
-2. **Open the solution file (ChaosOfSymbols.sln or similar) in Visual Studio**
-npm install
+2. **Open in Visual Studio**
+   - Open `ChaosOfSymbols.sln` solution file
+   - Wait for Visual Studio to load the project
 
-3. **Build the project**
-   - Select configuration (Debug/Release)
-   - Build Solution (F7 or Ctrl+Shift+B)
+3. **Build and Run**
+   - Press `F5` to build and run in Debug mode
+   - Or use `Ctrl+F5` to run without debugging
 
 4. **Run the game**
    - Set the game project as Startup Project
